@@ -1,0 +1,11 @@
+
+@import "@fontsource/poppins"; /* Defaults to weight 400 */
+@import "@fontsource/poppins/600.css"; /* Weight 600 */
+
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
