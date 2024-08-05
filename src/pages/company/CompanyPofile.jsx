@@ -54,13 +54,14 @@ const CompanyPofile = () => {
       logo,
       createdAt,
       updatedAt,
-    } = data.companyDetails;
+    } = data.data;
 
     const dateGet = new Date(createdAt);
     const formattedDate = format(dateGet, "MMMM d, yyyy, h:mm:ss a");
 
     content = (
       <>
+        {/* first Header section  */}
         <div className="w-full p-5 mx-5 mt-5 mb-2 rounded-md bg-white flex flex-wrap justify-between ">
           <div className="flex flex-wrap justify-between  w-full">
             {" "}
@@ -86,13 +87,14 @@ const CompanyPofile = () => {
               </h3>
             </div>
             <div className="w-[40px] cursor-pointer  h-[40px] flex flex-col justify-center align-middle items-center rounded-full bg-[#85858512] mr-2">
-              <Link to={`/company/update/${data.companyDetails.id}`}>
+              <Link to={`/company/update/${id}`}>
                 <FiEdit />
               </Link>
             </div>
           </div>
         </div>
 
+        {/* toogle button for section toggle  */}
         <div className="w-full mx-5 rounded-md bg-white flex flex-wrap  ">
           <Button
             buttonid="1"
@@ -119,6 +121,7 @@ const CompanyPofile = () => {
             title={"Info"}
           />
         </div>
+
         <div className="w-full p-5 mx-5 mt-5 mb-2 rounded-md bg-white flex flex-wrap justify-between ">
           {/* Profile Section  */}
           {selected == "1" ? (
@@ -127,22 +130,22 @@ const CompanyPofile = () => {
                 <h1 className="font-semibold mb-2">Basic Information</h1>
 
                 <ProfileSection
-                  id={data.companyDetails.id}
+                  id={data.data.id}
                   icon={<CiMail />}
                   title={email}
                 />
                 <ProfileSection
-                  id={data.companyDetails.id}
+                  id={data.data.id}
                   icon={<BsTelephone />}
                   title={phone_number}
                 />
                 <ProfileSection
-                  id={data.companyDetails.id}
+                  id={data.data.id}
                   icon={<PiAddressBookThin />}
                   title={address}
                 />
                 <ProfileSection
-                  id={data.companyDetails.id}
+                  id={data.data.id}
                   icon={<IoLocationOutline />}
                   title={`Created on ${formattedDate}`}
                 />
@@ -150,22 +153,22 @@ const CompanyPofile = () => {
               <div className="w-[50%] border-l pl-3 ">
                 <h1 className="font-semibold mb-2">Company Settings & Info</h1>
                 <ProfileSection
-                  id={data.companyDetails.id}
+                  id={data.data.id}
                   icon={<BsFileEarmarkPostFill />}
                   title={`Post Code : ${postal_code}`}
                 />
                 <ProfileSection
-                  id={data.companyDetails.id}
+                  id={data.data.id}
                   icon={<IoIosTimer />}
                   title={timezone}
                 />
                 <ProfileSection
-                  id={data.companyDetails.id}
+                  id={data.data.id}
                   icon={<LiaFaxSolid />}
                   title={fax}
                 />
                 <ProfileSection
-                  id={data.companyDetails.id}
+                  id={data.data.id}
                   icon={<IoLanguageOutline />}
                   title={language}
                 />
