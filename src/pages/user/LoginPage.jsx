@@ -13,11 +13,16 @@ const LoginPage = () => {
   const handleLogin = async (email, password) => {
     try {
       let { data } = await login({ email, password });
-      localStorage.setItem("token", data?.message?.accessToken);
+
+      if (!data) {
+        toast.error("Email or password is incorrect!");
+      }
+
+      localStorage.setItem("token", data?.data?.accessToken);
+
       navigate("/");
     } catch (error) {
-      console.log(error.message);
-      toast.error("Email or password is incorrect!");
+      toast.error(error.message);
     }
   };
   return (
