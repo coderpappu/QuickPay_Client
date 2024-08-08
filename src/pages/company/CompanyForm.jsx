@@ -9,7 +9,7 @@ import {
   useGetCompanyDetailsQuery,
   useUpdateCompanyMutation,
 } from "../../features/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import UploadForm from "../../helpers/UploadForm";
 import FormSkeleton from "../../skeletons/FormSkeleton";
 
@@ -42,74 +42,51 @@ const SignupSchema = Yup.object().shape({
 
 const CompanyForm = () => {
   const navigate = useNavigate();
+  const { id } = useParams(); // `id` will be undefined for create mode
   const [canSubmit, setCanSubmit] = useState(true);
-  const { id } = useParams();
   const [createNewCompany] = useCreateNewCompanyMutation();
   const [updateCompany] = useUpdateCompanyMutation();
-  const [initialValues, setInitialValues] = useState({
-    company_name: "",
-    address: "",
-    country: "",
-    city: "",
-    state: "",
-    postal_code: "",
-    email: "",
-    phone_number: "",
-    mobile_number: "",
-    fax: "",
-    website_url: "",
-    date_format: "",
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    language: "English",
-    currency_code: "",
-    currency_symbol: "",
-    logo: null,
-  });
 
   const {
     data: company,
-    isLoading: isCompanyLoading,
-    isError: isCompanyLoadingError,
+    isLoading,
+    isError,
   } = useGetCompanyDetailsQuery(id, {
-    skip: !id,
+    skip: !id, // Skip fetching company details if there's no `id`
   });
 
-  useEffect(() => {
-    if (company) {
-      setInitialValues({
-        company_name: company.companyDetails.company_name,
-        address: company.companyDetails.address,
-        country: company.companyDetails.country,
-        city: company.companyDetails.city,
-        state: company.companyDetails.state,
-        postal_code: company.companyDetails.postal_code,
-        email: company.companyDetails.email,
-        phone_number: company.companyDetails.phone_number,
-        mobile_number: company.companyDetails.mobile_number,
-        fax: company.companyDetails.fax,
-        website_url: company.companyDetails.website_url,
-        date_format: company.companyDetails.date_format,
-        timezone: company.companyDetails.timezone,
-        language: company.companyDetails.language,
-        currency_code: company.companyDetails.currency_code,
-        currency_symbol: company.companyDetails.currency_symbol,
-        logo: company.companyDetails.logo,
-      });
-    }
-  }, [company]);
-
-  const handleDeleteLogo = () => {
-    setInitialValues({
-      ...initialValues,
-      logo: null,
-    });
+  const initialValues = {
+    company_name: company?.data?.company_name || "",
+    address: company?.data?.address || "",
+    country: company?.data?.country || "",
+    city: company?.data?.city || "",
+    state: company?.data?.state || "",
+    postal_code: company?.data?.postal_code || "",
+    email: company?.data?.email || "",
+    phone_number: company?.data?.phone_number || "",
+    mobile_number: company?.data?.mobile_number || "",
+    fax: company?.data?.fax || "",
+    website_url: company?.data?.website_url || "",
+    date_format: company?.data?.date_format || "",
+    timezone:
+      company?.data?.timezone ||
+      Intl.DateTimeFormat().resolvedOptions().timeZone,
+    language: company?.data?.language || "English",
+    currency_code: company?.data?.currency_code || "",
+    currency_symbol: company?.data?.currency_symbol || "",
+    logo: company?.data?.logo || null,
   };
 
-  if (isCompanyLoading) {
+  const handleDeleteLogo = () => {
+    setCanSubmit(true);
+    // setFieldValue("logo", null);
+  };
+
+  if (isLoading) {
     return <FormSkeleton />;
   }
 
-  if (isCompanyLoadingError) {
+  if (isError) {
     return <h3>Some error occurred</h3>;
   }
 
@@ -119,82 +96,23 @@ const CompanyForm = () => {
       initialValues={initialValues}
       validationSchema={SignupSchema}
       onSubmit={async (values, { setSubmitting }) => {
-        let {
-          company_name,
-          address,
-          country,
-          city,
-          state,
-          postal_code,
-          email,
-          phone_number,
-          mobile_number,
-          fax,
-          website_url,
-          date_format,
-          timezone,
-          language,
-          currency_code,
-          currency_symbol,
-          logo,
-        } = values;
-
         try {
-          if (!id) {
-            const response = await createNewCompany({
-              company_name,
-              address,
-              country,
-              city,
-              state,
-              postal_code,
-              email,
-              phone_number,
-              mobile_number,
-              fax,
-              website_url,
-              date_format,
-              timezone,
-              language,
-              currency_code,
-              currency_symbol,
-              logo,
-            });
-            if (response.error) {
-              toast.error(response.error.data.msg);
-            } else {
-              toast.success("Company created successfully");
-              setSubmitting(false);
-              // navigate("/company/list");
-            }
+          let response;
+          if (id) {
+            // Update existing company
+            console.log(id);
+            response = await updateCompany({ id, ...values });
           } else {
-            const response = await updateCompany({
-              id,
-              company_name,
-              address,
-              country,
-              city,
-              state,
-              postal_code,
-              email,
-              phone_number,
-              mobile_number,
-              fax,
-              website_url,
-              date_format,
-              timezone,
-              language,
-              currency_code,
-              currency_symbol,
-              logo,
-            });
-            if (response.error) {
-              toast.error(response.error.data.msg);
-            } else {
-              toast.success("Company updated successfully");
-              setSubmitting(false);
-              navigate("/company/list");
-            }
+            // Create a new company
+            // response = await createNewCompany(values);
+          }
+
+          if (response.error) {
+            toast.error(response.error.data.msg);
+          } else {
+            toast.success(`Company ${id ? "updated" : "created"} successfully`);
+            setSubmitting(false);
+            navigate("/company/list");
           }
         } catch (error) {
           toast.error(error.message);
