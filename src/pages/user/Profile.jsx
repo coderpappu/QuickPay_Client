@@ -16,8 +16,7 @@ const Profile = () => {
   if (!isLoading && isError) content = "There is a error occured";
 
   if (isSuccess && !isError) {
-    console.log(data);
-    const { id, first_name, last_name, email, type, file } = data.data;
+    const { id, first_name, last_name, email, type, file } = data?.data;
 
     content = (
       <div className="flex flex-wrap justify-between w-full">
@@ -50,7 +49,7 @@ const Profile = () => {
           </button>
         </div>
         <div className="w-[2%] cursor-pointer">
-          <Link to={`/profile/${data?.id}`}>
+          <Link to={`/profile/${id}`}>
             <FiEdit />
           </Link>
         </div>
