@@ -7,8 +7,6 @@ import { Link } from "react-router-dom";
 const Profile = () => {
   const { data, isError, isLoading, isSuccess } = useGetUserQuery();
 
-  console.log(data);
-
   let content = null;
 
   if (isLoading) {
@@ -18,7 +16,9 @@ const Profile = () => {
   if (!isLoading && isError) content = "There is a error occured";
 
   if (isSuccess && !isError) {
-    const { id, first_name, last_name, email, type, file } = data;
+    console.log(data);
+    const { id, first_name, last_name, email, type, file } = data.data;
+
     content = (
       <div className="flex flex-wrap justify-between w-full">
         {" "}
