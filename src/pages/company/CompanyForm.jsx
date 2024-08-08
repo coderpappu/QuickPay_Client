@@ -100,22 +100,21 @@ const CompanyForm = () => {
           let response;
           if (id) {
             // Update existing company
-            console.log(id);
             response = await updateCompany({ id, ...values });
           } else {
             // Create a new company
-            // response = await createNewCompany(values);
+            response = await createNewCompany(values);
           }
 
           if (response.error) {
-            toast.error(response.error.data.msg);
+            toast.error(response.error.data.message);
           } else {
             toast.success(`Company ${id ? "updated" : "created"} successfully`);
             setSubmitting(false);
             navigate("/company/list");
           }
         } catch (error) {
-          toast.error(error.message);
+          toast.error("Something went wrong!");
         }
       }}
     >
