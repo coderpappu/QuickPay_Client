@@ -10,15 +10,18 @@ import { apiSlice, useGetUserQuery } from "../features/api";
 const Header = () => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
-  const { data, isLoading, isError } = useGetUserQuery();
+  const { data: userData, isLoading, isError } = useGetUserQuery();
 
   const handleToggle = () => {
     setShow(!show);
   };
 
+  console.log();
+
   const handleLogOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("company_id");
+
     let checkToken = localStorage.getItem("token");
 
     useEffect(() => {
@@ -55,13 +58,13 @@ const Header = () => {
 
             <div className="flex flex-wrap items-center ">
               <img
-                src={data.file}
+                src={userData?.data?.file}
                 alt="Avatar "
                 className="w-[40px] h-[40px] rounded-full"
               />
 
               <label className="ml-1 font-medium text-[#fff]">
-                {data.first_name}
+                {userData?.data?.first_name}
               </label>
               <MdOutlineKeyboardArrowDown
                 className="text-[#fff] text-xl cursor-pointer"
