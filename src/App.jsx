@@ -5,7 +5,7 @@ import RegistraionPage from "./pages/user/RegistraionPage";
 import CompanySettingsPage from "./pages/company/CompanySettingsPage";
 import Home from "./pages/Home";
 import Layout from "./Layout";
-import Profile from "./pages/user/Profile";
+import Profile from "./pages/employee/Profile";
 import CompanyList from "./pages/company/CompanyList";
 import { Toaster } from "react-hot-toast";
 import PrivateRoute from "./privateRoute/PrivateRoute";
@@ -23,6 +23,7 @@ import CompanyPrivateRoute from "./privateRoute/CompanyPrivateRoute";
 import CompanyPofile from "./pages/company/CompanyPofile";
 import ManualAttendance from "./pages/employee/ManualAttendance";
 import UserProfile from "./pages/employee/Profile";
+import EmployeeList from "./pages/employee/employeeList";
 
 function App() {
   return (
@@ -42,11 +43,14 @@ function App() {
               element={<CompanySettingsPage />}
             />
             <Route path="company/details/:id" element={<CompanyPofile />} />
-            <Route path="company/employee" element={<UserProfile />} />
 
             {/* Company-specific private routes */}
             <Route element={<CompanyPrivateRoute />}>
-              <Route path="company/employee" element={<UserProfile />} />
+              <Route path="company/employee" element={<EmployeeList />} />
+              <Route
+                path="company/employee/details/:id"
+                element={<Profile />}
+              />
 
               <Route path="company/shift/list" element={<ShiftList />} />
               <Route path="company/add/shift" element={<AddShift />} />

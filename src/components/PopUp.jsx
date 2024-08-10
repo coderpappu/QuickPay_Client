@@ -43,32 +43,9 @@ export default function PopUp() {
     );
 
   if (!isLoading && isError) {
-    content = (
-      <div className="flex items-center justify-between">
-        <h3 className="mb-0">{error?.data?.message}</h3>
-      </div>
-    );
-    
-  }
-
-  if (!isLoading & !isError) {
-    const { data } = companiesData;
-    content =
-      data?.length > 0 ? (
-        data?.map((company) => (
-          <tr key={company.id}>
-            <td className="py-2 px-4 text-center">{company.company_name}</td>
-            <td className="py-2 px-4 text-center">
-              <button
-                className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-sm w-28"
-                onClick={() => handleActivate(company.id)}
-              >
-                Select
-              </button>
-            </td>
-          </tr>
-        ))
-      ) : (
+    console.log(error?.status);
+    if (error.status == 404) {
+      content = (
         <div className="flex items-center justify-between">
           <h3 className="mb-0">Create your first company</h3>
           <Link to="/company/create">
@@ -84,6 +61,32 @@ export default function PopUp() {
           </button>
         </div>
       );
+    } else {
+      content = (
+        <div className="flex items-center justify-between">
+          <h3 className="mb-0">{error?.data?.message}</h3>
+        </div>
+      );
+    }
+  }
+
+  if (!isLoading & !isError) {
+    const { data } = companiesData;
+    content =
+      data?.length > 0 &&
+      data?.map((company) => (
+        <tr key={company.id}>
+          <td className="py-2 px-4 text-center">{company.company_name}</td>
+          <td className="py-2 px-4 text-center">
+            <button
+              className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-sm w-28"
+              onClick={() => handleActivate(company.id)}
+            >
+              Select
+            </button>
+          </td>
+        </tr>
+      ));
   }
 
   return (

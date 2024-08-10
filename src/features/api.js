@@ -86,6 +86,41 @@ export const apiSlice = createApi({
       invalidatesTags: ["Company"],
     }),
 
+    // employee
+    getEmployees: builder.query({
+      query: () => "/employee/getemployees",
+      providesTags: ["Company"],
+    }),
+
+    getEmployeeDetails: builder.query({
+      query: (id) => `/employee/getemployeesdetails/${id}`,
+      providesTags: ["Company"],
+    }),
+
+    // createNewCompany: builder.mutation({
+    //   query: (credentials) => ({
+    //     url: "/company/createcompany",
+    //     method: "POST",
+    //     body: credentials,
+    //   }),
+    //   invalidatesTags: ["Company"],
+    // }),
+    // updateCompany: builder.mutation({
+    //   query: ({ id, ...credentials }) => ({
+    //     url: `/company/updatecompany/${id}`,
+    //     method: "PUT",
+    //     body: credentials,
+    //   }),
+    //   invalidatesTags: ["Company"],
+    // }),
+    // deleteCompany: builder.mutation({
+    //   query: (id) => ({
+    //     url: `/company/deletecompany/${id}`,
+    //     method: "DELETE",
+    //   }),
+    //   invalidatesTags: ["Company"],
+    // }),
+
     // company selection
     setCompanyId: builder.mutation({
       queryFn: async (newCompanyId) => {
@@ -218,6 +253,13 @@ export const {
 
   useSetCompanyIdMutation,
   useGetCompanyIdQuery,
+
+  useGetEmployeesQuery,
+  useGetEmployeeDetailsQuery,
+  // useGetCompanyDetailsQuery,
+  // useCreateNewCompanyMutation,
+  // useUpdateCompanyMutation,
+  // useDeleteCompanyMutation,
 
   useAddShiftMutation,
   useGetShiftListQuery,
