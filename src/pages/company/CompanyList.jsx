@@ -116,7 +116,7 @@ const CompanyList = () => {
             <tbody>
               {companies?.map((company, index) => (
                 <tr
-                  key={company._id}
+                  key={company.id}
                   className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
                 >
                   <td className="py-2 text-sm text-center">{index + 1}</td>

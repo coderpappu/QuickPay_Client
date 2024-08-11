@@ -5,6 +5,7 @@ import formValidate from "../../../components/validationSchmea/UserValidation";
 import InputField from "../../../components/user/InputField";
 import {
   useAddShiftMutation,
+  useGetCompanyIdQuery,
   useUpdateShiftMutation,
 } from "../../../features/api";
 import toast, { Toaster } from "react-hot-toast";
@@ -13,6 +14,11 @@ import ShiftValidate from "../../../components/validationSchmea/shiftValidation"
 const ShiftForm = ({ shiftData }) => {
   const [shiftAdd, { data, isLoading, isError }] = useAddShiftMutation();
   const [updateShift, { data: updataData }] = useUpdateShiftMutation();
+  const {
+    data: companyId,
+    isLoading: idLoading,
+    isError: idError,
+  } = useGetCompanyIdQuery();
 
   const navigate = useNavigate();
 
@@ -26,6 +32,7 @@ const ShiftForm = ({ shiftData }) => {
           start_time,
           end_time,
           late_time_count,
+          company_id: companyId,
         });
 
         navigate("/company/shift/list");
@@ -38,11 +45,8 @@ const ShiftForm = ({ shiftData }) => {
       try {
         await updateShift({
           // eslint-disable-next-line react/prop-types
-          id: shiftData?._id,
-          name,
-          start_time,
-          end_time,
-          late_time_count,
+          helperKeys: { id: shiftData?.id, company_Id: companyId },
+          databody: { name, start_time, end_time, late_time_count },
         });
 
         navigate("/company/shift/list");

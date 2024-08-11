@@ -17,6 +17,7 @@ export const apiSlice = createApi({
     },
   }),
   tagTypes: ["User", "Company", "Shift", "Designation", "Section", "CompanyId"],
+
   endpoints: (builder) => ({
     // user Related EndPoints
     getUsers: builder.query({
@@ -129,6 +130,7 @@ export const apiSlice = createApi({
       },
       invalidatesTags: [{ type: "CompanyID", id: "CURRENT" }],
     }),
+
     getCompanyId: builder.query({
       queryFn: async () => {
         return { data: companyId };
@@ -143,34 +145,39 @@ export const apiSlice = createApi({
         params: { company_Id },
       }),
 
-      // providesTags: ["Shift"],
+      providesTags: ["Shift"],
     }),
-    getShift: builder.query({
-      query: (id) => `company/get/shift/${id}`,
+
+    getShiftDetails: builder.query({
+      query: (id) => `/shift/getDetails/${id}`,
 
       providesTags: ["Shift"],
     }),
 
     addShift: builder.mutation({
       query: (credentials) => ({
-        url: "/company/add/shift",
+        url: "/shift/create",
         method: "POST",
         body: credentials,
       }),
       invalidatesTags: ["Shift"],
     }),
+
     deleteShift: builder.mutation({
-      query: (id) => ({
-        url: `/company/delete/shift/${id}`,
+      query: ({ shiftId, company_Id }) => ({
+        url: `/shift/delete/${shiftId}`,
         method: "DELETE",
+        params: { company_Id: company_Id },
       }),
       invalidatesTags: ["Shift"],
     }),
+
     updateShift: builder.mutation({
       query: (credentials) => ({
-        url: `/company/update/shift/${credentials.id}`,
+        url: `/shift/update/${credentials.helperKeys.id}`,
         method: "PUT",
-        body: credentials,
+        body: credentials.databody,
+        params: { company_Id: credentials.helperKeys.company_Id },
       }),
       invalidatesTags: ["Shift"],
     }),
@@ -268,7 +275,7 @@ export const {
   useAddShiftMutation,
   useGetShiftListQuery,
   useDeleteShiftMutation,
-  useGetShiftQuery,
+  useGetShiftDetailsQuery,
   useUpdateShiftMutation,
 
   useGetDesignationsQuery,
