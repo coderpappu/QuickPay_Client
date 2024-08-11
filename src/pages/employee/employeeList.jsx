@@ -95,7 +95,7 @@ const EmployeeList = () => {
           </div>
           <div>
             <Link
-              to="/company/create"
+              to="/company/employee/registration"
               className="px-5 py-2 rounded-[3px] text-white bg-[#6D28D9] transition hover:bg-[#7f39f0]"
             >
               Add Employee

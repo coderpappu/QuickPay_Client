@@ -32,7 +32,6 @@ const RegistraionPage = () => {
 
       navigate("/login");
     } catch (error) {
-      console.log(error.message);
       toast.error("Please provide all info correctly.");
     }
 

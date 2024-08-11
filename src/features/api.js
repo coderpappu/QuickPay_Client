@@ -138,8 +138,12 @@ export const apiSlice = createApi({
 
     // Shift Related EndPoints
     getShiftList: builder.query({
-      query: () => "company/shift/list",
-      providesTags: ["Shift"],
+      query: ({ company_Id }) => ({
+        url: "/shift/listbycompany",
+        params: { company_Id },
+      }),
+
+      // providesTags: ["Shift"],
     }),
     getShift: builder.query({
       query: (id) => `company/get/shift/${id}`,

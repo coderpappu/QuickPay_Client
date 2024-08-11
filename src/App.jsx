@@ -24,6 +24,7 @@ import CompanyPofile from "./pages/company/CompanyPofile";
 import ManualAttendance from "./pages/employee/ManualAttendance";
 import UserProfile from "./pages/employee/Profile";
 import EmployeeList from "./pages/employee/employeeList";
+import EmployeeRegistration from "./pages/employee/employeeRegistrationForm";
 
 function App() {
   return (
@@ -47,6 +48,10 @@ function App() {
             {/* Company-specific private routes */}
             <Route element={<CompanyPrivateRoute />}>
               <Route path="company/employee" element={<EmployeeList />} />
+              <Route
+                path="company/employee/registration"
+                element={<EmployeeRegistration />}
+              />
               <Route
                 path="company/employee/details/:id"
                 element={<Profile />}

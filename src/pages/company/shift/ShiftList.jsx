@@ -8,78 +8,90 @@ import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 
 const ShiftList = () => {
-  const { data, isLoading, isError } = useGetShiftListQuery();
-  const [deleteShift, { isLoading: loding, isError: error }] =
-    useDeleteShiftMutation();
+  let company_Id = "b958fdd0-c19b-4929-ad74-0f97aaea1b97";
 
-  const handleDeleteShift = async (shiftId) => {
-    try {
-      if (window.confirm("Are you sure you want to delete")) {
-        await deleteShift(shiftId);
-      }
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
+  const {
+    data: ShiftList,
+    isLoading,
+    isError,
+  } = useGetShiftListQuery({
+    company_Id: company_Id,
+  });
+
+  // const [deleteShift, { isLoading: loding, isError: error }] =
+  //   useDeleteShiftMutation();
+
+  // const handleDeleteShift = async (shiftId) => {
+  //   try {
+  //     if (window.confirm("Are you sure you want to delete")) {
+  //       await deleteShift(shiftId);
+  //     }
+  //   } catch (error) {
+  //     console.error(error.message);
+  //   }
+  // };
 
   let content = null;
 
   if (isLoading && !isError) content = "Loading...";
   if (isError && !isLoading) content = "There was an error ";
-  if (!isLoading && !isError && data.length === 0)
+  if (!isLoading && !isError && Object.keys(ShiftList).length > 0)
     content = "No Shift Available";
-  if (!isLoading && !isError && data.length > 0)
-    content = (
-      <div>
-        <table className="w-full h-auto ">
-          <thead className="border-b border-slate-200 text-left">
-            <tr>
-              <th className="pb-2 text-base text-center">SL</th>
-              <th className="pb-2 text-base pl-10">Name</th>
-              <th className="pb-2 text-base text-center">Start Time</th>
-              <th className="pb-2 text-base text-center">End Time</th>
-              <th className="pb-2 text-base text-center">Late Time </th>
-              <th className="pb-2 text-base text-center">Update </th>
-              <th className="pb-2 text-base text-center">Delete </th>
-            </tr>
-          </thead>
+  if (!isLoading && !isError) {
 
-          <tbody>
-            {data.map((shift, index) => (
-              <tr
-                key={shift._id}
-                className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
-              >
-                <td className="py-2 text-sm text-center">{++index}</td>
-                <td className="py-2 text-sm font-semibold pl-10">
-                  {shift.name}
-                </td>
-                <td className="py-2 text-sm text-center">{shift.start_time}</td>
-                <td className="py-2 text-sm text-center">{shift.end_time}</td>
-                <td className="py-2 text-sm text-center">
-                  {shift.late_time_count}
-                </td>
-                <td className="py-2 text-sm ">
-                  <Link to={`/company/edit/shift/${shift._id}`}>
-                    <div className="grid place-items-center">
-                      <TbEdit className="text-2xl text-[#6D28D9]" />
-                    </div>
-                  </Link>
-                </td>
-                <td
-                  className="py-2 text-sm "
-                  onClick={() => handleDeleteShift(shift._id)}
-                >
-                  <div className="grid place-items-center">
-                    <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
+
+    const { data } = ShiftList;
+
+
+  // content = (
+  //   <div>
+  //     <table className="w-full h-auto ">
+  //       <thead className="border-b border-slate-200 text-left">
+  //         <tr>
+  //           <th className="pb-2 text-base text-center">SL</th>
+  //           <th className="pb-2 text-base pl-10">Name</th>
+  //           <th className="pb-2 text-base text-center">Start Time</th>
+  //           <th className="pb-2 text-base text-center">End Time</th>
+  //           <th className="pb-2 text-base text-center">Late Time </th>
+  //           <th className="pb-2 text-base text-center">Update </th>
+  //           <th className="pb-2 text-base text-center">Delete </th>
+  //         </tr>
+  //       </thead>
+
+  //       <tbody>
+  //         {data.map((shift, index) => (
+  //           <tr
+  //             key={shift._id}
+  //             className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
+  //           >
+  //             <td className="py-2 text-sm text-center">{++index}</td>
+  //             <td className="py-2 text-sm font-semibold pl-10">{shift.name}</td>
+  //             <td className="py-2 text-sm text-center">{shift.start_time}</td>
+  //             <td className="py-2 text-sm text-center">{shift.end_time}</td>
+  //             <td className="py-2 text-sm text-center">
+  //               {shift.late_time_count}
+  //             </td>
+  //             <td className="py-2 text-sm ">
+  //               <Link to={`/company/edit/shift/${shift._id}`}>
+  //                 <div className="grid place-items-center">
+  //                   <TbEdit className="text-2xl text-[#6D28D9]" />
+  //                 </div>
+  //               </Link>
+  //             </td>
+  //             <td
+  //               className="py-2 text-sm "
+  //               onClick={() => handleDeleteShift(shift._id)}
+  //             >
+  //               <div className="grid place-items-center">
+  //                 <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
+  //               </div>
+  //             </td>
+  //           </tr>
+  //         ))}
+  //       </tbody>
+  //     </table>
+  //   </div>
+  // );
 
   return (
     <div>
@@ -89,13 +101,13 @@ const ShiftList = () => {
         </div>
       </div>
 
-      {/* {content} */}
+      {content}
       <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-auto">
         {/* Heading And Btn */}
         <div className="flex flex-wrap justify-between mb-12">
           <div className="font-medium text-base ">
             {" "}
-            Now {data?.length} shift are available
+            {/* Now {data?.length} shift are available */}
           </div>
           <div>
             <Link
