@@ -9,14 +9,13 @@ import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 
 const ShiftList = () => {
-  const { data } = useGetCompanyIdQuery();
-
-  let company_Id = data;
+  const { data: company_Id } = useGetCompanyIdQuery();
 
   const {
     data: ShiftList,
     isLoading,
     isError,
+    error: errorMsg,
   } = useGetShiftListQuery({
     company_Id: company_Id,
   });
@@ -37,11 +36,9 @@ const ShiftList = () => {
   let content = null;
 
   if (isLoading && !isError) content = "Loading...";
-  if (isError && !isLoading) content = "There was an error ";
-  if (!isLoading && !isError && Object.keys(ShiftList).length > 0)
-    content = "No Shift Available";
-  if (!isLoading && !isError) {
-    const { data } = ShiftList;
+  if (isError && !isLoading) content = errorMsg?.data?.message;
+  if (!isLoading && !isError && ShiftList?.data) {
+    const data = ShiftList?.data;
 
     content = (
       <div>
@@ -59,22 +56,24 @@ const ShiftList = () => {
           </thead>
 
           <tbody>
-            {data.map((shift, index) => (
+            {data?.map((shift, index) => (
               <tr
-                key={shift.id}
+                key={shift?.id}
                 className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
               >
                 <td className="py-2 text-sm text-center">{++index}</td>
                 <td className="py-2 text-sm font-semibold pl-10">
-                  {shift.name}
+                  {shift?.name}
                 </td>
-                <td className="py-2 text-sm text-center">{shift.start_time}</td>
-                <td className="py-2 text-sm text-center">{shift.end_time}</td>
                 <td className="py-2 text-sm text-center">
-                  {shift.late_time_count}
+                  {shift?.start_time}
+                </td>
+                <td className="py-2 text-sm text-center">{shift?.end_time}</td>
+                <td className="py-2 text-sm text-center">
+                  {shift?.late_time_count}
                 </td>
                 <td className="py-2 text-sm ">
-                  <Link to={`/company/edit/shift/${shift.id}`}>
+                  <Link to={`/company/edit/shift/${shift?.id}`}>
                     <div className="grid place-items-center">
                       <TbEdit className="text-2xl text-[#6D28D9]" />
                     </div>
@@ -82,7 +81,7 @@ const ShiftList = () => {
                 </td>
                 <td
                   className="py-2 text-sm "
-                  onClick={() => handleDeleteShift(shift.id, company_Id)}
+                  onClick={() => handleDeleteShift(shift?.id, company_Id)}
                 >
                   <div className="grid place-items-center">
                     <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
@@ -94,35 +93,36 @@ const ShiftList = () => {
         </table>
       </div>
     );
-
-    return (
-      <div>
-        <div className="flex flex-wrap justify-between items-center pb-2">
-          <div>
-            <h2 className="font-semibold text-lg pb-2"> Shift</h2>
-          </div>
-        </div>
-
-        <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-auto">
-          {/* Heading And Btn */}
-          <div className="flex flex-wrap justify-between mb-12">
-            <div className="font-medium text-base ">
-              {" "}
-              Now {data?.length} shift are available
-            </div>
-            <div>
-              <Link
-                to="/company/add/shift"
-                className="px-5 py-2 rounded-[3px] text-white bg-[#6D28D9] transition hover:bg-[#7f39f0]"
-              >
-                Add Shift
-              </Link>
-            </div>
-          </div>
-          {content}
+  }
+  return (
+    <div>
+      <div className="flex flex-wrap justify-between items-center pb-2">
+        <div>
+          <h2 className="font-semibold text-lg pb-2"> Shift</h2>
         </div>
       </div>
-    );
-  }
+
+      <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-auto">
+        {/* Heading And Btn */}
+        <div className="flex flex-wrap justify-between mb-12">
+          <div className="font-medium text-base ">
+            {" "}
+            {!isError && `Now ${ShiftList?.data?.length} shift are available`}
+          </div>
+          <div>
+            <Link
+              to="/company/add/shift"
+              className="px-5 py-2 rounded-[3px] text-white bg-[#6D28D9] transition hover:bg-[#7f39f0]"
+            >
+              Add Shift
+            </Link>
+          </div>
+        </div>
+
+        {}
+        {content}
+      </div>
+    </div>
+  );
 };
 export default ShiftList;
