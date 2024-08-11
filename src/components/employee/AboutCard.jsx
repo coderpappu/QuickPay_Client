@@ -1,18 +1,26 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import PersonalInfo from "../../components/employee/PersonalInfo";
 import { FiEdit } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
-const AboutCard = () => {
+const AboutCard = ({ employeeDetails }) => {
+  console.log(employeeDetails);
   return (
     <div className="w-full   mx-5 mt-5 mb-2 rounded-mde flex flex-wrap justify-between ">
       <div className="w-[49%] relative p-4 bg-white rounded-md">
         <h1 className="text-xl font-medium mb-4">Personal Information </h1>
-        <PersonalInfo title="Mobile Number" data="+8801884815992" />
-        <PersonalInfo title="Passport No." data="9876543210" />
-        <PersonalInfo title="Passport Exp" data="9876543210" />
+        <PersonalInfo title="Mobile Number" data={employeeDetails?.phone} />
+        {employeeDetails?.id_type == "NID" ? (
+          <PersonalInfo title="ID Number" data={employeeDetails?.id_number} />
+        ) : (
+          <>
+            <PersonalInfo title="Passport No." data={employeeDetails?.pas} />
+            <PersonalInfo title="Passport Exp" data="9876543210" />
+          </>
+        )}
         <PersonalInfo title="Nationality" data="Bangladesh" />
-        <PersonalInfo title="Religion" data="Hindu" />
+        <PersonalInfo title="Religion" data={employeeDetails?.religion} />
         <PersonalInfo title="Marital status" data="Unmarried" />
         <PersonalInfo title="Nationality" data="Bangladesh" />
         <div className="absolute right-1 top-2  w-[40px] cursor-pointer  h-[40px] flex flex-col justify-center align-middle items-center rounded-full bg-[#85858512] mr-2">

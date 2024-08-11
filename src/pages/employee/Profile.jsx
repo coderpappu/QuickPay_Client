@@ -66,8 +66,8 @@ const Profile = () => {
           <InfoBox title="Phone" data={employeeDetails?.phone} />
           <InfoBox title="Email" data={employeeDetails?.email} />
           <InfoBox title="BirthDay" data="24th July" />
-          <InfoBox title="Address" data="Rahman Nagar , 2 no gate" />
-          <InfoBox title="Gender" data="Male" />
+          <InfoBox title="Address" data={employeeDetails?.present_address} />
+          <InfoBox title="Gender" data={employeeDetails?.gender} />
           <InfoBox title="Reports to " data="Sarwar " />
         </div>
       </div>
@@ -99,7 +99,7 @@ const Profile = () => {
         />
       </div>
 
-      {selected == "1" && <AboutCard />}
+      {selected == "1" && <AboutCard employeeDetails={employeeDetails} />}
     </div>
   );
 };

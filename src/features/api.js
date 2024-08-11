@@ -93,7 +93,7 @@ export const apiSlice = createApi({
     }),
 
     getEmployeeDetails: builder.query({
-      query: (id) => `/employee/getemployeesdetails/${id}`,
+      query: (id) => `/employee/getemployeedetails/${id}`,
       providesTags: ["Company"],
     }),
 
