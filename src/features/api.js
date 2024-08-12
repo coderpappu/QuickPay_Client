@@ -16,7 +16,15 @@ export const apiSlice = createApi({
       return headers;
     },
   }),
-  tagTypes: ["User", "Company", "Shift", "Designation", "Section", "CompanyId"],
+  tagTypes: [
+    "User",
+    "Company",
+    "Shift",
+    "Designation",
+    "department",
+    "Section",
+    "CompanyId",
+  ],
 
   endpoints: (builder) => ({
     // user Related EndPoints
@@ -182,6 +190,48 @@ export const apiSlice = createApi({
       invalidatesTags: ["Shift"],
     }),
 
+    // Departement related endpoints
+    createDepartment: builder.mutation({
+      query: (credentials) => ({
+        url: "/department/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["department"],
+    }),
+
+    getDepartments: builder.query({
+      query: (companyId) => ({
+        url: `/department/list`,
+        method: "GET",
+        params: { companyId },
+      }),
+      providesTags: ["department"],
+    }),
+
+    getDepartmentDetails: builder.query({
+      query: (id) => `/department/details/${id}`,
+      providesTags: ["department"],
+    }),
+
+    updateDepartment: builder.mutation({
+      query: ({ id, ...credentials }) => ({
+        url: `/department/update/${id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["department"],
+    }),
+
+    deleteDepartment: builder.mutation({
+      query: (id) => ({
+        url: `/department/delete`,
+        method: "DELETE",
+        params: { id },
+      }),
+      invalidatesTags: ["department"],
+    }),
+
     // designation Related EndPoints
     getDesignations: builder.query({
       query: (company_id) => `/designation/list/${company_id}`,
@@ -277,6 +327,12 @@ export const {
   useDeleteShiftMutation,
   useGetShiftDetailsQuery,
   useUpdateShiftMutation,
+  useDeleteDepartmentMutation,
+
+  useCreateDepartmentMutation,
+  useGetDepartmentsQuery,
+  useGetDepartmentDetailsQuery,
+  useUpdateDepartmentMutation,
 
   useGetDesignationsQuery,
   useGetDesignationDetailsQuery,
