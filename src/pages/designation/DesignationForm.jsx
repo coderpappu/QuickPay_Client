@@ -17,7 +17,9 @@ const DesignationSchema = Yup.object().shape({
 
 const DesignationForm = () => {
   const navigate = useNavigate();
+
   const { id } = useParams();
+
   const [createNewDesignation] = useCreateNewDesignationMutation();
   const [updateDesignation] = useUpdateDesignationMutation();
   const [initialValues, setInitialValues] = useState({ name: "" });
@@ -26,8 +28,8 @@ const DesignationForm = () => {
     useGetDesignationDetailsQuery(id, { skip: !id });
 
   useEffect(() => {
-    if (designation) {
-      setInitialValues({ name: designation.name });
+    if (designation?.data) {
+      setInitialValues({ name: designation?.data?.name });
     }
   }, [designation]);
 
@@ -53,7 +55,7 @@ const DesignationForm = () => {
             await createNewDesignation({ name, company_id: companyId })
               .then((res) => {
                 if (res.error != null) {
-                  toast.error(res.error.data.msg);
+                  toast.error(res?.error?.data?.message);
                 } else {
                   toast.success("Designation created successfully");
                   navigate("/designation/list");
@@ -64,10 +66,10 @@ const DesignationForm = () => {
                 toast.error(error);
               });
           } else {
-            await updateDesignation({ id, name })
+            await updateDesignation({ id, name, company_id: companyId })
               .then((res) => {
-                if (res.error != null) {
-                  toast.error(res.error.data.msg);
+                if (res?.error != null) {
+                  toast.error(res?.error?.data?.message);
                 } else {
                   toast.success("Designation updated successfully");
                   navigate("/designation/list");

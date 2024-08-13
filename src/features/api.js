@@ -245,6 +245,7 @@ export const apiSlice = createApi({
       query: (id) => `/designation/details/${id}`,
       providesTags: ["Designation"],
     }),
+
     createNewDesignation: builder.mutation({
       query: (credentials) => ({
         url: "/designation/create",
@@ -253,6 +254,7 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["Designation"],
     }),
+
     updateDesignation: builder.mutation({
       query: ({ id, ...credentials }) => ({
         url: `/designation/update/${id}`,
@@ -263,8 +265,9 @@ export const apiSlice = createApi({
     }),
     deleteDesignation: builder.mutation({
       query: (id) => ({
-        url: `/designation/delete/${id}`,
+        url: `/designation/delete/`,
         method: "DELETE",
+        params: { id },
       }),
       invalidatesTags: ["Designation"],
     }),
