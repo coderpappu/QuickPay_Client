@@ -10,6 +10,7 @@ import ConfirmDialog from "../../helpers/ConfirmDialog";
 import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import ListSkeleton from "../../skeletons/ListSkeleton";
+import { date } from "yup";
 
 const DesignationList = () => {
   const { data: companyId } = useGetCompanyIdQuery();
@@ -76,7 +77,7 @@ const DesignationList = () => {
         <div className="flex flex-wrap justify-between mb-12">
           <div className="font-medium text-base ">
             {" "}
-            {designations?.length | 0} Designation Available for Now
+            {designations?.data?.length | 0} Designation Available for Now
           </div>
           <div>
             <Link
@@ -100,22 +101,22 @@ const DesignationList = () => {
             </thead>
 
             <tbody>
-              {designations ? (
-                designations.map((designation, index) => (
+              {designations.data ? (
+                designations?.data?.map((designation, index) => (
                   <tr
-                    key={designation._id}
+                    key={designation?.id}
                     className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
                   >
                     <td className="py-2 text-sm text-center">{++index}</td>
                     <td className="py-2 text-sm font-semibold pl-10">
-                      {designation.name}
+                      {designation?.name}
                     </td>
                     <td className="py-2 text-sm text-center">
-                      {designation.created_by}
+                      {designation?.user_id}
                     </td>
 
                     <td className="py-2 text-sm ">
-                      <Link to={`/designation/update/${designation._id}`}>
+                      <Link to={`/designation/update/${designation?.id}`}>
                         <div className="grid place-items-center">
                           <TbEdit className="text-2xl text-[#6D28D9]" />
                         </div>
@@ -123,7 +124,7 @@ const DesignationList = () => {
                     </td>
                     <td
                       className="py-2 text-sm "
-                      onClick={() => handleDeleteDesignation(designation._id)}
+                      onClick={() => handleDeleteDesignation(designation?.id)}
                     >
                       <div className="grid place-items-center">
                         <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />

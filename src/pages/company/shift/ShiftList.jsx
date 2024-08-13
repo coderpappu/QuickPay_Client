@@ -1,12 +1,12 @@
 import React from "react";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import { TbEdit } from "react-icons/tb";
+import { Link } from "react-router-dom";
 import {
   useDeleteShiftMutation,
   useGetCompanyIdQuery,
   useGetShiftListQuery,
 } from "../../../features/api";
-import { Link } from "react-router-dom";
-import { TbEdit } from "react-icons/tb";
-import { MdOutlineDeleteOutline } from "react-icons/md";
 
 const ShiftList = () => {
   const { data: company_Id } = useGetCompanyIdQuery();

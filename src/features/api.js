@@ -234,9 +234,13 @@ export const apiSlice = createApi({
 
     // designation Related EndPoints
     getDesignations: builder.query({
-      query: (company_id) => `/designation/list/${company_id}`,
+      query: (companyId) => ({
+        url: `/designation/list/`,
+        params: { companyId },
+      }),
       providesTags: ["Designation"],
     }),
+
     getDesignationDetails: builder.query({
       query: (id) => `/designation/details/${id}`,
       providesTags: ["Designation"],
