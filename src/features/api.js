@@ -274,13 +274,18 @@ export const apiSlice = createApi({
 
     // section Related EndPoints
     getSections: builder.query({
-      query: (company_id) => `/section/list/${company_id}`,
+      query: (companyId) => ({
+        url: `/section/list/`,
+        params: { companyId },
+      }),
       providesTags: ["Section"],
     }),
+
     getSectionDetails: builder.query({
       query: (id) => `/section/details/${id}`,
       providesTags: ["Section"],
     }),
+
     createNewSection: builder.mutation({
       query: (credentials) => ({
         url: "/section/create",
@@ -289,6 +294,7 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["Section"],
     }),
+
     updateSection: builder.mutation({
       query: ({ id, ...credentials }) => ({
         url: `/section/update/${id}`,
@@ -299,11 +305,44 @@ export const apiSlice = createApi({
     }),
     deleteSection: builder.mutation({
       query: (id) => ({
-        url: `/section/delete/${id}`,
+        url: `/section/delete/`,
         method: "DELETE",
+        params: { id },
       }),
       invalidatesTags: ["Section"],
     }),
+
+    // getSections: builder.query({
+    //   query: (company_id) => `/section/list/${company_id}`,
+    //   providesTags: ["Section"],
+    // }),
+    // getSectionDetails: builder.query({
+    //   query: (id) => `/section/details/${id}`,
+    //   providesTags: ["Section"],
+    // }),
+    // createNewSection: builder.mutation({
+    //   query: (credentials) => ({
+    //     url: "/section/create",
+    //     method: "POST",
+    //     body: credentials,
+    //   }),
+    //   invalidatesTags: ["Section"],
+    // }),
+    // updateSection: builder.mutation({
+    //   query: ({ id, ...credentials }) => ({
+    //     url: `/section/update/${id}`,
+    //     method: "PUT",
+    //     body: credentials,
+    //   }),
+    //   invalidatesTags: ["Section"],
+    // }),
+    // deleteSection: builder.mutation({
+    //   query: (id) => ({
+    //     url: `/section/delete/${id}`,
+    //     method: "DELETE",
+    //   }),
+    //   invalidatesTags: ["Section"],
+    // }),
   }),
 });
 

@@ -34,12 +34,23 @@ const DepartmentList = () => {
 
   let content;
 
-  if (isLoading && !isError) content = <div>Loading...</div>;
+  if (isLoading && !isError)
+    content = (
+      <tr>
+        <td>
+          <div>Loading...</div>
+        </td>
+      </tr>
+    );
   if (isError && !isLoading)
     content = (
-      <div className="w-full bg-red-500 py-3 px-3 text-white">
-        {error?.data?.message}
-      </div>
+      <tr>
+        <td>
+          <div className="w-full bg-red-500 py-3 px-3 text-white">
+            {error?.data?.message}
+          </div>
+        </td>
+      </tr>
     );
 
   if (!isLoading && !isError)
