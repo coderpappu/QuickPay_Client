@@ -97,7 +97,10 @@ export const apiSlice = createApi({
 
     // employee
     getEmployees: builder.query({
-      query: () => "/employee/getemployees",
+      query: (companyId) => ({
+        url: "/employee/getemployees",
+        params: { companyId },
+      }),
       providesTags: ["Company"],
     }),
 
@@ -311,38 +314,6 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["Section"],
     }),
-
-    // getSections: builder.query({
-    //   query: (company_id) => `/section/list/${company_id}`,
-    //   providesTags: ["Section"],
-    // }),
-    // getSectionDetails: builder.query({
-    //   query: (id) => `/section/details/${id}`,
-    //   providesTags: ["Section"],
-    // }),
-    // createNewSection: builder.mutation({
-    //   query: (credentials) => ({
-    //     url: "/section/create",
-    //     method: "POST",
-    //     body: credentials,
-    //   }),
-    //   invalidatesTags: ["Section"],
-    // }),
-    // updateSection: builder.mutation({
-    //   query: ({ id, ...credentials }) => ({
-    //     url: `/section/update/${id}`,
-    //     method: "PUT",
-    //     body: credentials,
-    //   }),
-    //   invalidatesTags: ["Section"],
-    // }),
-    // deleteSection: builder.mutation({
-    //   query: (id) => ({
-    //     url: `/section/delete/${id}`,
-    //     method: "DELETE",
-    //   }),
-    //   invalidatesTags: ["Section"],
-    // }),
   }),
 });
 

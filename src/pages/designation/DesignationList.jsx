@@ -51,17 +51,62 @@ const DesignationList = () => {
     data: designations,
     isLoading,
     isError,
+    error,
   } = useGetDesignationsQuery(companyId, {
     skip: companyId == null,
   });
 
+  let content;
+
   if (isLoading) {
-    return <ListSkeleton />;
+    content = <ListSkeleton />;
   }
 
   if (isError) {
-    return <div>Error loading designations.</div>;
+    content = (
+      <tr>
+        <td>
+          <div className="text-red-600 font-poppins font-medium">
+            {error?.data?.message}
+          </div>
+        </td>
+      </tr>
+    );
   }
+
+  if (!isLoading && !isError)
+    content = designations?.data ? (
+      designations?.data?.map((designation, index) => (
+        <tr
+          key={designation?.id}
+          className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
+        >
+          <td className="py-2 text-sm text-center">{++index}</td>
+          <td className="py-2 text-sm font-semibold pl-10">
+            {designation?.name}
+          </td>
+          <td className="py-2 text-sm text-center">{designation?.user_id}</td>
+
+          <td className="py-2 text-sm ">
+            <Link to={`/designation/update/${designation?.id}`}>
+              <div className="grid place-items-center">
+                <TbEdit className="text-2xl text-[#6D28D9]" />
+              </div>
+            </Link>
+          </td>
+          <td
+            className="py-2 text-sm "
+            onClick={() => handleDeleteDesignation(designation?.id)}
+          >
+            <div className="grid place-items-center">
+              <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
+            </div>
+          </td>
+        </tr>
+      ))
+    ) : (
+      <h3 className="center py-6">No data to show</h3>
+    );
 
   return (
     <div>
@@ -71,7 +116,6 @@ const DesignationList = () => {
         </div>
       </div>
 
-      {/* {content} */}
       <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-auto">
         {/* Heading And Btn */}
         <div className="flex flex-wrap justify-between mb-12">
@@ -90,52 +134,19 @@ const DesignationList = () => {
         </div>
         <div>
           <table className="w-full h-auto ">
-            <thead className="border-b border-slate-200 text-left">
-              <tr>
-                <th className="pb-2 text-base text-center">SL</th>
-                <th className="pb-2 text-base pl-10">Name</th>
-                <th className="pb-2 text-base text-center">Created By</th>
-                <th className="pb-2 text-base text-center">Update </th>
-                <th className="pb-2 text-base text-center">Delete </th>
-              </tr>
-            </thead>
+            {designations?.data && (
+              <thead className="border-b border-slate-200 text-left">
+                <tr>
+                  <th className="pb-2 text-base text-center">SL</th>
+                  <th className="pb-2 text-base pl-10">Name</th>
+                  <th className="pb-2 text-base text-center">Created By</th>
+                  <th className="pb-2 text-base text-center">Update </th>
+                  <th className="pb-2 text-base text-center">Delete </th>
+                </tr>
+              </thead>
+            )}
 
-            <tbody>
-              {designations.data ? (
-                designations?.data?.map((designation, index) => (
-                  <tr
-                    key={designation?.id}
-                    className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
-                  >
-                    <td className="py-2 text-sm text-center">{++index}</td>
-                    <td className="py-2 text-sm font-semibold pl-10">
-                      {designation?.name}
-                    </td>
-                    <td className="py-2 text-sm text-center">
-                      {designation?.user_id}
-                    </td>
-
-                    <td className="py-2 text-sm ">
-                      <Link to={`/designation/update/${designation?.id}`}>
-                        <div className="grid place-items-center">
-                          <TbEdit className="text-2xl text-[#6D28D9]" />
-                        </div>
-                      </Link>
-                    </td>
-                    <td
-                      className="py-2 text-sm "
-                      onClick={() => handleDeleteDesignation(designation?.id)}
-                    >
-                      <div className="grid place-items-center">
-                        <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <h3 className="center py-6">No data to show</h3>
-              )}
-            </tbody>
+            <tbody>{content}</tbody>
           </table>
         </div>
       </div>

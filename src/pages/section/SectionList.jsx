@@ -56,13 +56,47 @@ const SectionList = () => {
     skip: companyId == null,
   });
 
+  let content;
+
   if (isLoading) {
-    return <ListSkeleton />;
+    content = <ListSkeleton />;
   }
 
   if (isError) {
-    return <div>{error?.data?.message}</div>;
+    content = (
+      <div className="text-red-600 font-poppins font-medium">
+        {error?.data?.message}
+      </div>
+    );
   }
+
+  if (!isLoading && !isError)
+    content = sections?.data?.map((section, index) => (
+      <tr
+        key={section.id}
+        className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
+      >
+        <td className="py-2 text-sm text-center">{++index}</td>
+        <td className="py-2 text-sm font-semibold pl-10">{section.name}</td>
+        <td className="py-2 text-sm text-center">{section.user_id}</td>
+
+        <td className="py-2 text-sm ">
+          <Link to={`/section/update/${section.id}`}>
+            <div className="grid place-items-center">
+              <TbEdit className="text-2xl text-[#6D28D9]" />
+            </div>
+          </Link>
+        </td>
+        <td
+          className="py-2 text-sm "
+          onClick={() => handleDeleteSection(section.id)}
+        >
+          <div className="grid place-items-center">
+            <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
+          </div>
+        </td>
+      </tr>
+    ));
 
   return (
     <div>
@@ -92,51 +126,18 @@ const SectionList = () => {
         <div>
           <table className="w-full h-auto ">
             <thead className="border-b border-slate-200 text-left">
-              <tr>
-                <th className="pb-2 text-base text-center">SL</th>
-                <th className="pb-2 text-base pl-10">Name</th>
-                <th className="pb-2 text-base text-center">Created By</th>
-                <th className="pb-2 text-base text-center">Update </th>
-                <th className="pb-2 text-base text-center">Delete </th>
-              </tr>
+              {sections?.data && (
+                <tr>
+                  <th className="pb-2 text-base text-center">SL</th>
+                  <th className="pb-2 text-base pl-10">Name</th>
+                  <th className="pb-2 text-base text-center">Created By</th>
+                  <th className="pb-2 text-base text-center">Update </th>
+                  <th className="pb-2 text-base text-center">Delete </th>
+                </tr>
+              )}
             </thead>
 
-            <tbody>
-              {sections ? (
-                sections?.data?.map((section, index) => (
-                  <tr
-                    key={section.id}
-                    className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
-                  >
-                    <td className="py-2 text-sm text-center">{++index}</td>
-                    <td className="py-2 text-sm font-semibold pl-10">
-                      {section.name}
-                    </td>
-                    <td className="py-2 text-sm text-center">
-                      {section.user_id}
-                    </td>
-
-                    <td className="py-2 text-sm ">
-                      <Link to={`/section/update/${section.id}`}>
-                        <div className="grid place-items-center">
-                          <TbEdit className="text-2xl text-[#6D28D9]" />
-                        </div>
-                      </Link>
-                    </td>
-                    <td
-                      className="py-2 text-sm "
-                      onClick={() => handleDeleteSection(section.id)}
-                    >
-                      <div className="grid place-items-center">
-                        <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <h3 className="center py-6">No data to show</h3>
-              )}
-            </tbody>
+            <tbody>{content}</tbody>
           </table>
         </div>
       </div>

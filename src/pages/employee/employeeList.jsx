@@ -21,11 +21,15 @@ const EmployeeList = () => {
   //     isError,
   //     refetch,
   //   } = useGetCompaniesQuery();
-
+  const { data: companyId } = useGetCompanyIdQuery();
   const [deleteCompany] = useDeleteCompanyMutation();
   const [setCompanyId] = useSetCompanyIdMutation();
-  const { data: companyId } = useGetCompanyIdQuery();
-  const { data, isLoading, isError } = useGetEmployeesQuery();
+
+  const {
+    data: employeesData,
+    isLoading,
+    isError,
+  } = useGetEmployeesQuery(companyId);
 
   const handleActivate = (id) => {
     setCompanyId(id);
@@ -75,10 +79,8 @@ const EmployeeList = () => {
   let employees;
 
   if (!isLoading && !isError) {
-    employees = data?.data;
+    employees = employeesData?.data;
   }
-
-  console.log(employees);
 
   return (
     <div>
@@ -110,6 +112,7 @@ const EmployeeList = () => {
                 <th className="pb-2 text-base text-center">SL</th>
                 <th className="pb-2 text-base pl-10">Name</th>
                 <th className="pb-2 text-base text-center">Email</th>
+                <th className="pb-2 text-base text-center">Department</th>
                 <th className="pb-2 text-base text-center">Status</th>
                 <th className="pb-2 text-base text-center">View</th>
                 <th className="pb-2 text-base text-center">Update</th>
@@ -126,6 +129,9 @@ const EmployeeList = () => {
                   <td className="py-2 text-sm text-center">{index + 1}</td>
                   <td className="py-2 text-sm font-semibold pl-10">
                     {employee?.name}
+                  </td>
+                  <td className="py-2 text-sm text-center">
+                    {employee.EmployeeDepartment[0].department.name}
                   </td>
                   <td className="py-2 text-sm text-center">{employee.email}</td>
                   <td className="py-2 text-sm text-center">
