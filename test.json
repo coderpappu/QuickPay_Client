@@ -1,0 +1,62 @@
+{
+    "workbench.colorTheme": "Default Dark Modern",
+    "workbench.iconTheme": "vs-seti",
+  
+    // config related to code formatting
+    "editor.fontSize": 22,
+    "editor.fontFamily": "'Fira Code',Consolas, 'Courier New', monospace",
+  
+    "editor.tokenColorCustomizations": {
+      "textMateRules": [
+        {
+          "scope": "comment",
+          "settings": {
+            "fontStyle": "italic"
+          }
+        }
+      ]
+    },
+  
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "[prisma]": {
+      "editor.defaultFormatter": "Prisma.prisma-insider"
+    },
+    "[javascript]": {
+      "editor.formatOnSave": false,
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascriptreact]": {
+      "editor.formatOnSave": false,
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "javascript.validate.enable": false, //disable all built-in syntax checking
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.fixAll.tslint": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "eslint.alwaysShowStatus": true,
+    // emmet
+    "emmet.triggerExpansionOnTab": true,
+    "emmet.includeLanguages": {
+      "javascript": "javascriptreact"
+    },
+    "terminal.integrated.fontFamily": "Fira Code",
+    "terminal.integrated.fontSize": 18,
+    "terminal.integrated.letterSpacing": 0.3,
+    "editor.mouseWheelZoom": true,
+  
+    "files.autoSave": "afterDelay",
+    "editor.wordWrap": "on",
+    "tabnine.experimentalAutoImports": true,
+    "security.workspace.trust.untrustedFiles": "open",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+  
+    "terminal.integrated.defaultProfile.windows": "Command Prompt"
+  
+    // "terminal.integrated.fontWeight" : "500"
+  
+    // terminal switch
+  }
+  

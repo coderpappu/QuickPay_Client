@@ -1,9 +1,8 @@
-import LoginForm from "../../components/LoginForm";
-import LoginImg from "../../assets/login.jpg";
-import Logo from "../../components/Logo";
-import api from "../../utils/api";
-import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import LoginImg from "../../assets/login.jpg";
+import LoginForm from "../../components/LoginForm";
+import Logo from "../../components/Logo";
 import { useLoginUserMutation } from "../../features/api";
 
 const LoginPage = () => {
