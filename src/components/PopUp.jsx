@@ -21,8 +21,6 @@ export default function PopUp() {
     error,
   } = useGetCompaniesQuery();
 
-  console.log(companiesData);
-
   const [setCompanyId] = useSetCompanyIdMutation();
   const { data: companyId } = useGetCompanyIdQuery();
 
@@ -43,7 +41,6 @@ export default function PopUp() {
     );
 
   if (!isLoading && isError) {
-    console.log(error?.status);
     if (error.status == 404) {
       content = (
         <div className="flex items-center justify-between">

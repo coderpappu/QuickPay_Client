@@ -4,7 +4,7 @@ import InfoBox from "../../components/employee/InfoBox";
 import Button from "../../components/company/Button";
 import { useState } from "react";
 import { FiEdit } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import AboutCard from "../../components/employee/AboutCard";
 import {
   useGetEmployeeDetailsQuery,
@@ -12,7 +12,9 @@ import {
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 const Profile = () => {
-  const { data, isLoading, isError } = useGetEmployeeDetailsQuery();
+  const id = useParams()?.id;
+
+  const { data, isLoading, isError } = useGetEmployeeDetailsQuery(id);
 
   const [selected, setSelected] = useState("1");
 

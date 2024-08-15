@@ -25,6 +25,7 @@ import ManualAttendance from "./pages/employee/ManualAttendance";
 import UserProfile from "./pages/employee/Profile";
 import EmployeeList from "./pages/employee/employeeList";
 import EmployeeRegistration from "./pages/employee/employeeRegistrationForm";
+import DepartmentForm from "./pages/department/DepartmentForm";
 
 function App() {
   return (
@@ -62,6 +63,10 @@ function App() {
               <Route path="company/edit/shift/:id" element={<EditShift />} />
 
               <Route path="department/list" element={<DepartmentList />} />
+              <Route
+                path="department/update/:id"
+                element={<DepartmentForm />}
+              />
               <Route path="department/create" element={<DepartmentSetting />} />
               <Route path="designation/list" element={<DesignationList />} />
               <Route

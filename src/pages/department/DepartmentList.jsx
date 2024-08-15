@@ -1,59 +1,113 @@
 import { Link } from "react-router-dom";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
-
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  useDeleteDepartmentMutation,
+  useGetCompanyIdQuery,
+  useGetDepartmentsQuery,
+} from "../../features/api";
 
 const DepartmentList = () => {
-    return (
-        <div className="container mx-auto p-4">
-            <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold mb-4">Total 0 departments.</h1>
-                <Link to="/department/create">
-                    <button className="bg-[#6D28D9] text-white font-semibold py-1 px-2 rounded text-xs hover:bg-blue-700">
-                        Add Department
-                    </button>
-                </Link>
-            </div>
-            <div className="overflow-x-auto">
-                <table className="min-w-full bg-white">
-                    <thead>
-                        <tr>
-                            <th className="py-2 px-4 border-b text-left">Name</th>
-                            <th className="py-2 px-4 border-b text-left">Created By</th>
-                            <th className="py-2 px-4 border-b text-left">Department Head</th>
-                            <th className="py-2 px-4 border-b text-left">Edit</th>
-                            <th className="py-2 px-4 border-b text-left">Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                       
+  const {
+    data: companyId,
+    isLoading: loading,
+    isError: errorStatus,
+  } = useGetCompanyIdQuery();
 
-                        <tr key="">
-                            <td className="py-2 px-4 border-b text-left">Test</td>
-                            <td className="py-2 px-4 border-b text-left">Test</td>
-                            <td className="py-2 px-4 border-b text-left">Test</td>
-                            
-                            <td className="py-2 px-4 border-b text-left">
-                                <Link to={`/company/update/`}>
-                                    <button className="text-blue-500 ">
-                                        <FontAwesomeIcon icon={faEdit} style={{ color: '#6D28D9' }}/>
-                                    </button>
-                                </Link>
-                            </td>
-                            <td className="py-2 px-4 border-b text-left">
-                                <button className="text-red-500" type="button" >
-                                    <FontAwesomeIcon icon={faTrash} />
-                                </button>
-                            </td>
-                        </tr>
+  const [departmentDelete] = useDeleteDepartmentMutation();
+  const deleteHandler = async (id) => {
+    try {
+      if (window.confirm("Are you sure you want to delete")) {
+        await departmentDelete(id);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+  const {
+    data: allDepartment,
+    isLoading,
+    isError,
+    error,
+  } = useGetDepartmentsQuery(companyId || undefined);
 
-                    </tbody>
-                </table>
-            </div>
-        </div >
-    )
-}
+  let content;
+
+  if (isLoading && !isError)
+    content = (
+      <tr>
+        <td>
+          <div>Loading...</div>
+        </td>
+      </tr>
+    );
+  if (isError && !isLoading)
+    content = (
+      <tr>
+        <td>
+          <div className="w-full bg-red-500 py-3 px-3 text-white">
+            {error?.data?.message}
+          </div>
+        </td>
+      </tr>
+    );
+
+  if (!isLoading && !isError)
+    content = allDepartment?.data?.map((department) => (
+      <tr key={department.id}>
+        <td className="py-2 px-4 border-b text-left">{department?.name}</td>
+        <td className="py-2 px-4 border-b text-left">{department?.user_id}</td>
+        {/* <td className="py-2 px-4 border-b text-left">
+          {department?.companyId}
+        </td> */}
+        <td className="py-2 px-4 border-b text-left">
+          <Link to={`/department/update/${department?.id}`}>
+            <button className="text-blue-500 ">
+              <FontAwesomeIcon icon={faEdit} style={{ color: "#6D28D9" }} />
+            </button>
+          </Link>
+        </td>
+        <td className="py-2 px-4 border-b text-left">
+          <button
+            className="text-red-500"
+            type="button"
+            onClick={() => deleteHandler(department?.id)}
+          >
+            <FontAwesomeIcon icon={faTrash} />
+          </button>
+        </td>
+      </tr>
+    ));
+
+  return (
+    <div className="container mx-auto p-4">
+      <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold mb-4">Total 0 departments.</h1>
+        <Link to="/department/create">
+          <button className="bg-[#6D28D9] text-white font-semibold py-1 px-2 rounded text-xs hover:bg-blue-700">
+            Add Department
+          </button>
+        </Link>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white">
+          {!isError && (
+            <thead>
+              <tr>
+                <th className="py-2 px-4 border-b text-left">Name</th>
+                <th className="py-2 px-4 border-b text-left">Created By</th>
+                {/* <th className="py-2 px-4 border-b text-left">Department Head</th> */}
+                <th className="py-2 px-4 border-b text-left">Edit</th>
+                <th className="py-2 px-4 border-b text-left">Delete</th>
+              </tr>
+            </thead>
+          )}
+          <tbody>{content}</tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
 
 export default DepartmentList;
