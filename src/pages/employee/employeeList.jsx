@@ -113,6 +113,7 @@ const EmployeeList = () => {
                 <th className="pb-2 text-base pl-10">Name</th>
                 <th className="pb-2 text-base text-center">Email</th>
                 <th className="pb-2 text-base text-center">Department</th>
+                <th className="pb-2 text-base text-center">Shift</th>
                 <th className="pb-2 text-base text-center">Status</th>
                 <th className="pb-2 text-base text-center">View</th>
                 <th className="pb-2 text-base text-center">Update</th>
@@ -130,10 +131,14 @@ const EmployeeList = () => {
                   <td className="py-2 text-sm font-semibold pl-10">
                     {employee?.name}
                   </td>
-                  <td className="py-2 text-sm text-center">
-                    {employee.EmployeeDepartment[0].department.name}
-                  </td>
                   <td className="py-2 text-sm text-center">{employee.email}</td>
+                  <td className="py-2 text-sm text-center">
+                    {employee?.EmployeeDepartment[0]?.department?.name}
+                  </td>
+                  <td className="py-2 text-sm text-center">
+                    {employee?.EmployeeShift[0]?.shift?.name}
+                  </td>
+
                   <td className="py-2 text-sm text-center">
                     {employee.id === companyId ? (
                       <button
