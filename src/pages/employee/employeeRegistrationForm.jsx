@@ -11,10 +11,13 @@ import {
   useGetSectionsQuery,
   useGetShiftListQuery,
 } from "../../features/api";
+import UploadForm from "../../helpers/UploadForm";
+import { useState } from "react";
 
 const EmployeeRegistrationForm = () => {
   const { data: CompanyId } = useGetCompanyIdQuery();
   const navigate = useNavigate();
+  const [canSubmit, setCanSubmit] = useState(true);
 
   const { data: departments, isLoading } = useGetDepartmentsQuery(CompanyId);
   const { data: designations } = useGetDesignationsQuery(CompanyId);
@@ -22,6 +25,10 @@ const EmployeeRegistrationForm = () => {
   const { data: shifts } = useGetShiftListQuery(CompanyId);
   const [createEmployee] = useCreateNewEmployeeMutation();
 
+  const handleDeleteLogo = () => {
+    setCanSubmit(true);
+    // setFieldValue("logo", null);
+  };
   let content;
 
   if (
@@ -242,7 +249,7 @@ const EmployeeRegistrationForm = () => {
                 />
               </div>
             </div>
-            <div>
+            {/* <div>
               <label
                 htmlFor="image"
                 className="block text-sm font-medium text-gray-700"
@@ -257,13 +264,20 @@ const EmployeeRegistrationForm = () => {
                   setFieldValue("image", event.currentTarget.files[0])
                 }
               />
+
+              
+
               <ErrorMessage
                 name="image"
                 component="div"
                 className="text-red-500 text-sm mt-1"
               />
-            </div>
-
+            </div> */}
+            <UploadForm
+              setFieldValue={setFieldValue}
+              canSubmit={canSubmit}
+              setCanSubmit={setCanSubmit}
+            />
             <div className="mt-4">
               <button
                 type="submit"

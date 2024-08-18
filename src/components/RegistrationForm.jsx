@@ -7,7 +7,6 @@ import { LuEyeOff } from "react-icons/lu";
 import { useState } from "react";
 
 const RegistrationForm = ({ registerHandler }) => {
-  
   const [password, setPassword] = useState("");
   const [type, setType] = useState("password");
   const [icon, setIcon] = useState(LuEyeOff);

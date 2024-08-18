@@ -24,6 +24,7 @@ export const apiSlice = createApi({
     "department",
     "Section",
     "CompanyId",
+    "Employee",
   ],
 
   endpoints: (builder) => ({
@@ -101,12 +102,12 @@ export const apiSlice = createApi({
         url: "/employee/getemployees",
         params: { companyId },
       }),
-      providesTags: ["Company"],
+      providesTags: ["Employee"],
     }),
 
     getEmployeeDetails: builder.query({
       query: (id) => `/employee/getemployeedetails/${id}`,
-      providesTags: ["Company"],
+      providesTags: ["Employee"],
     }),
 
     createNewEmployee: builder.mutation({
@@ -115,9 +116,17 @@ export const apiSlice = createApi({
         method: "POST",
         body: credentials,
       }),
-      invalidatesTags: ["Company"],
+      invalidatesTags: ["Employee"],
     }),
 
+    deleteEmployee: builder.mutation({
+      query: (id) => ({
+        url: `/employee/delete`,
+        method: "DELETE",
+        params: { id },
+      }),
+      invalidatesTags: ["Employee"],
+    }),
     // createNewCompany: builder.mutation({
     //   query: (credentials) => ({
     //     url: "/company/createcompany",
@@ -343,6 +352,9 @@ export const {
 
   useGetEmployeesQuery,
   useGetEmployeeDetailsQuery,
+  useDeleteEmployeeMutation,
+  useCreateNewEmployeeMutation,
+
   // useGetCompanyDetailsQuery,
   // useCreateNewCompanyMutation,
   // useUpdateCompanyMutation,
@@ -371,6 +383,4 @@ export const {
   useCreateNewSectionMutation,
   useUpdateSectionMutation,
   useDeleteSectionMutation,
-
-  useCreateNewEmployeeMutation,
 } = apiSlice;

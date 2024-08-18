@@ -34,8 +34,6 @@ const RegistraionPage = () => {
     } catch (error) {
       toast.error("Please provide all info correctly.");
     }
-
-    console.log("Register Function called");
   };
   return (
     <div className="w-full h-screen bg-[#FCFCFC]">

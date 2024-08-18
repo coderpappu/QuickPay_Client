@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
-  useDeleteCompanyMutation,
+  useDeleteEmployeeMutation,
   useGetCompaniesQuery,
   useSetCompanyIdMutation,
   useGetCompanyIdQuery,
@@ -22,7 +22,7 @@ const EmployeeList = () => {
   //     refetch,
   //   } = useGetCompaniesQuery();
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteCompany] = useDeleteCompanyMutation();
+  const [deleteEmployee] = useDeleteEmployeeMutation();
   const [setCompanyId] = useSetCompanyIdMutation();
 
   const {
@@ -47,13 +47,10 @@ const EmployeeList = () => {
             onConfirm={async () => {
               toast.dismiss(t.id);
               try {
-                await deleteCompany(id).then((res) => {
+                await deleteEmployee(id).then((res) => {
                   if (res.error != null) {
-                    toast.error(res.error.data.msg);
+                    toast.error(res.error.data.message);
                   } else {
-                    if (companyId === id) {
-                      setCompanyId(null);
-                    }
                     toast.success("Company deleted successfully");
                   }
                 });
