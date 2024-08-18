@@ -4,24 +4,37 @@ import PersonalInfo from "../../components/employee/PersonalInfo";
 import { FiEdit } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
-const AboutCard = ({ employeeDetails }) => {
+const JobDetails = ({ employeeDetails }) => {
   return (
     <div className="w-full   mx-5 mt-5 mb-2 rounded-mde flex flex-wrap justify-between ">
       <div className="w-[49%] relative p-4 bg-white rounded-md">
-        <h1 className="text-xl font-medium mb-4">Personal Information </h1>
-        <PersonalInfo title="Mobile Number" data={employeeDetails?.phone} />
-        {employeeDetails?.id_type == "NID" ? (
-          <PersonalInfo title="ID Number" data={employeeDetails?.id_number} />
-        ) : (
-          <>
-            <PersonalInfo title="Passport No." data={employeeDetails?.pas} />
-            <PersonalInfo title="Passport Exp" data="9876543210" />
-          </>
-        )}
-        <PersonalInfo title="Nationality" data="Bangladesh" />
-        <PersonalInfo title="Religion" data={employeeDetails?.religion} />
-        <PersonalInfo title="Marital status" data="Unmarried" />
-        <PersonalInfo title="Nationality" data="Bangladesh" />
+        <h1 className="text-xl font-medium mb-4">Job Details </h1>
+        <PersonalInfo
+          title="Department"
+          data={
+            employeeDetails?.EmployeeDepartment[0]?.department?.name ||
+            "No Department"
+          }
+        />
+
+        <PersonalInfo
+          title="Designation"
+          data={
+            employeeDetails?.EmployeeDesignation[0]?.designation?.name ||
+            "No Designation"
+          }
+        />
+        <PersonalInfo
+          title="Shift"
+          data={employeeDetails?.EmployeeShift[0]?.shift?.name || "No Shift"}
+        />
+        <PersonalInfo
+          title="Section"
+          data={
+            employeeDetails?.EmployeeSection[0]?.section.name || "No Section"
+          }
+        />
+
         <div className="absolute right-1 top-2  w-[40px] cursor-pointer  h-[40px] flex flex-col justify-center align-middle items-center rounded-full bg-[#85858512] mr-2">
           <Link
           // to={`/company/update/${data._id}`}
@@ -31,7 +44,7 @@ const AboutCard = ({ employeeDetails }) => {
         </div>
       </div>
 
-      <div className="w-[49%] relative p-4 bg-white rounded-md">
+      {/* <div className="w-[49%] relative p-4 bg-white rounded-md">
         <h1 className="text-xl font-medium mb-4">Emergency Contact</h1>
         <PersonalInfo title="Primary Name" data="John Doe" />
         <PersonalInfo title="Relationship" data="Father" />
@@ -48,9 +61,9 @@ const AboutCard = ({ employeeDetails }) => {
             <FiEdit className="text-[#6D28D9]" />
           </Link>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
 
-export default AboutCard;
+export default JobDetails;

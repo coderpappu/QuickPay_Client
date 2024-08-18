@@ -11,6 +11,7 @@ import {
   useGetEmployeesQuery,
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
+import JobDetails from "../../components/employee/JobDetails";
 const Profile = () => {
   const id = useParams()?.id;
 
@@ -67,7 +68,7 @@ const Profile = () => {
         <div className="w-[50%] border-l-2 border-dotted border-[#cacaca]">
           <InfoBox title="Phone" data={employeeDetails?.phone} />
           <InfoBox title="Email" data={employeeDetails?.email} />
-          <InfoBox title="BirthDay" data="24th July" />
+          <InfoBox title="BirthDay" data={employeeDetails?.birth_date} />
           <InfoBox title="Address" data={employeeDetails?.present_address} />
           <InfoBox title="Gender" data={employeeDetails?.gender} />
           <InfoBox title="Reports to " data="Sarwar " />
@@ -85,23 +86,24 @@ const Profile = () => {
           button_id="2"
           isActive={selected == "2"}
           handleSelect={handleSelect}
-          title={"Education & Experience"}
+          title={"Job Details"}
         />
         <Button
           button_id="3"
           isActive={selected == "3"}
           handleSelect={handleSelect}
-          title={"Bank"}
+          title={"Education & Experience"}
         />
         <Button
           button_id="4"
           isActive={selected == "4"}
           handleSelect={handleSelect}
-          title={"Reports"}
+          title={"Bank etc"}
         />
       </div>
 
       {selected == "1" && <AboutCard employeeDetails={employeeDetails} />}
+      {selected == "2" && <JobDetails employeeDetails={employeeDetails} />}
     </div>
   );
 };
