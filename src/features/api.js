@@ -109,6 +109,15 @@ export const apiSlice = createApi({
       providesTags: ["Company"],
     }),
 
+    createNewEmployee: builder.mutation({
+      query: (credentials) => ({
+        url: "/employee/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["Company"],
+    }),
+
     // createNewCompany: builder.mutation({
     //   query: (credentials) => ({
     //     url: "/company/createcompany",
@@ -362,4 +371,6 @@ export const {
   useCreateNewSectionMutation,
   useUpdateSectionMutation,
   useDeleteSectionMutation,
+
+  useCreateNewEmployeeMutation,
 } = apiSlice;
