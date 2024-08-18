@@ -37,7 +37,7 @@ const Profile = () => {
         <div className="flex flex-wrap justify-between items-center w-[50%]">
           <div className="w-[20%] mr-4">
             <img
-              src={ProfileImg}
+              src={employeeDetails?.image ? employeeDetails?.image : ProfileImg}
               alt="profile pic"
               className="w-[100px] h-[100px] rounded-full"
             />

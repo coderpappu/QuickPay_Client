@@ -43,10 +43,7 @@ const SignupSchema = Yup.object().shape({
 const CompanyForm = () => {
   const navigate = useNavigate();
   const { id } = useParams(); // `id` will be undefined for create mode
-  const handleDeleteLogo = () => {
-    setCanSubmit(true);
-    // setFieldValue("logo", null);
-  };
+  const [canSubmit, setCanSubmit] = useState(true);
   const [createNewCompany] = useCreateNewCompanyMutation();
   const [updateCompany] = useUpdateCompanyMutation();
 
@@ -187,6 +184,7 @@ const CompanyForm = () => {
                   setFieldValue={setFieldValue}
                   canSubmit={canSubmit}
                   setCanSubmit={setCanSubmit}
+                  name="logo"
                 />
               )}
             </div>

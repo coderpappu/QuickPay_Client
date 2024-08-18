@@ -59,7 +59,6 @@ const CompanyPofile = () => {
     const dateGet = new Date(createdAt);
     const formattedDate = format(dateGet, "MMMM d, yyyy, h:mm:ss a");
 
-    console.log(logo);
     content = (
       <>
         {/* first Header section  */}

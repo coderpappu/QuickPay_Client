@@ -3,14 +3,13 @@ import fileUpload from "./fileUpload";
 import toast from "react-hot-toast";
 import { ErrorMessage } from "formik";
 
-const UploadForm = ({ setFieldValue, canSubmit, setCanSubmit }) => {
+const UploadForm = ({ setFieldValue, canSubmit, setCanSubmit, name }) => {
   const [file, setFile] = useState(null);
   const [progress, setProgress] = useState(0);
 
   const handleChange = (e) => {
     if (e.target.files[0]) {
       setCanSubmit(false);
-
       setFile(e.target.files[0]);
     }
   };
@@ -19,7 +18,7 @@ const UploadForm = ({ setFieldValue, canSubmit, setCanSubmit }) => {
     try {
       const downloadURL = await fileUpload({ file, setProgress });
       if (downloadURL) {
-        setFieldValue("logo", downloadURL); // Update the logo URL in the parent component
+        setFieldValue(name, downloadURL); // Update the image URL in the parent component
         toast.success("File uploaded successfully!");
         setCanSubmit(true);
       }
@@ -37,13 +36,16 @@ const UploadForm = ({ setFieldValue, canSubmit, setCanSubmit }) => {
 
   return (
     <div>
-      <label htmlFor="logo" className="block text-sm font-medium text-gray-700">
-        Logo
+      <label
+        htmlFor="image"
+        className="block text-sm font-medium text-gray-700"
+      >
+        image
       </label>
       <input
         type="file"
-        name="logo"
-        id="logo"
+        name="image"
+        id="image"
         onChange={handleChange}
         className="mt-1 block w-full text-gray-500"
       />
@@ -56,7 +58,7 @@ const UploadForm = ({ setFieldValue, canSubmit, setCanSubmit }) => {
         </div>
       )}
       <ErrorMessage
-        name="logo"
+        name="image"
         component="div"
         className="text-red-500 text-sm mt-1"
       />

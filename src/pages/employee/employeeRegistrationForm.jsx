@@ -25,10 +25,10 @@ const EmployeeRegistrationForm = () => {
   const { data: shifts } = useGetShiftListQuery(CompanyId);
   const [createEmployee] = useCreateNewEmployeeMutation();
 
-  const handleDeleteLogo = () => {
-    setCanSubmit(true);
-    // setFieldValue("logo", null);
-  };
+  // const handleDeleteLogo = () => {
+  //   setCanSubmit(true);
+  //   // setFieldValue("logo", null);
+  // };
   let content;
 
   if (
@@ -277,6 +277,7 @@ const EmployeeRegistrationForm = () => {
               setFieldValue={setFieldValue}
               canSubmit={canSubmit}
               setCanSubmit={setCanSubmit}
+              name="image"
             />
             <div className="mt-4">
               <button
