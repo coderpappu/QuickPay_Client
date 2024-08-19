@@ -59,7 +59,7 @@ const EmployeeRegistrationForm = () => {
       id_number: "234234234324234",
       status: "ACTIVE",
       company_id: CompanyId,
-      fingerprint_id: "065e9d0a-5de2-4f46-bfb3-5e224a0536a3",
+      fingerprint_id: "527703a9-1ed6-4b55-a5b5-3c7bcd46e452",
       designationId: "",
       departmentId: "",
       sectionId: "",

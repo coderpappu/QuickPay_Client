@@ -127,6 +127,7 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["Employee"],
     }),
+
     // createNewCompany: builder.mutation({
     //   query: (credentials) => ({
     //     url: "/company/createcompany",
@@ -135,6 +136,7 @@ export const apiSlice = createApi({
     //   }),
     //   invalidatesTags: ["Company"],
     // }),
+
     // updateCompany: builder.mutation({
     //   query: ({ id, ...credentials }) => ({
     //     url: `/company/updatecompany/${id}`,
@@ -143,6 +145,7 @@ export const apiSlice = createApi({
     //   }),
     //   invalidatesTags: ["Company"],
     // }),
+
     // deleteCompany: builder.mutation({
     //   query: (id) => ({
     //     url: `/company/deletecompany/${id}`,

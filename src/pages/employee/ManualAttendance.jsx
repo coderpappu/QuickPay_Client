@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { MdOutlineCheckCircle } from "react-icons/md";
@@ -11,6 +11,11 @@ import {
 import { useState } from "react";
 
 const ManualAttendance = () => {
+  const [checkIn, setCheckIn] = useState(null);
+  const [checkOut, setCheckOut] = useState(null);
+
+  // console.log(checkIn, checkOut);
+
   const [editMode, setEditMode] = useState(false);
 
   return (
@@ -65,29 +70,35 @@ const ManualAttendance = () => {
                 <td className="py-2 text-sm font-semibold pl-10 ">Pappu Dey</td>
                 <td className="py-2 text-sm text-center">
                   {editMode ? (
-                    <input
-                      type="text"
-                      placeholder="10.00"
-                      className="p-2 w-[80px] bg-[#F0F3FF] rounded-sm focus:outline-[#6D28D8] text-center"
-                    />
+                    <form onChange={(e) => setCheckIn(e.target.value)}>
+                      <input
+                        type="time"
+                        placeholder="00.00"
+                        value={checkIn}
+                        className="p-2 w-[80px] bg-[#F0F3FF] rounded-sm focus:outline-[#6D28D8] text-center"
+                      />
+                    </form>
                   ) : (
-                    <lebel className="p-2">10.00</lebel>
+                    <lebel className="p-2">00.00</lebel>
                   )}
                 </td>
                 <td className="py-2 text-sm text-center">
                   {editMode ? (
-                    <input
-                      type="text"
-                      placeholder="03.00"
-                      className="p-2 w-[80px] bg-[#F0F3FF] rounded-sm focus:outline-[#6D28D8] text-center"
-                    />
+                    <form onChange={(e) => setCheckOut(e.target.value)}>
+                      <input
+                        type="time"
+                        placeholder="03.00"
+                        value={checkOut}
+                        className="p-2 w-[80px] bg-[#F0F3FF] rounded-sm focus:outline-[#6D28D8] text-center"
+                      />
+                    </form>
                   ) : (
                     <lebel>03.00</lebel>
                   )}
                 </td>
                 <td className="py-2 text-sm text-center">04.00</td>
                 {!editMode ? (
-                  <td className="py-2 text-sm ">
+                  <td className="py-2 text-sm">
                     <Link
                       // to={`/company/edit/shift/${0}`}
                       onClick={() => setEditMode(true)}
