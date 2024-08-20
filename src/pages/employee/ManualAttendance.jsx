@@ -6,6 +6,10 @@ import { MdOutlineCheckCircle } from "react-icons/md";
 import {
   useGetShiftListQuery,
   useDeleteShiftMutation,
+  useCreateAttendanceMutation,
+  useGetCompanyIdQuery,
+  useGetEmployeeDetailsQuery,
+  useGetEmployeesQuery,
 } from "../../features/api";
 
 import { useState } from "react";
@@ -13,10 +17,104 @@ import { useState } from "react";
 const ManualAttendance = () => {
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
+  const [checkCreate] = useCreateAttendanceMutation();
+  const { data: companyId } = useGetCompanyIdQuery();
+  const {
+    data: employees,
+    isLoading,
+    isError,
+  } = useGetEmployeesQuery(companyId);
 
   // console.log(checkIn, checkOut);
 
   const [editMode, setEditMode] = useState(false);
+  const handleCheck = async () => {
+    const todayDate = new Date();
+    const nowDate =
+      todayDate.getDate() +
+      " " +
+      (todayDate.getMonth() + 1) +
+      " " +
+      todayDate.getFullYear();
+
+    await checkCreate({
+      companyId,
+      employeeId: "8b8112f1-2bb4-4dee-8c06-46e367a6c60d",
+      fingerprintId: "065e9d0a-5de2-4f46-bfb3-5e224a0536a3",
+      date: nowDate,
+      check_in_time: checkIn,
+      check_out_time: checkOut,
+      late: false,
+      status: "Present",
+    });
+  };
+  let content;
+
+  if (isLoading && !isError) content = "Loading...";
+  if (!isLoading && isError) content = "Error Occured";
+
+  if (employees?.data?.length >= 0)
+    content = employees?.data?.map((employee, index) => (
+      <>
+        <tr
+          // key={shift._id}
+          // className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
+          className="w-full "
+          key={index}
+        >
+          <td className="py-2 text-sm text-center ">{++index}</td>
+          <td className="py-2 text-sm font-semibold pl-10 ">
+            {employee?.name}
+          </td>
+
+          <td className="py-2 text-sm font-semibold pl-10 ">
+            {employee?.EmployeeDepartment[0]?.department?.name}
+          </td>
+          <td className="py-2 text-sm font-semibold pl-10 ">
+            {employee?.EmployeeShift[0]?.shift?.name}
+          </td>
+          <td className="py-2 text-sm font-semibold pl-10 ">
+            <form onChange={(e) => setCheckOut(e.target.value)}>
+              <input
+                type="time"
+                placeholder="03.00"
+                value={checkOut}
+                className="p-2 w-[80px] bg-[#F0F3FF] rounded-sm focus:outline-[#6D28D8] text-center"
+              />
+            </form>
+          </td>
+          <td className="py-2 text-sm ">
+            <div className="grid place-items-center">
+              <MdOutlineCheckCircle
+                className="text-2xl text-green-600 cursor-pointer"
+                onClick={() => {
+                  setEditMode(false);
+                  handleCheck();
+                }}
+              />
+            </div>
+          </td>
+          <td className="py-2 text-sm font-semibold pl-10 ">
+            <form onChange={(e) => setCheckOut(e.target.value)}>
+              <input
+                type="time"
+                placeholder="03.00"
+                value={checkOut}
+                className="p-2 w-[80px] bg-[#F0F3FF] rounded-sm focus:outline-[#6D28D8] text-center"
+              />
+            </form>
+          </td>
+          <td
+            className="py-2 text-sm "
+            // onClick={() => handleDeleteShift(shift._id)}
+          >
+            <div className="grid place-items-center">
+              <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
+            </div>
+          </td>
+        </tr>
+      </>
+    ));
 
   return (
     <div>
@@ -48,86 +146,19 @@ const ManualAttendance = () => {
               <tr>
                 <th className="pb-2 text-base text-center w-[8%]">SL</th>
                 <th className="pb-2 text-base pl-10 w-[22%]">Name</th>
-                <th className="pb-2 text-base text-center w-[14%]">Check In</th>
                 <th className="pb-2 text-base text-center w-[14%]">
-                  Check Out
+                  Department
                 </th>
-                <th className="pb-2 text-base text-center w-[14%]">
-                  Total Hour{" "}
-                </th>
-                <th className="pb-2 text-base text-center w-[14%]">Update </th>
-                <th className="pb-2 text-base text-center w-[14%]">Delete </th>
+                <th className="pb-2 text-base text-center w-[14%]">Shift</th>
+
+                <th className="pb-2 text-base text-center w-[14%]">In Time </th>
+                <th className="pb-2 text-base text-center w-[14%]">In </th>
+                <th className="pb-2 text-base text-center w-[14%]">Out Time</th>
+                <th className="pb-2 text-base text-center w-[14%]">Out </th>
               </tr>
             </thead>
 
-            <tbody>
-              <tr
-                // key={shift._id}
-                // className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
-                className="w-full "
-              >
-                <td className="py-2 text-sm text-center ">1</td>
-                <td className="py-2 text-sm font-semibold pl-10 ">Pappu Dey</td>
-                <td className="py-2 text-sm text-center">
-                  {editMode ? (
-                    <form onChange={(e) => setCheckIn(e.target.value)}>
-                      <input
-                        type="time"
-                        placeholder="00.00"
-                        value={checkIn}
-                        className="p-2 w-[80px] bg-[#F0F3FF] rounded-sm focus:outline-[#6D28D8] text-center"
-                      />
-                    </form>
-                  ) : (
-                    <lebel className="p-2">00.00</lebel>
-                  )}
-                </td>
-                <td className="py-2 text-sm text-center">
-                  {editMode ? (
-                    <form onChange={(e) => setCheckOut(e.target.value)}>
-                      <input
-                        type="time"
-                        placeholder="03.00"
-                        value={checkOut}
-                        className="p-2 w-[80px] bg-[#F0F3FF] rounded-sm focus:outline-[#6D28D8] text-center"
-                      />
-                    </form>
-                  ) : (
-                    <lebel>03.00</lebel>
-                  )}
-                </td>
-                <td className="py-2 text-sm text-center">04.00</td>
-                {!editMode ? (
-                  <td className="py-2 text-sm">
-                    <Link
-                      // to={`/company/edit/shift/${0}`}
-                      onClick={() => setEditMode(true)}
-                    >
-                      <div className="grid place-items-center">
-                        <TbEdit className="text-2xl text-[#6D28D9]" />
-                      </div>
-                    </Link>
-                  </td>
-                ) : (
-                  <td className="py-2 text-sm ">
-                    <div className="grid place-items-center">
-                      <MdOutlineCheckCircle
-                        className="text-2xl text-green-600 cursor-pointer"
-                        onClick={() => setEditMode(false)}
-                      />
-                    </div>
-                  </td>
-                )}
-                <td
-                  className="py-2 text-sm "
-                  // onClick={() => handleDeleteShift(shift._id)}
-                >
-                  <div className="grid place-items-center">
-                    <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
-                  </div>
-                </td>
-              </tr>
-            </tbody>
+            <tbody>{content}</tbody>
           </table>
         </div>
       </div>
