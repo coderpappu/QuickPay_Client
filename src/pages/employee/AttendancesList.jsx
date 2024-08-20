@@ -16,22 +16,9 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { LuEye } from "react-icons/lu";
 
 const AttendanceList = () => {
-  //   const {
-  //     data: companyData,
-  //     isLoading,
-  //     isError,
-  //     refetch,
-  //   } = useGetCompaniesQuery();
   const { data: companyId } = useGetCompanyIdQuery();
   const [deleteEmployee] = useDeleteEmployeeMutation();
   const [setCompanyId] = useSetCompanyIdMutation();
-  //   let dateCheck = new Date();
-  //   const date =
-  //     dateCheck.getDate() +
-  //     "-" +
-  //     (dateCheck.getMonth() + 1) +
-  //     "-" +
-  //     dateCheck.getFullYear();
 
   let dateCheck = new Date();
   const todayDate = `${dateCheck.getFullYear()}-${String(
@@ -146,7 +133,7 @@ const AttendanceList = () => {
     <div>
       <div className="flex flex-wrap justify-between items-center pb-2">
         <div>
-          <h2 className="font-semibold text-lg pb-2">Employee</h2>
+          <h2 className="font-semibold text-lg pb-2">Presents Employee</h2>
         </div>
       </div>
 

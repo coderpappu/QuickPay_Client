@@ -379,9 +379,6 @@ export const {
   useDeleteEmployeeMutation,
   useCreateNewEmployeeMutation,
 
-  // attendance
-  useCreateAttendanceMutation,
-
   // useGetCompanyDetailsQuery,
   // useCreateNewCompanyMutation,
   // useUpdateCompanyMutation,
