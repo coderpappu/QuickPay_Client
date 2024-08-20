@@ -18,16 +18,17 @@ import { LuEye } from "react-icons/lu";
 
 const AttendanceList = () => {
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteEmployee] = useDeleteEmployeeMutation();
-  const [setCompanyId] = useSetCompanyIdMutation();
   const [deleteAttendance] = useDeleteAttendanceMutation();
 
+  // date pick
   let dateCheck = new Date();
   const todayDate = `${dateCheck.getFullYear()}-${String(
     dateCheck.getMonth() + 1
   ).padStart(2, "0")}-${String(dateCheck.getDate()).padStart(2, "0")}`;
 
   const [date, setDate] = useState(todayDate);
+  const [edit, setEdit] = useState(false);
+  const [checkIn, setCheckIn] = useState("");
 
   const {
     data: attendances,
@@ -35,17 +36,15 @@ const AttendanceList = () => {
     isError,
   } = useGetAttendancesQuery({ companyId, date });
 
-  const handleActivate = (id) => {
-    setCompanyId(id);
-  };
-
-  const handleDeactivate = () => {
-    // setCompanyId(null);
-  };
-
   const handleDateChange = (e) => {
     setDate(e.target.value);
   };
+
+  // update system of attendace
+  const handleEditAttendance = async () => {
+    setEdit(!edit);
+  };
+
   const handleDeleteCompany = async (id) => {
     const confirm = () =>
       toast(
@@ -76,6 +75,8 @@ const AttendanceList = () => {
     confirm();
   };
 
+  const handleCheck = () => {};
+
   let content;
 
   if (isLoading && !isError) content = <ListSkeleton />;
@@ -93,7 +94,17 @@ const AttendanceList = () => {
             {attendance?.employee?.name}
           </td>
           <td className="py-2 text-sm text-center">
-            {attendance?.check_in_time}
+            {edit ? (
+              <input
+                type="time"
+                placeholder="03.00"
+                value={attendance?.check_in_time}
+                onChange={(e) => handleCheck(e.target.value)}
+                className="p-2 w-[80px] bg-[#F0F3FF] rounded-sm focus:outline-[#6D28D8] text-center"
+              />
+            ) : (
+              attendance?.check_in_time
+            )}
           </td>
           <td className="py-2 text-sm text-center">
             {attendance?.check_out_time}
@@ -115,11 +126,14 @@ const AttendanceList = () => {
             </Link>
           </td>
           <td className="py-2 text-sm">
-            <Link to={`/company/update/${attendance.id}`}>
-              <div className="grid place-items-center">
-                <TbEdit className="text-2xl text-[#6D28D9]" />
-              </div>
-            </Link>
+            {/* <Link to={`/company/update/${attendance.id}`}> */}
+            <div className="grid place-items-center">
+              <TbEdit
+                className="text-2xl text-[#6D28D9]"
+                onClick={() => handleEditAttendance()}
+              />
+            </div>
+            {/* </Link> */}
           </td>
           <td
             className="py-2 text-sm"
