@@ -214,6 +214,25 @@ export const apiSlice = createApi({
       invalidatesTags: ["Shift"],
     }),
 
+    // Attendance related Endpoint
+    createAttendance: builder.mutation({
+      query: (credentials) => ({
+        url: "/attendance/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["department"],
+    }),
+
+    getAttendances: builder.query({
+      query: ({ companyId, date }) => ({
+        url: "/attendance/getattendances",
+        params: { companyId, date },
+      }),
+
+      providesTags: ["Shift"],
+    }),
+
     // Departement related endpoints
     createDepartment: builder.mutation({
       query: (credentials) => ({
@@ -386,4 +405,8 @@ export const {
   useCreateNewSectionMutation,
   useUpdateSectionMutation,
   useDeleteSectionMutation,
+
+  // attendance
+  useCreateAttendanceMutation,
+  useGetAttendancesQuery,
 } = apiSlice;

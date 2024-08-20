@@ -26,6 +26,7 @@ import UserProfile from "./pages/employee/Profile";
 import EmployeeList from "./pages/employee/employeeList";
 import EmployeeRegistration from "./pages/employee/employeeRegistrationForm";
 import DepartmentForm from "./pages/department/DepartmentForm";
+import AttendanceList from "./pages/employee/AttendancesList";
 
 function App() {
   return (
@@ -86,6 +87,7 @@ function App() {
                 path="employee/attendence"
                 element={<ManualAttendance />}
               />
+              <Route path="employee/attendences" element={<AttendanceList />} />
             </Route>
           </Route>
         </Route>
