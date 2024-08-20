@@ -43,6 +43,12 @@ const Sidebar = () => {
                     Attendance
                   </li>
                 </Link>
+                <Link to="/employee/attendences">
+                  <li className="py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer">
+                    Attendance List
+                  </li>
+                </Link>
+
                 <Link to="/company/employee">
                   <li className="py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer">
                     Employees
