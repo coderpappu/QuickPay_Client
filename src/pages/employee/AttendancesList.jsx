@@ -8,6 +8,7 @@ import {
   useGetCompanyIdQuery,
   useGetEmployeesQuery,
   useGetAttendancesQuery,
+  useDeleteAttendanceMutation,
 } from "../../features/api";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
@@ -19,6 +20,7 @@ const AttendanceList = () => {
   const { data: companyId } = useGetCompanyIdQuery();
   const [deleteEmployee] = useDeleteEmployeeMutation();
   const [setCompanyId] = useSetCompanyIdMutation();
+  const [deleteAttendance] = useDeleteAttendanceMutation();
 
   let dateCheck = new Date();
   const todayDate = `${dateCheck.getFullYear()}-${String(
@@ -40,6 +42,7 @@ const AttendanceList = () => {
   const handleDeactivate = () => {
     // setCompanyId(null);
   };
+
   const handleDateChange = (e) => {
     setDate(e.target.value);
   };
@@ -51,15 +54,15 @@ const AttendanceList = () => {
             onConfirm={async () => {
               toast.dismiss(t.id);
               try {
-                await deleteEmployee(id).then((res) => {
+                await deleteAttendance(id).then((res) => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
-                    toast.success("Company deleted successfully");
+                    toast.success("Attendance deleted successfully");
                   }
                 });
               } catch (error) {
-                toast.error(error.message || "Failed to delete company");
+                toast.error(error.message || "Failed to delete attendace");
               }
             }}
             onCancel={() => toast.dismiss(t.id)}
@@ -140,7 +143,7 @@ const AttendanceList = () => {
       <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-auto">
         <div className="flex flex-wrap justify-between mb-12">
           <div className="font-medium text-base">
-            {/* {companies && companies?.length} Company Available for Now */}
+            Now {attendances?.data?.length} Employee Available
           </div>
           <div className="border p-1">
             <input type="date" value={date} onChange={handleDateChange} />
