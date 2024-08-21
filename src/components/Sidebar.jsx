@@ -40,19 +40,22 @@ const Sidebar = () => {
             </Link>
 
             {/* Attendance menu */}
-            <li
-              className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-between ${
-                activeMenu === "attendance" && `bg-[#6D28D9] text-white`
-              }`}
-              onClick={() => handleMenuClick("attendance")}
-            >
-              Attendance
-              <IoIosArrowForward
-                className={`ml-2 transition-all ${
-                  activeMenu === "attendance" ? "rotate-90" : ""
+            {companyId && (
+              <li
+                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-between ${
+                  activeMenu === "attendance" && `bg-[#6D28D9] text-white`
                 }`}
-              />
-            </li>
+                onClick={() => handleMenuClick("attendance")}
+              >
+                Attendance
+                <IoIosArrowForward
+                  className={`ml-2 transition-all ${
+                    activeMenu === "attendance" ? "rotate-90" : ""
+                  }`}
+                />
+              </li>
+            )}
+
             {activeMenu === "attendance" && (
               <div className="ml-3">
                 <Link to="/employee/attendence">
@@ -81,19 +84,22 @@ const Sidebar = () => {
             )}
 
             {/* Company Settings menu */}
-            <li
-              className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-between ${
-                activeMenu === "companySettings" && `bg-[#6D28D9] text-white`
-              }`}
-              onClick={() => handleMenuClick("companySettings")}
-            >
-              Company Settings
-              <IoIosArrowForward
-                className={`ml-2 transition-all ${
-                  activeMenu === "companySettings" ? "rotate-90" : ""
+            {companyId && (
+              <li
+                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-between ${
+                  activeMenu === "companySettings" && `bg-[#6D28D9] text-white`
                 }`}
-              />
-            </li>
+                onClick={() => handleMenuClick("companySettings")}
+              >
+                Company Settings
+                <IoIosArrowForward
+                  className={`ml-2 transition-all ${
+                    activeMenu === "companySettings" ? "rotate-90" : ""
+                  }`}
+                />
+              </li>
+            )}
+
             {activeMenu === "companySettings" && (
               <div className="ml-3">
                 <Link to="/company/shift/list">
