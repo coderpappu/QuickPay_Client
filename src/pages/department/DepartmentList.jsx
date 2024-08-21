@@ -7,6 +7,8 @@ import {
   useGetCompanyIdQuery,
   useGetDepartmentsQuery,
 } from "../../features/api";
+import ListSkeleton from "../../skeletons/ListSkeleton";
+import ErrorMessage from "../../utils/ErrorMessage";
 
 const DepartmentList = () => {
   const {
@@ -34,25 +36,9 @@ const DepartmentList = () => {
 
   let content;
 
-  if (isLoading && !isError)
-    content = (
-      <tr>
-        <td>
-          <div>Loading...</div>
-        </td>
-      </tr>
-    );
+  if (isLoading && !isError) content = <ListSkeleton />;
   if (isError && !isLoading)
-    content = (
-      <tr>
-        <td>
-          <div className="w-full bg-red-500 py-3 px-3 text-white">
-            {error?.data?.message}
-          </div>
-        </td>
-      </tr>
-    );
-
+    content = <ErrorMessage message={error?.data?.message} />;
   if (!isLoading && !isError)
     content = allDepartment?.data?.map((department) => (
       <tr key={department.id}>

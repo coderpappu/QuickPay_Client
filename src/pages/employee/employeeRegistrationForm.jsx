@@ -1,4 +1,4 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -13,6 +13,7 @@ import {
 } from "../../features/api";
 import UploadForm from "../../helpers/UploadForm";
 import { useState } from "react";
+import ErrorMessage from "../../utils/ErrorMessage";
 
 const EmployeeRegistrationForm = () => {
   const { data: CompanyId } = useGetCompanyIdQuery();
@@ -37,7 +38,9 @@ const EmployeeRegistrationForm = () => {
     !sections?.data?.length ||
     !shifts?.data?.length
   ) {
-    content = "Please provide all the data first then create employee";
+    content = (
+      <ErrorMessage message="Please provide all the data first then create " />
+    );
   } else {
     const initialValues = {
       name: "Nasifa",
