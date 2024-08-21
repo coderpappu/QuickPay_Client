@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
-  useDeleteEmployeeMutation,
-  useGetCompaniesQuery,
-  useSetCompanyIdMutation,
   useGetCompanyIdQuery,
-  useGetEmployeesQuery,
   useGetAttendancesQuery,
   useDeleteAttendanceMutation,
 } from "../../features/api";
@@ -27,13 +23,12 @@ const AttendanceList = () => {
   ).padStart(2, "0")}-${String(dateCheck.getDate()).padStart(2, "0")}`;
 
   const [date, setDate] = useState(todayDate);
-  const [edit, setEdit] = useState(false);
-  const [checkIn, setCheckIn] = useState("");
 
   const {
     data: attendances,
     isLoading,
     isError,
+    error,
   } = useGetAttendancesQuery({ companyId, date });
 
   const handleDateChange = (e) => {
@@ -76,12 +71,17 @@ const AttendanceList = () => {
     confirm();
   };
 
-  const handleCheck = () => {};
-
   let content;
 
   if (isLoading && !isError) content = <ListSkeleton />;
-  if (!isLoading && isError) content = "Error";
+  if (!isLoading && isError)
+    content = (
+      <tr>
+        <td colSpan="10" className="bg-red-500 text-white px-4 py-2 rounded-md">
+          {error?.data?.message}
+        </td>
+      </tr>
+    );
 
   if (!isLoading && !isError && attendances?.data?.length >= 0)
     content = attendances?.data?.map((attendance, index) => (
@@ -168,7 +168,7 @@ const AttendanceList = () => {
         </div>
 
         <div>
-          <table className="w-full h-auto">
+          <table className="w-full h-auto table-auto">
             <thead className="border-b border-slate-200 text-left">
               <tr>
                 <th className="pb-2 text-base text-center">SL</th>
