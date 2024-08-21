@@ -28,6 +28,15 @@ const ManualAttendance = () => {
     let checkIn = checkInTimes[employeeId] || null;
     let checkOut = checkOutTimes[employeeId] || null;
 
+    // Define your thresholds
+    const lateThreshold = "09:30";
+    const overtimeThreshold = "17:00";
+
+    // Check for late attendance
+    const isLate = checkIn && checkIn > lateThreshold;
+    // Check for overtime
+    const isOvertime = checkOut && checkOut > overtimeThreshold;
+
     await createCheck({
       check_in_time: checkIn,
       check_out_time: checkOut,

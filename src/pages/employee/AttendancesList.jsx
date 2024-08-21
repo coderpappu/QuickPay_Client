@@ -42,7 +42,8 @@ const AttendanceList = () => {
 
   // update system of attendace
   const handleEditAttendance = async () => {
-    setEdit(!edit);
+    // setEdit(!edit);
+    alert("Edit System is not available");
   };
 
   const handleDeleteCompany = async (id) => {
@@ -94,17 +95,19 @@ const AttendanceList = () => {
             {attendance?.employee?.name}
           </td>
           <td className="py-2 text-sm text-center">
-            {edit ? (
-              <input
-                type="time"
-                placeholder="03.00"
-                value={attendance?.check_in_time}
-                onChange={(e) => handleCheck(e.target.value)}
-                className="p-2 w-[80px] bg-[#F0F3FF] rounded-sm focus:outline-[#6D28D8] text-center"
-              />
-            ) : (
+            {
+              // edit ? (
+              //   <input
+              //     type="time"
+              //     placeholder="03.00"
+              //     value={attendance?.check_in_time}
+              //     onChange={(e) => handleCheck(e.target.value)}
+              //     className="p-2 w-[80px] bg-[#F0F3FF] rounded-sm focus:outline-[#6D28D8] text-center"
+              //   />
+              // ) : (
               attendance?.check_in_time
-            )}
+              //)
+            }
           </td>
           <td className="py-2 text-sm text-center">
             {attendance?.check_out_time}
@@ -119,7 +122,7 @@ const AttendanceList = () => {
           <td className="py-2 text-sm text-center">{attendance?.status}</td>
 
           <td className="py-2 text-sm text-center">
-            <Link to={`/company/employee/details/${attendance.employee.id}`}>
+            <Link to={`/company/employee/details/${attendance?.employee?.id}`}>
               <div className="grid place-items-center">
                 <LuEye className="text-2xl text-green-500" />
               </div>
