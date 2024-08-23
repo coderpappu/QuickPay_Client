@@ -28,7 +28,7 @@ const SectionList = () => {
               try {
                 deleteSection(id).then((res) => {
                   if (res.error != null) {
-                    toast.error(res.error.data.msg);
+                    toast.error(res.error.data.message);
                   } else {
                     toast.success("Section deleted successfully");
                   }

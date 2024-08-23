@@ -10,7 +10,8 @@ import {
 
 import ErrorMessage from "../../../utils/ErrorMessage";
 import ListSkelaton from "../../../skeletons/ListSkeleton";
-
+import ConfirmDialog from "../../../helpers/ConfirmDialog";
+import toast from "react-hot-toast";
 const ShiftList = () => {
   const { data: company_Id } = useGetCompanyIdQuery();
 
@@ -26,14 +27,34 @@ const ShiftList = () => {
   const [deleteShift, { isLoading: loding, isError: error }] =
     useDeleteShiftMutation();
 
-  const handleDeleteShift = async (shiftId, company_Id) => {
-    try {
-      if (window.confirm("Are you sure you want to delete")) {
-        await deleteShift({ shiftId, company_Id });
-      }
-    } catch (error) {
-      console.error(error.message);
-    }
+  const handleDeleteShift = async (id, company_Id) => {
+    const confirm = () =>
+      toast(
+        (t) => (
+          <ConfirmDialog
+            onConfirm={async () => {
+              toast.dismiss(t.id);
+              try {
+                deleteShift({ shiftId: id, company_Id }).then((res) => {
+                  if (res.error != null) {
+                    toast.error(res.error.data.message);
+                  } else {
+                    toast.success("Shift deleted successfully");
+                  }
+                });
+              } catch (error) {
+                toast.error(error.message || "Failed to delete shift");
+              }
+            }}
+            onCancel={() => toast.dismiss(t.id)}
+          />
+        ),
+        {
+          duration: Infinity,
+        }
+      );
+
+    confirm();
   };
 
   let content = null;

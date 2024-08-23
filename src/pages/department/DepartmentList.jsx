@@ -9,7 +9,8 @@ import {
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import ErrorMessage from "../../utils/ErrorMessage";
-
+import toast from "react-hot-toast";
+import ConfirmDialog from "../../helpers/ConfirmDialog";
 const DepartmentList = () => {
   const {
     data: companyId,
@@ -18,14 +19,35 @@ const DepartmentList = () => {
   } = useGetCompanyIdQuery();
 
   const [departmentDelete] = useDeleteDepartmentMutation();
-  const deleteHandler = async (id) => {
-    try {
-      if (window.confirm("Are you sure you want to delete")) {
-        await departmentDelete(id);
-      }
-    } catch (error) {
-      console.error(error.message);
-    }
+
+  const handleDeleteDepartment = async (id) => {
+    const confirm = () =>
+      toast(
+        (t) => (
+          <ConfirmDialog
+            onConfirm={async () => {
+              toast.dismiss(t.id);
+              try {
+                departmentDelete(id).then((res) => {
+                  if (res.error != null) {
+                    toast.error(res.error.data.message);
+                  } else {
+                    toast.success("department deleted successfully");
+                  }
+                });
+              } catch (error) {
+                toast.error(error.message || "Failed to delete department");
+              }
+            }}
+            onCancel={() => toast.dismiss(t.id)}
+          />
+        ),
+        {
+          duration: Infinity,
+        }
+      );
+
+    confirm();
   };
   const {
     data: allDepartment,
@@ -58,7 +80,7 @@ const DepartmentList = () => {
           <button
             className="text-red-500"
             type="button"
-            onClick={() => deleteHandler(department?.id)}
+            onClick={() => handleDeleteDepartment(department?.id)}
           >
             <FontAwesomeIcon icon={faTrash} />
           </button>
