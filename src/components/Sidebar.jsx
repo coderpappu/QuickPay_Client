@@ -24,7 +24,7 @@ const Sidebar = () => {
   return (
     <div className="flex h-screen bg-gray-200">
       {/* Sidebar */}
-      <div className="bg-[#F0F3FF] shadow-inner text-black w-64 flex-shrink-0">
+      <div className="bg-[#d6deff] shadow-inner text-black w-64 flex-shrink-0">
         <div className="p-4">
           <h2 className="text-xl font-bold">XCEED Bangladesh</h2>
           <ul className="mt-4">
