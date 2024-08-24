@@ -137,7 +137,7 @@ const CompanyList = () => {
         </div>
       </div>
 
-      <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-auto">
+      <div className="border-solid border-[1px] border-slate-200 bg-[#ecf0f1] rounded-md p-5 w-full h-auto">
         <div className="flex flex-wrap justify-between mb-12">
           <div className="font-medium text-base">
             {(companies && companies?.length) || 0} Company Available for Now

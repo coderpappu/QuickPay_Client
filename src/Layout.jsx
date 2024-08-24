@@ -4,7 +4,7 @@ import Sidebar from "./components/Sidebar";
 
 const Layout = () => {
   return (
-    <div className="bg-[#F7F7F7] w-full">
+    <div className="bg-[#fff] w-full">
       <Header />
 
       <div className="wrapper-container flex flex-wrap justify-between">
