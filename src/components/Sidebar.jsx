@@ -38,6 +38,36 @@ const Sidebar = () => {
                 Manage Company
               </li>
             </Link>
+            {companyId && (
+              <li
+                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-between ${
+                  activeMenu === "dashboard" && `bg-[#6D28D9] text-white`
+                }`}
+                onClick={() => handleMenuClick("dashboard")}
+              >
+                Dashboard
+                <IoIosArrowForward
+                  className={`ml-2 transition-all ${
+                    activeMenu === "dashboard" ? "rotate-90" : ""
+                  }`}
+                />
+              </li>
+            )}
+            {activeMenu === "dashboard" && (
+              <div className="ml-3">
+                <Link to="/">
+                  <li
+                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
+                      activeSubMenu === "attendance" && "text-[#6D28D9]"
+                    }`}
+                    onClick={() => handleSubMenuClick("attendance")}
+                  >
+                    <div className="w-[6px] h-[6px] bg-[#6D28D9] rounded-full mr-2"></div>
+                    Admin Dashboard
+                  </li>
+                </Link>{" "}
+              </div>
+            )}
 
             {/* Attendance menu */}
             {companyId && (
