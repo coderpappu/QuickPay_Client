@@ -3,7 +3,6 @@ import React from "react";
 import { IoArrowUpOutline } from "react-icons/io5";
 
 const StatusCard = ({ title, count, percentage, icon: Icon, color }) => {
-  console.log(color);
   return (
     <div className="w-[235px] h-[100px] bg-[#d6deff] py-3 px-3 mr-3 rounded-md flex flex-wrap items-center justify-between">
       <div className=" h-[80px] flex flex-col justify-between">

@@ -12,18 +12,14 @@ import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { LuEye } from "react-icons/lu";
 import ErrorMessage from "../../utils/ErrorMessage";
-
+import DatePicker from "../../utils/DatePicker";
 const AttendanceList = () => {
   const { data: companyId } = useGetCompanyIdQuery();
   const [deleteAttendance] = useDeleteAttendanceMutation();
 
   // date pick
-  let dateCheck = new Date();
-  const todayDate = `${dateCheck.getFullYear()}-${String(
-    dateCheck.getMonth() + 1
-  ).padStart(2, "0")}-${String(dateCheck.getDate()).padStart(2, "0")}`;
 
-  const [date, setDate] = useState(todayDate);
+  const [date, setDate] = useState(DatePicker);
 
   const {
     data: attendances,

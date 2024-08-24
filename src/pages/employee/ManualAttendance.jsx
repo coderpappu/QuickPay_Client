@@ -36,12 +36,12 @@ const ManualAttendance = () => {
     const lateThreshold = "09:30";
     const overtimeThreshold = "17:00";
 
-    let checkTime = employees?.data[0]?.EmployeeShift[0]?.shift.start_time;
+    //let checkTime = employees?.data[0]?.EmployeeShift[0]?.shift.start_time
 
     // Check for late attendance
-    const isLate = checkIn && checkIn > lateThreshold;
+    // const isLate = checkIn && checkIn > lateThreshold;
     // Check for overtime
-    const isOvertime = checkOut && checkOut > overtimeThreshold;
+    // const isOvertime = checkOut && checkOut > overtimeThreshold;
 
     await createCheck({
       check_in_time: checkIn,
@@ -75,10 +75,10 @@ const ManualAttendance = () => {
         <td className="py-2 text-sm text-center ">{index + 1}</td>
         <td className="py-2 text-sm font-semibold pl-10 ">{employee?.name}</td>
         <td className="py-2 text-sm font-semibold pl-10 ">
-          {employee?.EmployeeDepartment[0]?.department?.name}
+          {employee?.EmployeeDepartment?.[0]?.department?.name}
         </td>
         <td className="py-2 text-sm font-semibold pl-10 ">
-          {employee?.EmployeeShift[0]?.shift?.name}
+          {employee?.EmployeeShift?.[0]?.shift?.name}
         </td>
         <td className="py-2 text-sm text-center">
           <input

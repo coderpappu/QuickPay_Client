@@ -93,10 +93,10 @@ const EmployeeList = () => {
             </td>
             <td className="py-2 text-sm text-center">{employee.email}</td>
             <td className="py-2 text-sm text-center">
-              {employee?.EmployeeDepartment[0]?.department?.name}
+              {employee?.EmployeeDepartment?.[0]?.department?.name}
             </td>
             <td className="py-2 text-sm text-center">
-              {employee?.EmployeeShift[0]?.shift?.name}
+              {employee?.EmployeeShift?.[0]?.shift?.name}
             </td>
 
             <td className="py-2 text-sm text-center">
@@ -110,21 +110,21 @@ const EmployeeList = () => {
               ) : (
                 <button
                   className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-sm w-28"
-                  onClick={() => handleActivate(employee.id)}
+                  onClick={() => handleActivate(employee?.id)}
                 >
                   Activate
                 </button>
               )}
             </td>
             <td className="py-2 text-sm text-center">
-              <Link to={`/company/employee/details/${employee.id}`}>
+              <Link to={`/company/employee/details/${employee?.id}`}>
                 <div className="grid place-items-center">
                   <LuEye className="text-2xl text-green-500" />
                 </div>
               </Link>
             </td>
             <td className="py-2 text-sm">
-              <Link to={`/company/update/${employee.id}`}>
+              <Link to={`/company/update/${employee?.id}`}>
                 <div className="grid place-items-center">
                   <TbEdit className="text-2xl text-[#6D28D9]" />
                 </div>
@@ -132,7 +132,7 @@ const EmployeeList = () => {
             </td>
             <td
               className="py-2 text-sm"
-              onClick={() => handleDeleteCompany(employee.id)}
+              onClick={() => handleDeleteCompany(employee?.id)}
             >
               <div className="grid place-items-center">
                 <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
