@@ -27,6 +27,7 @@ import EmployeeList from "./pages/employee/employeeList";
 import EmployeeRegistration from "./pages/employee/employeeRegistrationForm";
 import DepartmentForm from "./pages/department/DepartmentForm";
 import AttendanceList from "./pages/employee/AttendancesList";
+import Settings from "./pages/company/Settings";
 
 function App() {
   return (
@@ -81,6 +82,8 @@ function App() {
               <Route path="section/list" element={<SectionList />} />
               <Route path="section/create" element={<SectionSettings />} />
               <Route path="section/update/:id" element={<SectionSettings />} />
+
+              <Route path="company/settings" element={<Settings />} />
 
               {/* Attendance  */}
               <Route
