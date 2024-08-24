@@ -55,10 +55,6 @@ const Sidebar = () => {
                 />
               </li>
             )}
-<<<<<<< HEAD
-
-=======
->>>>>>> 739b84ec7286875ab44606893f7ef5d4d355a983
             {activeMenu === "attendance" && (
               <div className="ml-3">
                 <Link to="/employee/attendence">
@@ -102,10 +98,6 @@ const Sidebar = () => {
                 />
               </li>
             )}
-<<<<<<< HEAD
-
-=======
->>>>>>> 739b84ec7286875ab44606893f7ef5d4d355a983
             {activeMenu === "companySettings" && (
               <div className="ml-3">
                 <Link to="/company/shift/list">
