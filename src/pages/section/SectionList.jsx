@@ -11,6 +11,7 @@ import ConfirmDialog from "../../helpers/ConfirmDialog";
 import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import ListSkeleton from "../../skeletons/ListSkeleton";
+import ErrorMessage from "../../utils/ErrorMessage";
 
 const SectionList = () => {
   const { data: companyId } = useGetCompanyIdQuery();
@@ -27,7 +28,7 @@ const SectionList = () => {
               try {
                 deleteSection(id).then((res) => {
                   if (res.error != null) {
-                    toast.error(res.error.data.msg);
+                    toast.error(res.error.data.message);
                   } else {
                     toast.success("Section deleted successfully");
                   }
@@ -58,17 +59,10 @@ const SectionList = () => {
 
   let content;
 
-  if (isLoading) {
-    content = <ListSkeleton />;
-  }
+  if (isLoading && !isError) content = <ListSkeleton />;
 
-  if (isError) {
-    content = (
-      <div className="text-red-600 font-poppins font-medium">
-        {error?.data?.message}
-      </div>
-    );
-  }
+  if (!isLoading && isError)
+    content = <ErrorMessage message={error?.data?.message} />;
 
   if (!isLoading && !isError)
     content = sections?.data?.map((section, index) => (
@@ -109,7 +103,7 @@ const SectionList = () => {
       {/* {content} */}
       <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-auto">
         {/* Heading And Btn */}
-        <div className="flex flex-wrap justify-between mb-12">
+        <div className="flex flex-wrap justify-between mb-4">
           <div className="font-medium text-base ">
             {" "}
             {sections?.data?.length | 0} Section Available for Now
@@ -125,8 +119,8 @@ const SectionList = () => {
         </div>
         <div>
           <table className="w-full h-auto ">
-            <thead className="border-b border-slate-200 text-left">
-              {sections?.data && (
+            {!isError && (
+              <thead className="border-b border-slate-200 text-left mb-8">
                 <tr>
                   <th className="pb-2 text-base text-center">SL</th>
                   <th className="pb-2 text-base pl-10">Name</th>
@@ -134,8 +128,8 @@ const SectionList = () => {
                   <th className="pb-2 text-base text-center">Update </th>
                   <th className="pb-2 text-base text-center">Delete </th>
                 </tr>
-              )}
-            </thead>
+              </thead>
+            )}
 
             <tbody>{content}</tbody>
           </table>

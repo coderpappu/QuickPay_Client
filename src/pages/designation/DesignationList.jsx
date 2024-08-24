@@ -11,6 +11,7 @@ import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import { date } from "yup";
+import ErrorMessage from "../../utils/ErrorMessage";
 
 const DesignationList = () => {
   const { data: companyId } = useGetCompanyIdQuery();
@@ -27,7 +28,7 @@ const DesignationList = () => {
               try {
                 deleteDesignation(id).then((res) => {
                   if (res.error != null) {
-                    toast.error(res.error.data.msg);
+                    toast.error(res.error.data.message);
                   } else {
                     toast.success("Designation deleted successfully");
                   }
@@ -58,21 +59,10 @@ const DesignationList = () => {
 
   let content;
 
-  if (isLoading) {
-    content = <ListSkeleton />;
-  }
+  if (isLoading && !isError) content = <ListSkeleton />;
 
-  if (isError) {
-    content = (
-      <tr>
-        <td>
-          <div className="text-red-600 font-poppins font-medium">
-            {error?.data?.message}
-          </div>
-        </td>
-      </tr>
-    );
-  }
+  if (!isLoading && isError)
+    content = <ErrorMessage message={error?.data?.message} />;
 
   if (!isLoading && !isError)
     content = designations?.data ? (
@@ -118,7 +108,7 @@ const DesignationList = () => {
 
       <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-auto">
         {/* Heading And Btn */}
-        <div className="flex flex-wrap justify-between mb-12">
+        <div className="flex flex-wrap justify-between mb-4">
           <div className="font-medium text-base ">
             {" "}
             {designations?.data?.length | 0} Designation Available for Now
@@ -134,8 +124,8 @@ const DesignationList = () => {
         </div>
         <div>
           <table className="w-full h-auto ">
-            {designations?.data && (
-              <thead className="border-b border-slate-200 text-left">
+            {!isError && (
+              <thead className="border-b border-slate-200 text-left mt-8">
                 <tr>
                   <th className="pb-2 text-base text-center">SL</th>
                   <th className="pb-2 text-base pl-10">Name</th>

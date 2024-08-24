@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
-  useDeleteEmployeeMutation,
-  useGetCompaniesQuery,
-  useSetCompanyIdMutation,
   useGetCompanyIdQuery,
-  useGetEmployeesQuery,
   useGetAttendancesQuery,
   useDeleteAttendanceMutation,
 } from "../../features/api";
@@ -15,6 +11,7 @@ import ListSkeleton from "../../skeletons/ListSkeleton";
 import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { LuEye } from "react-icons/lu";
+import ErrorMessage from "../../utils/ErrorMessage";
 
 const AttendanceList = () => {
   const { data: companyId } = useGetCompanyIdQuery();
@@ -27,13 +24,12 @@ const AttendanceList = () => {
   ).padStart(2, "0")}-${String(dateCheck.getDate()).padStart(2, "0")}`;
 
   const [date, setDate] = useState(todayDate);
-  const [edit, setEdit] = useState(false);
-  const [checkIn, setCheckIn] = useState("");
 
   const {
     data: attendances,
     isLoading,
     isError,
+    error,
   } = useGetAttendancesQuery({ companyId, date });
 
   const handleDateChange = (e) => {
@@ -76,12 +72,11 @@ const AttendanceList = () => {
     confirm();
   };
 
-  const handleCheck = () => {};
-
   let content;
 
   if (isLoading && !isError) content = <ListSkeleton />;
-  if (!isLoading && isError) content = "Error";
+  if (!isLoading && isError)
+    content = <ErrorMessage message={error?.data?.message} />;
 
   if (!isLoading && !isError && attendances?.data?.length >= 0)
     content = attendances?.data?.map((attendance, index) => (
@@ -158,9 +153,9 @@ const AttendanceList = () => {
       </div>
 
       <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-auto">
-        <div className="flex flex-wrap justify-between mb-12">
+        <div className="flex flex-wrap justify-between mb-2">
           <div className="font-medium text-base">
-            Now {attendances?.data?.length} Employee Available
+            Now {attendances?.data?.length || 0} Employee Available
           </div>
           <div className="border p-1">
             <input type="date" value={date} onChange={handleDateChange} />
@@ -168,21 +163,23 @@ const AttendanceList = () => {
         </div>
 
         <div>
-          <table className="w-full h-auto">
-            <thead className="border-b border-slate-200 text-left">
-              <tr>
-                <th className="pb-2 text-base text-center">SL</th>
-                <th className="pb-2 text-base pl-10">Name</th>
-                <th className="pb-2 text-base text-center">In Time</th>
-                <th className="pb-2 text-base text-center">Out Time</th>
-                <th className="pb-2 text-base text-center">Late</th>
-                <th className="pb-2 text-base text-center">Over Time</th>
-                <th className="pb-2 text-base text-center">Status</th>
-                <th className="pb-2 text-base text-center">View</th>
-                <th className="pb-2 text-base text-center">Update</th>
-                <th className="pb-2 text-base text-center">Delete</th>
-              </tr>
-            </thead>
+          <table className="w-full h-auto table-auto">
+            {!isError && (
+              <thead className="border-b border-slate-200 text-left mt-12">
+                <tr>
+                  <th className="pb-2 text-base text-center">SL</th>
+                  <th className="pb-2 text-base pl-10">Name</th>
+                  <th className="pb-2 text-base text-center">In Time</th>
+                  <th className="pb-2 text-base text-center">Out Time</th>
+                  <th className="pb-2 text-base text-center">Late</th>
+                  <th className="pb-2 text-base text-center">Over Time</th>
+                  <th className="pb-2 text-base text-center">Status</th>
+                  <th className="pb-2 text-base text-center">View</th>
+                  <th className="pb-2 text-base text-center">Update</th>
+                  <th className="pb-2 text-base text-center">Delete</th>
+                </tr>
+              </thead>
+            )}
 
             <tbody>{content}</tbody>
           </table>

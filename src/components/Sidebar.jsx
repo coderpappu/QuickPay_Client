@@ -24,7 +24,7 @@ const Sidebar = () => {
   return (
     <div className="flex h-screen bg-gray-200">
       {/* Sidebar */}
-      <div className="bg-[#F0F3FF] shadow-inner text-black w-64 flex-shrink-0">
+      <div className="bg-[#d6deff] shadow-inner text-black w-64 flex-shrink-0">
         <div className="p-4">
           <h2 className="text-xl font-bold">XCEED Bangladesh</h2>
           <ul className="mt-4">
@@ -55,7 +55,10 @@ const Sidebar = () => {
                 />
               </li>
             )}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 739b84ec7286875ab44606893f7ef5d4d355a983
             {activeMenu === "attendance" && (
               <div className="ml-3">
                 <Link to="/employee/attendence">
@@ -99,7 +102,10 @@ const Sidebar = () => {
                 />
               </li>
             )}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 739b84ec7286875ab44606893f7ef5d4d355a983
             {activeMenu === "companySettings" && (
               <div className="ml-3">
                 <Link to="/company/shift/list">

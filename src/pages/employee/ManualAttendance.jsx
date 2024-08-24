@@ -5,6 +5,9 @@ import {
   useGetEmployeesQuery,
   useGetCompanyIdQuery,
 } from "../../features/api";
+import ListSkeleton from "../../skeletons/ListSkeleton";
+import { MdOutlineErrorOutline } from "react-icons/md";
+import ErrorMessage from "../../utils/ErrorMessage";
 
 const ManualAttendance = () => {
   const [checkInTimes, setCheckInTimes] = useState({});
@@ -17,6 +20,7 @@ const ManualAttendance = () => {
     data: employees,
     isLoading,
     isError,
+    error,
   } = useGetEmployeesQuery(companyId);
 
   const handleCheck = async (employeeId, fingerprintId) => {
@@ -31,6 +35,8 @@ const ManualAttendance = () => {
     // Define your thresholds
     const lateThreshold = "09:30";
     const overtimeThreshold = "17:00";
+
+    let checkTime = employees?.data[0]?.EmployeeShift[0]?.shift.start_time;
 
     // Check for late attendance
     const isLate = checkIn && checkIn > lateThreshold;
@@ -59,8 +65,10 @@ const ManualAttendance = () => {
 
   let content;
 
-  if (isLoading && !isError) content = "Loading...";
-  if (!isLoading && isError) content = "Error Occured";
+  if (isLoading && !isError) content = <ListSkeleton />;
+  if (!isLoading && isError)
+    content = <ErrorMessage message={error?.data?.message} />;
+
   if (!isLoading && !isError && employees?.data?.length >= 0)
     content = employees?.data?.map((employee, index) => (
       <tr key={employee?.id} className="w-full">
@@ -114,7 +122,7 @@ const ManualAttendance = () => {
       </div>
 
       <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-auto">
-        <div className="flex flex-wrap justify-between mb-12">
+        <div className="flex flex-wrap justify-between mb-3">
           <div className="font-medium text-base">
             Now 150 employees are available
           </div>
@@ -128,21 +136,27 @@ const ManualAttendance = () => {
         </div>
         <div>
           <table className="w-full h-auto">
-            <thead className="border-b border-slate-200 text-left">
-              <tr>
-                <th className="pb-2 text-base text-center w-[8%]">SL</th>
-                <th className="pb-2 text-base pl-10 w-[22%]">Name</th>
-                <th className="pb-2 text-base text-center w-[14%]">
-                  Department
-                </th>
-                <th className="pb-2 text-base text-center w-[14%]">Shift</th>
-                <th className="pb-2 text-base text-center w-[14%]">In Time</th>
-                <th className="pb-2 text-base text-center w-[14%]">Out Time</th>
-                <th className="pb-2 text-base text-center w-[14%]">Update</th>
-              </tr>
-            </thead>
+            {!isError && (
+              <thead className="border-b border-slate-200 text-left  mt-12">
+                <tr>
+                  <th className="pb-2 text-base text-center w-[8%]">SL</th>
+                  <th className="pb-2 text-base pl-10 w-[22%]">Name</th>
+                  <th className="pb-2 text-base text-center w-[14%]">
+                    Department
+                  </th>
+                  <th className="pb-2 text-base text-center w-[14%]">Shift</th>
+                  <th className="pb-2 text-base text-center w-[14%]">
+                    In Time
+                  </th>
+                  <th className="pb-2 text-base text-center w-[14%]">
+                    Out Time
+                  </th>
+                  <th className="pb-2 text-base text-center w-[14%]">Update</th>
+                </tr>
+              </thead>
+            )}
 
-            <tbody>{content}</tbody>
+            {!isError ? <tbody>{content}</tbody> : content}
           </table>
         </div>
       </div>

@@ -11,8 +11,10 @@ import {
   useGetSectionsQuery,
   useGetShiftListQuery,
 } from "../../features/api";
+
 import UploadForm from "../../helpers/UploadForm";
 import { useState } from "react";
+// import ErrorMessage from "../../utils/ErrorMessage";
 
 const EmployeeRegistrationForm = () => {
   const { data: CompanyId } = useGetCompanyIdQuery();
@@ -37,7 +39,9 @@ const EmployeeRegistrationForm = () => {
     !sections?.data?.length ||
     !shifts?.data?.length
   ) {
-    content = "Please provide all the data first then create employee";
+    // content = (
+    //   <ErrorMessage message="Please provide all the data first then create " />
+    // );
   } else {
     const initialValues = {
       name: "Nasifa",
@@ -59,7 +63,7 @@ const EmployeeRegistrationForm = () => {
       id_number: "234234234324234",
       status: "ACTIVE",
       company_id: CompanyId,
-      fingerprint_id: "527703a9-1ed6-4b55-a5b5-3c7bcd46e452",
+      fingerprint_id: "065e9d0a-5de2-4f46-bfb3-5e224a0536a3",
       designationId: "",
       departmentId: "",
       sectionId: "",
