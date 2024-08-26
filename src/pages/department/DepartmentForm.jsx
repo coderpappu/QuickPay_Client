@@ -53,7 +53,6 @@ const DepartmentForm = () => {
                 company_id: company_id,
               }).unwrap(); // Unwrap the promise for proper error handling
 
-              console.log(values);
               resetForm(); // Reset Formik form state
             }
 

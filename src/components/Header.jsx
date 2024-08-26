@@ -16,8 +16,6 @@ const Header = () => {
     setShow(!show);
   };
 
-  console.log();
-
   const handleLogOut = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("company_id");

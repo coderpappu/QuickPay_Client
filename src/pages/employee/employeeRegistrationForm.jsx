@@ -11,293 +11,470 @@ import {
   useGetSectionsQuery,
   useGetShiftListQuery,
 } from "../../features/api";
-
 import UploadForm from "../../helpers/UploadForm";
 import { useState } from "react";
-// import ErrorMessage from "../../utils/ErrorMessage";
 
 const EmployeeRegistrationForm = () => {
   const { data: CompanyId } = useGetCompanyIdQuery();
   const navigate = useNavigate();
+  const [step, setStep] = useState(1); // State to track current step
   const [canSubmit, setCanSubmit] = useState(true);
 
-  const { data: departments, isLoading } = useGetDepartmentsQuery(CompanyId);
+  const { data: departments } = useGetDepartmentsQuery(CompanyId);
   const { data: designations } = useGetDesignationsQuery(CompanyId);
   const { data: sections } = useGetSectionsQuery(CompanyId);
   const { data: shifts } = useGetShiftListQuery(CompanyId);
   const [createEmployee] = useCreateNewEmployeeMutation();
 
-  // const handleDeleteLogo = () => {
-  //   setCanSubmit(true);
-  //   // setFieldValue("logo", null);
-  // };
-  let content;
+  const initialValues = {
+    name: "",
+    email: "",
+    phone: "",
+    present_address: "",
+    permanent_address: "",
+    gender: "male",
+    religion: "MUSLIM",
+    birth_date: "",
+    joining_date: "",
+    terminate_date: "",
+    image: "",
+    job_status: "PERMANENT",
+    reference: "",
+    spouse_name: "",
+    emergency_contact: "",
+    id_type: "NID",
+    id_number: "",
+    status: "ACTIVE",
+    company_id: CompanyId,
+    fingerprint_id: "",
+    designationId: "",
+    departmentId: "",
+    sectionId: "",
+    shiftId: "",
+  };
 
-  if (
-    !departments?.data?.length ||
-    !designations?.data?.length ||
-    !sections?.data?.length ||
-    !shifts?.data?.length
-  ) {
-    // content = (
-    //   <ErrorMessage message="Please provide all the data first then create " />
-    // );
-  } else {
-    const initialValues = {
-      name: "Nasifa",
-      email: "nasifa@gmail.com",
-      phone: "23341231231",
-      present_address: "sdafsadf",
-      permanent_address: "sdfsdaf",
-      gender: "male",
-      religion: "MUSLIME",
-      birth_date: "",
-      joining_date: "",
-      terminate_date: "",
-      image: "",
-      job_status: "PERMANENT",
-      reference: "pappu",
-      spouse_name: "",
-      emergency_contact: "012245851451",
-      id_type: "NID",
-      id_number: "234234234324234",
-      status: "ACTIVE",
-      company_id: CompanyId,
-      fingerprint_id: "065e9d0a-5de2-4f46-bfb3-5e224a0536a3",
-      designationId: "",
-      departmentId: "",
-      sectionId: "",
-      shiftId: "",
-    };
+  const handleNext = () => setStep((prev) => prev + 1, console.log(step));
+  const handlePrevious = () => setStep((prev) => prev - 1);
 
-    content = (
-      <Formik
-        initialValues={initialValues}
-        validationSchema={EmployeeSchema}
-        onSubmit={async (values, { setSubmitting }) => {
+  const isLastStep = step === 3;
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={EmployeeSchema}
+      onSubmit={async (values, { setSubmitting }) => {
+        if (isLastStep) {
           try {
-            // Handle form submission logic here
-            await createEmployee(values);
+            await createEmployee(values).unwrap();
             toast.success("Employee registered successfully");
-            // navigate("/employee/list");
+            navigate("/employee/list");
           } catch (error) {
-            toast.error("Something went wrong!");
+            toast.error(error?.data?.message);
           } finally {
             setSubmitting(false);
           }
-        }}
-      >
-        {({ isSubmitting, setFieldValue }) => (
-          <Form>
+        } else {
+          handleNext();
+          setSubmitting(false);
+        }
+      }}
+    >
+      {({ isSubmitting, setFieldValue }) => (
+        <Form>
+          {step === 1 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {[
-                { label: "Name", name: "name", type: "text" },
-                { label: "Email", name: "email", type: "email" },
-                { label: "Phone", name: "phone", type: "text" },
-                {
-                  label: "Present Address",
-                  name: "present_address",
-                  type: "text",
-                },
-                {
-                  label: "Permanent Address",
-                  name: "permanent_address",
-                  type: "text",
-                },
-                { label: "Gender", name: "gender", type: "text" },
-                { label: "Religion", name: "religion", type: "text" },
-                { label: "Birth Date", name: "birth_date", type: "date" },
-                { label: "Joining Date", name: "joining_date", type: "date" },
-                {
-                  label: "Terminate Date",
-                  name: "terminate_date",
-                  type: "date",
-                },
-                { label: "Job Status", name: "job_status", type: "text" },
-                { label: "Reference", name: "reference", type: "text" },
-                { label: "Spouse Name", name: "spouse_name", type: "text" },
-                {
-                  label: "Emergency Contact",
-                  name: "emergency_contact",
-                  type: "text",
-                },
-                { label: "ID Type", name: "id_type", type: "text" },
-                { label: "ID Number", name: "id_number", type: "text" },
-                { label: "Status", name: "status", type: "text" },
-              ].map((field) => (
-                <div key={field.name}>
-                  <label
-                    htmlFor={field.name}
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    {field.label}
-                  </label>
-                  <Field
-                    type={field.type}
-                    name={field.name}
-                    id={field.name}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  />
-                  <ErrorMessage
-                    name={field.name}
-                    component="div"
-                    className="text-red-500 text-sm mt-1"
-                  />
-                </div>
-              ))}
               <div>
                 <label
-                  htmlFor="department"
+                  htmlFor="name"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Department
+                  Name
                 </label>
                 <Field
-                  as="select"
-                  name="departmentId"
-                  id="departmentId"
+                  type="text"
+                  name="name"
+                  id="name"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                >
-                  <option value="">Select a Department</option>
-                  {departments?.data?.map((department) => (
-                    <option key={department.id} value={department.id}>
-                      {department.name}
-                    </option>
-                  ))}
-                </Field>
+                />
                 <ErrorMessage
-                  name="departmentId"
+                  name="name"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
               </div>
-
               <div>
                 <label
-                  htmlFor="designationId"
+                  htmlFor="email"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Designation
+                  Email
                 </label>
                 <Field
-                  as="select"
-                  name="designationId"
-                  id="designationId"
+                  type="email"
+                  name="email"
+                  id="email"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                >
-                  <option value="">Select a Designation</option>
-                  {designations?.data?.map((designation) => (
-                    <option key={designation.id} value={designation.id}>
-                      {designation.name}
-                    </option>
-                  ))}
-                </Field>
+                />
                 <ErrorMessage
-                  name="designationId"
+                  name="email"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
               </div>
-
               <div>
                 <label
-                  htmlFor="sectionId"
+                  htmlFor="phone"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Section
+                  Phone
                 </label>
                 <Field
-                  as="select"
-                  name="sectionId"
-                  id="sectionId"
+                  type="text"
+                  name="phone"
+                  id="phone"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                >
-                  <option value="">Select a Section</option>
-                  {sections?.data?.map((section) => (
-                    <option key={section.id} value={section.id}>
-                      {section.name}
-                    </option>
-                  ))}
-                </Field>
+                />
                 <ErrorMessage
-                  name="sectionId"
+                  name="phone"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
               </div>
-
               <div>
                 <label
-                  htmlFor="shiftId"
+                  htmlFor="present_address"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Shift
+                  Present Address
                 </label>
                 <Field
-                  as="select"
-                  name="shiftId"
-                  id="shiftId"
+                  type="text"
+                  name="present_address"
+                  id="present_address"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                >
-                  <option value="">Select a Shift</option>
-                  {shifts?.data?.map((shift) => (
-                    <option key={shift.id} value={shift.id}>
-                      {shift.name}
-                    </option>
-                  ))}
-                </Field>
+                />
                 <ErrorMessage
-                  name="shiftId"
+                  name="present_address"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="permanent_address"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Permanent Address
+                </label>
+                <Field
+                  type="text"
+                  name="permanent_address"
+                  id="permanent_address"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+                <ErrorMessage
+                  name="permanent_address"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
               </div>
             </div>
-            {/* <div>
-              <label
-                htmlFor="image"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Upload Image
-              </label>
-              <input
-                type="file"
-                name="image"
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                onChange={(event) =>
-                  setFieldValue("image", event.currentTarget.files[0])
-                }
-              />
+          )}
 
-              
+          {step === 2 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label
+                  htmlFor="gender"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Gender
+                </label>
+                <Field
+                  as="select"
+                  name="gender"
+                  id="gender"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </Field>
+                <ErrorMessage
+                  name="gender"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="religion"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Religion
+                </label>
+                <Field
+                  as="select"
+                  name="religion"
+                  id="religion"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="MUSLIM">Muslim</option>
+                  <option value="HINDU">Hindu</option>
+                  <option value="CHRISTIAN">Christian</option>
+                  <option value="BUDDHIST">Buddhist</option>
+                </Field>
+                <ErrorMessage
+                  name="religion"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="birth_date"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Birth Date
+                </label>
+                <Field
+                  type="date"
+                  name="birth_date"
+                  id="birth_date"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+                <ErrorMessage
+                  name="birth_date"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="joining_date"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Joining Date
+                </label>
+                <Field
+                  type="date"
+                  name="joining_date"
+                  id="joining_date"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
 
-              <ErrorMessage
-                name="image"
-                component="div"
-                className="text-red-500 text-sm mt-1"
-              />
-            </div> */}
-            <UploadForm
-              setFieldValue={setFieldValue}
-              canSubmit={canSubmit}
-              setCanSubmit={setCanSubmit}
-              name="image"
-            />
-            <div className="mt-4">
+                <ErrorMessage
+                  name="joining_date"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="terminate_date"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Terminate Date
+                </label>
+                <Field
+                  type="date"
+                  name="terminate_date"
+                  id="terminate_date"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+                <ErrorMessage
+                  name="terminate_date"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="image"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Upload Image
+                </label>
+                <UploadForm onUpload={(url) => setFieldValue("image", url)} />
+                <ErrorMessage
+                  name="image"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label
+                  htmlFor="job_status"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Job Status
+                </label>
+                <Field
+                  as="select"
+                  name="job_status"
+                  id="job_status"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="PERMANENT">Permanent</option>
+                  <option value="PROBATION">Probation</option>
+                  <option value="CONTRACT">Contract</option>
+                </Field>
+                <ErrorMessage
+                  name="job_status"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="reference"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Reference
+                </label>
+                <Field
+                  type="text"
+                  name="reference"
+                  id="reference"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+                <ErrorMessage
+                  name="reference"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="spouse_name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Spouse Name
+                </label>
+                <Field
+                  type="text"
+                  name="spouse_name"
+                  id="spouse_name"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+                <ErrorMessage
+                  name="spouse_name"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="emergency_contact"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Emergency Contact
+                </label>
+                <Field
+                  type="text"
+                  name="emergency_contact"
+                  id="emergency_contact"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+                <ErrorMessage
+                  name="emergency_contact"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="id_type"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  ID Type
+                </label>
+                <Field
+                  as="select"
+                  name="id_type"
+                  id="id_type"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="NID">NID</option>
+                  <option value="PASSPORT">Passport</option>
+                  <option value="DRIVING_LICENSE">Driving License</option>
+                </Field>
+                <ErrorMessage
+                  name="id_type"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="id_number"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  ID Number
+                </label>
+                <Field
+                  type="text"
+                  name="id_number"
+                  id="id_number"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+                <ErrorMessage
+                  name="id_number"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="status"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Status
+                </label>
+                <Field
+                  as="select"
+                  name="status"
+                  id="status"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="ACTIVE">Active</option>
+                  <option value="INACTIVE">Inactive</option>
+                </Field>
+                <ErrorMessage
+                  name="status"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="flex justify-between mt-6">
+            {step > 1 && (
               <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#6D28D9] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                type="button"
+                onClick={handlePrevious}
+                className="px-4 py-2 bg-gray-600 text-white rounded-md"
               >
-                Register
+                Previous
               </button>
-            </div>
-          </Form>
-        )}
-      </Formik>
-    );
-  }
-  return content;
+            )}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-md"
+            >
+              {isLastStep ? "Submit" : "Next"}
+            </button>
+          </div>
+        </Form>
+      )}
+    </Formik>
+  );
 };
 
 export default EmployeeRegistrationForm;

@@ -12,7 +12,7 @@ import ShiftValidate from "../../../components/validationSchmea/shiftValidation"
 import React from "react";
 
 const ShiftForm = ({ shiftData }) => {
-  const [shiftAdd, { data, isLoading, isError }] = useAddShiftMutation();
+  const [shiftAdd, { data, isLoading, isError, error }] = useAddShiftMutation();
   const [updateShift, { data: updataData }] = useUpdateShiftMutation();
   const {
     data: companyId,
@@ -33,13 +33,14 @@ const ShiftForm = ({ shiftData }) => {
           end_time,
           late_time_count,
           company_id: companyId,
-        });
+        }).unwrap();
 
+        // console.log(data);
+
+        toast.success("Shift successfully added");
         navigate("/company/shift/list");
       } catch (error) {
-        console.error(error.message);
-      } finally {
-        setSubmitting(false);
+        toast.error(error?.data?.message);
       }
     } else {
       try {
@@ -48,7 +49,7 @@ const ShiftForm = ({ shiftData }) => {
           helperKeys: { id: shiftData?.id, company_Id: companyId },
           databody: { name, start_time, end_time, late_time_count },
         });
-
+        toast.success("Successfully updated");
         navigate("/company/shift/list");
       } catch (error) {
         console.error(error.message);
@@ -103,7 +104,7 @@ const ShiftForm = ({ shiftData }) => {
             >
               Add Shift
             </button>
-            <Toaster position="bottom right" />
+            {/* <Toaster position="bottom right" /> */}
           </Form>
         )}
       </Formik>

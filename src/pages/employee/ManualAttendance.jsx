@@ -18,8 +18,6 @@ const ManualAttendance = () => {
   const [createCheck] = useCreateAttendanceMutation();
   const { data: employeeSetting } = useGetEmployeeSettingQuery(companyId);
 
-  console.log(employeeSetting);
-
   const {
     data: employees,
     isLoading,
