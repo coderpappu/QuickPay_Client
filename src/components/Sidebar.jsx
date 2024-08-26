@@ -200,7 +200,7 @@ const Sidebar = () => {
             )}
 
             {/* Manage Users menu */}
-            <Link to="/manage/users">
+            {/* <Link to="/manage/users">
               <li
                 className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer ${
                   activeMenu === "manageUsers" && `bg-[#6D28D9] text-white`
@@ -209,7 +209,7 @@ const Sidebar = () => {
               >
                 Manage Users
               </li>
-            </Link>
+            </Link> */}
           </ul>
         </div>
       </div>

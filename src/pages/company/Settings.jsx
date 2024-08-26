@@ -5,6 +5,7 @@ import {
   useGetRootSettingQuery,
   useSetSettingMutation,
 } from "../../features/api";
+import toast from "react-hot-toast";
 
 const Settings = () => {
   const [setSetting] = useSetSettingMutation();
@@ -14,7 +15,7 @@ const Settings = () => {
   const [selected, setSelected] = useState("1");
   const [overtime, setOvertime] = useState({
     overtime_status: false,
-    overtime_min: "100", // Default value
+    overtime_min: "00", // Default value
   });
 
   // Handle function for button state
@@ -41,11 +42,17 @@ const Settings = () => {
   // Function to handle the save button click
   const settingHandler = async () => {
     if (overtime.overtime_status === true) {
-      await setSetting({
-        ...overtime,
-        company_id: companyId,
-        setting_id: setting?.data,
-      });
+      try {
+        await setSetting({
+          ...overtime,
+          company_id: companyId,
+          setting_id: setting?.data,
+        });
+
+        toast.success("Employee Setting Set Successfully");
+      } catch (error) {
+        toast.error("Failed to set employee settings");
+      }
     }
     // Add your logic to save the settings
   };
