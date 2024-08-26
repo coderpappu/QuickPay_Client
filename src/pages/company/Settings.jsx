@@ -95,7 +95,7 @@ const Settings = () => {
         {selected === "1" && (
           <div>
             <div className="w-full mt-2 border-solid border-[1px] border-slate-200 bg-white rounded-md p-5">
-              <div className="w-[250px] h-[60px] mb-6 flex flex-wrap items-center justify-between">
+              <div className="w-[280px] h-[60px] mb-6 flex flex-wrap items-center justify-between">
                 <h1>Over Time :</h1>
                 <input
                   type="checkbox"
@@ -109,7 +109,8 @@ const Settings = () => {
                   value={overtime.minutes}
                   onChange={handleInputChange}
                   className="w-[100px] h-7 p-[2px] bg-[#e7ecff] rounded-sm text-center"
-                />
+                />{" "}
+                Miniute
               </div>
 
               <button
