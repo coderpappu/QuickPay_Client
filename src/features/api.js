@@ -355,6 +355,30 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["Section"],
     }),
+
+    getRootSetting: builder.query({
+      query: (companyId) => ({
+        url: `/setting/rootsetting/`,
+        params: { company_id: companyId },
+      }),
+      providesTags: ["Section"],
+    }),
+    getEmployeeSetting: builder.query({
+      query: (companyId) => ({
+        url: `/setting/employeesetting/`,
+        params: { company_id: companyId },
+      }),
+      providesTags: ["Section"],
+    }),
+
+    setSetting: builder.mutation({
+      query: (credentials) => ({
+        url: "/setting/employeesettingcreate",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["Section"],
+    }),
   }),
 });
 
@@ -411,4 +435,8 @@ export const {
   useCreateAttendanceMutation,
   useGetAttendancesQuery,
   useDeleteAttendanceMutation,
+
+  useSetSettingMutation,
+  useGetRootSettingQuery,
+  useGetEmployeeSettingQuery,
 } = apiSlice;

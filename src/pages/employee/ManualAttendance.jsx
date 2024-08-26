@@ -4,6 +4,7 @@ import {
   useCreateAttendanceMutation,
   useGetEmployeesQuery,
   useGetCompanyIdQuery,
+  useGetEmployeeSettingQuery,
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import { MdOutlineErrorOutline } from "react-icons/md";
@@ -15,6 +16,9 @@ const ManualAttendance = () => {
 
   const { data: companyId } = useGetCompanyIdQuery();
   const [createCheck] = useCreateAttendanceMutation();
+  const { data: employeeSetting } = useGetEmployeeSettingQuery(companyId);
+
+  console.log(employeeSetting);
 
   const {
     data: employees,
