@@ -188,9 +188,9 @@ const Sidebar = () => {
                 <Link to="/company/settings">
                   <li
                     className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
-                      activeSubMenu === "employees" && "text-[#6D28D9]"
+                      activeSubMenu === "setting" && "text-[#6D28D9]"
                     }`}
-                    onClick={() => handleSubMenuClick("employees")}
+                    onClick={() => handleSubMenuClick("setting")}
                   >
                     <div className="w-[6px] h-[6px] bg-[#6D28D9] rounded-full mr-2"></div>
                     Settings
