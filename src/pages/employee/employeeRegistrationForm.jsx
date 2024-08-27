@@ -18,10 +18,10 @@ const EmployeeRegistrationForm = () => {
   const { data: CompanyId } = useGetCompanyIdQuery();
   const navigate = useNavigate();
   const [step, setStep] = useState(1); // State to track current step
-  const [canSubmit, setCanSubmit] = useState(true);
 
   const { data: departments } = useGetDepartmentsQuery(CompanyId);
   const { data: designations } = useGetDesignationsQuery(CompanyId);
+
   const { data: sections } = useGetSectionsQuery(CompanyId);
   const { data: shifts } = useGetShiftListQuery(CompanyId);
   const [createEmployee] = useCreateNewEmployeeMutation();
@@ -32,7 +32,7 @@ const EmployeeRegistrationForm = () => {
     phone: "",
     present_address: "",
     permanent_address: "",
-    gender: "male",
+    gender: "",
     religion: "MUSLIM",
     birth_date: "",
     joining_date: "",
@@ -53,19 +53,22 @@ const EmployeeRegistrationForm = () => {
     shiftId: "",
   };
 
-  const handleNext = () => setStep((prev) => prev + 1, console.log(step));
+  const handleNext = () => setStep((prev) => prev + 1);
   const handlePrevious = () => setStep((prev) => prev - 1);
 
-  const isLastStep = step === 3;
+  const isLastStep = step === 4;
 
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={EmployeeSchema}
+      validationSchema={EmployeeSchema(step)}
       onSubmit={async (values, { setSubmitting }) => {
         if (isLastStep) {
           try {
-            await createEmployee(values).unwrap();
+            await createEmployee({
+              ...values,
+              fingerprint_id: "2043d9f6-f383-4f76-a20d-68ca26f76200",
+            }).unwrap();
             toast.success("Employee registered successfully");
             navigate("/employee/list");
           } catch (error) {
@@ -90,6 +93,7 @@ const EmployeeRegistrationForm = () => {
                 >
                   Name
                 </label>
+
                 <Field
                   type="text"
                   name="name"
@@ -178,11 +182,6 @@ const EmployeeRegistrationForm = () => {
                   className="text-red-500 text-sm mt-1"
                 />
               </div>
-            </div>
-          )}
-
-          {step === 2 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label
                   htmlFor="gender"
@@ -196,6 +195,7 @@ const EmployeeRegistrationForm = () => {
                   id="gender"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 >
+                  <option>Select</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                 </Field>
@@ -205,6 +205,11 @@ const EmployeeRegistrationForm = () => {
                   className="text-red-500 text-sm mt-1"
                 />
               </div>
+            </div>
+          )}
+
+          {step === 2 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label
                   htmlFor="religion"
@@ -218,10 +223,11 @@ const EmployeeRegistrationForm = () => {
                   id="religion"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 >
-                  <option value="MUSLIM">Muslim</option>
-                  <option value="HINDU">Hindu</option>
-                  <option value="CHRISTIAN">Christian</option>
-                  <option value="BUDDHIST">Buddhist</option>
+                  <option>Select</option>
+                  <option value="ISLAM">ISLAM</option>
+                  <option value="HINDUISM">HINDUISM</option>
+                  <option value="BUDDHISM">BUDDHISM</option>
+                  <option value="OTHER">OTHER</option>
                 </Field>
                 <ErrorMessage
                   name="religion"
@@ -261,7 +267,6 @@ const EmployeeRegistrationForm = () => {
                   id="joining_date"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
-
                 <ErrorMessage
                   name="joining_date"
                   component="div"
@@ -275,6 +280,7 @@ const EmployeeRegistrationForm = () => {
                 >
                   Terminate Date
                 </label>
+
                 <Field
                   type="date"
                   name="terminate_date"
@@ -289,53 +295,12 @@ const EmployeeRegistrationForm = () => {
               </div>
               <div>
                 <label
-                  htmlFor="image"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Upload Image
-                </label>
-                <UploadForm onUpload={(url) => setFieldValue("image", url)} />
-                <ErrorMessage
-                  name="image"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-            </div>
-          )}
-
-          {step === 3 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label
-                  htmlFor="job_status"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Job Status
-                </label>
-                <Field
-                  as="select"
-                  name="job_status"
-                  id="job_status"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                >
-                  <option value="PERMANENT">Permanent</option>
-                  <option value="PROBATION">Probation</option>
-                  <option value="CONTRACT">Contract</option>
-                </Field>
-                <ErrorMessage
-                  name="job_status"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-              <div>
-                <label
                   htmlFor="reference"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Reference
                 </label>
+
                 <Field
                   type="text"
                   name="reference"
@@ -348,6 +313,31 @@ const EmployeeRegistrationForm = () => {
                   className="text-red-500 text-sm mt-1"
                 />
               </div>
+
+              <div>
+                <label
+                  htmlFor="job_status"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Job Status
+                </label>
+
+                <Field
+                  type="text"
+                  name="job_status"
+                  id="job_status"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+                <ErrorMessage
+                  name="job_status"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+            </div>
+          )}
+          {step === 3 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label
                   htmlFor="spouse_name"
@@ -355,6 +345,7 @@ const EmployeeRegistrationForm = () => {
                 >
                   Spouse Name
                 </label>
+
                 <Field
                   type="text"
                   name="spouse_name"
@@ -374,6 +365,7 @@ const EmployeeRegistrationForm = () => {
                 >
                   Emergency Contact
                 </label>
+
                 <Field
                   type="text"
                   name="emergency_contact"
@@ -391,18 +383,19 @@ const EmployeeRegistrationForm = () => {
                   htmlFor="id_type"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  ID Type
+                  Id Type
                 </label>
+
                 <Field
                   as="select"
                   name="id_type"
                   id="id_type"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 >
+                  <option value="PASSPORT">PASSPORT</option>
                   <option value="NID">NID</option>
-                  <option value="PASSPORT">Passport</option>
-                  <option value="DRIVING_LICENSE">Driving License</option>
                 </Field>
+
                 <ErrorMessage
                   name="id_type"
                   component="div"
@@ -416,6 +409,7 @@ const EmployeeRegistrationForm = () => {
                 >
                   ID Number
                 </label>
+
                 <Field
                   type="text"
                   name="id_number"
@@ -428,24 +422,111 @@ const EmployeeRegistrationForm = () => {
                   className="text-red-500 text-sm mt-1"
                 />
               </div>
+            </div>
+          )}
+
+          {step === 4 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label
-                  htmlFor="status"
+                  htmlFor="designationId"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Status
+                  Designation
                 </label>
                 <Field
                   as="select"
-                  name="status"
-                  id="status"
+                  name="designationId"
+                  id="designationId"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 >
-                  <option value="ACTIVE">Active</option>
-                  <option value="INACTIVE">Inactive</option>
+                  <option value="">Select Designation</option>
+                  {designations?.data?.map((designation) => (
+                    <option key={designation.id} value={designation.id}>
+                      {designation.name}
+                    </option>
+                  ))}
                 </Field>
                 <ErrorMessage
-                  name="status"
+                  name="designationId"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="departmentId"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Department
+                </label>
+                <Field
+                  as="select"
+                  name="departmentId"
+                  id="departmentId"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="">Select Department</option>
+                  {departments?.data?.map((department) => (
+                    <option key={department.id} value={department.id}>
+                      {department.name}
+                    </option>
+                  ))}
+                </Field>
+                <ErrorMessage
+                  name="departmentId"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="sectionId"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Section
+                </label>
+                <Field
+                  as="select"
+                  name="sectionId"
+                  id="sectionId"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option>Select Section</option>
+                  {sections?.data?.map((section) => (
+                    <option key={section.id} value={section.id}>
+                      {section.name}
+                    </option>
+                  ))}
+                </Field>
+                <ErrorMessage
+                  name="sectionId"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="shiftId"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Shift
+                </label>
+                <Field
+                  as="select"
+                  name="shiftId"
+                  id="shiftId"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="">Select Shift</option>
+                  {shifts?.data?.map((shift) => (
+                    <option key={shift.id} value={shift.id}>
+                      {shift.name}
+                    </option>
+                  ))}
+                </Field>
+                <ErrorMessage
+                  name="shiftId"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
@@ -458,7 +539,7 @@ const EmployeeRegistrationForm = () => {
               <button
                 type="button"
                 onClick={handlePrevious}
-                className="px-4 py-2 bg-gray-600 text-white rounded-md"
+                className="bg-gray-500 text-white py-2 px-4 rounded-md"
               >
                 Previous
               </button>
@@ -466,7 +547,9 @@ const EmployeeRegistrationForm = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 bg-indigo-600 text-white rounded-md"
+              className={`py-2 px-4 rounded-md ${
+                isLastStep ? "bg-blue-500" : "bg-blue-700"
+              } text-white`}
             >
               {isLastStep ? "Submit" : "Next"}
             </button>
