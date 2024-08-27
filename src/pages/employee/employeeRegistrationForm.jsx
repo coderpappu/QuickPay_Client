@@ -13,7 +13,9 @@ import {
 } from "../../features/api";
 import UploadForm from "../../helpers/UploadForm";
 import { useState } from "react";
-
+import EmployeeRegistrationStepper from "./Steper"; // Adjust the import path as needed
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 const EmployeeRegistrationForm = () => {
   const { data: CompanyId } = useGetCompanyIdQuery();
   const navigate = useNavigate();
@@ -84,6 +86,13 @@ const EmployeeRegistrationForm = () => {
     >
       {({ isSubmitting, setFieldValue }) => (
         <Form>
+          <Box sx={{ maxWidth: 600, margin: "auto", padding: 2 }}>
+            <Typography variant="h4" gutterBottom>
+              Employee Registration
+            </Typography>
+            <EmployeeRegistrationStepper />
+          </Box>
+
           {step === 1 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
