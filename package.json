@@ -10,6 +10,8 @@
     "lint": "yarn add -D prettier && yarn add -D babel-eslint && npx install-peerdeps --dev eslint-config-airbnb && yarn add -D eslint-config-prettier eslint-plugin-prettier"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
     "@firebase/util": "^1.9.7",
     "@fontsource/poppins": "^5.0.14",
     "@fortawesome/fontawesome": "^1.1.8",
@@ -19,6 +21,7 @@
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@headlessui/react": "^2.1.2",
     "@heroicons/react": "^2.1.4",
+    "@mui/material": "^6.0.1",
     "@reduxjs/toolkit": "^2.2.6",
     "antd": "^5.20.2",
     "axios": "^1.7.2",
