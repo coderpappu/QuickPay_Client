@@ -8,6 +8,7 @@ import {
   useGetDesignationDetailsQuery,
   useUpdateDesignationMutation,
   useGetCompanyIdQuery,
+  useCreateWeekendMutation,
 } from "../../../features/api";
 import FormSkeleton from "../../../skeletons/FormSkeleton";
 
@@ -21,9 +22,9 @@ const WeekendForm = () => {
 
   const { id } = useParams();
 
-  const [createNewDesignation] = useCreateNewDesignationMutation();
+  const [createWeekend] = useCreateWeekendMutation();
   const [updateDesignation] = useUpdateDesignationMutation();
-  const [initialValues, setInitialValues] = useState({ name: "" });
+  const [initialValues, setInitialValues] = useState({ name: "", status: "" });
 
   const { data: designation, isLoading: isDesignationLoading } =
     useGetDesignationDetailsQuery(id, { skip: !id });
@@ -51,15 +52,16 @@ const WeekendForm = () => {
         initialValues={initialValues}
         validationSchema={WeekendSchema}
         onSubmit={async (values, { setSubmitting }) => {
-          const { name } = values;
+          const { name, status } = values;
           if (id == null) {
-            await createNewDesignation({ name, company_id: companyId })
+            console.log(name, status);
+            await createWeekend({ name, company_id: companyId })
               .then((res) => {
                 if (res.error != null) {
                   toast.error(res?.error?.data?.message);
                 } else {
                   toast.success("Designation created successfully");
-                  navigate("/designation/list");
+                  // navigate("/designation/list");
                   setSubmitting(false);
                 }
               })

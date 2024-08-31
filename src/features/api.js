@@ -317,6 +317,7 @@ export const apiSlice = createApi({
     }),
 
     // section Related EndPoints
+
     getSections: builder.query({
       query: (companyId) => ({
         url: `/section/list/`,
@@ -356,6 +357,48 @@ export const apiSlice = createApi({
       invalidatesTags: ["Section"],
     }),
 
+    // calendar related endpoints
+    // getSections: builder.query({
+    //   query: (companyId) => ({
+    //     url: `/section/list/`,
+    //     params: { companyId },
+    //   }),
+    //   providesTags: ["Section"],
+    // }),
+
+    // getSectionDetails: builder.query({
+    //   query: (id) => `/section/details/${id}`,
+    //   providesTags: ["Section"],
+    // }),
+
+    createWeekend: builder.mutation({
+      query: (credentials) => ({
+        url: "/weekend/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["Section"],
+    }),
+
+    // updateSection: builder.mutation({
+    //   query: ({ id, ...credentials }) => ({
+    //     url: `/section/update/${id}`,
+    //     method: "PUT",
+    //     body: credentials,
+    //   }),
+    //   invalidatesTags: ["Section"],
+    // }),
+    // deleteSection: builder.mutation({
+    //   query: (id) => ({
+    //     url: `/section/delete/`,
+    //     method: "DELETE",
+    //     params: { id },
+    //   }),
+    //   invalidatesTags: ["Section"],
+    // }),
+
+    // Company Setting System
+
     getRootSetting: builder.query({
       query: (companyId) => ({
         url: `/setting/rootsetting/`,
@@ -370,7 +413,6 @@ export const apiSlice = createApi({
       }),
       providesTags: ["Section"],
     }),
-
     setSetting: builder.mutation({
       query: (credentials) => ({
         url: "/setting/employeesettingcreate",
@@ -435,6 +477,9 @@ export const {
   useCreateAttendanceMutation,
   useGetAttendancesQuery,
   useDeleteAttendanceMutation,
+
+  // weekend related endpoints
+  useCreateWeekendMutation,
 
   useSetSettingMutation,
   useGetRootSettingQuery,
