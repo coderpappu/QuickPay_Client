@@ -111,6 +111,49 @@ const Sidebar = () => {
                 </Link>
               </div>
             )}
+            {/* Company Settings menu */}
+            {companyId && (
+              <li
+                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-between ${
+                  activeMenu === "calendar" && `bg-[#6D28D9] text-white`
+                }`}
+                onClick={() => handleMenuClick("calendar")}
+              >
+                Calendar System
+                <IoIosArrowForward
+                  className={`ml-2 transition-all ${
+                    activeMenu === "calendar" ? "rotate-90" : ""
+                  }`}
+                />
+              </li>
+            )}
+
+            {activeMenu === "calendar" && (
+              <div className="ml-3">
+                <Link to="/company/weekend">
+                  <li
+                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
+                      activeSubMenu === "weekend" && "text-[#6D28D9]"
+                    }`}
+                    onClick={() => handleSubMenuClick("weekend")}
+                  >
+                    <div className="w-[6px] h-[6px] bg-[#6D28D9] rounded-full mr-2"></div>
+                    Weekend
+                  </li>
+                </Link>
+                <Link to="/company/calendar">
+                  <li
+                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
+                      activeSubMenu === "calendarShow" && "text-[#6D28D9]"
+                    }`}
+                    onClick={() => handleSubMenuClick("calendarShow")}
+                  >
+                    <div className="w-[6px] h-[6px] bg-[#6D28D9] rounded-full mr-2"></div>
+                    Calendar
+                  </li>
+                </Link>{" "}
+              </div>
+            )}
 
             {/* Company Settings menu */}
             {companyId && (
@@ -128,6 +171,7 @@ const Sidebar = () => {
                 />
               </li>
             )}
+
             {activeMenu === "companySettings" && (
               <div className="ml-3">
                 <Link to="/company/shift/list">
@@ -183,17 +227,6 @@ const Sidebar = () => {
                   >
                     <div className="w-[6px] h-[6px] bg-[#6D28D9] rounded-full mr-2"></div>
                     Employees
-                  </li>
-                </Link>
-                <Link to="/company/calendar">
-                  <li
-                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
-                      activeSubMenu === "calendar" && "text-[#6D28D9]"
-                    }`}
-                    onClick={() => handleSubMenuClick("calendar")}
-                  >
-                    <div className="w-[6px] h-[6px] bg-[#6D28D9] rounded-full mr-2"></div>
-                    Calendar
                   </li>
                 </Link>
 

@@ -29,6 +29,9 @@ import DepartmentForm from "./pages/department/DepartmentForm";
 import AttendanceList from "./pages/employee/AttendancesList";
 import Settings from "./pages/company/Settings";
 import Calendar from "./pages/calendar/Calendar";
+import NotFound from "./pages/NotFound";
+import Weekend from "./pages/calendar/weekend/Weekend";
+import WeekendSetting from "./pages/calendar/weekend/WeekendSettings";
 
 function App() {
   return (
@@ -93,6 +96,11 @@ function App() {
               />
               <Route path="employee/attendences" element={<AttendanceList />} />
               <Route path="company/calendar" element={<Calendar />} />
+              <Route path="company/weekend" element={<Weekend />} />
+              <Route
+                path="company/weekend/create"
+                element={<WeekendSetting />}
+              />
             </Route>
           </Route>
         </Route>
@@ -100,6 +108,7 @@ function App() {
         {/* Public routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registration" element={<RegistraionPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />
     </>
