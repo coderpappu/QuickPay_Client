@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
 import {
-  useCreateNewDesignationMutation,
   useGetDesignationDetailsQuery,
   useUpdateDesignationMutation,
   useGetCompanyIdQuery,
@@ -54,14 +53,13 @@ const WeekendForm = () => {
         onSubmit={async (values, { setSubmitting }) => {
           const { name, status } = values;
           if (id == null) {
-            console.log(name, status);
-            await createWeekend({ name, company_id: companyId })
+            await createWeekend({ name, status, company_id: companyId })
               .then((res) => {
                 if (res.error != null) {
                   toast.error(res?.error?.data?.message);
                 } else {
-                  toast.success("Designation created successfully");
-                  // navigate("/designation/list");
+                  toast.success("Weekend added successfully");
+                  navigate("/weekend/list");
                   setSubmitting(false);
                 }
               })
@@ -74,7 +72,7 @@ const WeekendForm = () => {
                 if (res?.error != null) {
                   toast.error(res?.error?.data?.message);
                 } else {
-                  toast.success("Designation updated successfully");
+                  toast.success("Weekend updated successfully");
                   navigate("/designation/list");
                   setSubmitting(false);
                 }
