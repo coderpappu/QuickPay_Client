@@ -438,6 +438,14 @@ export const apiSlice = createApi({
       invalidatesTags: ["weekend"],
     }),
 
+    getHolidayList: builder.query({
+      query: (companyId) => ({
+        url: `/holiday/list/`,
+        params: { companyId },
+      }),
+      providesTags: ["weekend"],
+    }),
+
     // Company Setting System
 
     getRootSetting: builder.query({
@@ -534,6 +542,7 @@ export const {
 
   // Holiday
   useCreateHolidayMutation,
+  useGetHolidayListQuery,
 
   useSetSettingMutation,
   useGetRootSettingQuery,

@@ -28,7 +28,6 @@ const HolidayForm = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: companyId } = useGetCompanyIdQuery();
-
   const [createHoliday] = useCreateHolidayMutation();
   const [updateWeekend] = useDeleteTypeMutation();
 
