@@ -141,6 +141,17 @@ const Sidebar = () => {
                     Weekend
                   </li>
                 </Link>
+                <Link to="/holiday">
+                  <li
+                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
+                      activeSubMenu === "holiday" && "text-[#6D28D9]"
+                    }`}
+                    onClick={() => handleSubMenuClick("holiday")}
+                  >
+                    <div className="w-[6px] h-[6px] bg-[#6D28D9] rounded-full mr-2"></div>
+                    Holiday
+                  </li>
+                </Link>
                 <Link to="/company/calendar">
                   <li
                     className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#6D28D9] cursor-pointer flex flex-wrap items-center ${

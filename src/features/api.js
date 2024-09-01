@@ -400,6 +400,43 @@ export const apiSlice = createApi({
       invalidatesTags: ["weekend"],
     }),
 
+    // holiday type
+    createHolidayType: builder.mutation({
+      query: (credentials) => ({
+        url: "/holiday/type/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["weekend"],
+    }),
+
+    getTypeList: builder.query({
+      query: (companyId) => ({
+        url: `/holiday/type/list/`,
+        params: { companyId },
+      }),
+      providesTags: ["weekend"],
+    }),
+
+    deleteType: builder.mutation({
+      query: (id) => ({
+        url: `/holiday/type/delete/`,
+        method: "DELETE",
+        params: { id },
+      }),
+      invalidatesTags: ["weekend"],
+    }),
+
+    // Holiday Endpoint
+    createHoliday: builder.mutation({
+      query: (credentials) => ({
+        url: "/holiday/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["weekend"],
+    }),
+
     // Company Setting System
 
     getRootSetting: builder.query({
@@ -409,6 +446,7 @@ export const apiSlice = createApi({
       }),
       providesTags: ["Section"],
     }),
+
     getEmployeeSetting: builder.query({
       query: (companyId) => ({
         url: `/setting/employeesetting/`,
@@ -487,6 +525,14 @@ export const {
   useDeleteWeekendMutation,
   useUpdateWeekendMutation,
   useGetWeekendDetailsQuery,
+
+  // holiday type
+  useCreateHolidayTypeMutation,
+  useGetTypeListQuery,
+  useDeleteTypeMutation,
+
+  // Holiday
+  useCreateHolidayMutation,
 
   useSetSettingMutation,
   useGetRootSettingQuery,

@@ -32,6 +32,8 @@ import Calendar from "./pages/calendar/Calendar";
 import NotFound from "./pages/NotFound";
 import Weekend from "./pages/calendar/weekend/Weekend";
 import WeekendSetting from "./pages/calendar/weekend/WeekendSettings";
+import Holiday from "./pages/calendar/holiday/type/Holiday";
+import TypeForm from "./pages/calendar/holiday/type/TypeForm";
 
 function App() {
   return (
@@ -102,6 +104,8 @@ function App() {
                 element={<WeekendSetting />}
               />
               <Route path="/weekend/update/:id" element={<WeekendSetting />} />
+              <Route path="/holiday" element={<Holiday />} />
+              <Route path="/holiday/type/add" element={<TypeForm />} />
             </Route>
           </Route>
         </Route>
