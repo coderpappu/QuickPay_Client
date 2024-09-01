@@ -12,9 +12,9 @@ import {
   useUpdateWeekendMutation,
   useCreateHolidayTypeMutation,
   useDeleteTypeMutation,
-} from "../../../../features/api";
+} from "../../../features/api";
 
-import FormSkeleton from "../../../../skeletons/FormSkeleton";
+import FormSkeleton from "../../../skeletons/ListSkeleton";
 
 const WeekendSchema = Yup.object().shape({
   type: Yup.string().required("Weekend Name is required"),

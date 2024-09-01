@@ -13,6 +13,7 @@ import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { LuEye } from "react-icons/lu";
 import ErrorMessage from "../../utils/ErrorMessage";
+
 const CompanyList = () => {
   const {
     data: companyData,
@@ -25,12 +26,33 @@ const CompanyList = () => {
   const [setCompanyId] = useSetCompanyIdMutation();
   const { data: companyId } = useGetCompanyIdQuery();
 
+  useEffect(() => {
+    const storedCompanyId = localStorage.getItem("companyId");
+    if (storedCompanyId) {
+      setCompanyId(storedCompanyId);
+    }
+  }, [setCompanyId]);
+
   const handleActivate = (id) => {
-    setCompanyId(id);
+    setCompanyId(id)
+      .unwrap()
+      .then(() => {
+        localStorage.setItem("companyId", id);
+      })
+      .catch((error) => {
+        console.error("Failed to set company ID:", error);
+      });
   };
 
   const handleDeactivate = () => {
-    setCompanyId(null);
+    setCompanyId(null)
+      .unwrap()
+      .then(() => {
+        localStorage.removeItem("companyId");
+      })
+      .catch((error) => {
+        console.error("Failed to clear company ID:", error);
+      });
   };
 
   const handleDeleteCompany = async (id) => {

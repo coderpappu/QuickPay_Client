@@ -4,10 +4,7 @@ import "./App.css";
 import Layout from "./Layout";
 import Calendar from "./pages/calendar/Calendar";
 import Holiday from "./pages/calendar/holiday/Holiday";
-import {
-  default as HolidayForm,
-  default as TypeForm,
-} from "./pages/calendar/holiday/type/TypeForm";
+import { default as TypeForm } from "./pages/calendar/holiday/type/TypeForm";
 import Weekend from "./pages/calendar/weekend/Weekend";
 import WeekendSetting from "./pages/calendar/weekend/WeekendSettings";
 import CompanyList from "./pages/company/CompanyList";
@@ -36,6 +33,7 @@ import ProfileUpdate from "./pages/user/ProfileUpdate";
 import RegistraionPage from "./pages/user/RegistraionPage";
 import CompanyPrivateRoute from "./privateRoute/CompanyPrivateRoute";
 import PrivateRoute from "./privateRoute/PrivateRoute";
+import HolidayForm from "./pages/calendar/holiday/HolidayForm";
 
 function App() {
   return (
