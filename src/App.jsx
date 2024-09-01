@@ -1,39 +1,41 @@
-import { Routes, Route } from "react-router-dom";
-import "./App.css";
-import LoginPage from "./pages/user/LoginPage";
-import RegistraionPage from "./pages/user/RegistraionPage";
-import CompanySettingsPage from "./pages/company/CompanySettingsPage";
-import Home from "./pages/Home";
-import Layout from "./Layout";
-import Profile from "./pages/employee/Profile";
-import CompanyList from "./pages/company/CompanyList";
 import { Toaster } from "react-hot-toast";
-import PrivateRoute from "./privateRoute/PrivateRoute";
-import ProfileUpdate from "./pages/user/ProfileUpdate";
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import Layout from "./Layout";
+import Calendar from "./pages/calendar/Calendar";
+import Holiday from "./pages/calendar/holiday/Holiday";
+import {
+  default as HolidayForm,
+  default as TypeForm,
+} from "./pages/calendar/holiday/type/TypeForm";
+import Weekend from "./pages/calendar/weekend/Weekend";
+import WeekendSetting from "./pages/calendar/weekend/WeekendSettings";
+import CompanyList from "./pages/company/CompanyList";
+import CompanyPofile from "./pages/company/CompanyPofile";
+import CompanySettingsPage from "./pages/company/CompanySettingsPage";
+import Settings from "./pages/company/Settings";
+import AddShift from "./pages/company/shift/AddShift";
+import EditShift from "./pages/company/shift/EditShift";
+import ShiftList from "./pages/company/shift/ShiftList";
+import DepartmentForm from "./pages/department/DepartmentForm";
 import DepartmentList from "./pages/department/DepartmentList";
 import DepartmentSetting from "./pages/department/DepartmentSettings";
 import DesignationList from "./pages/designation/DesignationList";
 import DesignationSetting from "./pages/designation/DesignationSettings";
-import AddShift from "./pages/company/shift/AddShift";
-import ShiftList from "./pages/company/shift/ShiftList";
-import EditShift from "./pages/company/shift/EditShift";
-import SectionList from "./pages/section/SectionList";
-import SectionSettings from "./pages/section/SectionSettings";
-import CompanyPrivateRoute from "./privateRoute/CompanyPrivateRoute";
-import CompanyPofile from "./pages/company/CompanyPofile";
-import ManualAttendance from "./pages/employee/ManualAttendance";
-import UserProfile from "./pages/employee/Profile";
+import AttendanceList from "./pages/employee/AttendancesList";
 import EmployeeList from "./pages/employee/employeeList";
 import EmployeeRegistration from "./pages/employee/employeeRegistrationForm";
-import DepartmentForm from "./pages/department/DepartmentForm";
-import AttendanceList from "./pages/employee/AttendancesList";
-import Settings from "./pages/company/Settings";
-import Calendar from "./pages/calendar/Calendar";
+import ManualAttendance from "./pages/employee/ManualAttendance";
+import Profile from "./pages/employee/Profile";
+import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
-import Weekend from "./pages/calendar/weekend/Weekend";
-import WeekendSetting from "./pages/calendar/weekend/WeekendSettings";
-import Holiday from "./pages/calendar/holiday/type/Holiday";
-import TypeForm from "./pages/calendar/holiday/type/TypeForm";
+import SectionList from "./pages/section/SectionList";
+import SectionSettings from "./pages/section/SectionSettings";
+import LoginPage from "./pages/user/LoginPage";
+import ProfileUpdate from "./pages/user/ProfileUpdate";
+import RegistraionPage from "./pages/user/RegistraionPage";
+import CompanyPrivateRoute from "./privateRoute/CompanyPrivateRoute";
+import PrivateRoute from "./privateRoute/PrivateRoute";
 
 function App() {
   return (
@@ -106,6 +108,7 @@ function App() {
               <Route path="/weekend/update/:id" element={<WeekendSetting />} />
               <Route path="/holiday" element={<Holiday />} />
               <Route path="/holiday/type/add" element={<TypeForm />} />
+              <Route path="/holidayform/" element={<HolidayForm />} />
             </Route>
           </Route>
         </Route>

@@ -20,7 +20,7 @@ const WeekendSchema = Yup.object().shape({
   type: Yup.string().required("Weekend Name is required"),
 });
 
-const TypeForm = () => {
+const HolidayForm = () => {
   const navigate = useNavigate();
 
   const { id } = useParams();
@@ -100,6 +100,51 @@ const TypeForm = () => {
                   Holiday Type
                 </label>
                 <Field
+                  type="select"
+                  name="type"
+                  id="type"
+                  className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                >
+                  <option value="">Select Holiday Type</option>
+                  <option value="public">Public Holiday</option>
+                  <option value="special">Special Holiday</option>
+                </Field>
+
+                <ErrorMessage
+                  name="type"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+
+              <div className="flex-grow">
+                <label
+                  htmlFor="type"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Start Time
+                </label>
+                <Field
+                  type="text"
+                  name="type"
+                  id="type"
+                  className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+                <ErrorMessage
+                  name="type"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+
+              <div className="flex-grow">
+                <label
+                  htmlFor="type"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  End Time
+                </label>
+                <Field
                   type="text"
                   name="type"
                   id="type"
@@ -129,4 +174,4 @@ const TypeForm = () => {
   );
 };
 
-export default TypeForm;
+export default HolidayForm;

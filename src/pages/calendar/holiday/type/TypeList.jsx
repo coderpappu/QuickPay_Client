@@ -16,7 +16,7 @@ import ErrorMessage from "../../../../utils/ErrorMessage";
 import toast from "react-hot-toast";
 import ConfirmDialog from "../../../../helpers/ConfirmDialog";
 
-const WeekendList = () => {
+const TypeList = () => {
   const { data: companyId } = useGetCompanyIdQuery();
   const [deleteType] = useDeleteTypeMutation();
 
@@ -137,4 +137,4 @@ const WeekendList = () => {
   );
 };
 
-export default WeekendList;
+export default TypeList;
