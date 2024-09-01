@@ -3,9 +3,12 @@ import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import {
   useDeleteDesignationMutation,
+  useDeleteWeekendMutation,
   useGetCompanyIdQuery,
   useGetDesignationsQuery,
+  useGetWeekendListQuery,
 } from "../../../features/api";
+
 import ListSkeleton from "../../../skeletons/ListSkeleton";
 import ErrorMessage from "../../../utils/ErrorMessage";
 import toast from "react-hot-toast";
@@ -13,9 +16,9 @@ import ConfirmDialog from "../../../helpers/ConfirmDialog";
 
 const WeekendList = () => {
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteDesignation] = useDeleteDesignationMutation();
+  const [deleteWeekend] = useDeleteWeekendMutation();
 
-  const handleDeleteDesignation = async (id) => {
+  const handleDeleteWeekend = async (id) => {
     const confirm = () =>
       toast(
         (t) => (
@@ -23,15 +26,15 @@ const WeekendList = () => {
             onConfirm={async () => {
               toast.dismiss(t.id);
               try {
-                deleteDesignation(id).then((res) => {
+                deleteWeekend(id).then((res) => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
-                    toast.success("Designation deleted successfully");
+                    toast.success("weekend deleted successfully");
                   }
                 });
               } catch (error) {
-                toast.error(error.message || "Failed to delete designation");
+                toast.error(error.message || "Failed to delete weekend");
               }
             }}
             onCancel={() => toast.dismiss(t.id)}
@@ -46,37 +49,43 @@ const WeekendList = () => {
   };
 
   const {
-    data: designations,
+    data: weekends,
     isLoading,
     isError,
     error,
-  } = useGetDesignationsQuery(companyId, {
+  } = useGetWeekendListQuery(companyId, {
     skip: companyId == null,
   });
 
   let content;
+
+  console.log(error);
 
   if (isLoading && !isError) content = <ListSkeleton />;
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
   if (!isLoading && !isError)
-    content = designations?.data ? (
-      designations?.data?.map((designation, index) => (
+    content = weekends?.data ? (
+      weekends?.data?.map((weekend, index) => (
         <tr
-          key={designation?.id}
+          key={weekend?.id}
           className={`${
             index % 2 === 0 ? "" : "bg-gray-50"
           } rounded-sm md:rounded-none`}
         >
           <td className="py-2 text-sm text-center">{++index}</td>
           <td className="py-2 text-sm font-semibold pl-4 md:pl-10">
-            {designation?.name}
+            {weekend?.name}
           </td>
-          <td className="py-2 text-sm text-center">{designation?.user_id}</td>
+          <td
+            className={` ${weekend.status === "INACTIVE" && "text-red-600"} py-2 text-sm text-center`}
+          >
+            {weekend?.status}
+          </td>
 
           <td className="py-2 text-sm">
-            <Link to={`/designation/update/${designation?.id}`}>
+            <Link to={`/weekend/update/${weekend?.id}`}>
               <div className="grid place-items-center">
                 <TbEdit className="text-2xl text-[#6D28D9]" />
               </div>
@@ -84,7 +93,7 @@ const WeekendList = () => {
           </td>
           <td
             className="py-2 text-sm"
-            onClick={() => handleDeleteDesignation(designation?.id)}
+            onClick={() => handleDeleteWeekend(weekend?.id)}
           >
             <div className="grid place-items-center">
               <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
@@ -100,7 +109,7 @@ const WeekendList = () => {
     <div className="px-4 md:px-0">
       <div className="flex flex-wrap justify-between items-center pb-2">
         <div>
-          <h2 className="font-semibold text-lg pb-2">Designations</h2>
+          <h2 className="font-semibold text-lg pb-2">Weekend</h2>
         </div>
       </div>
 
@@ -108,14 +117,14 @@ const WeekendList = () => {
         {/* Heading And Btn */}
         <div className="flex flex-wrap justify-between mb-4">
           <div className="font-medium text-base">
-            {designations?.data?.length | 0} Designation Available for Now
+            {weekends?.data?.length | 0} Weekend Available for Now
           </div>
           <div>
             <Link
               to="/company/weekend/create"
               className="px-5 py-2 rounded-[3px] text-white bg-[#6D28D9] transition hover:bg-[#7f39f0]"
             >
-              Add Designation
+              Add Weekend
             </Link>
           </div>
         </div>
@@ -126,7 +135,7 @@ const WeekendList = () => {
                 <tr>
                   <th className="pb-2 text-base text-center">SL</th>
                   <th className="pb-2 text-base pl-4 md:pl-10">Name</th>
-                  <th className="pb-2 text-base text-center">Created By</th>
+                  <th className="pb-2 text-base text-center">Status</th>
                   <th className="pb-2 text-base text-center">Update</th>
                   <th className="pb-2 text-base text-center">Delete</th>
                 </tr>

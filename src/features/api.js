@@ -26,6 +26,7 @@ export const apiSlice = createApi({
     "CompanyId",
     "Employee",
     "Attendance",
+    "weekend",
   ],
 
   endpoints: (builder) => ({
@@ -358,13 +359,13 @@ export const apiSlice = createApi({
     }),
 
     // calendar related endpoints
-    // getSections: builder.query({
-    //   query: (companyId) => ({
-    //     url: `/section/list/`,
-    //     params: { companyId },
-    //   }),
-    //   providesTags: ["Section"],
-    // }),
+    getWeekendList: builder.query({
+      query: (companyId) => ({
+        url: `/weekend/list/`,
+        params: { companyId },
+      }),
+      providesTags: ["weekend"],
+    }),
 
     // getSectionDetails: builder.query({
     //   query: (id) => `/section/details/${id}`,
@@ -377,25 +378,26 @@ export const apiSlice = createApi({
         method: "POST",
         body: credentials,
       }),
-      invalidatesTags: ["Section"],
+      invalidatesTags: ["weekend"],
     }),
 
-    // updateSection: builder.mutation({
-    //   query: ({ id, ...credentials }) => ({
-    //     url: `/section/update/${id}`,
-    //     method: "PUT",
-    //     body: credentials,
-    //   }),
-    //   invalidatesTags: ["Section"],
-    // }),
-    // deleteSection: builder.mutation({
-    //   query: (id) => ({
-    //     url: `/section/delete/`,
-    //     method: "DELETE",
-    //     params: { id },
-    //   }),
-    //   invalidatesTags: ["Section"],
-    // }),
+    updateWeekend: builder.mutation({
+      query: ({ id, ...credentials }) => ({
+        url: `/weekend/update/${id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["weekend"],
+    }),
+
+    deleteWeekend: builder.mutation({
+      query: (id) => ({
+        url: `/weekend/delete/`,
+        method: "DELETE",
+        params: { id },
+      }),
+      invalidatesTags: ["weekend"],
+    }),
 
     // Company Setting System
 
@@ -480,6 +482,8 @@ export const {
 
   // weekend related endpoints
   useCreateWeekendMutation,
+  useGetWeekendListQuery,
+  useDeleteWeekendMutation,
 
   useSetSettingMutation,
   useGetRootSettingQuery,
