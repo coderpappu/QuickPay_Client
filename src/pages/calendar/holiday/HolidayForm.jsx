@@ -12,21 +12,36 @@ import {
   useUpdateWeekendMutation,
   useCreateHolidayTypeMutation,
   useDeleteTypeMutation,
+  useGetTypeListQuery,
+  useCreateHolidayMutation,
 } from "../../../features/api";
 
 import FormSkeleton from "../../../skeletons/ListSkeleton";
 
-const WeekendSchema = Yup.object().shape({
+const HolidaySchema = Yup.object().shape({
   type: Yup.string().required("Weekend Name is required"),
+  start_date: Yup.string().required("Start date is required"),
+  end_date: Yup.string().required("End date is required"),
 });
 
 const HolidayForm = () => {
   const navigate = useNavigate();
-
   const { id } = useParams();
+  const { data: companyId } = useGetCompanyIdQuery();
 
-  const [createHolidayType] = useCreateHolidayTypeMutation();
+  const [createHoliday] = useCreateHolidayMutation();
   const [updateWeekend] = useDeleteTypeMutation();
+
+  // holiday type load from db
+  const {
+    data: types,
+    isLoading,
+    isError,
+    error,
+  } = useGetTypeListQuery(companyId, {
+    skip: companyId == null,
+  });
+
   const [initialValues, setInitialValues] = useState({ type: "" });
 
   const { data: weekend, isLoading: isDesignationLoading } =
@@ -35,12 +50,10 @@ const HolidayForm = () => {
   useEffect(() => {
     if (weekend?.data) {
       setInitialValues({
-        name: weekend?.data?.name,
+        type: weekend?.data?.name, // Renamed to 'type' for form consistency
       });
     }
   }, [weekend]);
-
-  const { data: companyId } = useGetCompanyIdQuery();
 
   if (companyId == null) {
     navigate("/");
@@ -55,16 +68,23 @@ const HolidayForm = () => {
       <Formik
         enableReinitialize={true}
         initialValues={initialValues}
-        validationSchema={WeekendSchema}
+        validationSchema={HolidaySchema}
         onSubmit={async (values, { setSubmitting }) => {
-          const { type } = values;
+          const { type, start_date, end_date, description } = values;
+
           if (id == null) {
-            await createHolidayType({ type, company_id: companyId })
+            await createHoliday({
+              holiday_type_id: type,
+              from_date: start_date,
+              to_date: end_date,
+              description,
+              company_id: companyId,
+            })
               .then((res) => {
                 if (res.error != null) {
                   toast.error(res?.error?.data?.message);
                 } else {
-                  toast.success("Weekend added successfully");
+                  toast.success("Holiday added successfully");
                   navigate("/holiday");
                   setSubmitting(false);
                 }
@@ -73,7 +93,14 @@ const HolidayForm = () => {
                 toast.error(error);
               });
           } else {
-            await updateWeekend({ id, name, company_id: companyId, status })
+            await updateWeekend({
+              id,
+              type,
+              company_id: companyId,
+              start_date,
+              end_date,
+              description,
+            })
               .then((res) => {
                 if (res?.error != null) {
                   toast.error(res?.error?.data?.message);
@@ -100,16 +127,18 @@ const HolidayForm = () => {
                   Holiday Type
                 </label>
                 <Field
-                  type="select"
+                  as="select"
                   name="type"
                   id="type"
                   className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 >
-                  <option value="">Select Holiday Type</option>
-                  <option value="public">Public Holiday</option>
-                  <option value="special">Special Holiday</option>
+                  <option value="">Select Type</option>
+                  {types?.data?.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
                 </Field>
-
                 <ErrorMessage
                   name="type"
                   component="div"
@@ -119,19 +148,19 @@ const HolidayForm = () => {
 
               <div className="flex-grow">
                 <label
-                  htmlFor="type"
+                  htmlFor="start_date"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Start Time
+                  Start Date
                 </label>
                 <Field
-                  type="text"
-                  name="type"
-                  id="type"
+                  type="date"
+                  name="start_date"
+                  id="start_date"
                   className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
                 <ErrorMessage
-                  name="type"
+                  name="start_date"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
@@ -139,19 +168,39 @@ const HolidayForm = () => {
 
               <div className="flex-grow">
                 <label
-                  htmlFor="type"
+                  htmlFor="end_date"
                   className="block text-sm font-medium text-gray-700"
                 >
                   End Time
                 </label>
                 <Field
-                  type="text"
-                  name="type"
-                  id="type"
+                  type="date"
+                  name="end_date"
+                  id="end_date"
                   className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
                 <ErrorMessage
-                  name="type"
+                  name="end_date"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+
+              <div className="flex-grow">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Description
+                </label>
+                <Field
+                  type="text"
+                  name="description"
+                  id="description"
+                  className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+                <ErrorMessage
+                  name="description"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />

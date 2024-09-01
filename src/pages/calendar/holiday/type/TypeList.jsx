@@ -1,25 +1,26 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import {
-  useDeleteDesignationMutation,
   useDeleteTypeMutation,
-  useDeleteWeekendMutation,
   useGetCompanyIdQuery,
-  useGetDesignationsQuery,
   useGetTypeListQuery,
-  useGetWeekendListQuery,
 } from "../../../../features/api";
 
 import ListSkeleton from "../../../../skeletons/ListSkeleton";
 import ErrorMessage from "../../../../utils/ErrorMessage";
 import toast from "react-hot-toast";
 import ConfirmDialog from "../../../../helpers/ConfirmDialog";
+import TypeForm from "./TypeForm";
 
 const TypeList = () => {
   const { data: companyId } = useGetCompanyIdQuery();
   const [deleteType] = useDeleteTypeMutation();
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
 
+  const onClose = () => {
+    setIsPopupOpen(false);
+  };
   const handleDeleteWeekend = async (id) => {
     const confirm = () =>
       toast(
@@ -108,12 +109,12 @@ const TypeList = () => {
             {weekends?.data?.length | 0} Holiday Type Available for Now
           </div>
           <div>
-            <Link
-              to="/holiday/type/add"
+            <button
+              onClick={() => setIsPopupOpen(true)} // Open the popup on click
               className="px-3 py-2 rounded-[3px] text-white bg-[#6D28D9] transition hover:bg-[#7f39f0]"
             >
               Add Type
-            </Link>
+            </button>
           </div>
         </div>
         <div>
@@ -133,6 +134,28 @@ const TypeList = () => {
           </table>
         </div>
       </div>
+
+      {/* Popup Component */}
+      {isPopupOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md">
+            <div className="flex justify-between items-center pb-3 border-b border-gray-200">
+              <h3 className="text-lg font-medium text-gray-800">
+                Add Holiday Type
+              </h3>
+              <button
+                className="text-gray-500 hover:text-gray-800"
+                onClick={() => setIsPopupOpen(false)} // Close popup
+              >
+                &times;
+              </button>
+            </div>
+            <div className="mt-4">
+              <TypeForm onClose={onClose} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

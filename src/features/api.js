@@ -434,6 +434,7 @@ export const apiSlice = createApi({
         method: "POST",
         body: credentials,
       }),
+
       invalidatesTags: ["weekend"],
     }),
 
