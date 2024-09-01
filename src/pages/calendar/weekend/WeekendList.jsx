@@ -59,8 +59,6 @@ const WeekendList = () => {
 
   let content;
 
-  console.log(error);
-
   if (isLoading && !isError) content = <ListSkeleton />;
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;

@@ -349,6 +349,7 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["Section"],
     }),
+
     deleteSection: builder.mutation({
       query: (id) => ({
         url: `/section/delete/`,
@@ -367,10 +368,10 @@ export const apiSlice = createApi({
       providesTags: ["weekend"],
     }),
 
-    // getSectionDetails: builder.query({
-    //   query: (id) => `/section/details/${id}`,
-    //   providesTags: ["Section"],
-    // }),
+    getWeekendDetails: builder.query({
+      query: (id) => `/weekend/details/${id}`,
+      providesTags: ["weekend"],
+    }),
 
     createWeekend: builder.mutation({
       query: (credentials) => ({
@@ -484,6 +485,8 @@ export const {
   useCreateWeekendMutation,
   useGetWeekendListQuery,
   useDeleteWeekendMutation,
+  useUpdateWeekendMutation,
+  useGetWeekendDetailsQuery,
 
   useSetSettingMutation,
   useGetRootSettingQuery,

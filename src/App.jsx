@@ -101,6 +101,7 @@ function App() {
                 path="company/weekend/create"
                 element={<WeekendSetting />}
               />
+              <Route path="/weekend/update/:id" element={<WeekendSetting />} />
             </Route>
           </Route>
         </Route>

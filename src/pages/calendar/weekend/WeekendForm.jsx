@@ -8,6 +8,8 @@ import {
   useUpdateDesignationMutation,
   useGetCompanyIdQuery,
   useCreateWeekendMutation,
+  useGetWeekendDetailsQuery,
+  useUpdateWeekendMutation,
 } from "../../../features/api";
 import FormSkeleton from "../../../skeletons/FormSkeleton";
 
@@ -22,17 +24,20 @@ const WeekendForm = () => {
   const { id } = useParams();
 
   const [createWeekend] = useCreateWeekendMutation();
-  const [updateDesignation] = useUpdateDesignationMutation();
+  const [updateWeekend] = useUpdateWeekendMutation();
   const [initialValues, setInitialValues] = useState({ name: "", status: "" });
 
-  const { data: designation, isLoading: isDesignationLoading } =
-    useGetDesignationDetailsQuery(id, { skip: !id });
+  const { data: weekend, isLoading: isDesignationLoading } =
+    useGetWeekendDetailsQuery(id, { skip: !id });
 
   useEffect(() => {
-    if (designation?.data) {
-      setInitialValues({ name: designation?.data?.name });
+    if (weekend?.data) {
+      setInitialValues({
+        name: weekend?.data?.name,
+        status: weekend?.data?.status,
+      });
     }
-  }, [designation]);
+  }, [weekend]);
 
   const { data: companyId } = useGetCompanyIdQuery();
 
@@ -67,7 +72,7 @@ const WeekendForm = () => {
                 toast.error(error);
               });
           } else {
-            await updateDesignation({ id, name, company_id: companyId })
+            await updateWeekend({ id, name, company_id: companyId, status })
               .then((res) => {
                 if (res?.error != null) {
                   toast.error(res?.error?.data?.message);
