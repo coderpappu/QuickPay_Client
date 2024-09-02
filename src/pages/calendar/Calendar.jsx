@@ -1,19 +1,10 @@
 import React from "react";
 import { Calendar as BigCalendar, dateFnsLocalizer } from "react-big-calendar";
-import {
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  eachDayOfInterval,
-  endOfMonth,
-  startOfMonth,
-} from "date-fns";
+import { format, parse, startOfWeek, getDay } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment";
 import {
-  useGetCompaniesQuery,
   useGetCompanyIdQuery,
   useGetHolidayListQuery,
   useGetWeekendListQuery,
@@ -37,13 +28,14 @@ const MyCalendar = () => {
     skip: companyId == null,
   });
 
-  // Assume weekend data includes days like ["Friday", "Saturday"]
   const { data: weekends } = useGetWeekendListQuery(companyId, {
     skip: companyId == null,
   });
 
   const weekendDays =
     weekends?.data?.map((day) => day.name.toLowerCase()) || [];
+
+  // Dummy event data for demonstration
 
   // Convert holidays to event format
   const events =
@@ -58,30 +50,38 @@ const MyCalendar = () => {
       },
     })) || [];
 
-  // Create a function to check if a day is a weekend
-  const isWeekend = (date) => {
-    const dayName = moment(date).format("dddd").toLowerCase();
-    return weekendDays.includes(dayName);
-  };
-
   // Custom style function
   function eventStyleGetter(event, start, end, isSelected) {
-    const backgroundColor = isWeekend(start) ? "#D3D3D3" : "#3174ad";
+    const dayOfWeek = moment(start).format("dddd").toLowerCase();
+    const isWeekend = weekendDays.includes(dayOfWeek);
+
+    const style = {
+      backgroundColor: isWeekend ? "lightcoral" : "#3174ad", // Apply color for weekends
+      borderRadius: "0px",
+      opacity: 0.8,
+      color: "white",
+      border: "0px",
+      display: "block",
+    };
+
     return {
-      style: {
-        backgroundColor,
-        borderRadius: "0px",
-        opacity: 0.8,
-        color: "black",
-        border: "0px",
-        display: "block",
-      },
+      style: style,
     };
   }
 
-  const handleSelectEvent = (event) => {
-    alert(`Event: ${event.title}`);
-  };
+  // Custom dayPropGetter to style entire days
+  function dayPropGetter(date) {
+    const dayOfWeek = moment(date).format("dddd").toLowerCase();
+    const isWeekend = weekendDays.includes(dayOfWeek);
+
+    const style = {
+      backgroundColor: isWeekend ? "#FFCCCC" : null, // Light red for weekends
+    };
+
+    return {
+      style: style,
+    };
+  }
 
   return (
     <div style={{ height: "100vh", padding: "20px" }}>
@@ -96,8 +96,8 @@ const MyCalendar = () => {
         step={30}
         selectable
         popup
-        onSelectEvent={handleSelectEvent}
         eventPropGetter={eventStyleGetter}
+        dayPropGetter={dayPropGetter} // Apply custom styles to entire days
       />
     </div>
   );
