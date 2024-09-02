@@ -27,6 +27,8 @@ export const apiSlice = createApi({
     "Employee",
     "Attendance",
     "weekend",
+    "holiday_type",
+    "holiday",
   ],
 
   endpoints: (builder) => ({
@@ -407,7 +409,7 @@ export const apiSlice = createApi({
         method: "POST",
         body: credentials,
       }),
-      invalidatesTags: ["weekend"],
+      invalidatesTags: ["holiday_type"],
     }),
 
     getTypeList: builder.query({
@@ -415,7 +417,7 @@ export const apiSlice = createApi({
         url: `/holiday/type/list/`,
         params: { companyId },
       }),
-      providesTags: ["weekend"],
+      providesTags: ["holiday_type"],
     }),
 
     deleteType: builder.mutation({
@@ -424,7 +426,7 @@ export const apiSlice = createApi({
         method: "DELETE",
         params: { id },
       }),
-      invalidatesTags: ["weekend"],
+      invalidatesTags: ["holiday_type"],
     }),
 
     // Holiday Endpoint
@@ -435,7 +437,7 @@ export const apiSlice = createApi({
         body: credentials,
       }),
 
-      invalidatesTags: ["weekend"],
+      invalidatesTags: ["holiday"],
     }),
 
     getHolidayList: builder.query({
@@ -443,7 +445,7 @@ export const apiSlice = createApi({
         url: `/holiday/list/`,
         params: { companyId },
       }),
-      providesTags: ["weekend"],
+      providesTags: ["holiday"],
     }),
 
     // Company Setting System
