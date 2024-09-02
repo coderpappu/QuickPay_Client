@@ -1,11 +1,11 @@
-import React from "react";
-import WeekendList from "./type/TypeList";
-import TypeForm from "./type/TypeForm";
+import HolidayList from "./HolidayList";
+import TypeList from "./type/TypeList";
 
 const Holiday = () => {
   return (
-    <div>
-      <WeekendList />
+    <div className="flex flex-wrap justify-between">
+      <TypeList />
+      <HolidayList />
     </div>
   );
 };

@@ -1,26 +1,31 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import {
-  useDeleteTypeMutation,
+  useDeleteDesignationMutation,
+  useDeleteWeekendMutation,
   useGetCompanyIdQuery,
-  useGetTypeListQuery,
-} from "../../../../features/api";
+  useGetDesignationsQuery,
+  useGetHolidayListQuery,
+  useGetWeekendListQuery,
+} from "../../../features/api";
 
-import ListSkeleton from "../../../../skeletons/ListSkeleton";
-import ErrorMessage from "../../../../utils/ErrorMessage";
+import ListSkeleton from "../../../skeletons/ListSkeleton";
+import ErrorMessage from "../../../utils/ErrorMessage";
 import toast from "react-hot-toast";
-import ConfirmDialog from "../../../../helpers/ConfirmDialog";
-import TypeForm from "./TypeForm";
+import ConfirmDialog from "../../../helpers/ConfirmDialog";
+import { useState } from "react";
+import HolidayFormPopup from "./HolidayForm";
 
-const TypeList = () => {
+const HolidayList = () => {
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteType] = useDeleteTypeMutation();
+  const [deleteWeekend] = useDeleteWeekendMutation();
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
 
   const onClose = () => {
     setIsPopupOpen(false);
   };
+
   const handleDeleteWeekend = async (id) => {
     const confirm = () =>
       toast(
@@ -29,15 +34,15 @@ const TypeList = () => {
             onConfirm={async () => {
               toast.dismiss(t.id);
               try {
-                deleteType(id).then((res) => {
+                deleteWeekend(id).then((res) => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
-                    toast.success("Type deleted successfully");
+                    toast.success("weekend deleted successfully");
                   }
                 });
               } catch (error) {
-                toast.error(error.message || "Failed to delete type");
+                toast.error(error.message || "Failed to delete weekend");
               }
             }}
             onCancel={() => toast.dismiss(t.id)}
@@ -52,13 +57,15 @@ const TypeList = () => {
   };
 
   const {
-    data: weekends,
+    data: holidays,
     isLoading,
     isError,
     error,
-  } = useGetTypeListQuery(companyId, {
+  } = useGetHolidayListQuery(companyId, {
     skip: companyId == null,
   });
+
+  //   console.log(holidays?.data?.[0]?.HolidayType?.name);
 
   let content;
 
@@ -67,22 +74,45 @@ const TypeList = () => {
     content = <ErrorMessage message={error?.data?.message} />;
 
   if (!isLoading && !isError)
-    content = weekends?.data ? (
-      weekends?.data?.map((weekend, index) => (
+    content = holidays?.data ? (
+      holidays?.data?.map((holiday, index) => (
         <tr
-          key={weekend?.id}
+          key={holiday?.id}
           className={`${
             index % 2 === 0 ? "" : "bg-gray-50"
           } rounded-sm md:rounded-none`}
         >
           <td className="py-2 text-sm text-center">{++index}</td>
-          <td className="py-2 text-sm text-center pl-4 md:pl-10">
-            {weekend?.name}
+          <td className="py-2 text-sm font-medium pl-4 ">{holiday?.name}</td>
+          <td className="py-2 text-sm font-medium pl-4 ">
+            {holiday?.HolidayType?.name}
+          </td>
+          <td
+            className={` ${holiday.status === "INACTIVE" && "text-red-600"} py-2 font-medium text-sm text-center`}
+          >
+            {holiday?.from_date}
+          </td>
+          <td
+            className={` ${holiday.status === "INACTIVE" && "text-red-600"} py-2 font-medium text-sm text-center`}
+          >
+            {holiday?.to_date}
+          </td>
+          <td
+            className={` ${holiday.status === "INACTIVE" && "text-red-600"} py-2 font-medium text-sm text-center`}
+          >
+            {holiday?.description}
           </td>
 
+          {/* <td className="py-2 text-sm">
+            <Link to={`/weekend/update/${holiday?.id}`}>
+              <div className="grid place-items-center">
+                <TbEdit className="text-2xl text-[#6D28D9]" />
+              </div>
+            </Link>
+          </td> */}
           <td
             className="py-2 text-sm"
-            onClick={() => handleDeleteWeekend(weekend?.id)}
+            onClick={() => handleDeleteWeekend(holiday?.id)}
           >
             <div className="grid place-items-center">
               <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
@@ -98,22 +128,22 @@ const TypeList = () => {
     // <div className="px-4 md:px-0">
     //   <div className="flex flex-wrap justify-between items-center pb-2">
     //     <div>
-    //       <h2 className="font-semibold text-lg pb-2">Holiday Type</h2>
+    //       <h2 className="font-semibold text-lg pb-2">Holiday</h2>
     //     </div>
     //   </div>
 
-    <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-[35%] h-auto overflow-x-auto">
+    <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-[64%] h-auto overflow-x-auto">
       {/* Heading And Btn */}
       <div className="flex flex-wrap justify-between mb-4">
         <div className="font-medium text-base">
-          {weekends?.data?.length | 0} Type
+          {holidays?.data?.length | 0} Holiday Available for Now
         </div>
         <div>
           <button
-            onClick={() => setIsPopupOpen(true)} // Open the popup on click
-            className="px-3 py-2 text-sm rounded-[3px] text-white bg-[#6D28D9] transition hover:bg-[#7f39f0]"
+            onClick={() => setIsPopupOpen(true)}
+            className="px-5 py-2 text-sm rounded-[3px] text-white bg-[#6D28D9] transition hover:bg-[#7f39f0]"
           >
-            Add Type
+            Add Weekend
           </button>
         </div>
       </div>
@@ -122,10 +152,12 @@ const TypeList = () => {
           {!isError && (
             <thead className="border-b border-slate-200 text-left">
               <tr>
-                <th className="pb-2 text-sm text-center  w-10">SL</th>
-                <th className="pb-2 text-sm text-center pl-4  md:pl-10">
-                  Name
-                </th>
+                <th className="pb-2 text-sm text-center w-10">SL</th>
+                <th className="pb-2 text-sm pl-4 ">Name</th>
+                <th className="pb-2 text-sm pl-4 ">Type</th>
+                <th className="pb-2 text-sm text-center">From</th>
+                <th className="pb-2 text-sm text-center">To</th>
+                <th className="pb-2 text-sm text-center">Description</th>
 
                 <th className="pb-2 text-sm text-center">Action</th>
               </tr>
@@ -135,9 +167,8 @@ const TypeList = () => {
           <tbody>{content}</tbody>
         </table>
       </div>
-      {/* </div> */}
-
       {/* Popup Component */}
+
       {isPopupOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
@@ -153,13 +184,14 @@ const TypeList = () => {
               </button>
             </div>
             <div className="mt-4">
-              <TypeForm onClose={onClose} />
+              <HolidayFormPopup onClose={onClose} />
             </div>
           </div>
         </div>
       )}
     </div>
+    // </div>
   );
 };
 
-export default TypeList;
+export default HolidayList;

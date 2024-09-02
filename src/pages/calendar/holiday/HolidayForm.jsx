@@ -4,52 +4,55 @@ import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
 import {
-  useGetDesignationDetailsQuery,
-  useUpdateDesignationMutation,
-  useGetCompanyIdQuery,
-  useCreateWeekendMutation,
-  useGetWeekendDetailsQuery,
-  useUpdateWeekendMutation,
-  useCreateHolidayTypeMutation,
-  useDeleteTypeMutation,
   useGetTypeListQuery,
   useCreateHolidayMutation,
+  useUpdateWeekendMutation,
+  useGetWeekendDetailsQuery,
+  useGetCompanyIdQuery,
 } from "../../../features/api";
-
-import FormSkeleton from "../../../skeletons/ListSkeleton";
+import FormSkeleton from "../../../skeletons/FormSkeleton";
 
 const HolidaySchema = Yup.object().shape({
-  type: Yup.string().required("Weekend Name is required"),
+  name: Yup.string().required("Name is required"),
+  type: Yup.string().required("Holiday Type is required"),
   start_date: Yup.string().required("Start date is required"),
   end_date: Yup.string().required("End date is required"),
 });
 
-const HolidayForm = () => {
+const HolidayFormPopup = ({ onClose }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: companyId } = useGetCompanyIdQuery();
   const [createHoliday] = useCreateHolidayMutation();
-  const [updateWeekend] = useDeleteTypeMutation();
+  const [updateWeekend] = useUpdateWeekendMutation();
 
-  // holiday type load from db
   const {
     data: types,
     isLoading,
     isError,
-    error,
   } = useGetTypeListQuery(companyId, {
-    skip: companyId == null,
+    skip: !companyId,
   });
 
-  const [initialValues, setInitialValues] = useState({ type: "" });
+  const [initialValues, setInitialValues] = useState({
+    name: "",
+    type: "",
+    start_date: "",
+    end_date: "",
+    description: "",
+  });
 
-  const { data: weekend, isLoading: isDesignationLoading } =
+  const { data: weekend, isLoading: isWeekendLoading } =
     useGetWeekendDetailsQuery(id, { skip: !id });
 
   useEffect(() => {
     if (weekend?.data) {
       setInitialValues({
-        type: weekend?.data?.name, // Renamed to 'type' for form consistency
+        name: weekend?.data?.name,
+        type: weekend?.data?.holiday_type_id,
+        start_date: weekend?.data?.start_date || "",
+        end_date: weekend?.data?.end_date || "",
+        description: weekend?.data?.description || "",
       });
     }
   }, [weekend]);
@@ -58,67 +61,95 @@ const HolidayForm = () => {
     navigate("/");
   }
 
-  if (isDesignationLoading) {
+  if (isWeekendLoading || isLoading) {
     return <FormSkeleton />;
   }
 
   return (
-    <div>
-      <Formik
-        enableReinitialize={true}
-        initialValues={initialValues}
-        validationSchema={HolidaySchema}
-        onSubmit={async (values, { setSubmitting }) => {
-          const { type, start_date, end_date, description } = values;
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+        <button
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+          onClick={onClose}
+        >
+          &#x2715;
+        </button>
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          {id ? "Edit Holiday" : "Add Holiday"}
+        </h2>
+        <Formik
+          enableReinitialize
+          initialValues={initialValues}
+          validationSchema={HolidaySchema}
+          onSubmit={async (values, { setSubmitting }) => {
+            const { name, type, start_date, end_date, description } = values;
 
-          if (id == null) {
-            await createHoliday({
-              holiday_type_id: type,
-              from_date: start_date,
-              to_date: end_date,
-              description,
-              company_id: companyId,
-            })
-              .then((res) => {
-                if (res.error != null) {
-                  toast.error(res?.error?.data?.message);
-                } else {
-                  toast.success("Holiday added successfully");
-                  navigate("/holiday");
-                  setSubmitting(false);
-                }
-              })
-              .catch((error) => {
-                toast.error(error);
-              });
-          } else {
-            await updateWeekend({
-              id,
-              type,
-              company_id: companyId,
-              start_date,
-              end_date,
-              description,
-            })
-              .then((res) => {
-                if (res?.error != null) {
-                  toast.error(res?.error?.data?.message);
-                } else {
-                  toast.success("Weekend updated successfully");
-                  navigate("/designation/list");
-                  setSubmitting(false);
-                }
-              })
-              .catch((error) => {
-                toast.error(error);
-              });
-          }
-        }}
-      >
-        {({ isSubmitting }) => (
-          <Form className="w-full max-w-lg">
-            <div className=" ">
-              <div className="flex-grow">
+            try {
+              if (!id) {
+                await createHoliday({
+                  name,
+                  holiday_type_id: type,
+                  from_date: start_date,
+                  to_date: end_date,
+                  description,
+                  company_id: companyId,
+                }).then((res) => {
+                  if (res.error) {
+                    toast.error(res?.error?.data?.message);
+                  } else {
+                    toast.success("Holiday added successfully");
+                    navigate("/holiday");
+                    onClose();
+                  }
+                });
+              } else {
+                await updateWeekend({
+                  id,
+                  type,
+                  company_id: companyId,
+                  start_date,
+                  end_date,
+                  description,
+                }).then((res) => {
+                  if (res.error) {
+                    toast.error(res?.error?.data?.message);
+                  } else {
+                    toast.success("Holiday updated successfully");
+                    navigate("/holiday");
+                    onClose();
+                  }
+                });
+              }
+            } catch (error) {
+              toast.error("An error occurred while submitting the form.");
+            } finally {
+              setSubmitting(false);
+            }
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <div className="mb-4">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Name
+                </label>
+                <Field
+                  type="text"
+                  name="name"
+                  id="name"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
+                />
+                <ErrorMessage
+                  name="name"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+
+              <div className="mb-4">
                 <label
                   htmlFor="type"
                   className="block text-sm font-medium text-gray-700"
@@ -129,7 +160,7 @@ const HolidayForm = () => {
                   as="select"
                   name="type"
                   id="type"
-                  className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
                 >
                   <option value="">Select Type</option>
                   {types?.data?.map((item) => (
@@ -145,7 +176,7 @@ const HolidayForm = () => {
                 />
               </div>
 
-              <div className="flex-grow">
+              <div className="mb-4">
                 <label
                   htmlFor="start_date"
                   className="block text-sm font-medium text-gray-700"
@@ -156,7 +187,7 @@ const HolidayForm = () => {
                   type="date"
                   name="start_date"
                   id="start_date"
-                  className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
                 />
                 <ErrorMessage
                   name="start_date"
@@ -165,18 +196,18 @@ const HolidayForm = () => {
                 />
               </div>
 
-              <div className="flex-grow">
+              <div className="mb-4">
                 <label
                   htmlFor="end_date"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  End Time
+                  End Date
                 </label>
                 <Field
                   type="date"
                   name="end_date"
                   id="end_date"
-                  className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
                 />
                 <ErrorMessage
                   name="end_date"
@@ -185,7 +216,7 @@ const HolidayForm = () => {
                 />
               </div>
 
-              <div className="flex-grow">
+              <div className="mb-4">
                 <label
                   htmlFor="description"
                   className="block text-sm font-medium text-gray-700"
@@ -196,7 +227,7 @@ const HolidayForm = () => {
                   type="text"
                   name="description"
                   id="description"
-                  className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
                 />
                 <ErrorMessage
                   name="description"
@@ -205,21 +236,28 @@ const HolidayForm = () => {
                 />
               </div>
 
-              <div className="flex-none mt-2">
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="mr-4 px-4 py-2 bg-gray-300 rounded-md text-sm font-medium text-gray-800 hover:bg-gray-400"
+                >
+                  Cancel
+                </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#6D28D9] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="px-4 py-2 bg-[#6D28D9] rounded-md text-sm font-medium text-white hover:bg-[#5A21B3]"
                 >
-                  Add
+                  {id ? "Update" : "Add"}
                 </button>
               </div>
-            </div>
-          </Form>
-        )}
-      </Formik>
+            </Form>
+          )}
+        </Formik>
+      </div>
     </div>
   );
 };
 
-export default HolidayForm;
+export default HolidayFormPopup;
