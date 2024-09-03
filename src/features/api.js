@@ -394,10 +394,10 @@ export const apiSlice = createApi({
     }),
 
     deleteWeekend: builder.mutation({
-      query: (id) => ({
+      query: (name) => ({
         url: `/weekend/delete/`,
         method: "DELETE",
-        params: { id },
+        params: { name },
       }),
       invalidatesTags: ["weekend"],
     }),
