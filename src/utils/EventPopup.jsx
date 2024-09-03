@@ -31,19 +31,19 @@ const EventPopup = ({ event, onClose }) => {
         </div>
         <div className="text-gray-700 space-y-4">
           <div className="flex ">
-            <AiOutlineHolder className="text-lg mr-2" />
+            <AiOutlineHolder className="text-lg mr-2" size={19} />
             <p className="text-base text-justify flex-1">
               {event.resource.description}
             </p>
           </div>
 
           <div className="flex items-center">
-            <BsCalendar2Check className="text-lg mr-2" />
+            <BsCalendar2Check className="text-lg mr-2" size={15} />
             <p className="text-justify flex-1">{event.end.toDateString()}</p>
           </div>
 
           <div className="flex items-center">
-            <CiLock className="text-lg mr-2" />
+            <CiLock className="text-lg mr-2" size={18} />
             <p className="text-justify flex-1">{event.resource.holidayType}</p>
           </div>
         </div>
