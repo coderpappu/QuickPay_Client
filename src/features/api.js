@@ -448,6 +448,15 @@ export const apiSlice = createApi({
       providesTags: ["holiday"],
     }),
 
+    deleteHoliday: builder.mutation({
+      query: (id) => ({
+        url: `/holiday/delete/`,
+        method: "DELETE",
+        params: { id },
+      }),
+      invalidatesTags: ["holiday"],
+    }),
+
     // Company Setting System
 
     getRootSetting: builder.query({
@@ -545,6 +554,7 @@ export const {
   // Holiday
   useCreateHolidayMutation,
   useGetHolidayListQuery,
+  useDeleteHolidayMutation,
 
   useSetSettingMutation,
   useGetRootSettingQuery,

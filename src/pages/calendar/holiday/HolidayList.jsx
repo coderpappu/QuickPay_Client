@@ -3,6 +3,7 @@ import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import {
   useDeleteDesignationMutation,
+  useDeleteHolidayMutation,
   useDeleteWeekendMutation,
   useGetCompanyIdQuery,
   useGetDesignationsQuery,
@@ -19,7 +20,7 @@ import HolidayFormPopup from "./HolidayForm";
 
 const HolidayList = () => {
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteWeekend] = useDeleteWeekendMutation();
+  const [deleteHoliday] = useDeleteHolidayMutation();
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
 
   const onClose = () => {
@@ -34,15 +35,15 @@ const HolidayList = () => {
             onConfirm={async () => {
               toast.dismiss(t.id);
               try {
-                deleteWeekend(id).then((res) => {
+                deleteHoliday(id).then((res) => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
-                    toast.success("weekend deleted successfully");
+                    toast.success("Holiday deleted successfully");
                   }
                 });
               } catch (error) {
-                toast.error(error.message || "Failed to delete weekend");
+                toast.error(error.message || "Failed to delete holiday");
               }
             }}
             onCancel={() => toast.dismiss(t.id)}
