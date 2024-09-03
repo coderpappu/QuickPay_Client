@@ -11,6 +11,8 @@ import {
   useGetWeekendListQuery,
 } from "../../features/api";
 import EventPopup from "../../utils/EventPopup";
+import CustomToolbar from "../../utils/Toolbar";
+import CustomWeekdayHeader from "../../utils/CustomWeekdayHeader";
 
 const locales = {
   "en-US": enUS,
@@ -108,6 +110,11 @@ const MyCalendar = () => {
         step={30}
         selectables
         popup
+        components={{
+          toolbar: CustomToolbar,
+
+          // Use the custom toolbar
+        }}
         onSelectEvent={handleSelectEvent}
         eventPropGetter={eventStyleGetter}
         dayPropGetter={dayPropGetter} // Apply custom styles to entire days
