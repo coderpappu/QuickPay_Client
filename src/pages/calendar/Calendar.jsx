@@ -4,11 +4,13 @@ import { format, parse, startOfWeek, getDay } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment";
+import { useState } from "react";
 import {
   useGetCompanyIdQuery,
   useGetHolidayListQuery,
   useGetWeekendListQuery,
 } from "../../features/api";
+import EventPopup from "../../utils/EventPopup";
 
 const locales = {
   "en-US": enUS,
@@ -49,6 +51,16 @@ const MyCalendar = () => {
         holidayType: holiday.HolidayType.name,
       },
     })) || [];
+
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  const handleSelectEvent = (event) => {
+    setSelectedEvent(event);
+  };
+
+  const handleClosePopup = () => {
+    setSelectedEvent(null);
+  };
 
   // Custom style function
   function eventStyleGetter(event, start, end, isSelected) {
@@ -94,11 +106,15 @@ const MyCalendar = () => {
         defaultView="month"
         views={["month", "week", "day", "agenda"]}
         step={30}
-        selectable
+        selectables
         popup
+        onSelectEvent={handleSelectEvent}
         eventPropGetter={eventStyleGetter}
         dayPropGetter={dayPropGetter} // Apply custom styles to entire days
       />
+      {selectedEvent && (
+        <EventPopup event={selectedEvent} onClose={handleClosePopup} />
+      )}
     </div>
   );
 };
