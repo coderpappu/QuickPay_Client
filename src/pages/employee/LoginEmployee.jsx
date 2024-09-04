@@ -6,6 +6,7 @@ import Logo from "../../components/Logo";
 import {
   useLoginEmployeeMutation,
   useLoginUserMutation,
+  useSetCompanyIdMutation,
 } from "../../features/api";
 
 const LoginEmployee = () => {
@@ -16,14 +17,13 @@ const LoginEmployee = () => {
     try {
       let { data } = await login({ email, password });
 
-      console.log(data);
       if (!data) {
         toast.error("Email or password is incorrect!");
       }
 
       localStorage.setItem("token", data?.data?.accessToken);
 
-      //   navigate("/");
+      navigate("/");
     } catch (error) {
       toast.error(error.message);
     }

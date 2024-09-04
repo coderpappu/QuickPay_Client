@@ -22,6 +22,7 @@ export default function PopUp() {
   } = useGetCompaniesQuery();
 
   const [setCompanyId] = useSetCompanyIdMutation();
+
   const { data: companyId } = useGetCompanyIdQuery();
 
   const [open, setOpen] = useState(companyId == null);

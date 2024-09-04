@@ -9,13 +9,17 @@ import AboutCard from "../../components/employee/AboutCard";
 import {
   useGetEmployeeDetailsQuery,
   useGetEmployeesQuery,
+  useGetUserQuery,
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import JobDetails from "../../components/employee/JobDetails";
 const Profile = () => {
   const id = useParams()?.id;
+  const { data: employeeData } = useGetUserQuery();
 
-  const { data, isLoading, isError } = useGetEmployeeDetailsQuery(id);
+  const { data, isLoading, isError } = useGetEmployeeDetailsQuery(
+    id || employeeData?.data?.id
+  );
 
   const [selected, setSelected] = useState("1");
 

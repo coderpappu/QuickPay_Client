@@ -12,6 +12,8 @@ const Header = () => {
   const navigate = useNavigate();
   const { data: userData, isLoading, isError } = useGetUserQuery();
 
+  console.log(userData);
+
   const handleToggle = () => {
     setShow(!show);
   };
@@ -71,9 +73,15 @@ const Header = () => {
             </div>
             {show && (
               <div className="absolute w-[150px] h-[100px] p-2 rounded-sm bg-[#fff] border-2 top-11 right-0">
-                <Link to="/profile" className="font-medium text-sm">
-                  My Profile
-                </Link>{" "}
+                {userData?.data?.type == "employee" ? (
+                  <Link to="employee/details" className="font-medium text-sm">
+                    My Profile
+                  </Link>
+                ) : (
+                  <Link to="/profile" className="font-medium text-sm">
+                    My Profile
+                  </Link>
+                )}
                 <br />
                 <Link className="font-medium text-sm"> Setting</Link>
                 <br />

@@ -1,8 +1,15 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { useGetUserQuery } from "../features/api";
-import HomeSkeleton from "../skeletons/HomeSkeleton"; // Corrected import name
+import {
+  useGetEmployeeDetailsQuery,
+  useGetEmployeeQuery,
+  useGetUserQuery,
+} from "../features/api";
+import HomeSkeleton from "../skeletons/HomeSkeleton";
+// Corrected import name
 const PrivateRoute = () => {
   const { data, isLoading, isSuccess, isError } = useGetUserQuery();
+  const { data: employeeData } = useGetEmployeeQuery();
+
   const navigate = useNavigate();
 
   let content = null;

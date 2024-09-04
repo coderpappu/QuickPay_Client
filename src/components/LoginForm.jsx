@@ -30,7 +30,7 @@ const LoginForm = ({ handleLogin }) => {
         </Link>
       </p>
       <h2 className="text-2xl font-semibold pt-16 mb-6">
-        Sign in to <label className="text-[#6D28D9] font-bold">Admin</label>{" "}
+        Sign in to <label className="text-[#6D28D9] font-bold">Employee</label>{" "}
       </h2>
 
       <div className="py-4 md:w-full lg:w-[400px]">
@@ -38,7 +38,7 @@ const LoginForm = ({ handleLogin }) => {
           initialValues={{ email: "coder@gmail.com", password: "12345678" }}
           validate={(values) => {
             const errors = {};
-            if (!values.email) {  
+            if (!values.email) {
               errors.email = "Required";
             } else if (
               !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
@@ -125,6 +125,12 @@ const LoginForm = ({ handleLogin }) => {
             </Form>
           )}
         </Formik>
+        <Link
+          to="/employee/login"
+          className="text-[#ff1616] text-sm lg:text-lg"
+        >
+          Employee Login
+        </Link>
       </div>
     </div>
   );

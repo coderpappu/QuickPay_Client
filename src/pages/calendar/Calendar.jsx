@@ -7,6 +7,7 @@ import moment from "moment";
 import { useState } from "react";
 import {
   useGetCompanyIdQuery,
+  useGetEmployeeQuery,
   useGetHolidayListQuery,
   useGetWeekendListQuery,
 } from "../../features/api";
@@ -28,6 +29,9 @@ const localizer = dateFnsLocalizer({
 
 const MyCalendar = () => {
   const { data: companyId } = useGetCompanyIdQuery();
+  // Replace with actual company ID
+  const { data } = useGetEmployeeQuery();
+
   const { data: holidays } = useGetHolidayListQuery(companyId, {
     skip: companyId == null,
   });

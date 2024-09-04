@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
 import ProfileImg from "../assets/avatar1.jpg";
@@ -8,15 +8,24 @@ import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import PopUp from "../components/PopUp";
 
 import AdminDashboard from "./dashboard/AdminDashboard";
+import { useGetUserQuery, useSetCompanyIdMutation } from "../features/api";
 
 const Home = () => {
+  const [setCompanyId] = useSetCompanyIdMutation();
+
+  const { data: employeeData } = useGetUserQuery();
+
+  useEffect(() => {
+    setCompanyId(employeeData?.data?.company_id);
+  }, [setCompanyId]);
+
   return (
     <div className="">
-      {/* <h1 className="text-6xl text-[#6D28D9] font-bold text-center">
+      <h1 className="text-6xl text-[#6D28D9] font-bold text-center">
         QuickPay
-      </h1> */}
+      </h1>
 
-      <PopUp />
+      {!employeeData?.data && <PopUp />}
 
       <div className="mb-2">
         <h4 className="text-xl font-bold ">Welcome to QuickPay</h4>

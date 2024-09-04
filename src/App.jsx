@@ -68,6 +68,8 @@ function App() {
                 element={<Profile />}
               />
 
+              <Route path="/employee/details" element={<Profile />} />
+
               <Route path="company/shift/list" element={<ShiftList />} />
               <Route path="company/add/shift" element={<AddShift />} />
               <Route path="company/edit/shift/:id" element={<EditShift />} />
@@ -114,7 +116,9 @@ function App() {
         </Route>
 
         {/* Public routes */}
+
         <Route path="employee/login" element={<LoginEmployee />} />
+
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registration" element={<RegistraionPage />} />
         <Route path="*" element={<NotFound />} />
