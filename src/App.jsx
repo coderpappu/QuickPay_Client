@@ -34,6 +34,7 @@ import RegistraionPage from "./pages/user/RegistraionPage";
 import CompanyPrivateRoute from "./privateRoute/CompanyPrivateRoute";
 import PrivateRoute from "./privateRoute/PrivateRoute";
 import HolidayForm from "./pages/calendar/holiday/HolidayForm";
+import LoginEmployee from "./pages/employee/LoginEmployee";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="company/list" element={<CompanyList />} />
+
             <Route path="profile" element={<Profile />} />
             <Route path="profile/:id" element={<ProfileUpdate />} />
 
@@ -112,6 +114,7 @@ function App() {
         </Route>
 
         {/* Public routes */}
+        <Route path="employee/login" element={<LoginEmployee />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registration" element={<RegistraionPage />} />
         <Route path="*" element={<NotFound />} />

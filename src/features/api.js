@@ -101,6 +101,15 @@ export const apiSlice = createApi({
     }),
 
     // employee
+    loginEmployee: builder.mutation({
+      query: (credentials) => ({
+        url: "/employee/login",
+        method: "POST",
+        body: credentials,
+      }),
+      providesTags: ["Employee"],
+    }),
+
     getEmployees: builder.query({
       query: (companyId) => ({
         url: "/employee/getemployees",
@@ -500,6 +509,7 @@ export const {
   useSetCompanyIdMutation,
   useGetCompanyIdQuery,
 
+  useLoginEmployeeMutation,
   useGetEmployeesQuery,
   useGetEmployeeDetailsQuery,
   useDeleteEmployeeMutation,
