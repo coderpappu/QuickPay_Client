@@ -1,11 +1,7 @@
-
 @import "@fontsource/poppins"; /* Defaults to weight 400 */
 @import "@fontsource/poppins/600.css"; /* Weight 600 */
 
-
-
+@import "keep-react/css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-

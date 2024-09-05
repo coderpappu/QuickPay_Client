@@ -55,7 +55,7 @@ const Sidebar = () => {
                   Attendance
                 </li>
               </Link>
-              <Link to="#">
+              <Link to="/employee/leave">
                 <li
                   className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
                     activeMenu === "Apply" && `bg-[#6D28D9] text-white`
@@ -63,7 +63,7 @@ const Sidebar = () => {
                   onClick={() => handleMenuClick("Apply")}
                 >
                   <BsBoxArrowInUpRight size={18} className="mr-1" />
-                  Apply
+                  Leave
                 </li>
               </Link>
               <Link to="/employee/details">
@@ -74,16 +74,6 @@ const Sidebar = () => {
                   onClick={() => handleMenuClick("profile")}
                 >
                   Profile
-                </li>
-              </Link>
-              <Link to="/employee/leave">
-                <li
-                  className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-between ${
-                    activeMenu === "leave" && `bg-[#6D28D9] text-white`
-                  }`}
-                  onClick={() => handleMenuClick("leave")}
-                >
-                  Leave
                 </li>
               </Link>
 
