@@ -2,7 +2,10 @@ import { Link } from "react-router-dom";
 import { useGetCompanyIdQuery, useGetUserQuery } from "../features/api";
 import { useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
-
+import { PiCalendarCheckLight } from "react-icons/pi";
+import { BiCheckShield } from "react-icons/bi";
+import { BsBoxArrowInUpRight } from "react-icons/bs";
+import { RxCalendar } from "react-icons/rx";
 const Sidebar = () => {
   const { data: companyId } = useGetCompanyIdQuery();
   const [activeMenu, setActiveMenu] = useState(null);
@@ -32,17 +35,40 @@ const Sidebar = () => {
             <ul className="mt-4">
               <Link to="/company/calendar">
                 <li
-                  className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-between ${
+                  className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center  ${
                     activeMenu === "calendar" && `bg-[#6D28D9] text-white`
                   }`}
                   onClick={() => handleMenuClick("calendar")}
                 >
+                  <RxCalendar size={20} className="mr-1" />
                   Company Calendar
+                </li>
+              </Link>
+              <Link to="#">
+                <li
+                  className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
+                    activeMenu === "Attendance" && `bg-[#6D28D9] text-white`
+                  }`}
+                  onClick={() => handleMenuClick("Attendance")}
+                >
+                  <BiCheckShield className="mr-1" size={21} />
+                  Attendance
+                </li>
+              </Link>
+              <Link to="#">
+                <li
+                  className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
+                    activeMenu === "Apply" && `bg-[#6D28D9] text-white`
+                  }`}
+                  onClick={() => handleMenuClick("Apply")}
+                >
+                  <BsBoxArrowInUpRight size={18} className="mr-1" />
+                  Apply
                 </li>
               </Link>
               <Link to="/employee/details">
                 <li
-                  className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-between ${
+                  className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
                     activeMenu === "profile" && `bg-[#6D28D9] text-white`
                   }`}
                   onClick={() => handleMenuClick("profile")}
