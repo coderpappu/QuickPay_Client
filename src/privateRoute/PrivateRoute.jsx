@@ -14,7 +14,7 @@ const PrivateRoute = () => {
 
   let content = null;
   if (isLoading) content = <HomeSkeleton />;
-  if (isError) content = navigate("/login");
+  if (isError) content = navigate("/employee/login");
   if (isSuccess && !isError && data) content = <Outlet />;
 
   return <>{content}</>;

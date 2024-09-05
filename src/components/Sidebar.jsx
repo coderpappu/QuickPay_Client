@@ -76,6 +76,16 @@ const Sidebar = () => {
                   Profile
                 </li>
               </Link>
+              <Link to="/employee/leave">
+                <li
+                  className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-between ${
+                    activeMenu === "leave" && `bg-[#6D28D9] text-white`
+                  }`}
+                  onClick={() => handleMenuClick("leave")}
+                >
+                  Leave
+                </li>
+              </Link>
 
               {/* {activeMenu === "calendar" && (
                 <div className="ml-3">

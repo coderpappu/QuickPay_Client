@@ -35,6 +35,7 @@ import CompanyPrivateRoute from "./privateRoute/CompanyPrivateRoute";
 import PrivateRoute from "./privateRoute/PrivateRoute";
 import HolidayForm from "./pages/calendar/holiday/HolidayForm";
 import LoginEmployee from "./pages/employee/LoginEmployee";
+import Leave from "./pages/employee/Leave";
 
 function App() {
   return (
@@ -102,6 +103,7 @@ function App() {
               />
               <Route path="employee/attendences" element={<AttendanceList />} />
               <Route path="company/calendar" element={<Calendar />} />
+              <Route path="employee/leave" element={<Leave />} />
               <Route path="company/weekend" element={<Weekend />} />
               <Route
                 path="company/weekend/create"
