@@ -10,6 +10,7 @@ const Sidebar = () => {
   const { data: companyId } = useGetCompanyIdQuery();
   const [activeMenu, setActiveMenu] = useState(null);
   const [activeSubMenu, setActiveSubMenu] = useState(null);
+  const [activeSubMain, setActiveSubMain] = useState(null);
   const { data } = useGetUserQuery();
 
   const handleMenuClick = (menu) => {
@@ -17,6 +18,15 @@ const Sidebar = () => {
       setActiveMenu(null);
     } else {
       setActiveMenu(menu);
+      setActiveSubMenu(null); // Reset submenu when a new menu is selected
+    } // Reset submenu when a new menu is selected
+  };
+
+  const handleSubMainClick = (menu) => {
+    if (activeSubMain === menu) {
+      setActiveSubMain(null);
+    } else {
+      setActiveSubMain(menu);
       setActiveSubMenu(null); // Reset submenu when a new menu is selected
     } // Reset submenu when a new menu is selected
   };
@@ -250,6 +260,109 @@ const Sidebar = () => {
               {companyId && (
                 <li
                   className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-between ${
+                    activeMenu === "leaveManagement" &&
+                    `bg-[#6D28D9] text-white`
+                  }`}
+                  onClick={() => handleMenuClick("leaveManagement")}
+                >
+                  Leave Management
+                  <IoIosArrowForward
+                    className={`ml-2 transition-all ${
+                      activeMenu === "leaveManagement" ? "rotate-90" : ""
+                    }`}
+                  />
+                </li>
+              )}
+
+              {activeMenu === "leaveManagement" && (
+                <>
+                  <div className="ml-3">
+                    <li
+                      className={`py-2 px-4 rounded-[3px] transition-all   cursor-pointer flex flex-wrap items-center justify-between `}
+                      onClick={() => handleSubMainClick("leavesetup")}
+                    >
+                      Setup
+                      <IoIosArrowForward
+                        className={`ml-2 transition-all ${
+                          activeSubMain === "leavesetup" ? "rotate-90" : ""
+                        }`}
+                      />
+                    </li>
+                    {activeSubMain === "leavesetup" && (
+                      <div className="ml-2">
+                        <Link to="/company/leave">
+                          <li
+                            className={`py-1 px-4 rounded-[3px] transition-all hover:text-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
+                              activeSubMenu === "leaveType" && "text-[#6D28D9]"
+                            }`}
+                            onClick={() => handleSubMenuClick("leaveType")}
+                          >
+                            <div className="w-[6px] h-[6px] bg-[#6D28D9] rounded-full mr-2"></div>
+                            Leave Type
+                          </li>
+                        </Link>
+                        <Link to="/company/leave">
+                          <li
+                            className={`py-1 px-4 rounded-[3px] transition-all hover:text-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
+                              activeSubMenu === "earnLeave" && "text-[#6D28D9]"
+                            }`}
+                            onClick={() => handleSubMenuClick("earnLeave")}
+                          >
+                            <div className="w-[6px] h-[6px] bg-[#6D28D9] rounded-full mr-2"></div>
+                            Earn Leave
+                          </li>
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="ml-3">
+                    <li
+                      className={`py-2 px-4 rounded-[3px] transition-all   cursor-pointer flex flex-wrap items-center justify-between `}
+                      onClick={() => handleSubMainClick("leaveApplication")}
+                    >
+                      Leave Applicaion
+                      <IoIosArrowForward
+                        className={`ml-2 transition-all ${
+                          activeSubMain === "leaveApplication"
+                            ? "rotate-90"
+                            : ""
+                        }`}
+                      />
+                    </li>
+                    {activeSubMain === "leaveApplication" && (
+                      <div className="ml-2">
+                        <Link to="/company/leave">
+                          <li
+                            className={`py-1 px-4 rounded-[3px] transition-all hover:text-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
+                              activeSubMenu === "leaveType" && "text-[#6D28D9]"
+                            }`}
+                            onClick={() => handleSubMenuClick("leaveType")}
+                          >
+                            <div className="w-[6px] h-[6px] bg-[#6D28D9] rounded-full mr-2"></div>
+                            Leave Type
+                          </li>
+                        </Link>
+                        <Link to="/company/leave">
+                          <li
+                            className={`py-1 px-4 rounded-[3px] transition-all hover:text-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
+                              activeSubMenu === "earnLeave" && "text-[#6D28D9]"
+                            }`}
+                            onClick={() => handleSubMenuClick("earnLeave")}
+                          >
+                            <div className="w-[6px] h-[6px] bg-[#6D28D9] rounded-full mr-2"></div>
+                            Earn Leave
+                          </li>
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {companyId && (
+                <li
+                  className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-between ${
                     activeMenu === "companySettings" &&
                     `bg-[#6D28D9] text-white`
                   }`}
@@ -310,6 +423,7 @@ const Sidebar = () => {
                       Section
                     </li>
                   </Link>
+
                   <Link to="/company/employee">
                     <li
                       className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
