@@ -10,7 +10,11 @@ import {
   useGetWeekendDetailsQuery,
   useGetCompanyIdQuery,
   useCreateLeaveTypeMutation,
+  useUpdateLeaveTypeMutation,
+  useGetLeaveTypeListQuery,
+  useGetLeaveTypeDetailsQuery,
 } from "../../features/api";
+
 import FormSkeleton from "../../skeletons/FormSkeleton";
 
 const LeaveTypeSchema = Yup.object().shape({
@@ -25,7 +29,7 @@ const LeaveTypeForm = ({ onClose }) => {
   const { id } = useParams();
   const { data: companyId } = useGetCompanyIdQuery();
   const [createLeaveType] = useCreateLeaveTypeMutation();
-  const [updateWeekend] = useUpdateWeekendMutation();
+  const [updateLeaveType] = useUpdateLeaveTypeMutation();
 
   const {
     data: types,
@@ -43,21 +47,21 @@ const LeaveTypeForm = ({ onClose }) => {
     description: "",
   });
 
-  const { data: weekend, isLoading: isWeekendLoading } =
-    useGetWeekendDetailsQuery(id, { skip: !id });
+  const { data: leaveType, isLoading: isWeekendLoading } =
+    useGetLeaveTypeDetailsQuery(id, { skip: !id });
 
   useEffect(() => {
-    if (weekend?.data) {
+    if (leaveType?.data) {
       setInitialValues({
-        name: weekend?.data?.name,
-        code: weekend?.data?.holiday_type_id,
-        type: weekend?.data?.holiday_type_id,
-        day: weekend?.data?.start_date || "",
+        name: leaveType?.data?.name,
+        code: leaveType?.data?.code,
+        type: leaveType?.data?.type,
+        day: leaveType?.data?.day,
 
-        description: weekend?.data?.description || "",
+        description: leaveType?.data?.description,
       });
     }
-  }, [weekend]);
+  }, [leaveType]);
 
   if (companyId == null) {
     navigate("/");
@@ -100,24 +104,25 @@ const LeaveTypeForm = ({ onClose }) => {
                     toast.error(res?.error?.data?.message);
                   } else {
                     toast.success("Leave Type added successfully");
-                    navigate("/holiday");
+                    navigate("/company/leave/type");
                     onClose();
                   }
                 });
               } else {
-                await updateWeekend({
+                await updateLeaveType({
                   id,
+                  name,
+                  code,
                   type,
-                  company_id: companyId,
-                  start_date,
-                  end_date,
+                  day,
                   description,
+                  company_id: companyId,
                 }).then((res) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Holiday updated successfully");
-                    navigate("/holiday");
+                    toast.success("Leave type updated successfully");
+                    navigate("/company/leave/type");
                     onClose();
                   }
                 });

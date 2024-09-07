@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
   // useDeletetypeMutation,
@@ -7,6 +7,7 @@ import {
   useSetCompanyIdMutation,
   useGetCompanyIdQuery,
   useGetLeaveTypeListQuery,
+  useDeleteLeaveTypeMutation,
 } from "../../features/api";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
@@ -23,6 +24,7 @@ const LeaveTypeList = () => {
   //     isError,
   //     refetch,
   //   } = useGetCompaniesQuery();
+  const navigate = useNavigate();
 
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
 
@@ -31,7 +33,7 @@ const LeaveTypeList = () => {
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
-  // const [deleteEmployee] = useDeleteEmployeeMutation();
+  const [deleteLeaveType] = useDeleteLeaveTypeMutation();
   const [setCompanyId] = useSetCompanyIdMutation();
 
   const {
@@ -57,7 +59,7 @@ const LeaveTypeList = () => {
             onConfirm={async () => {
               toast.dismiss(t.id);
               try {
-                await deleteEmployee(id).then((res) => {
+                await deleteLeaveType(id).then((res) => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
@@ -100,10 +102,11 @@ const LeaveTypeList = () => {
             <td className="py-2 text-sm text-center">{type.code}</td>
 
             <td className="py-2 text-sm text-center">{type?.type}</td>
+            <td className="py-2 text-sm text-center">{type?.day}</td>
             <td className="py-2 text-sm text-center">{type?.description}</td>
 
             <td className="py-2 text-sm">
-              <Link to={`/company/update/${type?.id}`}>
+              <Link to={`/company/leave/form/${type?.id}`}>
                 <div className="grid place-items-center">
                   <TbEdit className="text-2xl text-[#6D28D9]" />
                 </div>
@@ -154,6 +157,7 @@ const LeaveTypeList = () => {
                   <th className="pb-2 text-base pl-10">Name</th>
                   <th className="pb-2 text-base text-center">Code</th>
                   <th className="pb-2 text-base text-center">Type</th>
+                  <th className="pb-2 text-base text-center">Day</th>
                   <th className="pb-2 text-base text-center">Description</th>
 
                   <th className="pb-2 text-base text-center">Update</th>
