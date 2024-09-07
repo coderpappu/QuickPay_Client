@@ -9,13 +9,14 @@ import {
   useUpdateWeekendMutation,
   useGetWeekendDetailsQuery,
   useGetCompanyIdQuery,
+  useCreateLeaveTypeMutation,
 } from "../../features/api";
 import FormSkeleton from "../../skeletons/FormSkeleton";
 
-const HolidaySchema = Yup.object().shape({
+const LeaveTypeSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   code: Yup.string().required("Code is required"),
-  type: Yup.string().required("Leave Type is required"),
+  // type: Yup.string().required("Leave Type is required"),
   day: Yup.string().required("Day is required"),
 });
 
@@ -23,7 +24,7 @@ const LeaveTypeForm = ({ onClose }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: companyId } = useGetCompanyIdQuery();
-  const [createHoliday] = useCreateHolidayMutation();
+  const [createLeaveType] = useCreateLeaveTypeMutation();
   const [updateWeekend] = useUpdateWeekendMutation();
 
   const {
@@ -36,9 +37,9 @@ const LeaveTypeForm = ({ onClose }) => {
 
   const [initialValues, setInitialValues] = useState({
     name: "",
+    code: "",
     type: "",
-    start_date: "",
-    end_date: "",
+    day: "",
     description: "",
   });
 
@@ -81,17 +82,17 @@ const LeaveTypeForm = ({ onClose }) => {
         <Formik
           enableReinitialize
           initialValues={initialValues}
-          validationSchema={HolidaySchema}
+          validationSchema={LeaveTypeSchema}
           onSubmit={async (values, { setSubmitting }) => {
-            const { name, type, start_date, end_date, description } = values;
+            const { name, code, type, day, description } = values;
 
             try {
               if (!id) {
-                await createHoliday({
+                await createLeaveType({
                   name,
-                  holiday_type_id: type,
-                  from_date: start_date,
-                  to_date: end_date,
+                  code,
+                  type,
+                  day,
                   description,
                   company_id: companyId,
                 }).then((res) => {
@@ -184,8 +185,8 @@ const LeaveTypeForm = ({ onClose }) => {
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
                 >
                   <option value="">Select</option>
-                  <option value="">Paid</option>
-                  <option value="">Unpaid</option>
+                  <option value="Paid">Paid</option>
+                  <option value="UnPaid">Unpaid</option>
                 </Field>
                 <ErrorMessage
                   name="type"

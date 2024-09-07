@@ -471,6 +471,26 @@ export const apiSlice = createApi({
       invalidatesTags: ["holiday"],
     }),
 
+    // Leave Related Endpoint
+
+    createLeaveType: builder.mutation({
+      query: (credentials) => ({
+        url: "/leave/type/create",
+        method: "POST",
+        body: credentials,
+      }),
+
+      invalidatesTags: ["holiday"],
+    }),
+
+    getLeaveTypeList: builder.query({
+      query: (companyId) => ({
+        url: `/leave/type/list/`,
+        params: { companyId },
+      }),
+      providesTags: ["holiday"],
+    }),
+
     // Company Setting System
 
     getRootSetting: builder.query({
@@ -571,6 +591,10 @@ export const {
   useCreateHolidayMutation,
   useGetHolidayListQuery,
   useDeleteHolidayMutation,
+
+  // Leave Endpoint
+  useCreateLeaveTypeMutation,
+  useGetLeaveTypeListQuery,
 
   useSetSettingMutation,
   useGetRootSettingQuery,

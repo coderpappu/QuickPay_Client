@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
-  useDeleteEmployeeMutation,
+  // useDeletetypeMutation,
   useGetCompaniesQuery,
   useSetCompanyIdMutation,
   useGetCompanyIdQuery,
-  useGetEmployeesQuery,
+  useGetLeaveTypeListQuery,
 } from "../../features/api";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
@@ -31,15 +31,15 @@ const LeaveTypeList = () => {
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteEmployee] = useDeleteEmployeeMutation();
+  // const [deleteEmployee] = useDeleteEmployeeMutation();
   const [setCompanyId] = useSetCompanyIdMutation();
 
   const {
-    data: employeesData,
+    data: leaveTypes,
     isLoading,
     isError,
     error,
-  } = useGetEmployeesQuery(companyId);
+  } = useGetLeaveTypeListQuery(companyId);
 
   const handleActivate = (id) => {
     setCompanyId(id);
@@ -84,49 +84,26 @@ const LeaveTypeList = () => {
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  let employees;
+  let leaveTypesData;
 
   if (!isLoading && !isError) {
-    employees = employeesData?.data;
+    leaveTypesData = leaveTypes?.data;
     content = (
       <>
-        {employees?.map((employee, index) => (
+        {leaveTypesData?.map((type, index) => (
           <tr
-            key={employee?.id}
+            key={type?.id}
             className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
           >
             <td className="py-2 text-sm text-center">{index + 1}</td>
-            <td className="py-2 text-sm font-semibold pl-10">
-              {employee?.name}
-            </td>
-            <td className="py-2 text-sm text-center">{employee.email}</td>
-            <td className="py-2 text-sm text-center">
-              {employee?.EmployeeDepartment?.[0]?.department?.name}
-            </td>
-            <td className="py-2 text-sm text-center">
-              {employee?.EmployeeShift?.[0]?.shift?.name}
-            </td>
+            <td className="py-2 text-sm font-semibold pl-10">{type?.name}</td>
+            <td className="py-2 text-sm text-center">{type.code}</td>
 
-            <td className="py-2 text-sm text-center">
-              {employee.id === companyId ? (
-                <button
-                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-3 rounded text-sm w-28"
-                  onClick={handleDeactivate}
-                >
-                  Deactivate
-                </button>
-              ) : (
-                <button
-                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-sm w-28"
-                  onClick={() => handleActivate(employee?.id)}
-                >
-                  Activate
-                </button>
-              )}
-            </td>
+            <td className="py-2 text-sm text-center">{type?.type}</td>
+            <td className="py-2 text-sm text-center">{type?.description}</td>
 
             <td className="py-2 text-sm">
-              <Link to={`/company/update/${employee?.id}`}>
+              <Link to={`/company/update/${type?.id}`}>
                 <div className="grid place-items-center">
                   <TbEdit className="text-2xl text-[#6D28D9]" />
                 </div>
@@ -134,7 +111,7 @@ const LeaveTypeList = () => {
             </td>
             <td
               className="py-2 text-sm"
-              onClick={() => handleDeleteCompany(employee?.id)}
+              onClick={() => handleDeleteCompany(type?.id)}
             >
               <div className="grid place-items-center">
                 <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
@@ -178,7 +155,7 @@ const LeaveTypeList = () => {
                   <th className="pb-2 text-base text-center">Code</th>
                   <th className="pb-2 text-base text-center">Type</th>
                   <th className="pb-2 text-base text-center">Description</th>
-                  <th className="pb-2 text-base text-center">Status</th>
+
                   <th className="pb-2 text-base text-center">Update</th>
                   <th className="pb-2 text-base text-center">Delete</th>
                 </tr>
