@@ -37,6 +37,7 @@ import HolidayForm from "./pages/calendar/holiday/HolidayForm";
 import LoginEmployee from "./pages/employee/LoginEmployee";
 import Leave from "./pages/employee/Leave";
 import LeaveSettings from "./pages/leave/LeaveSettings";
+import LeaveTypeList from "./pages/leave/LeaveTypeList";
 
 function App() {
   return (
@@ -106,6 +107,7 @@ function App() {
               <Route path="company/calendar" element={<Calendar />} />
               <Route path="employee/leave" element={<Leave />} />
               <Route path="company/leave" element={<LeaveSettings />} />
+              <Route path="company/leave/type" element={<LeaveTypeList />} />
               <Route path="company/weekend" element={<Weekend />} />
               <Route
                 path="company/weekend/create"

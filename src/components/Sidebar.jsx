@@ -290,7 +290,7 @@ const Sidebar = () => {
                     </li>
                     {activeSubMain === "leavesetup" && (
                       <div className="ml-2">
-                        <Link to="/company/leave">
+                        <Link to="company/leave/type">
                           <li
                             className={`py-1 px-4 rounded-[3px] transition-all hover:text-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
                               activeSubMenu === "leaveType" && "text-[#6D28D9]"
