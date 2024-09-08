@@ -484,6 +484,16 @@ export const apiSlice = createApi({
       invalidatesTags: ["leaveType"],
     }),
 
+    employeeCreateLeave: builder.mutation({
+      query: (credentials) => ({
+        url: "/leave/employeecreate",
+        method: "POST",
+        body: credentials,
+      }),
+
+      invalidatesTags: ["leaveType"],
+    }),
+
     getLeaveTypeList: builder.query({
       query: (companyId) => ({
         url: `/leave/type/list/`,
@@ -491,6 +501,14 @@ export const apiSlice = createApi({
       }),
       providesTags: ["leaveType"],
     }),
+    getAllEmployeeLeaveList: builder.query({
+      query: (companyId) => ({
+        url: `/leave/list`,
+        params: { companyId },
+      }),
+      providesTags: ["leaveType"],
+    }),
+
     updateLeaveType: builder.mutation({
       query: ({ id, ...credentials }) => ({
         url: `/leave/type/update/${id}`,
@@ -619,6 +637,8 @@ export const {
   useUpdateLeaveTypeMutation,
   useGetLeaveTypeDetailsQuery,
   useDeleteLeaveTypeMutation,
+  useEmployeeCreateLeaveMutation,
+  useGetAllEmployeeLeaveListQuery,
 
   useSetSettingMutation,
   useGetRootSettingQuery,

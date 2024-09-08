@@ -9,33 +9,40 @@ import {
   useUpdateWeekendMutation,
   useGetWeekendDetailsQuery,
   useGetCompanyIdQuery,
+  useGetLeaveTypeListQuery,
+  useEmployeeCreateLeaveMutation,
 } from "../../features/api";
 import FormSkeleton from "../../skeletons/FormSkeleton";
 
-const HolidaySchema = Yup.object().shape({
-  type: Yup.string().required("Holiday Type is required"),
+const leaveSchema = Yup.object().shape({
+  leaveType_id: Yup.string().required("Leave Type is required"),
   start_date: Yup.string().required("Start date is required"),
   end_date: Yup.string().required("End date is required"),
   reason: Yup.string().required("Reason is required"),
 });
 
+// leaveType_id String
+// start_date   String
+// end_date     String
+// reason       String
+
 const LeaveForm = ({ onClose }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: companyId } = useGetCompanyIdQuery();
-  const [createHoliday] = useCreateHolidayMutation();
+  const [createEmployeeLeave] = useEmployeeCreateLeaveMutation();
   const [updateWeekend] = useUpdateWeekendMutation();
 
   const {
     data: types,
     isLoading,
     isError,
-  } = useGetTypeListQuery(companyId, {
+  } = useGetLeaveTypeListQuery(companyId, {
     skip: !companyId,
   });
 
   const [initialValues, setInitialValues] = useState({
-    type: "",
+    leaveType_id: "",
     start_date: "",
     end_date: "",
     reason: "",
@@ -47,11 +54,10 @@ const LeaveForm = ({ onClose }) => {
   useEffect(() => {
     if (weekend?.data) {
       setInitialValues({
-        name: weekend?.data?.name,
-        type: weekend?.data?.holiday_type_id,
+        leaveType_id: weekend?.data?.holiday_type_id,
         start_date: weekend?.data?.start_date || "",
         end_date: weekend?.data?.end_date || "",
-        description: weekend?.data?.description || "",
+        reason: weekend?.data?.description || "",
       });
     }
   }, [weekend]);
@@ -79,24 +85,23 @@ const LeaveForm = ({ onClose }) => {
         <Formik
           enableReinitialize
           initialValues={initialValues}
-          validationSchema={HolidaySchema}
+          // validationSchema={leaveSchema}
           onSubmit={async (values, { setSubmitting }) => {
-            const { name, type, start_date, end_date, description } = values;
+            const { leaveType_id, start_date, end_date, reason } = values;
 
             try {
               if (!id) {
-                await createHoliday({
-                  name,
-                  holiday_type_id: type,
-                  from_date: start_date,
-                  to_date: end_date,
-                  description,
+                await createEmployeeLeave({
+                  leaveType_id,
+                  start_date,
+                  end_date,
+                  reason,
                   company_id: companyId,
                 }).then((res) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Holiday added successfully");
+                    toast.success("Leave applied successfully");
                     navigate("/holiday");
                     onClose();
                   }
@@ -104,16 +109,16 @@ const LeaveForm = ({ onClose }) => {
               } else {
                 await updateWeekend({
                   id,
-                  type,
-                  company_id: companyId,
+                  leaveType_id,
                   start_date,
                   end_date,
-                  description,
+                  reason,
+                  company_id: companyId,
                 }).then((res) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Holiday updated successfully");
+                    toast.success("Leave updated updated successfully");
                     navigate("/holiday");
                     onClose();
                   }
@@ -130,14 +135,14 @@ const LeaveForm = ({ onClose }) => {
             <Form>
               <div className="mb-4">
                 <label
-                  htmlFor="type"
+                  htmlFor="leaveType_id"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Leave Type
                 </label>
                 <Field
                   as="select"
-                  name="type"
+                  name="leaveType_id"
                   id="type"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
                 >
@@ -149,7 +154,7 @@ const LeaveForm = ({ onClose }) => {
                   ))}
                 </Field>
                 <ErrorMessage
-                  name="type"
+                  name="leaveType_id"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
@@ -197,19 +202,19 @@ const LeaveForm = ({ onClose }) => {
 
               <div className="mb-4">
                 <label
-                  htmlFor="description"
+                  htmlFor="reason"
                   className="block text-sm font-medium text-gray-700"
                 >
                   Reason
                 </label>
                 <Field
                   type="text"
-                  name="description"
+                  name="reason"
                   id="description"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
                 />
                 <ErrorMessage
-                  name="description"
+                  name="reason"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />

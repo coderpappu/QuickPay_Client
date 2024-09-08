@@ -4,17 +4,71 @@ import "react-circular-progressbar/dist/styles.css";
 import { TbDots } from "react-icons/tb";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import LeaveForm from "./LeaveForm";
+import {
+  useGetAllEmployeeLeaveListQuery,
+  useGetCompanyIdQuery,
+} from "../../features/api";
+import ListSkeleton from "../../skeletons/ListSkeleton";
+import { ErrorMessage } from "formik";
 
 const Leave = () => {
   const [progressValue, setProgressValue] = useState(10);
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
 
   const onClose = () => {
-    console.log(isPopupOpen);
     setIsPopupOpen(false);
   };
 
-  console.log(isPopupOpen);
+  const { data: companyId } = useGetCompanyIdQuery();
+  const {
+    data: employeeLeave,
+    isLoading,
+    isError,
+  } = useGetAllEmployeeLeaveListQuery();
+  let content;
+
+  if (isLoading && !isError) content = <ListSkeleton />;
+  if (!isLoading && isError)
+    content = <ErrorMessage message={error?.data?.message} />;
+
+  let employees;
+
+  if (!isLoading && !isError) {
+    content = (
+      <tbody>
+        {employeeLeave?.data?.map((leave) => (
+          <tr key={leave?.id} className={" rounded-sm"}>
+            <td className="py-2 text-sm ">{leave?.LeaveType?.name}</td>
+
+            <td className="py-2 text-sm ">
+              {/* {employee?.name} */}
+              {leave?.start_date}
+            </td>
+            <td className="py-2 text-sm ">
+              {/* {employee?.name} */}
+              {leave?.end_date}
+            </td>
+            <td className="py-2 text-sm">{/* {employee?.name} */}2</td>
+            <td className="py-2 text-sm ">
+              {/* {employee?.name} */}
+              {leave?.reason}
+            </td>
+            <td className="py-2 text-sm ">
+              {/* {employee?.name} */}
+              Manager
+            </td>
+            <td className="py-2 text-sm ">
+              {/* {employee?.name} */}
+              Approved
+            </td>
+            <td className="py-2 text-sm text-center">
+              <TbDots />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    );
+  }
 
   return (
     <div className="px-4 md:px-0">
@@ -129,72 +183,7 @@ const Leave = () => {
               <th className="pb-2 text-base ">Action</th>
             </tr>
           </thead>
-          {/* )} */}
-          <tbody>
-            <tr
-              // key={employee?.id}
-              className={" rounded-sm"}
-            >
-              <td className="py-2 text-sm ">Casual Leave</td>
-
-              <td className="py-2 text-sm ">
-                {/* {employee?.name} */}
-                16/03/2006
-              </td>
-              <td className="py-2 text-sm ">
-                {/* {employee?.name} */}
-                16/03/2007
-              </td>
-              <td className="py-2 text-sm">{/* {employee?.name} */}2</td>
-              <td className="py-2 text-sm ">
-                {/* {employee?.name} */}
-                Fever
-              </td>
-              <td className="py-2 text-sm ">
-                {/* {employee?.name} */}
-                Manager
-              </td>
-              <td className="py-2 text-sm ">
-                {/* {employee?.name} */}
-                Approved
-              </td>
-              <td className="py-2 text-sm text-center">
-                <TbDots />
-              </td>
-            </tr>
-
-            <tr
-              // key={employee?.id}
-              className={"bg-gray-50 rounded-sm"}
-            >
-              <td className="py-2 text-sm ">Sick Leave</td>
-
-              <td className="py-2 text-sm ">
-                {/* {employee?.name} */}
-                16/03/2006
-              </td>
-              <td className="py-2 text-sm ">
-                {/* {employee?.name} */}
-                16/03/2007
-              </td>
-              <td className="py-2 text-sm">{/* {employee?.name} */}2</td>
-              <td className="py-2 text-sm ">
-                {/* {employee?.name} */}
-                Fever
-              </td>
-              <td className="py-2 text-sm ">
-                {/* {employee?.name} */}
-                Manager
-              </td>
-              <td className="py-2 text-sm ">
-                {/* {employee?.name} */}
-                Approved
-              </td>
-              <td className="py-2 text-sm text-center">
-                <TbDots />
-              </td>
-            </tr>
-          </tbody>
+          {content}
         </table>
       </div>
       {isPopupOpen && (
