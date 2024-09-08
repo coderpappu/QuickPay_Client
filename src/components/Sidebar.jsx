@@ -332,15 +332,18 @@ const Sidebar = () => {
                     </li>
                     {activeSubMain === "leaveApplication" && (
                       <div className="ml-2">
-                        <Link to="/company/leave">
+                        <Link to="company/leave/application">
                           <li
                             className={`py-1 px-4 rounded-[3px] transition-all hover:text-[#6D28D9] cursor-pointer flex flex-wrap items-center ${
-                              activeSubMenu === "leaveType" && "text-[#6D28D9]"
+                              activeSubMenu === "leaveApplication" &&
+                              "text-[#6D28D9]"
                             }`}
-                            onClick={() => handleSubMenuClick("leaveType")}
+                            onClick={() =>
+                              handleSubMenuClick("leaveApplication")
+                            }
                           >
                             <div className="w-[6px] h-[6px] bg-[#6D28D9] rounded-full mr-2"></div>
-                            Leave Type
+                            Leave Applications
                           </li>
                         </Link>
                         <Link to="/company/leave">

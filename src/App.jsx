@@ -40,6 +40,7 @@ import LeaveSettings from "./pages/leave/LeaveSettings";
 import LeaveTypeList from "./pages/leave/LeaveTypeList";
 import LeaveForm from "./pages/employee/LeaveForm";
 import LeaveTypeForm from "./pages/leave/LeaveTypeForm";
+import LeaveApplicationList from "./pages/leave/LeaveApplicationList";
 
 function App() {
   return (
@@ -110,6 +111,10 @@ function App() {
               <Route path="employee/leave" element={<Leave />} />
               <Route path="company/leave" element={<LeaveSettings />} />
               <Route path="company/leave/type" element={<LeaveTypeList />} />
+              <Route
+                path="company/leave/application"
+                element={<LeaveApplicationList />}
+              />
               <Route
                 path="company/leave/form/:id"
                 element={<LeaveTypeForm />}
