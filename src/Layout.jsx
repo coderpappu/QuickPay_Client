@@ -7,12 +7,12 @@ const Layout = () => {
     <div className="bg-[#fff] w-full">
       <Header />
 
-      <div className="wrapper-container flex flex-wrap justify-between">
-        <div className="w-[20%] bg-slate-200">
+      <div className="lg:wrapper-container xl:w-full flex flex-wrap justify-between">
+        <div className="xl:w-[15%] lg:w-[20%] ">
           <Sidebar />
         </div>
 
-        <div className="w-[80%] p-4">
+        <div className="xl:w-[85%] lg:w-[80%] lg:p-4 xl:py-5 xl:px-14">
           <Outlet />
         </div>
       </div>

@@ -12,8 +12,6 @@ const Header = () => {
   const navigate = useNavigate();
   const { data: userData, isLoading, isError } = useGetUserQuery();
 
-  console.log(userData);
-
   const handleToggle = () => {
     setShow(!show);
   };
@@ -33,8 +31,8 @@ const Header = () => {
     }, [checkToken]);
   };
   return (
-    <div className="bg-[#6D28D9] w-full py-2">
-      <div className="wrapper-container flex flex-wrap items-center justify-between ">
+    <div className="bg-[#6D28D9] w-full py-2 xl:px-6">
+      <div className="lg:wrapper-container xl:w-full flex flex-wrap items-center justify-between ">
         {/* Product Brand Logo  */}
         <div className="w-[80%]">
           <Logo />
