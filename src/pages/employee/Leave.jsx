@@ -27,17 +27,31 @@ const Leave = () => {
   } = useGetAllEmployeeLeaveListQuery();
   let content;
 
+  const statusColorHandler = (status) => {
+    switch (status) {
+      case "PENDING":
+        return "bg-[#ffffcd] text-[#f7d000]";
+      case "APPROVED":
+        return "bg-[#DDF6E1] text-[#1DCF33]";
+      case "REJECTED":
+        return "bg-[#ffd4d4] text-[#ff0d0d]";
+      default:
+        return "text-gray-500";
+    }
+  };
+
   if (isLoading && !isError) content = <ListSkeleton />;
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  let employees;
-
   if (!isLoading && !isError) {
     content = (
       <tbody>
-        {employeeLeave?.data?.map((leave) => (
-          <tr key={leave?.id} className={" rounded-sm"}>
+        {employeeLeave?.data?.map((leave, index) => (
+          <tr
+            key={leave?.id}
+            className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
+          >
             <td className="py-2 text-sm ">{leave?.LeaveType?.name}</td>
 
             <td className="py-2 text-sm ">
@@ -48,20 +62,33 @@ const Leave = () => {
               {/* {employee?.name} */}
               {leave?.end_date}
             </td>
-            <td className="py-2 text-sm">{/* {employee?.name} */}2</td>
+            <td className="py-2 text-sm text-center">
+              {/* {employee?.name} */}2
+            </td>
             <td className="py-2 text-sm ">
               {/* {employee?.name} */}
               {leave?.reason}
             </td>
             <td className="py-2 text-sm ">
               {/* {employee?.name} */}
-              Manager
+              {leave?.paid_status}
             </td>
             <td className="py-2 text-sm ">
               {/* {employee?.name} */}
-              Approved
+              {leave?.note || "..."}
             </td>
-            <td className="py-2 text-sm text-center">
+            <td className="py-2 text-sm ">
+              {/* {employee?.name} */}
+              Manager
+            </td>
+            <td className="py-2 text-sm ">
+              <div
+                className={` ${statusColorHandler(leave.status)} w-32 m-auto  px-1 py-2 text-xs font-bold rounded-full text-center `}
+              >
+                {leave?.status}
+              </div>
+            </td>
+            <td className="py-2 text-sm flex justify-center items-center">
               <TbDots />
             </td>
           </tr>
@@ -157,7 +184,7 @@ const Leave = () => {
           </div>
         </div>
       </div>
-      <div className="border-solid border-[1px] mt-3 border-slate-200 bg-white rounded-md p-5 w-full h-[250px]">
+      <div className="border-solid border-[1px] mt-3 border-slate-200 bg-white rounded-md p-5 w-full h-auto">
         <div className="flex flex-wrap justify-between items-center mb-4">
           <div>All Leave Request</div>
 
@@ -178,8 +205,10 @@ const Leave = () => {
               <th className="pb-2 text-base ">To</th>
               <th className="pb-2 text-base ">Days</th>
               <th className="pb-2 text-base ">Reason</th>
+              <th className="pb-2 text-base ">Paid Status</th>
+              <th className="pb-2 text-base ">Note</th>
               <th className="pb-2 text-base ">Approved By</th>
-              <th className="pb-2 text-base ">Status</th>
+              <th className="pb-2 text-base text-center">Status</th>
               <th className="pb-2 text-base ">Action</th>
             </tr>
           </thead>
