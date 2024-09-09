@@ -2,17 +2,22 @@ import React, { useState } from "react";
 import {
   useGetAllLeaveApplicationQuery,
   useGetCompanyIdQuery,
+  useUpdateLeaveApplicationMutation,
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
-import { ErrorMessage } from "formik";
+import { ErrorMessage, Form } from "formik";
 import { LiaEditSolid } from "react-icons/lia";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 
 const LeaveApplicationList = () => {
   // Manage edit state for individual rows
   const [editRow, setEditRow] = useState(null);
+  const [updatedStatus, setUpdatedStatus] = useState(null);
 
   const { data: companyId } = useGetCompanyIdQuery();
+
+  const [applicationUpdate] = useUpdateLeaveApplicationMutation();
+
   const {
     data: leaveApplicationList,
     isLoading,
@@ -39,9 +44,12 @@ const LeaveApplicationList = () => {
   };
 
   // Handle toggling between edit and checkmark for a specific row
-  const toggleEdit = (id) => {
+  const toggleEdit = async (id) => {
     if (editRow === id) {
       // If the row is already in edit mode, reset it
+
+      await applicationUpdate({ id, status: updatedStatus });
+
       setEditRow(null);
     } else {
       // Otherwise, set this row to be edited
@@ -63,11 +71,14 @@ const LeaveApplicationList = () => {
             <td className="py-2 text-sm  flex-wrap justify-center items-center">
               {editRow === leave.id ? (
                 <div className="m-auto w-32 h-[36px]">
-                  <select className="border border-[#ddd] w-full   px-2 py-1 rounded-[5px] ">
-                    <option>{leave.status}</option>
-                    <option>PENDING</option>
-                    <option>REJECTED</option>
-                  </select>
+                  <form onChange={(e) => setUpdatedStatus(e.target.value)}>
+                    <select className="border border-[#ddd] w-full   px-2 py-1 rounded-[5px] ">
+                      <option value={leave?.status}>{leave.status}</option>
+
+                      <option value="REJECTED">REJECTED</option>
+                      <option value="APPROVED">APPROVED</option>
+                    </select>
+                  </form>
                 </div>
               ) : (
                 <div
