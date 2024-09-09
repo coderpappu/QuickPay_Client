@@ -30,6 +30,7 @@ export const apiSlice = createApi({
     "holiday_type",
     "holiday",
     "leaveType",
+    "leaveApplication",
   ],
 
   endpoints: (builder) => ({
@@ -491,7 +492,7 @@ export const apiSlice = createApi({
         body: credentials,
       }),
 
-      invalidatesTags: ["leaveType"],
+      invalidatesTags: ["leaveApplication"],
     }),
 
     getLeaveTypeList: builder.query({
@@ -506,7 +507,7 @@ export const apiSlice = createApi({
         url: `/leave/list`,
         params: { companyId },
       }),
-      providesTags: ["leaveType"],
+      providesTags: ["leaveApplication"],
     }),
 
     getAllLeaveApplication: builder.query({
@@ -514,7 +515,7 @@ export const apiSlice = createApi({
         url: `/leave/application/list`,
         params: { companyId },
       }),
-      providesTags: ["leaveType"],
+      providesTags: ["leaveApplication"],
     }),
 
     updateLeaveType: builder.mutation({
@@ -531,7 +532,7 @@ export const apiSlice = createApi({
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["leaveType"],
+      invalidatesTags: ["leaveApplication"],
     }),
 
     getLeaveTypeDetails: builder.query({
