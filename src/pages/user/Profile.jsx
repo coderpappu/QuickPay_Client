@@ -44,7 +44,7 @@ const Profile = () => {
             <label className="font-medium ">Email : </label> {email}
           </h2>
 
-          <button className="bg-[#6D28D9] text-white font-poppins py-2 px-3 rounded-md font-medium mt-3">
+          <button className="bg-[#3686FF] text-white font-poppins py-2 px-3 rounded-md font-medium mt-3">
             Send Message
           </button>
         </div>

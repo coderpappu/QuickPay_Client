@@ -83,7 +83,7 @@ const ShiftList = () => {
             <td className="py-2 text-sm ">
               <Link to={`/company/edit/shift/${shift?.id}`}>
                 <div className="grid place-items-center">
-                  <TbEdit className="text-2xl text-[#6D28D9]" />
+                  <TbEdit className="text-2xl text-[#3686FF]" />
                 </div>
               </Link>
             </td>
@@ -118,7 +118,7 @@ const ShiftList = () => {
           <div>
             <Link
               to="/company/add/shift"
-              className="px-5 py-2 rounded-[3px] text-white bg-[#6D28D9] transition hover:bg-[#7f39f0]"
+              className="px-5 py-2 rounded-[3px] text-white bg-[#3686FF] transition hover:bg-[#7f39f0]"
             >
               Add Shift
             </Link>

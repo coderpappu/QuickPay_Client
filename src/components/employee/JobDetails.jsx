@@ -39,7 +39,7 @@ const JobDetails = ({ employeeDetails }) => {
           <Link
           // to={`/company/update/${data._id}`}
           >
-            <FiEdit className="text-[#6D28D9]" />
+            <FiEdit className="text-[#3686FF]" />
           </Link>
         </div>
       </div>
@@ -58,7 +58,7 @@ const JobDetails = ({ employeeDetails }) => {
           <Link
           // to={`/company/update/${data._id}`}
           >
-            <FiEdit className="text-[#6D28D9]" />
+            <FiEdit className="text-[#3686FF]" />
           </Link>
         </div>
       </div> */}

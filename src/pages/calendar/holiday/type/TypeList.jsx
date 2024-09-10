@@ -110,7 +110,7 @@ const TypeList = () => {
         <div>
           <button
             onClick={() => setIsPopupOpen(true)} // Open the popup on click
-            className="px-3 py-2 text-sm rounded-[3px] text-white bg-[#6D28D9] transition hover:bg-[#7f39f0]"
+            className="px-3 py-2 text-sm rounded-[3px] text-white bg-[#3686FF] transition hover:bg-[#7f39f0]"
           >
             Add Type
           </button>

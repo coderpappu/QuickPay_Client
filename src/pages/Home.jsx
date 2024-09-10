@@ -15,7 +15,7 @@ const Home = () => {
 
   return (
     <div className="">
-      <h1 className="text-6xl text-[#6D28D9] font-bold text-center">
+      <h1 className="text-6xl text-[#3686FF] font-bold text-center">
         QuickPay
       </h1>
 

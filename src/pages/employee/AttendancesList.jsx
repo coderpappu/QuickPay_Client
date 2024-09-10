@@ -123,7 +123,7 @@ const AttendanceList = () => {
             {/* <Link to={`/company/update/${attendance.id}`}> */}
             <div className="grid place-items-center">
               <TbEdit
-                className="text-2xl text-[#6D28D9]"
+                className="text-2xl text-[#3686FF]"
                 onClick={() => handleEditAttendance()}
               />
             </div>

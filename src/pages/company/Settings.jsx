@@ -114,7 +114,7 @@ const Settings = () => {
               </div>
 
               <button
-                className="py-2 px-10 bg-[#6D28D9] rounded-[4px] text-white mt-6"
+                className="py-2 px-10 bg-[#3686FF] rounded-[4px] text-white mt-6"
                 onClick={settingHandler}
               >
                 Save

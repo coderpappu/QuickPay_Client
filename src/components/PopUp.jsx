@@ -47,7 +47,7 @@ export default function PopUp() {
         <div className="flex items-center justify-between">
           <h3 className="mb-0">Create your first company</h3>
           <Link to="/company/create">
-            <button className="bg-[#6D28D9] text-white font-semibold py-3 px-2 rounded text-xs">
+            <button className="bg-[#3686FF] text-white font-semibold py-3 px-2 rounded text-xs">
               Add Company
             </button>
           </Link>

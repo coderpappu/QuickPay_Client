@@ -189,7 +189,7 @@ const Leave = () => {
           <div>All Leave Request</div>
 
           <button
-            className="px-3 py-2 bg-[#6D28D9] text-white flex justify-between items-center rounded-md"
+            className="px-3 py-2 bg-[#3686FF] text-white flex justify-between items-center rounded-md"
             onClick={() => setIsPopupOpen(true)}
           >
             {" "}

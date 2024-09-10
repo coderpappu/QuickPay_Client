@@ -193,7 +193,7 @@ const CompanyForm = () => {
             <button
               type="submit"
               disabled={isSubmitting || !canSubmit}
-              className={` w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${!canSubmit && "bg-[#a582dc]"} bg-[#6D28D9] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 `}
+              className={` w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${!canSubmit && "bg-[#a582dc]"} bg-[#3686FF] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 `}
             >
               Submit
             </button>

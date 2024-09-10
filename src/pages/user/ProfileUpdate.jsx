@@ -52,7 +52,7 @@ const ProfileUpdate = () => {
     content = (
       <div className="w-full md:w-[50%] h-full pt-6 xl:pt-10 px-3 sm:px-10 md:px-5">
         <h2 className="text-2xl font-semibold pt-16 mb-6">
-          Profile <label className="text-[#6D28D9] font-bold">Update</label>
+          Profile <label className="text-[#3686FF] font-bold">Update</label>
         </h2>
         <div className="py-4 md:w-full lg:w-[400px]">
           <Formik
@@ -111,7 +111,7 @@ const ProfileUpdate = () => {
                   <input
                     type="file"
                     name="file"
-                    className="w-[100%] h-12 border-1 border-[#6D28D9] rounded-[5px] mt-1 mb-3 px-1"
+                    className="w-[100%] h-12 border-1 border-[#3686FF] rounded-[5px] mt-1 mb-3 px-1"
                     onChange={(event) => {
                       setFieldValue("file", event.currentTarget.files[0]);
                     }}

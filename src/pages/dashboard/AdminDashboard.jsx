@@ -1,16 +1,15 @@
 import React from "react";
 import { FcBriefcase } from "react-icons/fc";
 // employee icon
-import { FcNightLandscape } from "react-icons/fc";
-import { FcVoicePresentation } from "react-icons/fc";
+import { FcNightLandscape, FcVoicePresentation } from "react-icons/fc";
 import StatusCard from "../../components/dashboard/StatusCard";
-import DatePicker from "../../utils/DatePicker";
 import {
-  useGetEmployeesQuery,
-  useGetCompanyIdQuery,
-  useGetShiftListQuery,
-  useGetAttendancesQuery,
+    useGetAttendancesQuery,
+    useGetCompanyIdQuery,
+    useGetEmployeesQuery,
+    useGetShiftListQuery,
 } from "../../features/api";
+import DatePicker from "../../utils/DatePicker";
 
 const AdminDashboard = () => {
   // company related request
@@ -35,7 +34,7 @@ const AdminDashboard = () => {
         count={totalEmployees}
         percentage={12}
         icon={FcBriefcase}
-        color={"#6D28D9"}
+        color={"#3686FF"}
       />
       <StatusCard
         title={"Shift"}

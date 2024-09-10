@@ -27,7 +27,7 @@ const LoginForm = ({ handleLogin }) => {
         </Link>
       </p>
       <h2 className="text-2xl font-semibold pt-16 mb-6">
-        Sign in to <label className="text-[#6D28D9] font-bold">Employee</label>{" "}
+        Sign in to <label className="text-[#3686FF] font-bold">Employee</label>{" "}
       </h2>
 
       <div className="py-4 md:w-full lg:w-[400px]">
@@ -65,7 +65,7 @@ const LoginForm = ({ handleLogin }) => {
                 type="email"
                 name="email"
                 placeholder="coder@gmail.com"
-                className="w-[100%] h-12 border-1 border-[#6D28D9]	rounded-[5px] mt-1 mb-3 px-1"
+                className="w-[100%] h-12 border-1 border-[#3686FF]	rounded-[5px] mt-1 mb-3 px-1"
               />
               <ErrorMessage
                 name="email"
@@ -80,7 +80,7 @@ const LoginForm = ({ handleLogin }) => {
                   type={type}
                   name="password"
                   autoComplete="current-password"
-                  className="w-[100%] h-12 border-1 border-[#6D28D9]	rounded-[5px] mt-1 mb-3 px-1"
+                  className="w-[100%] h-12 border-1 border-[#3686FF]	rounded-[5px] mt-1 mb-3 px-1"
                   placeholder="12345678"
                 />
                 <span

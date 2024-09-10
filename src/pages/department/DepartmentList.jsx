@@ -72,7 +72,7 @@ const DepartmentList = () => {
         <td className="py-2 px-4 border-b text-left">
           <Link to={`/department/update/${department?.id}`}>
             <button className="text-blue-500 ">
-              <FontAwesomeIcon icon={faEdit} style={{ color: "#6D28D9" }} />
+              <FontAwesomeIcon icon={faEdit} style={{ color: "#3686FF" }} />
             </button>
           </Link>
         </td>
@@ -93,7 +93,7 @@ const DepartmentList = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold mb-4">Total 0 departments.</h1>
         <Link to="/department/create">
-          <button className="bg-[#6D28D9] text-white font-semibold py-1 px-2 rounded text-xs hover:bg-blue-700">
+          <button className="bg-[#3686FF] text-white font-semibold py-1 px-2 rounded text-xs hover:bg-blue-700">
             Add Department
           </button>
         </Link>

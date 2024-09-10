@@ -28,7 +28,7 @@ const RegistrationForm = ({ registerHandler }) => {
         </Link>
       </p>
       <h2 className="text-2xl font-semibold pt-16 mb-6">
-        Account <label className="text-[#6D28D9] font-bold">Register</label>{" "}
+        Account <label className="text-[#3686FF] font-bold">Register</label>{" "}
       </h2>
       <div className="py-4 md:w-full lg:w-[400px]">
         <Formik
@@ -100,7 +100,7 @@ const RegistrationForm = ({ registerHandler }) => {
                 type="text"
                 name="first_name"
                 placeholder="Pappu"
-                className="w-[100%] h-12 border-1 border-[#6D28D9]	rounded-[5px] mt-1 mb-3 px-1"
+                className="w-[100%] h-12 border-1 border-[#3686FF]	rounded-[5px] mt-1 mb-3 px-1"
               />
               <ErrorMessage
                 name="first_name"
@@ -115,7 +115,7 @@ const RegistrationForm = ({ registerHandler }) => {
                 type="text"
                 name="last_name"
                 placeholder="Dey"
-                className="w-[100%] h-12 border-1 border-[#6D28D9]	rounded-[5px] mt-1 mb-3 px-1"
+                className="w-[100%] h-12 border-1 border-[#3686FF]	rounded-[5px] mt-1 mb-3 px-1"
               />
               <ErrorMessage
                 name="last_name"
@@ -130,7 +130,7 @@ const RegistrationForm = ({ registerHandler }) => {
                 type="email"
                 name="email"
                 placeholder="coder@gmail.com"
-                className="w-[100%] h-12 border-1 border-[#6D28D9]	rounded-[5px] mt-1 mb-3 px-1"
+                className="w-[100%] h-12 border-1 border-[#3686FF]	rounded-[5px] mt-1 mb-3 px-1"
               />
               <ErrorMessage
                 name="email"
@@ -145,7 +145,7 @@ const RegistrationForm = ({ registerHandler }) => {
                 type="text"
                 name="phone"
                 placeholder="0152536362"
-                className="w-[100%] h-12 border-1 border-[#6D28D9]	rounded-[5px] mt-1 mb-3 px-1"
+                className="w-[100%] h-12 border-1 border-[#3686FF]	rounded-[5px] mt-1 mb-3 px-1"
               />
               <ErrorMessage
                 name="phone"
@@ -161,7 +161,7 @@ const RegistrationForm = ({ registerHandler }) => {
                   type={type}
                   name="password"
                   autoComplete="current-password"
-                  className="w-[100%] h-12 border-1 border-[#6D28D9]	rounded-[5px] mt-1 mb-3 px-1"
+                  className="w-[100%] h-12 border-1 border-[#3686FF]	rounded-[5px] mt-1 mb-3 px-1"
                   placeholder="12345678"
                 />
                 <span

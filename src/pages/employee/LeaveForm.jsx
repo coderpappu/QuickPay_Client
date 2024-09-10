@@ -142,7 +142,7 @@ const LeaveForm = ({ onClose }) => {
                   as="select"
                   name="leaveType_id"
                   id="type"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
                 >
                   <option value="">Select Type</option>
                   {types?.data?.map((item) => (
@@ -169,7 +169,7 @@ const LeaveForm = ({ onClose }) => {
                   type="date"
                   name="start_date"
                   id="start_date"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
                 />
                 <ErrorMessage
                   name="start_date"
@@ -189,7 +189,7 @@ const LeaveForm = ({ onClose }) => {
                   type="date"
                   name="end_date"
                   id="end_date"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
                 />
                 <ErrorMessage
                   name="end_date"
@@ -209,7 +209,7 @@ const LeaveForm = ({ onClose }) => {
                   type="text"
                   name="reason"
                   id="description"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
                 />
                 <ErrorMessage
                   name="reason"
@@ -229,7 +229,7 @@ const LeaveForm = ({ onClose }) => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 bg-[#6D28D9] rounded-md text-sm font-medium text-white hover:bg-[#5A21B3]"
+                  className="px-4 py-2 bg-[#3686FF] rounded-md text-sm font-medium text-white hover:bg-[#5A21B3]"
                 >
                   {id ? "Update" : "Apply"}
                 </button>

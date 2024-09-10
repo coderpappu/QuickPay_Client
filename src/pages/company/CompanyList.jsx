@@ -5,10 +5,10 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import {
-    useDeleteCompanyMutation,
-    useGetCompaniesQuery,
-    useGetCompanyIdQuery,
-    useSetCompanyIdMutation,
+  useDeleteCompanyMutation,
+  useGetCompaniesQuery,
+  useGetCompanyIdQuery,
+  useSetCompanyIdMutation,
 } from "../../features/api";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
@@ -107,7 +107,9 @@ const CompanyList = () => {
           <td className="py-2 text-sm font-semibold pl-10">
             {company.company_name}
           </td>
-          <td className="py-2 text-sm text-center">{company.email}</td>
+          <td className="py-2 text-sm ">{company.email}</td>
+          <td className="py-2 text-sm ">{company.website_url}</td>
+          <td className="py-2 text-sm ">{company.country}</td>
           <td className="py-2 text-sm text-center">
             {company.id === companyId ? (
               <button
@@ -135,7 +137,7 @@ const CompanyList = () => {
           <td className="py-2 text-sm">
             <Link to={`/company/update/${company.id}`}>
               <div className="grid place-items-center">
-                <TbEdit className="text-2xl text-[#6D28D9]" />
+                <TbEdit className="text-2xl text-[#3686FF]" />
               </div>
             </Link>
           </td>
@@ -159,7 +161,7 @@ const CompanyList = () => {
         </div>
       </div>
 
-      <div className="border-solid border-[1px] border-slate-200 bg-[#ecf0f1] rounded-md p-5 w-full h-auto">
+      <div className="border-solid border-[1px] border-slate-200 bg-[#fff] rounded-md p-5 w-full h-auto">
         <div className="flex flex-wrap justify-between mb-12">
           <div className="font-medium text-base">
             {(companies && companies?.length) || 0} Company Available for Now
@@ -167,7 +169,7 @@ const CompanyList = () => {
           <div>
             <Link
               to="/company/create"
-              className="px-5 py-2 rounded-[3px] text-white bg-[#6D28D9] transition hover:bg-[#7f39f0]"
+              className="px-5 py-2 rounded-[3px] text-white bg-[#3686FF] transition hover:bg-[#7f39f0]"
             >
               Add Company
             </Link>
@@ -181,7 +183,9 @@ const CompanyList = () => {
                 <tr>
                   <th className="pb-2 text-base text-center">SL</th>
                   <th className="pb-2 text-base pl-10">Company Name</th>
-                  <th className="pb-2 text-base text-center">Email</th>
+                  <th className="pb-2 text-base ">Email</th>
+                  <th className="pb-2 text-base ">Website</th>
+                  <th className="pb-2 text-base ">Location </th>
                   <th className="pb-2 text-base text-center">Status</th>
                   <th className="pb-2 text-base text-center">View</th>
                   <th className="pb-2 text-base text-center">Update</th>

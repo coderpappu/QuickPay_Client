@@ -66,7 +66,7 @@ const Modal = ({ isOpen, onClose, onSave, leaveData, setLeaveData }) => {
             </button>
             <button
               type="button"
-              className="px-4 py-2 bg-[#6D28D9] text-white rounded-md"
+              className="px-4 py-2 bg-[#3686FF] text-white rounded-md"
               onClick={onSave}
             >
               Save
@@ -163,7 +163,7 @@ const LeaveApplicationList = () => {
             <td className="py-2 text-sm text-center flex justify-center items-center">
               <LiaEditSolid
                 size={23}
-                color="#6D28D9"
+                color="#3686FF"
                 onClick={() => openModal(leave)}
               />
             </td>

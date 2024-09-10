@@ -143,7 +143,7 @@ const LeaveTypeForm = ({ onClose }) => {
                   type="text"
                   name="name"
                   id="name"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
                 />
                 <ErrorMessage
                   name="name"
@@ -163,7 +163,7 @@ const LeaveTypeForm = ({ onClose }) => {
                   type="text"
                   name="code"
                   id="code"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
                 />
                 <ErrorMessage
                   name="code"
@@ -183,7 +183,7 @@ const LeaveTypeForm = ({ onClose }) => {
                   as="select"
                   name="type"
                   id="type"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
                 >
                   <option value="">Select</option>
                   <option value="Paid">Paid</option>
@@ -208,7 +208,7 @@ const LeaveTypeForm = ({ onClose }) => {
                   name="day"
                   id="day"
                   placeHolder="Number of day"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
                 />
                 <ErrorMessage
                   name="day"
@@ -228,7 +228,7 @@ const LeaveTypeForm = ({ onClose }) => {
                   type="text"
                   name="description"
                   id="description"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#6D28D9] focus:border-[#6D28D9] sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
                 />
                 <ErrorMessage
                   name="description"
@@ -248,7 +248,7 @@ const LeaveTypeForm = ({ onClose }) => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 bg-[#6D28D9] rounded-md text-sm font-medium text-white hover:bg-[#5A21B3]"
+                  className="px-4 py-2 bg-[#3686FF] rounded-md text-sm font-medium text-white hover:bg-[#5A21B3]"
                 >
                   {id ? "Update" : "Add"}
                 </button>
