@@ -33,14 +33,15 @@ const Header = () => {
     <div className="bg-[#fff] w-full py-2 xl:px-6">
       <div className="lg:wrapper-container xl:w-full flex flex-wrap items-center justify-between ">
         {/* Product Brand Logo  */}
-        <div className="w-[80%]">{/* <Logo /> */}</div>
+        <div className="w-[80%]">
+          {" "}
+          <h2 className="font-semibold text-2xl text-[#0E1A34] font-poppins">
+            Xceed Bangladesh LTD
+          </h2>
+        </div>
 
         {/* Company Name  */}
-        {/* <div className="w-[40%] text-center">
-            <h2 className="font-semibold text-2xl text-[#fff] font-sans">
-              Xceed Bangladesh LTD
-            </h2>
-          </div> */}
+
         <div className="w-[20%] flex flex-wrap align-center justify-end">
           <div className="w-[40px] h-[40px] flex flex-col items-center rounded-md bg-[#e9e9e961] mr-2">
             <CiBellOn className="text-2xl text-[#0E1A34] m-auto" />
@@ -67,7 +68,7 @@ const Header = () => {
               />
             </div>
             {show && (
-              <div className="absolute w-[150px] h-[100px] p-2 rounded-sm bg-[#30414e] border-2 top-11 right-0">
+              <div className="absolute w-[150px] h-[100px] p-2 rounded-sm bg-[#ffffff] border-2 top-11 right-0">
                 {userData?.data?.type == "employee" ? (
                   <Link to="employee/details" className="font-medium text-sm">
                     My Profile
