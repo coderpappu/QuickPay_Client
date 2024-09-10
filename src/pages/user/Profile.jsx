@@ -1,9 +1,9 @@
 import React from "react";
-import { useGetUserQuery } from "../../features/api";
 import { FiEdit } from "react-icons/fi";
+import { useGetUserQuery } from "../../features/api";
 
-import ProfileImg from "../../assets/profile-placeholder.png";
 import { Link } from "react-router-dom";
+import ProfileImg from "../../assets/profile-placeholder.png";
 const Profile = () => {
   const { data, isError, isLoading, isSuccess } = useGetUserQuery();
 

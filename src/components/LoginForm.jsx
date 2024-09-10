@@ -1,10 +1,7 @@
-import React from "react";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import React, { useState } from "react";
+import { LuEye, LuEyeOff } from "react-icons/lu";
 import { Link } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import { LuEye } from "react-icons/lu";
-import { LuEyeOff } from "react-icons/lu";
-import { useState } from "react";
 
 const LoginForm = ({ handleLogin }) => {
   const [password, setPassword] = useState("");
@@ -68,7 +65,7 @@ const LoginForm = ({ handleLogin }) => {
                 type="email"
                 name="email"
                 placeholder="coder@gmail.com"
-                className="w-[100%] h-12 border-1 border-[#ddd]	rounded-[5px] mt-1 mb-3 px-1"
+                className="w-[100%] h-12 border-1 border-[#6D28D9]	rounded-[5px] mt-1 mb-3 px-1"
               />
               <ErrorMessage
                 name="email"
@@ -83,7 +80,7 @@ const LoginForm = ({ handleLogin }) => {
                   type={type}
                   name="password"
                   autoComplete="current-password"
-                  className="w-[100%] h-12 border-1 border-[#ddd]	rounded-[5px] mt-1 mb-3 px-1"
+                  className="w-[100%] h-12 border-1 border-[#6D28D9]	rounded-[5px] mt-1 mb-3 px-1"
                   placeholder="12345678"
                 />
                 <span

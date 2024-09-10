@@ -1,12 +1,12 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
+import * as Yup from "yup";
 import {
-  useCreateDepartmentMutation,
-  useGetCompanyIdQuery,
-  useGetDepartmentDetailsQuery,
-  useUpdateDepartmentMutation,
+    useCreateDepartmentMutation,
+    useGetCompanyIdQuery,
+    useGetDepartmentDetailsQuery,
+    useUpdateDepartmentMutation,
 } from "../../features/api";
 
 const DepartmentSchema = Yup.object().shape({

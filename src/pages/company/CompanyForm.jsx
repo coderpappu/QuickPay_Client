@@ -1,15 +1,15 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { useNavigate, useParams } from "react-router-dom";
-import toast from "react-hot-toast";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import {
-  useCreateNewCompanyMutation,
-  useGetCompanyDetailsQuery,
-  useUpdateCompanyMutation,
-} from "../../features/api";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
+import * as Yup from "yup";
+import {
+    useCreateNewCompanyMutation,
+    useGetCompanyDetailsQuery,
+    useUpdateCompanyMutation,
+} from "../../features/api";
 import UploadForm from "../../helpers/UploadForm";
 import FormSkeleton from "../../skeletons/FormSkeleton";
 

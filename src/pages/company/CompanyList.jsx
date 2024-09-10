@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
+import { LuEye } from "react-icons/lu";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import { TbEdit } from "react-icons/tb";
+import { Link } from "react-router-dom";
 import {
-  useDeleteCompanyMutation,
-  useGetCompaniesQuery,
-  useSetCompanyIdMutation,
-  useGetCompanyIdQuery,
+    useDeleteCompanyMutation,
+    useGetCompaniesQuery,
+    useGetCompanyIdQuery,
+    useSetCompanyIdMutation,
 } from "../../features/api";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
-import { TbEdit } from "react-icons/tb";
-import { MdOutlineDeleteOutline } from "react-icons/md";
-import { LuEye } from "react-icons/lu";
 import ErrorMessage from "../../utils/ErrorMessage";
 
 const CompanyList = () => {

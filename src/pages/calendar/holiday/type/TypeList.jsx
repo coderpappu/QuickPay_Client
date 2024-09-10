@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import {
-  useDeleteTypeMutation,
-  useGetCompanyIdQuery,
-  useGetTypeListQuery,
+    useDeleteTypeMutation,
+    useGetCompanyIdQuery,
+    useGetTypeListQuery,
 } from "../../../../features/api";
 
-import ListSkeleton from "../../../../skeletons/ListSkeleton";
-import ErrorMessage from "../../../../utils/ErrorMessage";
 import toast from "react-hot-toast";
 import ConfirmDialog from "../../../../helpers/ConfirmDialog";
+import ListSkeleton from "../../../../skeletons/ListSkeleton";
+import ErrorMessage from "../../../../utils/ErrorMessage";
 import TypeForm from "./TypeForm";
 
 const TypeList = () => {

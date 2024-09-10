@@ -1,13 +1,13 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { useNavigate, useParams } from "react-router-dom";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import * as Yup from "yup";
 import {
-  useCreateNewDesignationMutation,
-  useGetDesignationDetailsQuery,
-  useUpdateDesignationMutation,
-  useGetCompanyIdQuery,
+    useCreateNewDesignationMutation,
+    useGetCompanyIdQuery,
+    useGetDesignationDetailsQuery,
+    useUpdateDesignationMutation,
 } from "../../features/api";
 import FormSkeleton from "../../skeletons/FormSkeleton";
 

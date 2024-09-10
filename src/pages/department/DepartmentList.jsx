@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import toast from "react-hot-toast";
 import {
-  useDeleteDepartmentMutation,
-  useGetCompanyIdQuery,
-  useGetDepartmentsQuery,
+    useDeleteDepartmentMutation,
+    useGetCompanyIdQuery,
+    useGetDepartmentsQuery,
 } from "../../features/api";
+import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import ErrorMessage from "../../utils/ErrorMessage";
-import toast from "react-hot-toast";
-import ConfirmDialog from "../../helpers/ConfirmDialog";
 const DepartmentList = () => {
   const {
     data: companyId,

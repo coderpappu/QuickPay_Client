@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import Logo from "../components/Logo";
-import ProfileImg from "../assets/avatar1.jpg";
 import { CiBellOn } from "react-icons/ci";
 import { IoChatbubbleOutline } from "react-icons/io5";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import { apiSlice, useGetUserQuery } from "../features/api";
+import { Link, useNavigate } from "react-router-dom";
+import Logo from "../components/Logo";
+import { useGetUserQuery } from "../features/api";
 
 const Header = () => {
   const [show, setShow] = useState(false);

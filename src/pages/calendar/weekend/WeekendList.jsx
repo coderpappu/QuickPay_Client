@@ -1,18 +1,16 @@
-import { Link } from "react-router-dom";
-import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
+import { TbEdit } from "react-icons/tb";
+import { Link } from "react-router-dom";
 import {
-  useDeleteDesignationMutation,
-  useDeleteWeekendMutation,
-  useGetCompanyIdQuery,
-  useGetDesignationsQuery,
-  useGetWeekendListQuery,
+    useDeleteWeekendMutation,
+    useGetCompanyIdQuery,
+    useGetWeekendListQuery
 } from "../../../features/api";
 
-import ListSkeleton from "../../../skeletons/ListSkeleton";
-import ErrorMessage from "../../../utils/ErrorMessage";
 import toast from "react-hot-toast";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
+import ListSkeleton from "../../../skeletons/ListSkeleton";
+import ErrorMessage from "../../../utils/ErrorMessage";
 
 const WeekendList = () => {
   const { data: companyId } = useGetCompanyIdQuery();

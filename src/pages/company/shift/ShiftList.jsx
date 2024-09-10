@@ -3,15 +3,15 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import {
-  useDeleteShiftMutation,
-  useGetCompanyIdQuery,
-  useGetShiftListQuery,
+    useDeleteShiftMutation,
+    useGetCompanyIdQuery,
+    useGetShiftListQuery,
 } from "../../../features/api";
 
-import ErrorMessage from "../../../utils/ErrorMessage";
-import ListSkelaton from "../../../skeletons/ListSkeleton";
-import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import toast from "react-hot-toast";
+import ConfirmDialog from "../../../helpers/ConfirmDialog";
+import ListSkelaton from "../../../skeletons/ListSkeleton";
+import ErrorMessage from "../../../utils/ErrorMessage";
 const ShiftList = () => {
   const { data: company_Id } = useGetCompanyIdQuery();
 

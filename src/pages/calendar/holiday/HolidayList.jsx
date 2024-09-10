@@ -1,21 +1,15 @@
-import { Link } from "react-router-dom";
-import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import {
-  useDeleteDesignationMutation,
-  useDeleteHolidayMutation,
-  useDeleteWeekendMutation,
-  useGetCompanyIdQuery,
-  useGetDesignationsQuery,
-  useGetHolidayListQuery,
-  useGetWeekendListQuery,
+    useDeleteHolidayMutation,
+    useGetCompanyIdQuery,
+    useGetHolidayListQuery
 } from "../../../features/api";
 
-import ListSkeleton from "../../../skeletons/ListSkeleton";
-import ErrorMessage from "../../../utils/ErrorMessage";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
-import { useState } from "react";
+import ListSkeleton from "../../../skeletons/ListSkeleton";
+import ErrorMessage from "../../../utils/ErrorMessage";
 import HolidayFormPopup from "./HolidayForm";
 
 const HolidayList = () => {

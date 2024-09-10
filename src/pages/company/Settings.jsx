@@ -1,11 +1,11 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import Button from "../../components/company/Button";
 import {
-  useGetCompanyIdQuery,
-  useGetRootSettingQuery,
-  useSetSettingMutation,
+    useGetCompanyIdQuery,
+    useGetRootSettingQuery,
+    useSetSettingMutation,
 } from "../../features/api";
-import toast from "react-hot-toast";
 
 const Settings = () => {
   const [setSetting] = useSetSettingMutation();

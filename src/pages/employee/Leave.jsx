@@ -1,15 +1,15 @@
+import { ErrorMessage } from "formik";
 import React, { useState } from "react";
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { TbDots } from "react-icons/tb";
 import { HiOutlinePlusSm } from "react-icons/hi";
-import LeaveForm from "./LeaveForm";
+import { TbDots } from "react-icons/tb";
 import {
-  useGetAllEmployeeLeaveListQuery,
-  useGetCompanyIdQuery,
+    useGetAllEmployeeLeaveListQuery,
+    useGetCompanyIdQuery,
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
-import { ErrorMessage } from "formik";
+import LeaveForm from "./LeaveForm";
 
 const Leave = () => {
   const [progressValue, setProgressValue] = useState(10);

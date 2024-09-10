@@ -1,13 +1,12 @@
 // src/pages/ProfileUpdate.js
+import { ErrorMessage, Form, Formik } from "formik";
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage } from "formik";
 import toast, { Toaster } from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
+import InputField from "../../components/user/InputField";
 import { useGetUserQuery, useUpdateUserMutation } from "../../features/api";
 import fileUpload from "../../helpers/fileUpload";
-import InputField from "../../components/user/InputField";
 
-import formValidate from "../../components/validationSchmea/UserValidation";
 import UserValidation from "../../components/validationSchmea/UserValidation";
 
 const ProfileUpdate = () => {
@@ -112,7 +111,7 @@ const ProfileUpdate = () => {
                   <input
                     type="file"
                     name="file"
-                    className="w-[100%] h-12 border-1 border-[#ddd] rounded-[5px] mt-1 mb-3 px-1"
+                    className="w-[100%] h-12 border-1 border-[#6D28D9] rounded-[5px] mt-1 mb-3 px-1"
                     onChange={(event) => {
                       setFieldValue("file", event.currentTarget.files[0]);
                     }}

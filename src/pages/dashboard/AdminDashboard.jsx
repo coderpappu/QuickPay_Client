@@ -35,7 +35,7 @@ const AdminDashboard = () => {
         count={totalEmployees}
         percentage={12}
         icon={FcBriefcase}
-        color={"#ddd"}
+        color={"#6D28D9"}
       />
       <StatusCard
         title={"Shift"}

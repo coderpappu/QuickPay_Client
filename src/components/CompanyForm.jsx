@@ -1,17 +1,16 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import api from "../utils/api";
-import { useNavigate, useParams } from "react-router-dom";
-import toast from "react-hot-toast";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import toast from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
+import * as Yup from "yup";
 
-import {
-  useCreateNewCompanyMutation,
-  useGetCompanyDetailsQuery,
-  useUpdateCompanyMutation,
-} from "../features/api";
 import { useEffect, useState } from "react";
+import {
+    useCreateNewCompanyMutation,
+    useGetCompanyDetailsQuery,
+    useUpdateCompanyMutation,
+} from "../features/api";
 import UploadForm from "../helpers/UploadForm";
 
 const SignupSchema = Yup.object().shape({

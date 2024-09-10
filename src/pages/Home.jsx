@@ -1,14 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import Logo from "../components/Logo";
-import ProfileImg from "../assets/avatar1.jpg";
-import { CiBellOn } from "react-icons/ci";
-import { IoChatbubbleOutline } from "react-icons/io5";
-import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import React, { useEffect } from "react";
 import PopUp from "../components/PopUp";
 
-import AdminDashboard from "./dashboard/AdminDashboard";
 import { useGetUserQuery, useSetCompanyIdMutation } from "../features/api";
+import AdminDashboard from "./dashboard/AdminDashboard";
 
 const Home = () => {
   const [setCompanyId] = useSetCompanyIdMutation();

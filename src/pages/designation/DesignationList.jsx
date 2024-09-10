@@ -1,16 +1,15 @@
 import { Link } from "react-router-dom";
 
-import {
-  useDeleteDesignationMutation,
-  useGetDesignationsQuery,
-  useGetCompanyIdQuery,
-} from "../../features/api";
 import toast from "react-hot-toast";
-import ConfirmDialog from "../../helpers/ConfirmDialog";
-import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
+import { TbEdit } from "react-icons/tb";
+import {
+    useDeleteDesignationMutation,
+    useGetCompanyIdQuery,
+    useGetDesignationsQuery,
+} from "../../features/api";
+import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
-import { date } from "yup";
 import ErrorMessage from "../../utils/ErrorMessage";
 
 const DesignationList = () => {

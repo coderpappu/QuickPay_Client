@@ -1,15 +1,16 @@
-import { Link } from "react-router-dom";
-import { useGetCompanyIdQuery, useGetUserQuery } from "../features/api";
 import { useState } from "react";
-import { IoIosArrowForward } from "react-icons/io";
-import { PiCalendarCheckLight } from "react-icons/pi";
+import { AiOutlineProduct } from "react-icons/ai";
 import { BiCheckShield } from "react-icons/bi";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
-import { RxCalendar } from "react-icons/rx";
-import { LuListTodo } from "react-icons/lu";
-import { AiOutlineProduct } from "react-icons/ai";
 import { GoPeople } from "react-icons/go";
+import { IoIosArrowForward } from "react-icons/io";
 import { IoCalendarClearOutline } from "react-icons/io5";
+import { LuListTodo } from "react-icons/lu";
+import { RxCalendar } from "react-icons/rx";
+import { Link } from "react-router-dom";
+import { RxExit } from "react-icons/rx";
+import { AiOutlineSetting } from "react-icons/ai";
+import { useGetCompanyIdQuery, useGetUserQuery } from "../features/api";
 const Sidebar = () => {
   const { data: companyId } = useGetCompanyIdQuery();
   const [activeMenu, setActiveMenu] = useState(null);
@@ -120,7 +121,7 @@ const Sidebar = () => {
               </Link> */}
           </ul>
         ) : (
-          <ul className="mt-4">
+          <ul className="mt-4 w-60">
             <Link to="/company/list">
               <li
                 className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex justify-start items-center ${
@@ -134,15 +135,17 @@ const Sidebar = () => {
             </Link>
             {companyId && (
               <li
-                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-start ${
+                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-between ${
                   activeMenu === "dashboard" && `bg-[#6D28D9] text-white`
                 }`}
                 onClick={() => handleMenuClick("dashboard")}
               >
-                <AiOutlineProduct size={20} className="mr-2" />
-                Dashboard
+                <div className="w-[80%] flex justify-start items-center">
+                  <AiOutlineProduct size={20} className="mr-2" />
+                  Dashboard
+                </div>
                 <IoIosArrowForward
-                  className={`ml-[60px] transition-all ${
+                  className={` transition-all ${
                     activeMenu === "dashboard" ? "rotate-90" : ""
                   }`}
                 />
@@ -167,15 +170,17 @@ const Sidebar = () => {
             {/* Attendance menu */}
             {companyId && (
               <li
-                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-start ${
+                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-between ${
                   activeMenu === "attendance" && `bg-[#6D28D9] text-white`
                 }`}
                 onClick={() => handleMenuClick("attendance")}
               >
-                <GoPeople size={20} className="mr-2" />
-                Attendance
+                <div className="w-[80%] flex justify-start items-center">
+                  <GoPeople size={20} className="mr-2" />
+                  Attendance
+                </div>
                 <IoIosArrowForward
-                  className={`ml-14 transition-all ${
+                  className={` transition-all ${
                     activeMenu === "attendance" ? "rotate-90" : ""
                   }`}
                 />
@@ -210,15 +215,17 @@ const Sidebar = () => {
             {/* Company Settings menu */}
             {companyId && (
               <li
-                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-start ${
+                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#6D28D9] cursor-pointer flex flex-wrap items-center justify-between ${
                   activeMenu === "calendar" && `bg-[#6D28D9] text-white`
                 }`}
                 onClick={() => handleMenuClick("calendar")}
               >
-                <IoCalendarClearOutline size={19} className="mr-2" />
-                Calendar System
+                <div className="w-[90%] flex justify-start items-center">
+                  <IoCalendarClearOutline size={19} className="mr-2" />
+                  Calendar System
+                </div>
                 <IoIosArrowForward
-                  className={`ml-3 transition-all ${
+                  className={` transition-all ${
                     activeMenu === "calendar" ? "rotate-90" : ""
                   }`}
                 />
@@ -272,9 +279,12 @@ const Sidebar = () => {
                 }`}
                 onClick={() => handleMenuClick("leaveManagement")}
               >
-                Leave Management
+                <div className="w-[80%] flex justify-start items-center">
+                  <RxExit size={19} className="mr-2" />
+                  Leave
+                </div>
                 <IoIosArrowForward
-                  className={`ml-2 transition-all ${
+                  className={`transition-all ${
                     activeMenu === "leaveManagement" ? "rotate-90" : ""
                   }`}
                 />
@@ -373,7 +383,10 @@ const Sidebar = () => {
                 }`}
                 onClick={() => handleMenuClick("companySettings")}
               >
-                Company Settings
+                <div className="w-[88%] flex justify-start items-center">
+                  <AiOutlineSetting size={20} className="mr-2" />
+                  Company Settings
+                </div>
                 <IoIosArrowForward
                   className={`ml-2 transition-all ${
                     activeMenu === "companySettings" ? "rotate-90" : ""

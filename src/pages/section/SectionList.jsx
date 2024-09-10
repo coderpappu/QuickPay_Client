@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
 
 import {
-  useDeleteSectionMutation,
-  useGetSectionsQuery,
-  useGetCompanyIdQuery,
+    useDeleteSectionMutation,
+    useGetCompanyIdQuery,
+    useGetSectionsQuery,
 } from "../../features/api";
 
 import toast from "react-hot-toast";
-import ConfirmDialog from "../../helpers/ConfirmDialog";
-import { TbEdit } from "react-icons/tb";
 import { MdOutlineDeleteOutline } from "react-icons/md";
+import { TbEdit } from "react-icons/tb";
+import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import ErrorMessage from "../../utils/ErrorMessage";
 

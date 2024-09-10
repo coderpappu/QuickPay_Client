@@ -1,10 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import React, { useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { LuEye } from "react-icons/lu";
-import { LuEyeOff } from "react-icons/lu";
-import { useState } from "react";
+import { LuEye, LuEyeOff } from "react-icons/lu";
+import { Link } from "react-router-dom";
 
 const RegistrationForm = ({ registerHandler }) => {
   const [password, setPassword] = useState("");
@@ -102,7 +100,7 @@ const RegistrationForm = ({ registerHandler }) => {
                 type="text"
                 name="first_name"
                 placeholder="Pappu"
-                className="w-[100%] h-12 border-1 border-[#ddd]	rounded-[5px] mt-1 mb-3 px-1"
+                className="w-[100%] h-12 border-1 border-[#6D28D9]	rounded-[5px] mt-1 mb-3 px-1"
               />
               <ErrorMessage
                 name="first_name"
@@ -117,7 +115,7 @@ const RegistrationForm = ({ registerHandler }) => {
                 type="text"
                 name="last_name"
                 placeholder="Dey"
-                className="w-[100%] h-12 border-1 border-[#ddd]	rounded-[5px] mt-1 mb-3 px-1"
+                className="w-[100%] h-12 border-1 border-[#6D28D9]	rounded-[5px] mt-1 mb-3 px-1"
               />
               <ErrorMessage
                 name="last_name"
@@ -132,7 +130,7 @@ const RegistrationForm = ({ registerHandler }) => {
                 type="email"
                 name="email"
                 placeholder="coder@gmail.com"
-                className="w-[100%] h-12 border-1 border-[#ddd]	rounded-[5px] mt-1 mb-3 px-1"
+                className="w-[100%] h-12 border-1 border-[#6D28D9]	rounded-[5px] mt-1 mb-3 px-1"
               />
               <ErrorMessage
                 name="email"
@@ -147,7 +145,7 @@ const RegistrationForm = ({ registerHandler }) => {
                 type="text"
                 name="phone"
                 placeholder="0152536362"
-                className="w-[100%] h-12 border-1 border-[#ddd]	rounded-[5px] mt-1 mb-3 px-1"
+                className="w-[100%] h-12 border-1 border-[#6D28D9]	rounded-[5px] mt-1 mb-3 px-1"
               />
               <ErrorMessage
                 name="phone"
@@ -163,7 +161,7 @@ const RegistrationForm = ({ registerHandler }) => {
                   type={type}
                   name="password"
                   autoComplete="current-password"
-                  className="w-[100%] h-12 border-1 border-[#ddd]	rounded-[5px] mt-1 mb-3 px-1"
+                  className="w-[100%] h-12 border-1 border-[#6D28D9]	rounded-[5px] mt-1 mb-3 px-1"
                   placeholder="12345678"
                 />
                 <span

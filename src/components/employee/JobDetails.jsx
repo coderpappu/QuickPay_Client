@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import PersonalInfo from "../../components/employee/PersonalInfo";
 import { FiEdit } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import PersonalInfo from "../../components/employee/PersonalInfo";
 
 const JobDetails = ({ employeeDetails }) => {
   return (

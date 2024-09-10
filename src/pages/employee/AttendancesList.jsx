@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import { LuEye } from "react-icons/lu";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import { TbEdit } from "react-icons/tb";
+import { Link } from "react-router-dom";
 import {
-  useGetCompanyIdQuery,
-  useGetAttendancesQuery,
-  useDeleteAttendanceMutation,
+    useDeleteAttendanceMutation,
+    useGetAttendancesQuery,
+    useGetCompanyIdQuery,
 } from "../../features/api";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
-import { TbEdit } from "react-icons/tb";
-import { MdOutlineDeleteOutline } from "react-icons/md";
-import { LuEye } from "react-icons/lu";
-import ErrorMessage from "../../utils/ErrorMessage";
 import DatePicker from "../../utils/DatePicker";
+import ErrorMessage from "../../utils/ErrorMessage";
 const AttendanceList = () => {
   const { data: companyId } = useGetCompanyIdQuery();
   const [deleteAttendance] = useDeleteAttendanceMutation();

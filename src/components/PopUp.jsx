@@ -1,17 +1,17 @@
 import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  DialogTitle,
+    Dialog,
+    DialogBackdrop,
+    DialogPanel,
+    DialogTitle,
 } from "@headlessui/react";
 import {
-  useGetCompaniesQuery,
-  useSetCompanyIdMutation,
-  useGetCompanyIdQuery,
+    useGetCompaniesQuery,
+    useGetCompanyIdQuery,
+    useSetCompanyIdMutation,
 } from "../features/api";
 
-import { Link } from "react-router-dom";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function PopUp() {
   const {

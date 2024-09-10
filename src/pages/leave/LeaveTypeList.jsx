@@ -1,19 +1,16 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import { MdOutlineDeleteOutline } from "react-icons/md";
+import { TbEdit } from "react-icons/tb";
+import { Link, useNavigate } from "react-router-dom";
 import {
-  // useDeletetypeMutation,
-  useGetCompaniesQuery,
-  useSetCompanyIdMutation,
-  useGetCompanyIdQuery,
-  useGetLeaveTypeListQuery,
-  useDeleteLeaveTypeMutation,
+    useDeleteLeaveTypeMutation,
+    useGetCompanyIdQuery,
+    useGetLeaveTypeListQuery,
+    useSetCompanyIdMutation
 } from "../../features/api";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
-import { TbEdit } from "react-icons/tb";
-import { MdOutlineDeleteOutline } from "react-icons/md";
-import { LuEye } from "react-icons/lu";
 import ErrorMessage from "../../utils/ErrorMessage";
 import LeaveTypeForm from "./LeaveTypeForm";
 
