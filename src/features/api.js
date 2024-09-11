@@ -518,6 +518,14 @@ export const apiSlice = createApi({
       providesTags: ["leaveApplication"],
     }),
 
+    calculationLeaveDays: builder.query({
+      query: ({ year, company_id }) => ({
+        url: `/leave/calculateleavedays`,
+        params: { year, company_id },
+      }),
+      providesTags: ["leaveApplication"],
+    }),
+
     updateLeaveType: builder.mutation({
       query: ({ id, ...credentials }) => ({
         url: `/leave/type/update/${id}`,
@@ -659,6 +667,7 @@ export const {
   useGetAllEmployeeLeaveListQuery,
   useGetAllLeaveApplicationQuery,
   useUpdateLeaveApplicationMutation,
+  useCalculationLeaveDaysQuery,
 
   useSetSettingMutation,
   useGetRootSettingQuery,

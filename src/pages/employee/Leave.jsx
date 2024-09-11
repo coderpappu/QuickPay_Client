@@ -5,8 +5,9 @@ import "react-circular-progressbar/dist/styles.css";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import { TbDots } from "react-icons/tb";
 import {
-    useGetAllEmployeeLeaveListQuery,
-    useGetCompanyIdQuery,
+  useCalculationLeaveDaysQuery,
+  useGetAllEmployeeLeaveListQuery,
+  useGetCompanyIdQuery,
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import LeaveForm from "./LeaveForm";
@@ -25,8 +26,15 @@ const Leave = () => {
     isLoading,
     isError,
   } = useGetAllEmployeeLeaveListQuery();
+
+  const {
+    data: leaveCalculation,
+    isLoading: leaveLoading,
+    isError: leaveError,
+  } = useCalculationLeaveDaysQuery({ year: 2024, company_id: companyId });
   let content;
 
+  console.log(leaveCalculation?.data?.[0]?.usedDays);
   const statusColorHandler = (status) => {
     switch (status) {
       case "PENDING":
@@ -112,8 +120,8 @@ const Leave = () => {
         <div className="w-full h-[100px]  mt-2 flex flex-wrap justify-around ">
           <div className="w-[100px] h-[100px] text-center">
             <CircularProgressbar
-              value={progressValue}
-              text={`${progressValue}%`}
+              value={leaveCalculation?.data?.[0]?.percentageUsed}
+              text={`${Number(leaveCalculation?.data?.[0]?.percentageUsed)}%`}
               strokeWidth={11}
               styles={buildStyles({
                 textColor: "red",
@@ -124,7 +132,7 @@ const Leave = () => {
             />
             <div className="mt-2">
               <h2>Sick Leave</h2>
-              <h2>30 / 100 </h2>
+              <h2>{`${Math.round(leaveCalculation?.data?.[0]?.usedDays)} / ${Number(leaveCalculation?.data?.[0]?.totalDays)}  `}</h2>
             </div>
           </div>
 

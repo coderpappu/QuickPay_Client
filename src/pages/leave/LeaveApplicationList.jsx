@@ -2,9 +2,9 @@ import { ErrorMessage } from "formik";
 import React, { useState } from "react";
 import { LiaEditSolid } from "react-icons/lia";
 import {
-    useGetAllLeaveApplicationQuery,
-    useGetCompanyIdQuery,
-    useUpdateLeaveApplicationMutation,
+  useGetAllLeaveApplicationQuery,
+  useGetCompanyIdQuery,
+  useUpdateLeaveApplicationMutation,
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 
