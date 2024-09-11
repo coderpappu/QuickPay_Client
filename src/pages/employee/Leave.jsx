@@ -34,7 +34,7 @@ const Leave = () => {
   } = useCalculationLeaveDaysQuery({ year: 2024, company_id: companyId });
   let content;
 
-  console.log(leaveCalculation?.data?.[0]?.usedDays);
+  console.log(leaveCalculation);
   const statusColorHandler = (status) => {
     switch (status) {
       case "PENDING":
@@ -138,8 +138,8 @@ const Leave = () => {
 
           <div className="w-[100px] h-[100px] text-center">
             <CircularProgressbar
-              value={progressValue}
-              text={`${progressValue}%`}
+              value={leaveCalculation?.data?.[1]?.percentageUsed}
+              text={`${Number(leaveCalculation?.data?.[1]?.percentageUsed)}%`}
               strokeWidth={11}
               styles={buildStyles({
                 textColor: "red",
@@ -149,8 +149,8 @@ const Leave = () => {
               })}
             />
             <div className="mt-2">
-              <h2>Sick Leave</h2>
-              <h2>30 / 100 </h2>
+              <h2>Casual Leave</h2>
+              <h2>{`${Math.round(leaveCalculation?.data?.[1]?.usedDays)} / ${Number(leaveCalculation?.data?.[1]?.totalDays)}  `}</h2>
             </div>
           </div>
           <div className="w-[100px] h-[100px] text-center">
