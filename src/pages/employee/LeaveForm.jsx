@@ -4,11 +4,12 @@ import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
-    useEmployeeCreateLeaveMutation,
-    useGetCompanyIdQuery,
-    useGetLeaveTypeListQuery,
-    useGetWeekendDetailsQuery,
-    useUpdateWeekendMutation
+  useEmployeeCreateLeaveMutation,
+  useGetCompanyIdQuery,
+  useGetEarnLeaveQuery,
+  useGetLeaveTypeListQuery,
+  useGetWeekendDetailsQuery,
+  useUpdateWeekendMutation,
 } from "../../features/api";
 import FormSkeleton from "../../skeletons/FormSkeleton";
 
@@ -39,6 +40,9 @@ const LeaveForm = ({ onClose }) => {
     skip: !companyId,
   });
 
+  const { data: earnLeave, isLoading: earnLeaveLoding } =
+    useGetEarnLeaveQuery(companyId);
+
   const [initialValues, setInitialValues] = useState({
     leaveType_id: "",
     start_date: "",
@@ -67,6 +71,12 @@ const LeaveForm = ({ onClose }) => {
   if (isWeekendLoading || isLoading) {
     return <FormSkeleton />;
   }
+  let allType;
+  if (!isLoading && !earnLeaveLoding) {
+    allType = types?.data?.concat(earnLeave?.data);
+  }
+
+  console.log(allType);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -145,7 +155,7 @@ const LeaveForm = ({ onClose }) => {
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
                 >
                   <option value="">Select Type</option>
-                  {types?.data?.map((item) => (
+                  {allType?.map((item) => (
                     <option key={item.id} value={item.id}>
                       {item.name}
                     </option>
