@@ -320,7 +320,7 @@ const Sidebar = () => {
                           Leave Type
                         </li>
                       </Link>
-                      <Link to="/company/leave">
+                      <Link to="/company/leave/earnleave">
                         <li
                           className={`py-1 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                             activeSubMenu === "earnLeave" && "text-[#3686FF]"
@@ -359,17 +359,6 @@ const Sidebar = () => {
                         >
                           <div className="w-[6px] h-[6px] bg-[#3686FF] rounded-full mr-2"></div>
                           Leave Applications
-                        </li>
-                      </Link>
-                      <Link to="/company/leave">
-                        <li
-                          className={`py-1 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
-                            activeSubMenu === "earnLeave" && "text-[#3686FF]"
-                          }`}
-                          onClick={() => handleSubMenuClick("earnLeave")}
-                        >
-                          <div className="w-[6px] h-[6px] bg-[#3686FF] rounded-full mr-2"></div>
-                          Earn Leave
                         </li>
                       </Link>
                     </div>
