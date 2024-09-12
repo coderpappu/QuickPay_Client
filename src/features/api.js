@@ -31,6 +31,7 @@ export const apiSlice = createApi({
     "holiday",
     "leaveType",
     "leaveApplication",
+    "earnLeave",
   ],
 
   endpoints: (builder) => ({
@@ -485,6 +486,15 @@ export const apiSlice = createApi({
       invalidatesTags: ["leaveType"],
     }),
 
+    createEarnLeave: builder.mutation({
+      query: (credentials) => ({
+        url: "/leave/earnleave/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["leaveType"],
+    }),
+
     employeeCreateLeave: builder.mutation({
       query: (credentials) => ({
         url: "/leave/employeecreate",
@@ -516,6 +526,14 @@ export const apiSlice = createApi({
         params: { companyId },
       }),
       providesTags: ["leaveApplication"],
+    }),
+
+    getEarnLeave: builder.query({
+      query: (companyId) => ({
+        url: `/leave/earnleave`,
+        params: { companyId },
+      }),
+      providesTags: ["earnLeave"],
     }),
 
     calculationLeaveDays: builder.query({
@@ -668,6 +686,8 @@ export const {
   useGetAllLeaveApplicationQuery,
   useUpdateLeaveApplicationMutation,
   useCalculationLeaveDaysQuery,
+  useGetEarnLeaveQuery,
+  useCreateEarnLeaveMutation,
 
   useSetSettingMutation,
   useGetRootSettingQuery,
