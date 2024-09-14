@@ -76,8 +76,6 @@ const LeaveForm = ({ onClose }) => {
     allType = types?.data?.concat(earnLeave?.data);
   }
 
-  console.log(allType);
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
@@ -96,7 +94,6 @@ const LeaveForm = ({ onClose }) => {
           // validationSchema={leaveSchema}
           onSubmit={async (values, { setSubmitting }) => {
             const { leaveType_id, start_date, end_date, reason } = values;
-
             try {
               if (!id) {
                 await createEmployeeLeave({
