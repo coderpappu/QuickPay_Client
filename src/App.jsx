@@ -44,6 +44,8 @@ import LeaveApplicationList from "./pages/leave/LeaveApplicationList";
 import EarnLeave from "./pages/leave/earnLeave/EarnLeave";
 import GradeList from "./pages/payroll/grade/gradeList";
 import GradeForm from "./pages/payroll/grade/gradeForm";
+import AllowanceList from "./pages/payroll/allowance/AllowanceList";
+import AllowanceForm from "./pages/payroll/allowance/AllowanceForm";
 
 function App() {
   return (
@@ -136,6 +138,12 @@ function App() {
               {/* Payroll System - Grade end point   */}
               <Route path="/company/grade/" element={<GradeList />} />
               <Route path="/company/grade/form/:id" element={<GradeForm />} />
+
+              <Route path="/company/allowance/" element={<AllowanceList />} />
+              <Route
+                path="/company/allowance/form/:id"
+                element={<AllowanceForm />}
+              />
             </Route>
           </Route>
         </Route>

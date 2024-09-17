@@ -622,6 +622,52 @@ export const apiSlice = createApi({
       invalidatesTags: ["grade"],
     }),
 
+    // Allowance
+    createAllowance: builder.mutation({
+      query: (credentials) => ({
+        url: "/allowance_deduction/allowance/create",
+        method: "POST",
+        body: credentials,
+      }),
+
+      invalidatesTags: ["allowance"],
+    }),
+
+    getAllowanceList: builder.query({
+      query: (companyId) => ({
+        url: `/allowance_deduction/allowance/list`,
+        params: { companyId },
+      }),
+      providesTags: ["allowance"],
+    }),
+
+    getAllowanceDetails: builder.query({
+      query: (id) => ({
+        url: `/allowance_deduction/allowance/details`,
+        params: { id },
+      }),
+
+      providesTags: ["allowance"],
+    }),
+
+    updateAllowance: builder.mutation({
+      query: ({ id, ...credentials }) => ({
+        url: `/allowance_deduction/allowance/update/${id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["allowance"],
+    }),
+
+    deleteAllowance: builder.mutation({
+      query: (allowanceId) => ({
+        url: `/allowance_deduction/allowance/delete/`,
+        method: "DELETE",
+        params: { allowanceId },
+      }),
+      invalidatesTags: ["allowance"],
+    }),
+
     // Company Setting System
 
     getRootSetting: builder.query({
@@ -743,6 +789,13 @@ export const {
   useGetGradeDetailsQuery,
   useUpdateGradeMutation,
   useDeleteGradeMutation,
+
+  // Allowance
+  useCreateAllowanceMutation,
+  useGetAllowanceListQuery,
+  useGetAllowanceDetailsQuery,
+  useUpdateAllowanceMutation,
+  useDeleteAllowanceMutation,
 
   useSetSettingMutation,
   useGetRootSettingQuery,

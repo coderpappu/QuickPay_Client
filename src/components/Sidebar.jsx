@@ -401,6 +401,17 @@ const Sidebar = () => {
                     Grade List
                   </li>
                 </Link>
+                <Link to="/company/allowance">
+                  <li
+                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                      activeSubMenu === "allowance" && "text-[#3686FF]"
+                    }`}
+                    onClick={() => handleSubMenuClick("allowance")}
+                  >
+                    <div className="w-[6px] h-[6px] bg-[#3686FF] rounded-full mr-2"></div>
+                    Allowance List
+                  </li>
+                </Link>
               </div>
             )}
             {companyId && (
