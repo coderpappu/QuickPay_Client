@@ -574,6 +574,54 @@ export const apiSlice = createApi({
       invalidatesTags: ["leaveType"],
     }),
 
+    // payroll
+
+    // Grade
+    createGrade: builder.mutation({
+      query: (credentials) => ({
+        url: "/grade/create",
+        method: "POST",
+        body: credentials,
+      }),
+
+      invalidatesTags: ["grade"],
+    }),
+
+    getGradeList: builder.query({
+      query: (companyId) => ({
+        url: `/grade/list`,
+        params: { companyId },
+      }),
+      providesTags: ["grade"],
+    }),
+
+    getGradeDetails: builder.query({
+      query: (id) => (gradeId) => ({
+        url: `/grade/details`,
+        params: { gradeId },
+      }),
+
+      providesTags: ["grade"],
+    }),
+
+    updateGrade: builder.mutation({
+      query: ({ id, ...credentials }) => ({
+        url: `/grade/update/${id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["grade"],
+    }),
+
+    deleteGrade: builder.mutation({
+      query: (id) => ({
+        url: `/grade/delete/`,
+        method: "DELETE",
+        params: { id },
+      }),
+      invalidatesTags: ["grade"],
+    }),
+
     // Company Setting System
 
     getRootSetting: builder.query({
@@ -688,6 +736,13 @@ export const {
   useCalculationLeaveDaysQuery,
   useGetEarnLeaveQuery,
   useCreateEarnLeaveMutation,
+
+  // Grade Endpoint
+  useCreateGradeMutation,
+  useGetGradeListQuery,
+  useGetGradeDetailsQuery,
+  useUpdateGradeMutation,
+  useDeleteGradeMutation,
 
   useSetSettingMutation,
   useGetRootSettingQuery,
