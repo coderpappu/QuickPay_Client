@@ -367,6 +367,42 @@ const Sidebar = () => {
               </>
             )}
 
+            {/* Payroll  */}
+            {companyId && (
+              <li
+                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex flex-wrap items-center justify-between ${
+                  activeMenu === "payroll" && `bg-[#3686FF] text-white`
+                }`}
+                onClick={() => handleMenuClick("payroll")}
+              >
+                <div className="w-[88%] flex justify-start items-center">
+                  <AiOutlineSetting size={20} className="mr-2" />
+                  PayRoll
+                </div>
+                <IoIosArrowForward
+                  className={`ml-2 transition-all ${
+                    activeMenu === "payroll" ? "rotate-90" : ""
+                  }`}
+                />
+              </li>
+            )}
+
+            {/* Grade Menu  */}
+            {activeMenu === "payroll" && (
+              <div className="ml-3">
+                <Link to="/company/grade">
+                  <li
+                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                      activeSubMenu === "grade" && "text-[#3686FF]"
+                    }`}
+                    onClick={() => handleSubMenuClick("grade")}
+                  >
+                    <div className="w-[6px] h-[6px] bg-[#3686FF] rounded-full mr-2"></div>
+                    Grade List
+                  </li>
+                </Link>
+              </div>
+            )}
             {companyId && (
               <li
                 className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex flex-wrap items-center justify-between ${

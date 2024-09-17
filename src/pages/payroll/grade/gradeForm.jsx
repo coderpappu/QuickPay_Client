@@ -4,27 +4,28 @@ import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
-    useCreateLeaveTypeMutation,
-    useGetCompanyIdQuery,
-    useGetLeaveTypeDetailsQuery,
-    useGetTypeListQuery,
-    useUpdateLeaveTypeMutation
-} from "../../features/api";
+  useCreateGradeMutation,
+  useCreateLeaveTypeMutation,
+  useGetCompanyIdQuery,
+  useGetLeaveTypeDetailsQuery,
+  useGetTypeListQuery,
+  useUpdateLeaveTypeMutation,
+} from "../../../features/api";
 
-import FormSkeleton from "../../skeletons/FormSkeleton";
+import FormSkeleton from "../../../skeletons/FormSkeleton";
 
 const LeaveTypeSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
-  code: Yup.string().required("Code is required"),
+  basic_salary: Yup.number().required("Basic Salary is required"),
   // type: Yup.string().required("Leave Type is required"),
-  day: Yup.string().required("Day is required"),
+  overtime_rate: Yup.number().required("Over Time is required"),
 });
 
 const LeaveTypeForm = ({ onClose }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: companyId } = useGetCompanyIdQuery();
-  const [createLeaveType] = useCreateLeaveTypeMutation();
+  const [createGrade] = useCreateGradeMutation();
   const [updateLeaveType] = useUpdateLeaveTypeMutation();
 
   const {
@@ -37,10 +38,8 @@ const LeaveTypeForm = ({ onClose }) => {
 
   const [initialValues, setInitialValues] = useState({
     name: "",
-    code: "",
-    type: "",
-    day: "",
-    description: "",
+    basic_salary: "",
+    overtime_rate: "",
   });
 
   const { data: leaveType, isLoading: isWeekendLoading } =
@@ -77,30 +76,28 @@ const LeaveTypeForm = ({ onClose }) => {
           &#x2715;
         </button>
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          {id ? "Edit Leave Type" : "Add Leave Type"}
+          {id ? "Edit Grade" : "Add Grade"}
         </h2>
         <Formik
           enableReinitialize
           initialValues={initialValues}
           validationSchema={LeaveTypeSchema}
           onSubmit={async (values, { setSubmitting }) => {
-            const { name, code, type, day, description } = values;
+            const { name, basic_salary, overtime_rate } = values;
 
             try {
               if (!id) {
-                await createLeaveType({
+                await createGrade({
                   name,
-                  code,
-                  type,
-                  day,
-                  description,
+                  basic_salary,
+                  overtime_rate,
                   company_id: companyId,
                 }).then((res) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Leave Type added successfully");
-                    navigate("/company/leave/type");
+                    toast.success("Grade added successfully");
+                    navigate("/company/grade");
                     onClose();
                   }
                 });
@@ -108,16 +105,14 @@ const LeaveTypeForm = ({ onClose }) => {
                 await updateLeaveType({
                   id,
                   name,
-                  code,
-                  type,
-                  day,
-                  description,
+                  basic_salary,
+                  overtime_rate,
                   company_id: companyId,
                 }).then((res) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Leave type updated successfully");
+                    toast.success("Grade updated successfully");
                     navigate("/company/leave/type");
                     onClose();
                   }
@@ -154,19 +149,19 @@ const LeaveTypeForm = ({ onClose }) => {
 
               <div className="mb-4">
                 <label
-                  htmlFor="code"
+                  htmlFor="basic_salary"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Code
+                  Basic Salary
                 </label>
                 <Field
-                  type="text"
-                  name="code"
-                  id="code"
+                  type="number"
+                  name="basic_salary"
+                  id="basic_salary"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
                 />
                 <ErrorMessage
-                  name="code"
+                  name="basic_salary"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
@@ -174,64 +169,19 @@ const LeaveTypeForm = ({ onClose }) => {
 
               <div className="mb-4">
                 <label
-                  htmlFor="type"
+                  htmlFor="overtime_rate"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Type
+                  Over Time Rate
                 </label>
                 <Field
-                  as="select"
-                  name="type"
-                  id="type"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
-                >
-                  <option value="">Select</option>
-                  <option value="Paid">Paid</option>
-                  <option value="UnPaid">Unpaid</option>
-                </Field>
-                <ErrorMessage
-                  name="type"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-
-              <div className="mb-4">
-                <label
-                  htmlFor="day"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Day
-                </label>
-                <Field
-                  type="text"
-                  name="day"
-                  id="day"
-                  placeHolder="Number of day"
+                  type="number"
+                  name="overtime_rate"
+                  id="overtime_rate"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
                 />
                 <ErrorMessage
-                  name="day"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-
-              <div className="mb-4">
-                <label
-                  htmlFor="description"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Description
-                </label>
-                <Field
-                  type="text"
-                  name="description"
-                  id="description"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
-                />
-                <ErrorMessage
-                  name="description"
+                  name="overtime_rate"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />

@@ -42,6 +42,7 @@ import LeaveForm from "./pages/employee/LeaveForm";
 import LeaveTypeForm from "./pages/leave/LeaveTypeForm";
 import LeaveApplicationList from "./pages/leave/LeaveApplicationList";
 import EarnLeave from "./pages/leave/earnLeave/EarnLeave";
+import GradeList from "./pages/payroll/grade/gradeList";
 
 function App() {
   return (
@@ -130,6 +131,9 @@ function App() {
               <Route path="/holiday" element={<Holiday />} />
               <Route path="/holiday/type/add" element={<TypeForm />} />
               <Route path="/holidayform/" element={<HolidayForm />} />
+
+              {/* Payroll System - Grade end point   */}
+              <Route path="/company/grade/" element={<GradeList />} />
             </Route>
           </Route>
         </Route>

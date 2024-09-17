@@ -8,13 +8,13 @@ import {
   useGetCompanyIdQuery,
   useGetLeaveTypeListQuery,
   useSetCompanyIdMutation,
-} from "../../features/api";
-import ConfirmDialog from "../../helpers/ConfirmDialog";
-import ListSkeleton from "../../skeletons/ListSkeleton";
-import ErrorMessage from "../../utils/ErrorMessage";
-import LeaveTypeForm from "./gradeForm";
+} from "../../../features/api";
+import ConfirmDialog from "../../../helpers/ConfirmDialog";
+import ListSkeleton from "../../../skeletons/ListSkeleton";
+import ErrorMessage from "../../../utils/ErrorMessage";
+import LeaveTypeForm from "././gradeForm";
 
-const LeaveTypeList = () => {
+const GradeList = () => {
   //   const {
   //     data: companyData,
   //     isLoading,
@@ -190,4 +190,4 @@ const LeaveTypeList = () => {
   );
 };
 
-export default LeaveTypeList;
+export default GradeList;
