@@ -4,8 +4,10 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
 import {
+  useDeleteGradeMutation,
   useDeleteLeaveTypeMutation,
   useGetCompanyIdQuery,
+  useGetGradeListQuery,
   useGetLeaveTypeListQuery,
   useSetCompanyIdMutation,
 } from "../../../features/api";
@@ -15,12 +17,6 @@ import ErrorMessage from "../../../utils/ErrorMessage";
 import LeaveTypeForm from "././gradeForm";
 
 const GradeList = () => {
-  //   const {
-  //     data: companyData,
-  //     isLoading,
-  //     isError,
-  //     refetch,
-  //   } = useGetCompaniesQuery();
   const navigate = useNavigate();
 
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
@@ -30,15 +26,15 @@ const GradeList = () => {
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteLeaveType] = useDeleteLeaveTypeMutation();
+  const [deleteGrade] = useDeleteGradeMutation();
   const [setCompanyId] = useSetCompanyIdMutation();
 
   const {
-    data: leaveTypes,
+    data: gradeList,
     isLoading,
     isError,
     error,
-  } = useGetLeaveTypeListQuery(companyId);
+  } = useGetGradeListQuery(companyId);
 
   const handleActivate = (id) => {
     setCompanyId(id);
@@ -56,15 +52,15 @@ const GradeList = () => {
             onConfirm={async () => {
               toast.dismiss(t.id);
               try {
-                await deleteLeaveType(id).then((res) => {
+                await deleteGrade(id).then((res) => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
-                    toast.success("Company deleted successfully");
+                    toast.success("Grade deleted successfully");
                   }
                 });
               } catch (error) {
-                toast.error(error.message || "Failed to delete company");
+                toast.error(error.message || "Failed to delete grade");
               }
             }}
             onCancel={() => toast.dismiss(t.id)}
@@ -83,27 +79,25 @@ const GradeList = () => {
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  let leaveTypesData;
+  let gradeData;
 
   if (!isLoading && !isError) {
-    leaveTypesData = leaveTypes?.data;
+    gradeData = gradeList?.data;
     content = (
       <>
-        {leaveTypesData?.map((type, index) => (
+        {gradeData?.map((grade, index) => (
           <tr
-            key={type?.id}
+            key={grade?.id}
             className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
           >
             <td className="py-2 text-sm text-center">{index + 1}</td>
-            <td className="py-2 text-sm font-semibold pl-10">{type?.name}</td>
-            <td className="py-2 text-sm text-center">{type.code}</td>
+            <td className="py-2 text-sm font-semibold pl-10">{grade?.name}</td>
+            <td className="py-2 text-sm text-center">{grade.basic_salary}</td>
 
-            <td className="py-2 text-sm text-center">{type?.type}</td>
-            <td className="py-2 text-sm text-center">{type?.day}</td>
-            <td className="py-2 text-sm text-center">{type?.description}</td>
+            <td className="py-2 text-sm text-center">{grade?.overtime_rate}</td>
 
             <td className="py-2 text-sm">
-              <Link to={`/company/leave/form/${type?.id}`}>
+              <Link to={`/company/leave/form/${grade?.id}`}>
                 <div className="grid place-items-center">
                   <TbEdit className="text-2xl text-[#3686FF]" />
                 </div>
@@ -111,7 +105,7 @@ const GradeList = () => {
             </td>
             <td
               className="py-2 text-sm"
-              onClick={() => handleDeleteCompany(type?.id)}
+              onClick={() => handleDeleteCompany(grade?.id)}
             >
               <div className="grid place-items-center">
                 <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
@@ -152,10 +146,8 @@ const GradeList = () => {
                 <tr>
                   <th className="pb-2 text-base text-center">SL</th>
                   <th className="pb-2 text-base pl-10">Name</th>
-                  <th className="pb-2 text-base text-center">Code</th>
-                  <th className="pb-2 text-base text-center">Type</th>
-                  <th className="pb-2 text-base text-center">Day</th>
-                  <th className="pb-2 text-base text-center">Description</th>
+                  <th className="pb-2 text-base text-center">Basic Salary</th>
+                  <th className="pb-2 text-base text-center">OverTime Rate</th>
 
                   <th className="pb-2 text-base text-center">Update</th>
                   <th className="pb-2 text-base text-center">Delete</th>

@@ -17,7 +17,6 @@ import FormSkeleton from "../../../skeletons/FormSkeleton";
 const LeaveTypeSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   basic_salary: Yup.number().required("Basic Salary is required"),
-  // type: Yup.string().required("Leave Type is required"),
   overtime_rate: Yup.number().required("Over Time is required"),
 });
 
@@ -113,7 +112,7 @@ const LeaveTypeForm = ({ onClose }) => {
                     toast.error(res?.error?.data?.message);
                   } else {
                     toast.success("Grade updated successfully");
-                    navigate("/company/leave/type");
+                    navigate("/company/grade");
                     onClose();
                   }
                 });

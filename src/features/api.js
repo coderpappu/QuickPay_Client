@@ -614,10 +614,10 @@ export const apiSlice = createApi({
     }),
 
     deleteGrade: builder.mutation({
-      query: (id) => ({
+      query: (gradeId) => ({
         url: `/grade/delete/`,
         method: "DELETE",
-        params: { id },
+        params: { gradeId },
       }),
       invalidatesTags: ["grade"],
     }),
