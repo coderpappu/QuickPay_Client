@@ -412,6 +412,17 @@ const Sidebar = () => {
                     Allowance List
                   </li>
                 </Link>
+                <Link to="/company/deduction">
+                  <li
+                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                      activeSubMenu === "deduction" && "text-[#3686FF]"
+                    }`}
+                    onClick={() => handleSubMenuClick("deduction")}
+                  >
+                    <div className="w-[6px] h-[6px] bg-[#3686FF] rounded-full mr-2"></div>
+                    Deduction List
+                  </li>
+                </Link>
               </div>
             )}
             {companyId && (

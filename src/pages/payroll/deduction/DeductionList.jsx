@@ -5,19 +5,23 @@ import { TbEdit } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
 import {
   useDeleteAllowanceMutation,
+  useDeleteDeductionMutation,
   useDeleteGradeMutation,
   useDeleteLeaveTypeMutation,
   useGetAllowanceListQuery,
   useGetCompanyIdQuery,
+  useGetDeductionListQuery,
   useGetGradeListQuery,
   useGetLeaveTypeListQuery,
   useSetCompanyIdMutation,
 } from "../../../features/api";
+
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import ListSkeleton from "../../../skeletons/ListSkeleton";
 import ErrorMessage from "../../../utils/ErrorMessage";
-import AllowanceForm from "./AllowanceForm";
-const AllowanceList = () => {
+import DeductionForm from "./DeductionForm";
+
+const DeductionList = () => {
   const navigate = useNavigate();
 
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
@@ -27,15 +31,15 @@ const AllowanceList = () => {
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteAllowance] = useDeleteAllowanceMutation();
+  const [deleteDeduction] = useDeleteDeductionMutation();
   const [setCompanyId] = useSetCompanyIdMutation();
 
   const {
-    data: allowanceList,
+    data: deductionList,
     isLoading,
     isError,
     error,
-  } = useGetAllowanceListQuery(companyId);
+  } = useGetDeductionListQuery(companyId);
 
   const handleActivate = (id) => {
     setCompanyId(id);
@@ -45,7 +49,7 @@ const AllowanceList = () => {
     // setCompanyId(null);
   };
 
-  const handleDeleteAllowance = async (id) => {
+  const handleDeleteDeduction = async (id) => {
     const confirm = () =>
       toast(
         (t) => (
@@ -53,15 +57,15 @@ const AllowanceList = () => {
             onConfirm={async () => {
               toast.dismiss(t.id);
               try {
-                await deleteAllowance(id).then((res) => {
+                await deleteDeduction(id).then((res) => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
-                    toast.success("Allowance deleted successfully");
+                    toast.success("Deduction deleted successfully");
                   }
                 });
               } catch (error) {
-                toast.error(error.message || "Failed to delete allowance");
+                toast.error(error.message || "Failed to delete deduction");
               }
             }}
             onCancel={() => toast.dismiss(t.id)}
@@ -74,37 +78,38 @@ const AllowanceList = () => {
 
     confirm();
   };
+
   let content;
 
   if (isLoading && !isError) content = <ListSkeleton />;
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  let allowanceData;
+  let deductionData;
 
   if (!isLoading && !isError) {
-    allowanceData = allowanceList?.data;
+    deductionData = deductionList?.data;
     content = (
       <>
-        {allowanceData?.map((allowance, index) => (
+        {deductionData?.map((deduction, index) => (
           <tr
-            key={allowance?.id}
+            key={deduction?.id}
             className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
           >
             <td className="py-2 text-sm text-center">{index + 1}</td>
             <td className="py-2 text-sm font-semibold pl-10">
-              {allowance?.name}
+              {deduction?.name}
             </td>
-            <td className="py-2 text-sm text-center">{allowance?.type}</td>
+            <td className="py-2 text-sm text-center">{deduction?.type}</td>
 
             <td className="py-2 text-sm text-center">
-              {allowance?.basic_percentage}
+              {deduction?.basic_percentage}
             </td>
             <td className="py-2 text-sm text-center">
-              {allowance?.limit_per_month}
+              {deduction?.limit_per_month}
             </td>
             <td className="py-2 text-sm">
-              <Link to={`/company/allowance/form/${allowance?.id}`}>
+              <Link to={`/company/deduction/form/${deduction?.id}`}>
                 <div className="grid place-items-center">
                   <TbEdit className="text-2xl text-[#3686FF]" />
                 </div>
@@ -112,7 +117,7 @@ const AllowanceList = () => {
             </td>
             <td
               className="py-2 text-sm"
-              onClick={() => handleDeleteAllowance(allowance?.id)}
+              onClick={() => handleDeleteDeduction(deduction?.id)}
             >
               <div className="grid place-items-center">
                 <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
@@ -186,7 +191,7 @@ const AllowanceList = () => {
               </button>
             </div>
             <div className="mt-4">
-              <AllowanceForm onClose={onClose} />
+              <DeductionForm onClose={onClose} />
             </div>
           </div>
         </div>
@@ -195,4 +200,4 @@ const AllowanceList = () => {
   );
 };
 
-export default AllowanceList;
+export default DeductionList;

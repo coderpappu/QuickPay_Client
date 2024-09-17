@@ -5,33 +5,36 @@ import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
   useCreateAllowanceMutation,
+  useCreateDeductionMutation,
   useCreateGradeMutation,
   useCreateLeaveTypeMutation,
   useGetAllowanceDetailsQuery,
   useGetCompanyIdQuery,
+  useGetDeductionDetailsQuery,
   useGetGradeDetailsQuery,
   useGetLeaveTypeDetailsQuery,
   useGetTypeListQuery,
   useUpdateAllowanceMutation,
+  useUpdateDeductionMutation,
   useUpdateGradeMutation,
   useUpdateLeaveTypeMutation,
 } from "../../../features/api";
 
 import FormSkeleton from "../../../skeletons/FormSkeleton";
 
-const allowanceSchema = Yup.object().shape({
+const deductionSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   type: Yup.string().required("Type is required"),
   basic_percentage: Yup.number().required("Basic percentage is required"),
   limit_per_month: Yup.number().required("Limit per month is required"),
 });
 
-const AllowanceForm = ({ onClose }) => {
+const DeductionForm = ({ onClose }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: companyId } = useGetCompanyIdQuery();
-  const [createAllowance] = useCreateAllowanceMutation();
-  const [updateAllowance] = useUpdateAllowanceMutation();
+  const [createDeduction] = useCreateDeductionMutation();
+  const [updateDeduction] = useUpdateDeductionMutation();
 
   const {
     data: types,
@@ -48,19 +51,19 @@ const AllowanceForm = ({ onClose }) => {
     limit_per_month: "",
   });
 
-  const { data: allowanceDetails, isLoading: isWeekendLoading } =
-    useGetAllowanceDetailsQuery(id, { skip: !id });
+  const { data: deductionDetails, isLoading: isWeekendLoading } =
+    useGetDeductionDetailsQuery(id, { skip: !id });
 
   useEffect(() => {
-    if (allowanceDetails?.data) {
+    if (deductionDetails?.data) {
       setInitialValues({
-        name: allowanceDetails?.data?.name,
-        type: allowanceDetails?.data?.type,
-        basic_percentage: allowanceDetails?.data?.basic_percentage,
-        limit_per_month: allowanceDetails?.data?.limit_per_month,
+        name: deductionDetails?.data?.name,
+        type: deductionDetails?.data?.type,
+        basic_percentage: deductionDetails?.data?.basic_percentage,
+        limit_per_month: deductionDetails?.data?.limit_per_month,
       });
     }
-  }, [allowanceDetails]);
+  }, [deductionDetails]);
 
   if (companyId == null) {
     navigate("/");
@@ -85,13 +88,13 @@ const AllowanceForm = ({ onClose }) => {
         <Formik
           enableReinitialize
           initialValues={initialValues}
-          validationSchema={allowanceSchema}
+          validationSchema={deductionSchema}
           onSubmit={async (values, { setSubmitting }) => {
             const { name, type, basic_percentage, limit_per_month } = values;
 
             try {
               if (!id) {
-                await createAllowance({
+                await createDeduction({
                   name,
                   type,
                   basic_percentage,
@@ -101,13 +104,13 @@ const AllowanceForm = ({ onClose }) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Allowance added successfully");
-                    navigate("/company/allowance");
+                    toast.success("Deduction added successfully");
+                    navigate("/company/deduction");
                     onClose();
                   }
                 });
               } else {
-                await updateAllowance({
+                await updateDeduction({
                   id,
                   name,
                   type,
@@ -118,8 +121,8 @@ const AllowanceForm = ({ onClose }) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Allowance updated successfully");
-                    navigate("/company/allowance");
+                    toast.success("Deduction updated successfully");
+                    navigate("/company/deduction");
                     onClose();
                   }
                 });
@@ -237,4 +240,4 @@ const AllowanceForm = ({ onClose }) => {
   );
 };
 
-export default AllowanceForm;
+export default DeductionForm;

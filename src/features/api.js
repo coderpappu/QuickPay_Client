@@ -668,6 +668,52 @@ export const apiSlice = createApi({
       invalidatesTags: ["allowance"],
     }),
 
+    // Deduction
+    createDeduction: builder.mutation({
+      query: (credentials) => ({
+        url: "/allowance_deduction/deduction/create",
+        method: "POST",
+        body: credentials,
+      }),
+
+      invalidatesTags: ["deduction"],
+    }),
+
+    getDeductionList: builder.query({
+      query: (companyId) => ({
+        url: `/allowance_deduction/deduction/list`,
+        params: { companyId },
+      }),
+      providesTags: ["deduction"],
+    }),
+
+    getDeductionDetails: builder.query({
+      query: (id) => ({
+        url: `/allowance_deduction/deduction/details`,
+        params: { id },
+      }),
+
+      providesTags: ["deduction"],
+    }),
+
+    updateDeduction: builder.mutation({
+      query: ({ id, ...credentials }) => ({
+        url: `/allowance_deduction/deduction/update/${id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["deduction"],
+    }),
+
+    deleteDeduction: builder.mutation({
+      query: (deductionId) => ({
+        url: `/allowance_deduction/deduction/delete/`,
+        method: "DELETE",
+        params: { deductionId },
+      }),
+      invalidatesTags: ["deduction"],
+    }),
+
     // Company Setting System
 
     getRootSetting: builder.query({
@@ -796,6 +842,13 @@ export const {
   useGetAllowanceDetailsQuery,
   useUpdateAllowanceMutation,
   useDeleteAllowanceMutation,
+
+  //Deduction
+  useCreateDeductionMutation,
+  useGetDeductionListQuery,
+  useGetDeductionDetailsQuery,
+  useUpdateDeductionMutation,
+  useDeleteDeductionMutation,
 
   useSetSettingMutation,
   useGetRootSettingQuery,

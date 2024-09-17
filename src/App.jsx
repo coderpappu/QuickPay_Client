@@ -46,6 +46,8 @@ import GradeList from "./pages/payroll/grade/gradeList";
 import GradeForm from "./pages/payroll/grade/gradeForm";
 import AllowanceList from "./pages/payroll/allowance/AllowanceList";
 import AllowanceForm from "./pages/payroll/allowance/AllowanceForm";
+import DeductionList from "./pages/payroll/deduction/DeductionList";
+import DeductionForm from "./pages/payroll/deduction/DeductionForm";
 
 function App() {
   return (
@@ -143,6 +145,12 @@ function App() {
               <Route
                 path="/company/allowance/form/:id"
                 element={<AllowanceForm />}
+              />
+
+              <Route path="/company/deduction/" element={<DeductionList />} />
+              <Route
+                path="/company/deduction/form/:id"
+                element={<DeductionForm />}
               />
             </Route>
           </Route>
