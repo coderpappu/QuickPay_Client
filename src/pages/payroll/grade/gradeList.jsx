@@ -14,7 +14,7 @@ import {
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import ListSkeleton from "../../../skeletons/ListSkeleton";
 import ErrorMessage from "../../../utils/ErrorMessage";
-import LeaveTypeForm from "././gradeForm";
+import GradeForm from "././gradeForm";
 
 const GradeList = () => {
   const navigate = useNavigate();
@@ -97,7 +97,7 @@ const GradeList = () => {
             <td className="py-2 text-sm text-center">{grade?.overtime_rate}</td>
 
             <td className="py-2 text-sm">
-              <Link to={`/company/leave/form/${grade?.id}`}>
+              <Link to={`/company/grade/form/${grade?.id}`}>
                 <div className="grid place-items-center">
                   <TbEdit className="text-2xl text-[#3686FF]" />
                 </div>
@@ -120,7 +120,7 @@ const GradeList = () => {
     <div>
       <div className="flex flex-wrap justify-between items-center pb-2">
         <div>
-          <h2 className="font-semibold text-lg pb-2">Leave Type </h2>
+          <h2 className="font-semibold text-lg pb-2">Employee Grade List </h2>
         </div>
       </div>
 
@@ -173,7 +173,7 @@ const GradeList = () => {
               </button>
             </div>
             <div className="mt-4">
-              <LeaveTypeForm onClose={onClose} />
+              <GradeForm onClose={onClose} />
             </div>
           </div>
         </div>

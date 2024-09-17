@@ -7,8 +7,10 @@ import {
   useCreateGradeMutation,
   useCreateLeaveTypeMutation,
   useGetCompanyIdQuery,
+  useGetGradeDetailsQuery,
   useGetLeaveTypeDetailsQuery,
   useGetTypeListQuery,
+  useUpdateGradeMutation,
   useUpdateLeaveTypeMutation,
 } from "../../../features/api";
 
@@ -20,12 +22,12 @@ const LeaveTypeSchema = Yup.object().shape({
   overtime_rate: Yup.number().required("Over Time is required"),
 });
 
-const LeaveTypeForm = ({ onClose }) => {
+const GradeForm = ({ onClose }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: companyId } = useGetCompanyIdQuery();
   const [createGrade] = useCreateGradeMutation();
-  const [updateLeaveType] = useUpdateLeaveTypeMutation();
+  const [updateGrade] = useUpdateGradeMutation();
 
   const {
     data: types,
@@ -41,21 +43,18 @@ const LeaveTypeForm = ({ onClose }) => {
     overtime_rate: "",
   });
 
-  const { data: leaveType, isLoading: isWeekendLoading } =
-    useGetLeaveTypeDetailsQuery(id, { skip: !id });
+  const { data: gradeDetails, isLoading: isWeekendLoading } =
+    useGetGradeDetailsQuery(id, { skip: !id });
 
   useEffect(() => {
-    if (leaveType?.data) {
+    if (gradeDetails?.data) {
       setInitialValues({
-        name: leaveType?.data?.name,
-        code: leaveType?.data?.code,
-        type: leaveType?.data?.type,
-        day: leaveType?.data?.day,
-
-        description: leaveType?.data?.description,
+        name: gradeDetails?.data?.name,
+        basic_salary: gradeDetails?.data?.basic_salary,
+        overtime_rate: gradeDetails?.data?.overtime_rate,
       });
     }
-  }, [leaveType]);
+  }, [gradeDetails]);
 
   if (companyId == null) {
     navigate("/");
@@ -101,7 +100,7 @@ const LeaveTypeForm = ({ onClose }) => {
                   }
                 });
               } else {
-                await updateLeaveType({
+                await updateGrade({
                   id,
                   name,
                   basic_salary,
@@ -210,4 +209,4 @@ const LeaveTypeForm = ({ onClose }) => {
   );
 };
 
-export default LeaveTypeForm;
+export default GradeForm;

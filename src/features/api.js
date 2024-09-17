@@ -596,9 +596,9 @@ export const apiSlice = createApi({
     }),
 
     getGradeDetails: builder.query({
-      query: (id) => (gradeId) => ({
+      query: (id) => ({
         url: `/grade/details`,
-        params: { gradeId },
+        params: { id },
       }),
 
       providesTags: ["grade"],

@@ -43,6 +43,7 @@ import LeaveTypeForm from "./pages/leave/LeaveTypeForm";
 import LeaveApplicationList from "./pages/leave/LeaveApplicationList";
 import EarnLeave from "./pages/leave/earnLeave/EarnLeave";
 import GradeList from "./pages/payroll/grade/gradeList";
+import GradeForm from "./pages/payroll/grade/gradeForm";
 
 function App() {
   return (
@@ -134,6 +135,7 @@ function App() {
 
               {/* Payroll System - Grade end point   */}
               <Route path="/company/grade/" element={<GradeList />} />
+              <Route path="/company/grade/form/:id" element={<GradeForm />} />
             </Route>
           </Route>
         </Route>
