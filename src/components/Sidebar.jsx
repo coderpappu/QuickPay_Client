@@ -42,8 +42,8 @@ const Sidebar = () => {
   return (
     // <div className="flex h-screen ">
 
-    <div className="flex h-screen bg-[#0E1A34] shadow-inner text-white w-64 xl:w-72 flex-shrink-0">
-      <div className="lg:px-4  xl:px-6">
+    <div className="flex  h-screen bg-[#0E1A34] shadow-inner text-white w-64 xl:w-64 2xl:w-72 flex-shrink-0">
+      <div className="lg:px-4  xl:px-4 font-poppins text-[15px] text-[#d5d5d5]">
         <div>
           <Logo />
         </div>
@@ -126,7 +126,7 @@ const Sidebar = () => {
           <ul className="mt-4 w-60">
             <Link to="/company/list">
               <li
-                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex justify-start items-center ${
+                className={`py-2 mb-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex justify-start items-center ${
                   activeMenu === "manageCompany" && `bg-[#3686FF] text-white`
                 }`}
                 onClick={() => handleMenuClick("manageCompany")}
@@ -137,7 +137,7 @@ const Sidebar = () => {
             </Link>
             {companyId && (
               <li
-                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex flex-wrap items-center justify-between ${
+                className={`py-2 mb-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex flex-wrap items-center justify-between ${
                   activeMenu === "dashboard" && `bg-[#3686FF] text-white`
                 }`}
                 onClick={() => handleMenuClick("dashboard")}
@@ -157,7 +157,7 @@ const Sidebar = () => {
               <div className="ml-3">
                 <Link to="/">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                    className={`py-2 mb-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                       activeSubMenu === "attendance" && "text-[#3686FF]"
                     }`}
                     onClick={() => handleSubMenuClick("attendance")}
@@ -172,7 +172,7 @@ const Sidebar = () => {
             {/* Attendance menu */}
             {companyId && (
               <li
-                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex flex-wrap items-center justify-between ${
+                className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex flex-wrap items-center justify-between ${
                   activeMenu === "attendance" && `bg-[#3686FF] text-white`
                 }`}
                 onClick={() => handleMenuClick("attendance")}
@@ -192,7 +192,7 @@ const Sidebar = () => {
               <div className="ml-3">
                 <Link to="/employee/attendence">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                       activeSubMenu === "attendance" && "text-[#3686FF]"
                     }`}
                     onClick={() => handleSubMenuClick("attendance")}
@@ -203,7 +203,7 @@ const Sidebar = () => {
                 </Link>
                 <Link to="/employee/attendences">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                       activeSubMenu === "attendanceList" && "text-[#3686FF]"
                     }`}
                     onClick={() => handleSubMenuClick("attendanceList")}
@@ -217,7 +217,7 @@ const Sidebar = () => {
             {/* Company Settings menu */}
             {companyId && (
               <li
-                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex flex-wrap items-center justify-between ${
+                className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex flex-wrap items-center justify-between ${
                   activeMenu === "calendar" && `bg-[#3686FF] text-white`
                 }`}
                 onClick={() => handleMenuClick("calendar")}
@@ -238,7 +238,7 @@ const Sidebar = () => {
               <div className="ml-3">
                 <Link to="/company/weekend">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                       activeSubMenu === "weekend" && "text-[#3686FF]"
                     }`}
                     onClick={() => handleSubMenuClick("weekend")}
@@ -249,7 +249,7 @@ const Sidebar = () => {
                 </Link>
                 <Link to="/holiday">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                       activeSubMenu === "holiday" && "text-[#3686FF]"
                     }`}
                     onClick={() => handleSubMenuClick("holiday")}
@@ -261,7 +261,7 @@ const Sidebar = () => {
 
                 <Link to="/company/calendar">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                       activeSubMenu === "calendarShow" && "text-[#3686FF]"
                     }`}
                     onClick={() => handleSubMenuClick("calendarShow")}
@@ -276,7 +276,7 @@ const Sidebar = () => {
             {/* Company Settings menu */}
             {companyId && (
               <li
-                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex flex-wrap items-center justify-between ${
+                className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex flex-wrap items-center justify-between ${
                   activeMenu === "leaveManagement" && `bg-[#3686FF] text-white`
                 }`}
                 onClick={() => handleMenuClick("leaveManagement")}
@@ -297,7 +297,7 @@ const Sidebar = () => {
               <>
                 <div className="ml-3">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all   cursor-pointer flex flex-wrap items-center justify-between `}
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all   cursor-pointer flex flex-wrap items-center justify-between `}
                     onClick={() => handleSubMainClick("leavesetup")}
                   >
                     Setup
@@ -311,7 +311,7 @@ const Sidebar = () => {
                     <div className="ml-2">
                       <Link to="company/leave/type">
                         <li
-                          className={`py-1 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                          className={`py-1 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                             activeSubMenu === "leaveType" && "text-[#3686FF]"
                           }`}
                           onClick={() => handleSubMenuClick("leaveType")}
@@ -322,7 +322,7 @@ const Sidebar = () => {
                       </Link>
                       <Link to="/company/leave/earnleave">
                         <li
-                          className={`py-1 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                          className={`py-1 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                             activeSubMenu === "earnLeave" && "text-[#3686FF]"
                           }`}
                           onClick={() => handleSubMenuClick("earnLeave")}
@@ -337,7 +337,7 @@ const Sidebar = () => {
 
                 <div className="ml-3">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all   cursor-pointer flex flex-wrap items-center justify-between `}
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all   cursor-pointer flex flex-wrap items-center justify-between `}
                     onClick={() => handleSubMainClick("leaveApplication")}
                   >
                     Leave Applicaion
@@ -351,7 +351,7 @@ const Sidebar = () => {
                     <div className="ml-2">
                       <Link to="company/leave/application">
                         <li
-                          className={`py-1 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                          className={`py-1 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                             activeSubMenu === "leaveApplication" &&
                             "text-[#3686FF]"
                           }`}
@@ -370,7 +370,7 @@ const Sidebar = () => {
             {/* Payroll  */}
             {companyId && (
               <li
-                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex flex-wrap items-center justify-between ${
+                className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex flex-wrap items-center justify-between ${
                   activeMenu === "payroll" && `bg-[#3686FF] text-white`
                 }`}
                 onClick={() => handleMenuClick("payroll")}
@@ -392,7 +392,7 @@ const Sidebar = () => {
               <div className="ml-3">
                 <Link to="/company/grade">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                       activeSubMenu === "grade" && "text-[#3686FF]"
                     }`}
                     onClick={() => handleSubMenuClick("grade")}
@@ -403,7 +403,7 @@ const Sidebar = () => {
                 </Link>
                 <Link to="/company/allowance">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                       activeSubMenu === "allowance" && "text-[#3686FF]"
                     }`}
                     onClick={() => handleSubMenuClick("allowance")}
@@ -414,7 +414,7 @@ const Sidebar = () => {
                 </Link>
                 <Link to="/company/deduction">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                       activeSubMenu === "deduction" && "text-[#3686FF]"
                     }`}
                     onClick={() => handleSubMenuClick("deduction")}
@@ -427,12 +427,12 @@ const Sidebar = () => {
             )}
             {companyId && (
               <li
-                className={`py-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex flex-wrap items-center justify-between ${
+                className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex flex-wrap items-center justify-between ${
                   activeMenu === "companySettings" && `bg-[#3686FF] text-white`
                 }`}
                 onClick={() => handleMenuClick("companySettings")}
               >
-                <div className="w-[88%] flex justify-start items-center">
+                <div className="w-[88%]  flex justify-start items-center">
                   <AiOutlineSetting size={20} className="mr-2" />
                   Company Settings
                 </div>
@@ -448,7 +448,7 @@ const Sidebar = () => {
               <div className="ml-3">
                 <Link to="/company/shift/list">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                       activeSubMenu === "shift" && "text-[#3686FF]"
                     }`}
                     onClick={() => handleSubMenuClick("shift")}
@@ -459,7 +459,7 @@ const Sidebar = () => {
                 </Link>
                 <Link to="/department/list">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                       activeSubMenu === "department" && "text-[#3686FF]"
                     }`}
                     onClick={() => handleSubMenuClick("department")}
@@ -470,7 +470,7 @@ const Sidebar = () => {
                 </Link>
                 <Link to="/designation/list">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                       activeSubMenu === "designation" && "text-[#3686FF]"
                     }`}
                     onClick={() => handleSubMenuClick("designation")}
@@ -481,7 +481,7 @@ const Sidebar = () => {
                 </Link>
                 <Link to="/section/list">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                       activeSubMenu === "section" && "text-[#3686FF]"
                     }`}
                     onClick={() => handleSubMenuClick("section")}
@@ -493,7 +493,7 @@ const Sidebar = () => {
 
                 <Link to="/company/employee">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                       activeSubMenu === "employees" && "text-[#3686FF]"
                     }`}
                     onClick={() => handleSubMenuClick("employees")}
@@ -505,7 +505,7 @@ const Sidebar = () => {
 
                 <Link to="/company/settings">
                   <li
-                    className={`py-2 px-4 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
                       activeSubMenu === "setting" && "text-[#3686FF]"
                     }`}
                     onClick={() => handleSubMenuClick("setting")}
