@@ -1,14 +1,18 @@
-/* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiEdit } from "react-icons/fi";
 import {
+  useCreateEmployeeAllowanceMutation,
   useGetAllowanceListQuery,
   useGetCompanyIdQuery,
   useGetDeductionListQuery,
   useGetGradeListQuery,
+  useGetSalarySettingQuery,
 } from "../../../features/api";
 
 const SalarySettings = () => {
+  const [selectedAllowances, setSelectedAllowances] = useState([]);
+  const [selectedDeductions, setSelectedDeductions] = useState([]);
+  const [selectedGrade, setSelectedGrade] = useState("");
   const { data: companyId } = useGetCompanyIdQuery();
 
   const {
@@ -29,9 +33,27 @@ const SalarySettings = () => {
     isError: gradeError,
   } = useGetGradeListQuery(companyId);
 
-  const [selectedAllowances, setSelectedAllowances] = useState([]);
-  const [selectedDeductions, setSelectedDeductions] = useState([]);
-  const [selectedGrade, setSelectedGrade] = useState("");
+  const { data: SalarySetting } = useGetSalarySettingQuery();
+
+  // Set initial selected allowances based on SalarySetting
+  useEffect(() => {
+    if (SalarySetting?.data) {
+      const initialAllowances = SalarySetting?.data?.allowances.map(
+        (allowance) => allowance?.allowance?.id
+      );
+      const initialDeductions = SalarySetting?.data?.deductions.map(
+        (deduction) => deduction?.deduction?.id
+      );
+      // const initialgrades = SalarySetting?.data?.grades.map(
+      //   (deduction) => deduction?.deduction?.id
+      // );
+      setSelectedDeductions(initialDeductions || []);
+      setSelectedAllowances(initialAllowances || []);
+    }
+  }, [SalarySetting]);
+
+  const [createSalarySetting, { isLoading, isError }] =
+    useCreateEmployeeAllowanceMutation();
 
   const handleAllowanceChange = (allowanceId) => {
     setSelectedAllowances((prev) =>
@@ -61,6 +83,7 @@ const SalarySettings = () => {
       gradeId: selectedGrade,
       companyId: companyId,
     };
+    createSalarySetting(salaryData);
     console.log("Salary Settings:", {
       ...salaryData,
       employeeId: "employee1", // Replace with actual employee ID

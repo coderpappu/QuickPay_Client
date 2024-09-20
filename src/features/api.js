@@ -714,6 +714,24 @@ export const apiSlice = createApi({
       invalidatesTags: ["deduction"],
     }),
 
+    // employee Create
+    createEmployeeAllowance: builder.mutation({
+      query: (credentials) => ({
+        url: "/salarysetting/create",
+        method: "POST",
+        body: credentials,
+      }),
+
+      invalidatesTags: ["deduction"],
+    }),
+
+    getSalarySetting: builder.query({
+      query: (companyId) => ({
+        url: `/salarysetting/getsalarysetting`,
+        params: { companyId },
+      }),
+      providesTags: ["deduction"],
+    }),
     // Company Setting System
 
     getRootSetting: builder.query({
@@ -849,6 +867,10 @@ export const {
   useGetDeductionDetailsQuery,
   useUpdateDeductionMutation,
   useDeleteDeductionMutation,
+
+  // Employee Salaray Setting
+  useCreateEmployeeAllowanceMutation,
+  useGetSalarySettingQuery,
 
   useSetSettingMutation,
   useGetRootSettingQuery,
