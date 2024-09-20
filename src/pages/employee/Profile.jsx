@@ -13,6 +13,7 @@ import {
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import JobDetails from "../../components/employee/JobDetails";
+import SalarySettingsForm from "./SalarySetting/SalarySetting";
 const Profile = () => {
   const id = useParams()?.id;
   const { data: employeeData } = useGetUserQuery();
@@ -108,6 +109,7 @@ const Profile = () => {
 
       {selected == "1" && <AboutCard employeeDetails={employeeDetails} />}
       {selected == "2" && <JobDetails employeeDetails={employeeDetails} />}
+      {selected == "3" && <SalarySettingsForm />}
     </div>
   );
 };

@@ -9,6 +9,7 @@ import {
 import ListSkeleton from "../../skeletons/ListSkeleton";
 
 // Modal Component
+// eslint-disable-next-line react/prop-types
 const Modal = ({ isOpen, onClose, onSave, leaveData, setLeaveData }) => {
   if (!isOpen) return null;
 
@@ -94,6 +95,7 @@ const LeaveApplicationList = () => {
     data: leaveApplicationList,
     isLoading,
     isError,
+    error,
   } = useGetAllLeaveApplicationQuery(companyId);
 
   let content;

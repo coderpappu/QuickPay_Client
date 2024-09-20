@@ -31,12 +31,11 @@ const Leave = () => {
     data: leaveCalculation,
     isLoading: leaveLoading,
     isError: leaveError,
+    error,
   } = useCalculationLeaveDaysQuery({ year: 2024, company_id: companyId });
 
-  console.log(leaveCalculation);
   let content;
 
-  console.log(leaveCalculation);
   const statusColorHandler = (status) => {
     switch (status) {
       case "PENDING":
