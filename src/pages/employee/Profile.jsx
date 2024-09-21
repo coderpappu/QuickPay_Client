@@ -97,7 +97,7 @@ const Profile = () => {
           button_id="3"
           isActive={selected == "3"}
           handleSelect={handleSelect}
-          title={"Education & Experience"}
+          title={"Salary Details"}
         />
         <Button
           button_id="4"
