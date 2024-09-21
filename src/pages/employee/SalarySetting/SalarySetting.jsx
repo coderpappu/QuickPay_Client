@@ -44,9 +44,11 @@ const SalarySettings = () => {
       const initialDeductions = SalarySetting?.data?.deductions.map(
         (deduction) => deduction?.deduction?.id
       );
-      // const initialgrades = SalarySetting?.data?.grades.map(
-      //   (deduction) => deduction?.deduction?.id
-      // );
+      const initialgrades = SalarySetting?.data?.grade?.map(
+        (grade) => grade?.grade?.id
+      );
+
+      setSelectedGrade(initialgrades || []);
       setSelectedDeductions(initialDeductions || []);
       setSelectedAllowances(initialAllowances || []);
     }
