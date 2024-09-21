@@ -48,7 +48,7 @@ const SalarySettings = () => {
         (grade) => grade?.grade?.id
       );
 
-      setSelectedGrade(initialgrades || []);
+      setSelectedGrade(initialgrades);
       setSelectedDeductions(initialDeductions || []);
       setSelectedAllowances(initialAllowances || []);
     }
@@ -86,10 +86,7 @@ const SalarySettings = () => {
       companyId: companyId,
     };
     createSalarySetting(salaryData);
-    console.log("Salary Settings:", {
-      ...salaryData,
-      employeeId: "employee1", // Replace with actual employee ID
-    });
+
     alert("Salary settings saved (check console for details)");
   };
 
