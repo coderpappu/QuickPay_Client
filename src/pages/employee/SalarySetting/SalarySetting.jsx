@@ -44,11 +44,9 @@ const SalarySettings = () => {
       const initialDeductions = SalarySetting?.data?.deductions.map(
         (deduction) => deduction?.deduction?.id
       );
-      
-      // const initialgrades = SalarySetting?.data?.grades.map(
-      //   (deduction) => deduction?.deduction?.id
-      // );
+      const initialgrades = SalarySetting?.data?.grade?.grade?.id;
 
+      setSelectedGrade(initialgrades);
       setSelectedDeductions(initialDeductions || []);
       setSelectedAllowances(initialAllowances || []);
     }
@@ -86,10 +84,7 @@ const SalarySettings = () => {
       companyId: companyId,
     };
     createSalarySetting(salaryData);
-    console.log("Salary Settings:", {
-      ...salaryData,
-      employeeId: "employee1", // Replace with actual employee ID
-    });
+
     alert("Salary settings saved (check console for details)");
   };
 

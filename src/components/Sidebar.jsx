@@ -9,6 +9,7 @@ import { LuListTodo } from "react-icons/lu";
 import { RxCalendar, RxExit } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
+import { TbMoneybag } from "react-icons/tb";
 import { useGetCompanyIdQuery, useGetUserQuery } from "../features/api";
 const Sidebar = () => {
   const { data: companyId } = useGetCompanyIdQuery();
@@ -42,7 +43,7 @@ const Sidebar = () => {
   return (
     // <div className="flex h-screen ">
 
-    <div className="flex  h-screen bg-[#0E1A34] shadow-inner text-white w-64 xl:w-64 2xl:w-72 flex-shrink-0">
+    <div className="flex  h-[100%] bg-[#0E1A34] shadow-inner text-white w-64 xl:w-64 2xl:w-[284px] flex-shrink-0">
       <div className="lg:px-4  xl:px-4 font-poppins text-[15px] text-[#d5d5d5]">
         <div>
           <Logo />
@@ -376,7 +377,7 @@ const Sidebar = () => {
                 onClick={() => handleMenuClick("payroll")}
               >
                 <div className="w-[88%] flex justify-start items-center">
-                  <AiOutlineSetting size={20} className="mr-2" />
+                  <TbMoneybag size={20} className="mr-2" />
                   PayRoll
                 </div>
                 <IoIosArrowForward
@@ -423,6 +424,48 @@ const Sidebar = () => {
                     Deduction List
                   </li>
                 </Link>
+
+                {/* loan system  */}
+                <div className="ml-3">
+                  <li
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all   cursor-pointer flex flex-wrap items-center justify-between `}
+                    onClick={() => handleSubMainClick("loansetup")}
+                  >
+                    Loan Management
+                    <IoIosArrowForward
+                      className={`ml-2 transition-all ${
+                        activeSubMain === "loansetup" ? "rotate-90" : ""
+                      }`}
+                    />
+                  </li>
+                  {activeSubMain === "loansetup" && (
+                    <div className="ml-2">
+                      <Link to="company/loan/type">
+                        <li
+                          className={`py-1 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                            activeSubMenu === "loanType" && "text-[#3686FF]"
+                          }`}
+                          onClick={() => handleSubMenuClick("loanType")}
+                        >
+                          <div className="w-[6px] h-[6px] bg-[#3686FF] rounded-full mr-2"></div>
+                          Loan Type
+                        </li>
+                      </Link>
+                      <Link to="/company/loan/application">
+                        <li
+                          className={`py-1 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                            activeSubMenu === "loanApplication" &&
+                            "text-[#3686FF]"
+                          }`}
+                          onClick={() => handleSubMenuClick("loanApplication")}
+                        >
+                          <div className="w-[6px] h-[6px] bg-[#3686FF] rounded-full mr-2"></div>
+                          Loan Application
+                        </li>
+                      </Link>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
             {companyId && (
