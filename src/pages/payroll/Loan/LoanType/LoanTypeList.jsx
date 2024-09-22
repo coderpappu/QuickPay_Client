@@ -100,11 +100,11 @@ const LoanTypeList = () => {
               {loanType?.name}
             </td>
             <td className="py-2 text-sm text-center">
-              {loanType.basic_salary}
+              {loanType.interestRate}
             </td>
 
             <td className="py-2 text-sm text-center">
-              {loanType?.overtime_rate}
+              {loanType?.maxLoanAmount}
             </td>
 
             <td className="py-2 text-sm">
@@ -131,7 +131,7 @@ const LoanTypeList = () => {
     <div>
       <div className="flex flex-wrap justify-between items-center pb-2">
         <div>
-          <h2 className="font-semibold text-lg pb-2">Employee Grade List </h2>
+          <h2 className="font-semibold text-lg pb-2">Loan Types </h2>
         </div>
       </div>
 
@@ -157,8 +157,8 @@ const LoanTypeList = () => {
                 <tr>
                   <th className="pb-2 text-base text-center">SL</th>
                   <th className="pb-2 text-base pl-10">Name</th>
-                  <th className="pb-2 text-base text-center">Basic Salary</th>
-                  <th className="pb-2 text-base text-center">OverTime Rate</th>
+                  <th className="pb-2 text-base text-center">Interest Rate</th>
+                  <th className="pb-2 text-base text-center">Max Amount</th>
 
                   <th className="pb-2 text-base text-center">Update</th>
                   <th className="pb-2 text-base text-center">Delete</th>
