@@ -732,6 +732,53 @@ export const apiSlice = createApi({
       }),
       providesTags: ["deduction"],
     }),
+
+    // Loan System Endpoint
+    createLoanType: builder.mutation({
+      query: (credentials) => ({
+        url: "/loan/type/create",
+        method: "POST",
+        body: credentials,
+      }),
+
+      invalidatesTags: ["loanType"],
+    }),
+
+    getLoanTypeList: builder.query({
+      query: (companyId) => ({
+        url: `/loan/type/list`,
+        params: { companyId },
+      }),
+      providesTags: ["loanType"],
+    }),
+
+    getLoanDetails: builder.query({
+      query: (id) => ({
+        url: `/loan/type/details`,
+        params: { id },
+      }),
+
+      providesTags: ["loanType"],
+    }),
+
+    updateLoanType: builder.mutation({
+      query: ({ id, ...credentials }) => ({
+        url: `/loan/type/update/${id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["allowance"],
+    }),
+
+    deleteLoanType: builder.mutation({
+      query: (loanTypeId) => ({
+        url: `/loan/type/delete/`,
+        method: "DELETE",
+        params: { loanTypeId },
+      }),
+      invalidatesTags: ["loanType"],
+    }),
+
     // Company Setting System
 
     getRootSetting: builder.query({
