@@ -9,6 +9,7 @@ import { LuListTodo } from "react-icons/lu";
 import { RxCalendar, RxExit } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
+import { TbMoneybag } from "react-icons/tb";
 import { useGetCompanyIdQuery, useGetUserQuery } from "../features/api";
 const Sidebar = () => {
   const { data: companyId } = useGetCompanyIdQuery();
@@ -42,7 +43,7 @@ const Sidebar = () => {
   return (
     // <div className="flex h-screen ">
 
-    <div className="flex  h-screen bg-[#0E1A34] shadow-inner text-white w-64 xl:w-64 2xl:w-72 flex-shrink-0">
+    <div className="flex  h-[100%] bg-[#0E1A34] shadow-inner text-white w-64 xl:w-64 2xl:w-[284px] flex-shrink-0">
       <div className="lg:px-4  xl:px-4 font-poppins text-[15px] text-[#d5d5d5]">
         <div>
           <Logo />
@@ -376,7 +377,7 @@ const Sidebar = () => {
                 onClick={() => handleMenuClick("payroll")}
               >
                 <div className="w-[88%] flex justify-start items-center">
-                  <AiOutlineSetting size={20} className="mr-2" />
+                  <TbMoneybag size={20} className="mr-2" />
                   PayRoll
                 </div>
                 <IoIosArrowForward
