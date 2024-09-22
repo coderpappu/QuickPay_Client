@@ -919,6 +919,13 @@ export const {
   useCreateEmployeeAllowanceMutation,
   useGetSalarySettingQuery,
 
+  // Loan Type Endpoint
+  useCreateLoanTypeMutation,
+  useGetLoanTypeListQuery,
+  useGetLoanDetailsQuery,
+  useUpdateLoanTypeMutation,
+  useDeleteLoanTypeMutation,
+
   useSetSettingMutation,
   useGetRootSettingQuery,
   useGetEmployeeSettingQuery,

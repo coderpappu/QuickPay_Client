@@ -424,6 +424,48 @@ const Sidebar = () => {
                     Deduction List
                   </li>
                 </Link>
+
+                {/* loan system  */}
+                <div className="ml-3">
+                  <li
+                    className={`py-2 px-4 mb-2 rounded-[3px] transition-all   cursor-pointer flex flex-wrap items-center justify-between `}
+                    onClick={() => handleSubMainClick("loansetup")}
+                  >
+                    Loan Management
+                    <IoIosArrowForward
+                      className={`ml-2 transition-all ${
+                        activeSubMain === "loansetup" ? "rotate-90" : ""
+                      }`}
+                    />
+                  </li>
+                  {activeSubMain === "loansetup" && (
+                    <div className="ml-2">
+                      <Link to="company/loan/type">
+                        <li
+                          className={`py-1 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                            activeSubMenu === "loanType" && "text-[#3686FF]"
+                          }`}
+                          onClick={() => handleSubMenuClick("loanType")}
+                        >
+                          <div className="w-[6px] h-[6px] bg-[#3686FF] rounded-full mr-2"></div>
+                          Loan Type
+                        </li>
+                      </Link>
+                      <Link to="/company/loan/application">
+                        <li
+                          className={`py-1 px-4 mb-2 rounded-[3px] transition-all hover:text-[#3686FF] cursor-pointer flex flex-wrap items-center ${
+                            activeSubMenu === "loanApplication" &&
+                            "text-[#3686FF]"
+                          }`}
+                          onClick={() => handleSubMenuClick("loanApplication")}
+                        >
+                          <div className="w-[6px] h-[6px] bg-[#3686FF] rounded-full mr-2"></div>
+                          Loan Application
+                        </li>
+                      </Link>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
             {companyId && (

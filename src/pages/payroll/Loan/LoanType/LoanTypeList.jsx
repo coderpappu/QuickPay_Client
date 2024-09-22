@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
+
 import {
   useDeleteGradeMutation,
   useDeleteLeaveTypeMutation,
@@ -10,13 +11,17 @@ import {
   useGetGradeListQuery,
   useGetLeaveTypeListQuery,
   useSetCompanyIdMutation,
-} from "../../../features/api";
-import ConfirmDialog from "../../../helpers/ConfirmDialog";
-import ListSkeleton from "../../../skeletons/ListSkeleton";
-import ErrorMessage from "../../../utils/ErrorMessage";
+} from "../../../../features/api";
+
+import ConfirmDialog from "../../../../helpers/ConfirmDialog";
+import ListSkeleton from "../../../../skeletons/ListSkeleton";
+import ErrorMessage from "../../../../utils/ErrorMessage";
+
 import GradeForm from "./LoanTypeForm";
 
-const GradeList = () => {
+import { useGetLoanTypeListQuery } from "../../../../features/api";
+
+const LoanTypeList = () => {
   const navigate = useNavigate();
 
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
@@ -29,7 +34,12 @@ const GradeList = () => {
   const [deleteGrade] = useDeleteGradeMutation();
   const [setCompanyId] = useSetCompanyIdMutation();
 
-  const { data: gradeList, isLoading, isError, error } = companyId;
+  const {
+    data: loanTypeList,
+    isLoading,
+    isError,
+    error,
+  } = useGetLoanTypeListQuery(companyId);
 
   const handleActivate = (id) => {
     setCompanyId(id);
@@ -74,25 +84,31 @@ const GradeList = () => {
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  let gradeData;
+  let loanTypeData;
 
   if (!isLoading && !isError) {
-    gradeData = gradeList?.data;
+    loanTypeData = loanTypeList?.data;
     content = (
       <>
-        {gradeData?.map((grade, index) => (
+        {loanTypeData?.map((loanType, index) => (
           <tr
-            key={grade?.id}
+            key={loanType?.id}
             className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
           >
             <td className="py-2 text-sm text-center">{index + 1}</td>
-            <td className="py-2 text-sm font-semibold pl-10">{grade?.name}</td>
-            <td className="py-2 text-sm text-center">{grade.basic_salary}</td>
+            <td className="py-2 text-sm font-semibold pl-10">
+              {loanType?.name}
+            </td>
+            <td className="py-2 text-sm text-center">
+              {loanType.basic_salary}
+            </td>
 
-            <td className="py-2 text-sm text-center">{grade?.overtime_rate}</td>
+            <td className="py-2 text-sm text-center">
+              {loanType?.overtime_rate}
+            </td>
 
             <td className="py-2 text-sm">
-              <Link to={`/company/grade/form/${grade?.id}`}>
+              <Link to={`/company/loanType/form/${loanType?.id}`}>
                 <div className="grid place-items-center">
                   <TbEdit className="text-2xl text-[#3686FF]" />
                 </div>
@@ -100,7 +116,7 @@ const GradeList = () => {
             </td>
             <td
               className="py-2 text-sm"
-              onClick={() => handleDeleteCompany(grade?.id)}
+              onClick={() => handleDeleteCompany(loanType?.id)}
             >
               <div className="grid place-items-center">
                 <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
@@ -177,4 +193,4 @@ const GradeList = () => {
   );
 };
 
-export default GradeList;
+export default LoanTypeList;

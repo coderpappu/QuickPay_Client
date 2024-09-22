@@ -48,6 +48,8 @@ import AllowanceList from "./pages/payroll/allowance/AllowanceList";
 import AllowanceForm from "./pages/payroll/allowance/AllowanceForm";
 import DeductionList from "./pages/payroll/deduction/DeductionList";
 import DeductionForm from "./pages/payroll/deduction/DeductionForm";
+import LoanTypeList from "./pages/payroll/Loan/LoanType/LoanTypeList";
+import LoanTypeForm from "./pages/payroll/Loan/LoanType/LoanTypeForm";
 
 function App() {
   return (
@@ -152,6 +154,10 @@ function App() {
                 path="/company/deduction/form/:id"
                 element={<DeductionForm />}
               />
+
+              {/* Loan  */}
+              <Route path="/company/loan/type" element={<LoanTypeList />} />
+              <Route path="/company/loan/type/:id" element={<LoanTypeForm />} />
             </Route>
           </Route>
         </Route>

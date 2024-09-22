@@ -12,9 +12,9 @@ import {
   useGetTypeListQuery,
   useUpdateGradeMutation,
   useUpdateLeaveTypeMutation,
-} from "../../../features/api";
+} from "../../../../features/api";
 
-import FormSkeleton from "../../../skeletons/FormSkeleton";
+import FormSkeleton from "../../../../skeletons/FormSkeleton";
 
 const LeaveTypeSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -22,7 +22,7 @@ const LeaveTypeSchema = Yup.object().shape({
   overtime_rate: Yup.number().required("Over Time is required"),
 });
 
-const GradeForm = ({ onClose }) => {
+const LoanTypeForm = ({ onClose }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: companyId } = useGetCompanyIdQuery();
@@ -209,4 +209,4 @@ const GradeForm = ({ onClose }) => {
   );
 };
 
-export default GradeForm;
+export default LoanTypeForm;
