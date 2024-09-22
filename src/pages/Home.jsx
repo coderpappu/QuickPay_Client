@@ -10,7 +10,10 @@ const Home = () => {
   const { data: employeeData } = useGetUserQuery();
 
   useEffect(() => {
-    setCompanyId(employeeData?.data?.company_id);
+    const storedCompanyId = localStorage.getItem("companyId");
+    if (storedCompanyId) {
+      setCompanyId(storedCompanyId);
+    }
   }, [setCompanyId]);
 
   return (
