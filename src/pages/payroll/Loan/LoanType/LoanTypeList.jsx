@@ -17,9 +17,8 @@ import ConfirmDialog from "../../../../helpers/ConfirmDialog";
 import ListSkeleton from "../../../../skeletons/ListSkeleton";
 import ErrorMessage from "../../../../utils/ErrorMessage";
 
-import GradeForm from "./LoanTypeForm";
-
 import { useGetLoanTypeListQuery } from "../../../../features/api";
+import LoanTypeForm from "./LoanTypeForm";
 
 const LoanTypeList = () => {
   const navigate = useNavigate();
@@ -145,7 +144,7 @@ const LoanTypeList = () => {
               onClick={() => setIsPopupOpen(true)}
               className="px-5 py-2 rounded-[3px] text-white bg-[#3686FF] transition hover:bg-[#7f39f0]"
             >
-              Add Leave Type
+              Add Loan Type
             </Link>
           </div>
         </div>
@@ -175,7 +174,7 @@ const LoanTypeList = () => {
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <div className="flex justify-between items-center pb-3 border-b border-gray-200">
-              <h3 className="text-lg font-medium text-gray-800">Leave Type</h3>
+              <h3 className="text-lg font-medium text-gray-800">Loan Type</h3>
               <button
                 className="text-gray-500 hover:text-gray-800"
                 onClick={() => setIsPopupOpen(false)} // Close popup
@@ -184,7 +183,7 @@ const LoanTypeList = () => {
               </button>
             </div>
             <div className="mt-4">
-              <GradeForm onClose={onClose} />
+              <LoanTypeForm onClose={onClose} />
             </div>
           </div>
         </div>

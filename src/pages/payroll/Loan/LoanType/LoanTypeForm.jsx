@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import {
   useCreateGradeMutation,
   useCreateLeaveTypeMutation,
+  useCreateLoanTypeMutation,
   useGetCompanyIdQuery,
   useGetGradeDetailsQuery,
   useGetLeaveTypeDetailsQuery,
@@ -16,17 +17,17 @@ import {
 
 import FormSkeleton from "../../../../skeletons/FormSkeleton";
 
-const LeaveTypeSchema = Yup.object().shape({
+const loanTypeSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
-  basic_salary: Yup.number().required("Basic Salary is required"),
-  overtime_rate: Yup.number().required("Over Time is required"),
+  interestRate: Yup.number().required("Interest rate is required"),
+  maxLoanAmount: Yup.number().required("Max Amount is required"),
 });
 
 const LoanTypeForm = ({ onClose }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: companyId } = useGetCompanyIdQuery();
-  const [createGrade] = useCreateGradeMutation();
+  const [createLoanType] = useCreateLoanTypeMutation();
   const [updateGrade] = useUpdateGradeMutation();
 
   const {
@@ -74,28 +75,28 @@ const LoanTypeForm = ({ onClose }) => {
           &#x2715;
         </button>
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          {id ? "Edit Grade" : "Add Grade"}
+          {id ? "Edit Loan Type" : "Add Loan Type "}
         </h2>
         <Formik
           enableReinitialize
           initialValues={initialValues}
-          validationSchema={LeaveTypeSchema}
+          validationSchema={loanTypeSchema}
           onSubmit={async (values, { setSubmitting }) => {
-            const { name, basic_salary, overtime_rate } = values;
+            const { name, interestRate, maxLoanAmount } = values;
 
             try {
               if (!id) {
-                await createGrade({
+                await createLoanType({
                   name,
-                  basic_salary,
-                  overtime_rate,
-                  company_id: companyId,
+                  interestRate,
+                  maxLoanAmount,
+                  companyId,
                 }).then((res) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Grade added successfully");
-                    navigate("/company/grade");
+                    toast.success("Loan added successfully");
+                    navigate("/company/loan/type");
                     onClose();
                   }
                 });
@@ -147,19 +148,19 @@ const LoanTypeForm = ({ onClose }) => {
 
               <div className="mb-4">
                 <label
-                  htmlFor="basic_salary"
+                  htmlFor="interestRate"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Basic Salary
+                  Interest Rate
                 </label>
                 <Field
                   type="number"
-                  name="basic_salary"
-                  id="basic_salary"
+                  name="interestRate"
+                  id="interestRate"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
                 />
                 <ErrorMessage
-                  name="basic_salary"
+                  name="interestRate"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
@@ -167,19 +168,19 @@ const LoanTypeForm = ({ onClose }) => {
 
               <div className="mb-4">
                 <label
-                  htmlFor="overtime_rate"
+                  htmlFor="maxLoanAmount"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Over Time Rate
+                  Max Amount
                 </label>
                 <Field
                   type="number"
-                  name="overtime_rate"
-                  id="overtime_rate"
+                  name="maxLoanAmount"
+                  id="maxLoanAmount"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
                 />
                 <ErrorMessage
-                  name="overtime_rate"
+                  name="maxLoanAmount"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
