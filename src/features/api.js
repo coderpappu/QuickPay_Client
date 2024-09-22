@@ -762,12 +762,12 @@ export const apiSlice = createApi({
     }),
 
     updateLoanType: builder.mutation({
-      query: ({ id, ...credentials }) => ({
-        url: `/loan/type/update/${id}`,
+      query: (credentials) => ({
+        url: `/loan/type/update`,
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["allowance"],
+      invalidatesTags: ["loanType"],
     }),
 
     deleteLoanType: builder.mutation({

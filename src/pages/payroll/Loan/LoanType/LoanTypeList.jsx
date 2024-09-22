@@ -25,9 +25,16 @@ const LoanTypeList = () => {
   const navigate = useNavigate();
 
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
+  const [editLoanId, setEditLoanId] = useState(undefined);
 
   const onClose = () => {
     setIsPopupOpen(false);
+    setEditLoanId(undefined);
+  };
+
+  const handleLoantypeid = (id) => {
+    setEditLoanId(id);
+    setIsPopupOpen(true);
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
@@ -108,11 +115,12 @@ const LoanTypeList = () => {
             </td>
 
             <td className="py-2 text-sm">
-              <Link to={`/company/loan/type/${loanType?.id}`}>
-                <div className="grid place-items-center">
-                  <TbEdit className="text-2xl text-[#3686FF]" />
-                </div>
-              </Link>
+              <div
+                className="grid place-items-center cursor-pointer"
+                onClick={() => handleLoantypeid(loanType?.id)}
+              >
+                <TbEdit className="text-2xl text-[#3686FF]" />
+              </div>
             </td>
             <td
               className="py-2 text-sm"
@@ -184,7 +192,7 @@ const LoanTypeList = () => {
               </button>
             </div>
             <div className="mt-4">
-              <LoanTypeForm onClose={onClose} />
+              <LoanTypeForm onClose={onClose} loanTypeId={editLoanId} />
             </div>
           </div>
         </div>

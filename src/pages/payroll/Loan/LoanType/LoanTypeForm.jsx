@@ -10,9 +10,11 @@ import {
   useGetCompanyIdQuery,
   useGetGradeDetailsQuery,
   useGetLeaveTypeDetailsQuery,
+  useGetLoanDetailsQuery,
   useGetTypeListQuery,
   useUpdateGradeMutation,
   useUpdateLeaveTypeMutation,
+  useUpdateLoanTypeMutation,
 } from "../../../../features/api";
 
 import FormSkeleton from "../../../../skeletons/FormSkeleton";
@@ -23,12 +25,12 @@ const loanTypeSchema = Yup.object().shape({
   maxLoanAmount: Yup.number().required("Max Amount is required"),
 });
 
-const LoanTypeForm = ({ onClose }) => {
+const LoanTypeForm = ({ onClose, loanTypeId }) => {
   const navigate = useNavigate();
-  const { id } = useParams();
+
   const { data: companyId } = useGetCompanyIdQuery();
   const [createLoanType] = useCreateLoanTypeMutation();
-  const [updateGrade] = useUpdateGradeMutation();
+  const [updateLoanType] = useUpdateLoanTypeMutation();
 
   const {
     data: types,
@@ -40,22 +42,22 @@ const LoanTypeForm = ({ onClose }) => {
 
   const [initialValues, setInitialValues] = useState({
     name: "",
-    basic_salary: "",
-    overtime_rate: "",
+    interestRate: "",
+    maxLoanAmount: "",
   });
 
-  const { data: gradeDetails, isLoading: isWeekendLoading } =
-    useGetGradeDetailsQuery(id, { skip: !id });
+  const { data: loanTypeDetails, isLoading: isWeekendLoading } =
+    useGetLoanDetailsQuery(loanTypeId);
 
   useEffect(() => {
-    if (gradeDetails?.data) {
+    if (loanTypeDetails?.data) {
       setInitialValues({
-        name: gradeDetails?.data?.name,
-        basic_salary: gradeDetails?.data?.basic_salary,
-        overtime_rate: gradeDetails?.data?.overtime_rate,
+        name: loanTypeDetails?.data?.name,
+        interestRate: loanTypeDetails?.data?.interestRate,
+        maxLoanAmount: loanTypeDetails?.data?.maxLoanAmount,
       });
     }
-  }, [gradeDetails]);
+  }, [loanTypeDetails]);
 
   if (companyId == null) {
     navigate("/");
@@ -75,7 +77,7 @@ const LoanTypeForm = ({ onClose }) => {
           &#x2715;
         </button>
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          {id ? "Edit Loan Type" : "Add Loan Type "}
+          {loanTypeId ? "Edit Loan Type" : "Add Loan Type "}
         </h2>
         <Formik
           enableReinitialize
@@ -85,7 +87,7 @@ const LoanTypeForm = ({ onClose }) => {
             const { name, interestRate, maxLoanAmount } = values;
 
             try {
-              if (!id) {
+              if (!loanTypeId) {
                 await createLoanType({
                   name,
                   interestRate,
@@ -101,18 +103,18 @@ const LoanTypeForm = ({ onClose }) => {
                   }
                 });
               } else {
-                await updateGrade({
-                  id,
+                await updateLoanType({
+                  id: loanTypeId,
                   name,
-                  basic_salary,
-                  overtime_rate,
-                  company_id: companyId,
+                  interestRate,
+                  maxLoanAmount,
+                  companyId,
                 }).then((res) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Grade updated successfully");
-                    navigate("/company/grade");
+                    toast.success("Loan type updated successfully");
+                    navigate("/company/loan/type");
                     onClose();
                   }
                 });
@@ -199,7 +201,7 @@ const LoanTypeForm = ({ onClose }) => {
                   disabled={isSubmitting}
                   className="px-4 py-2 bg-[#3686FF] rounded-md text-sm font-medium text-white hover:bg-[#5A21B3]"
                 >
-                  {id ? "Update" : "Add"}
+                  {loanTypeId ? "Update" : "Add"}
                 </button>
               </div>
             </Form>
