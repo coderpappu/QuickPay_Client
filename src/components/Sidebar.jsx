@@ -4,14 +4,29 @@ import { IoIosArrowForward } from "react-icons/io";
 import Logo from "../components/Logo";
 import { useGetCompanyIdQuery, useGetUserQuery } from "../features/api";
 import { PiDotDuotone } from "react-icons/pi";
+import { LuListTodo } from "react-icons/lu";
+import { Link } from "react-router-dom";
+
 const Sidebar = () => {
   const { data: companyId } = useGetCompanyIdQuery();
   const { data } = useGetUserQuery();
   const [activeMenu, setActiveMenu] = useState(null);
   const [activeSubMenu, setActiveSubMenu] = useState(null);
 
-  // Example array with nested submenus
+  // Example array with both single-level and nested submenus
   const menuItems = [
+    {
+      title: "Manage Company",
+      icon: <LuListTodo size={20} />,
+      link: "/",
+    },
+
+    {
+      title: "Dashboard",
+      icon: <AiOutlineProduct size={20} />,
+      subMenu: [{ title: "Admin Dashboard", link: "/" }],
+    },
+
     {
       title: "Products",
       icon: <AiOutlineProduct size={20} />,
@@ -40,7 +55,6 @@ const Sidebar = () => {
         },
       ],
     },
-    // Add more menus as needed
   ];
 
   const handleMenuClick = (index) => {
@@ -56,16 +70,16 @@ const Sidebar = () => {
   const renderSubMenu = (subMenus) => {
     return (
       <ul className="pl-5 mt-2 space-y-2">
-        {subMenus.map((sub, subIndex) => (
+        {subMenus?.map((sub, subIndex) => (
           <li key={subIndex}>
             {sub.subMenu ? (
               <>
                 {/* Handle nested submenu */}
                 <button
                   onClick={() => handleSubMenuClick(subIndex)}
-                  className="w-full flex justify-between items-center pl-3 pr-4 py-2 "
+                  className="w-full flex justify-between items-center pl-3 pr-4 py-2"
                 >
-                  <div className="flex flex-wrap justify-start items-center gap-1">
+                  <div className="flex items-center gap-1">
                     <PiDotDuotone color="#3686FF" size={20} />
                     <span>{sub.title}</span>
                   </div>
@@ -77,17 +91,14 @@ const Sidebar = () => {
                 {activeSubMenu === subIndex && renderSubMenu(sub.subMenu)}
               </>
             ) : (
-              <div
-                className="flex flex-wrap justify-normal items-center
-               pl-4"
-              >
+              <div className="flex items-center pl-4">
                 <PiDotDuotone color="#3686FF" size={20} />
-                <a
-                  href={sub.link}
-                  className="block  pr-4 py-2 hover:text-white"
+                <Link
+                  to={sub.link}
+                  className="block pr-4 py-2 hover:text-white"
                 >
-                  <h3> {sub.title}</h3>
-                </a>
+                  <span>{sub.title}</span>
+                </Link>
               </div>
             )}
           </li>
@@ -104,26 +115,42 @@ const Sidebar = () => {
         </div>
         <ul className="mt-4">
           {menuItems.map((menu, menuIndex) => (
-            <li
-              key={menuIndex}
-              className={`group ${activeMenu === menuIndex ? "" : ""}`}
-            >
-              <button
-                onClick={() => handleMenuClick(menuIndex)}
-                className={`w-full py-3 mb-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex flex-wrap items-center justify-between ${
-                  activeMenu === "dashboard" && `bg-[#3686FF] text-white`
-                }`}
-              >
-                <span className="flex items-center">
-                  {menu.icon}
-                  <span className="ml-2">{menu.title}</span>
-                </span>
-                <IoIosArrowForward
-                  className={`${activeMenu === menuIndex ? "rotate-90" : ""} transition-transform`}
-                />
-              </button>
+            <li key={menuIndex}>
+              {menu.subMenu ? (
+                // Handle nested menus
+                <button
+                  onClick={() => handleMenuClick(menuIndex)}
+                  className={`w-full py-3 mb-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex items-center justify-between ${
+                    activeMenu === menuIndex && "bg-[#3686FF] text-white"
+                  }`}
+                >
+                  <span className="flex items-center">
+                    {menu.icon}
+                    <span className="ml-2">{menu.title}</span>
+                  </span>
+                  <IoIosArrowForward
+                    className={`${activeMenu === menuIndex ? "rotate-90" : ""} transition-transform`}
+                  />
+                </button>
+              ) : (
+                // Handle single-level menus
+                <Link
+                  to={menu.link}
+                  className={` w-full py-3 mb-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex items-center ${
+                    activeMenu === menuIndex && "bg-[#3686FF] text-white"
+                  }`}
+                >
+                  <span className="flex items-center">
+                    {menu.icon}
+                    <span className="ml-2">{menu.title}</span>
+                  </span>
+                </Link>
+              )}
 
-              {activeMenu === menuIndex && renderSubMenu(menu.subMenu)}
+              {/* Render submenu if active */}
+              {activeMenu === menuIndex &&
+                menu.subMenu &&
+                renderSubMenu(menu.subMenu)}
             </li>
           ))}
         </ul>
