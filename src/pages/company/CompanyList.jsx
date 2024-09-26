@@ -101,16 +101,24 @@ const CompanyList = () => {
       {companies?.map((company, index) => (
         <tr
           key={company.id}
-          className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
+          className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm "}
         >
-          <td className="py-2 text-sm text-center">{index + 1}</td>
-          <td className="py-2 text-sm font-semibold pl-10">
+          <td className="py-2 text-sm text-center  dark:text-dark-text-color">
+            {index + 1}
+          </td>
+          <td className="py-2 text-sm font-semibold pl-10 dark:text-dark-text-color">
             {company.company_name}
           </td>
-          <td className="py-2 text-sm ">{company.email}</td>
-          <td className="py-2 text-sm ">{company.website_url}</td>
-          <td className="py-2 text-sm ">{company.country}</td>
-          <td className="py-2 text-sm text-center">
+          <td className="py-2 text-sm  dark:text-dark-text-color">
+            {company.email}
+          </td>
+          <td className="py-2 text-sm  dark:text-dark-text-color">
+            {company.website_url}
+          </td>
+          <td className="py-2 text-sm  dark:text-dark-text-color">
+            {company.country}
+          </td>
+          <td className="py-2 text-sm text-center dark:text-dark-text-color">
             {company.id === companyId ? (
               <button
                 className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-3 rounded text-sm w-28"
@@ -127,14 +135,14 @@ const CompanyList = () => {
               </button>
             )}
           </td>
-          <td className="py-2 text-sm text-center">
+          <td className="py-2 text-sm text-center dark:text-dark-text-color">
             <Link to={`/company/details/${company.id}`}>
               <div className="grid place-items-center">
                 <LuEye className="text-2xl text-green-500" />
               </div>
             </Link>
           </td>
-          <td className="py-2 text-sm">
+          <td className="py-2 text-sm dark:text-dark-text-color">
             <Link to={`/company/update/${company.id}`}>
               <div className="grid place-items-center">
                 <TbEdit className="text-2xl text-[#3686FF]" />
@@ -157,19 +165,21 @@ const CompanyList = () => {
     <div>
       <div className="flex flex-wrap justify-between items-center pb-2">
         <div>
-          <h2 className="font-semibold text-lg pb-2">Company</h2>
+          <h2 className="font-semibold text-lg pb-2 text-dark-heading-color">
+            Company
+          </h2>
         </div>
       </div>
 
-      <div className="border-solid border-[1px] border-slate-200 bg-[#fff] rounded-md p-5 w-full h-auto">
+      <div className="border-solid border-[1px] border-slate-200 bg-[#fff] dark:bg-dark-card dark:border-opacity-10 dark:border-dark-border-color rounded-md p-5 w-full h-auto">
         <div className="flex flex-wrap justify-between mb-12">
-          <div className="font-medium text-base">
+          <div className="font-medium text-base text-dark-border-color	">
             {(companies && companies?.length) || 0} Company Available for Now
           </div>
           <div>
             <Link
               to="/company/create"
-              className="px-5 py-2 rounded-[3px] text-white bg-[#3686FF] transition hover:bg-[#7f39f0]"
+              className="px-5 py-2 rounded-[3px] text-white bg-button-bg hover:bg-button-bg-hover transition "
             >
               Add Company
             </Link>
@@ -179,17 +189,17 @@ const CompanyList = () => {
         <div>
           <table className="w-full h-auto">
             {!isError && (
-              <thead className="border-b border-slate-200 text-left">
-                <tr>
-                  <th className="pb-2 text-base text-center">SL</th>
-                  <th className="pb-2 text-base pl-10">Company Name</th>
-                  <th className="pb-2 text-base ">Email</th>
-                  <th className="pb-2 text-base ">Website</th>
-                  <th className="pb-2 text-base ">Location </th>
-                  <th className="pb-2 text-base text-center">Status</th>
-                  <th className="pb-2 text-base text-center">View</th>
-                  <th className="pb-2 text-base text-center">Update</th>
-                  <th className="pb-2 text-base text-center">Delete</th>
+              <thead className="border-b border-slate-200 dark:border-opacity-10 dark:border-dark-border-color text-left">
+                <tr className="dark:text-white ">
+                  <th className="pb-2 text-[14px] text-center">SL</th>
+                  <th className="pb-2 text-[14px] pl-10">Company Name</th>
+                  <th className="pb-2 text-[14px] ">Email</th>
+                  <th className="pb-2 text-[14px] ">Website</th>
+                  <th className="pb-2 text-[14px] ">Location </th>
+                  <th className="pb-2 text-[14px] text-center">Status</th>
+                  <th className="pb-2 text-[14px] text-center">View</th>
+                  <th className="pb-2 text-[14px] text-center">Update</th>
+                  <th className="pb-2 text-[14px] text-center">Delete</th>
                 </tr>
               </thead>
             )}

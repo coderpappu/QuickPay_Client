@@ -199,7 +199,7 @@ const CompanyPofile = () => {
   }
   return (
     <div>
-      <h2> Company / Profile</h2>
+      <h2 className="dark:text-dark-text-color"> Company / Profile</h2>
       {content}
     </div>
   );

@@ -17,7 +17,7 @@ const Layout = () => {
       className={`bg-[#EBEFF2] w-full dark:bg-dark-bg ${darkMode && "dark"} lg:wrapper-container xl:w-full flex flex-wrap justify-between`}
     >
       {/* sidebar  */}
-      <div className="2xl:w-[15%] xl:w-[20%] lg:w-[20%] fixed h-screen bg-[#0E1A34]">
+      <div className="2xl:w-[15%] xl:w-[20%] lg:w-[20%] fixed h-screen bg-[#0E1A34] ">
         <Sidebar />
       </div>
 
