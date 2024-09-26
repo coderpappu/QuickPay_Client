@@ -17,6 +17,11 @@ const config = {
       animation: {
         "fade-in": "fadeIn 0.3s ease-out",
       },
+      colors: {
+        "dark-bg": "#0F172A",
+        "dark-card": "#1E293B",
+        "dark-box": "#293548",
+      },
     },
   },
 
