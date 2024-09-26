@@ -21,6 +21,8 @@ const config = {
         "dark-bg": "#0F172A",
         "dark-card": "#1E293B",
         "dark-box": "#293548",
+        "dark-text-color": "#c4c7ce",
+        "dark-heading-color": "rgb(56 189 248)",
       },
     },
   },

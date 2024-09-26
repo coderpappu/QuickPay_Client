@@ -4,6 +4,7 @@ import { IoChatbubbleOutline } from "react-icons/io5";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import ProfilePalceholderImg from "../assets/profile-placeholder.png";
+import ManProfile from "../assets/man-placeholder.jpg";
 import { useGetUserQuery } from "../features/api";
 import { CiDark } from "react-icons/ci";
 import { CiLight } from "react-icons/ci";
@@ -72,7 +73,7 @@ const Header = ({ darkModeHandler, darkMode }) => {
 
             <div className="flex flex-wrap items-center ">
               <img
-                src={userData?.data?.file || ProfilePalceholderImg}
+                src={userData?.data?.file || ManProfile}
                 alt="Avatar "
                 className="w-[40px] h-[40px] rounded-full border border-[#0E1A34]"
               />

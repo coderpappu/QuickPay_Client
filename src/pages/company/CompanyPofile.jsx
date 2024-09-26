@@ -16,7 +16,7 @@ import { BsFileEarmarkPostFill } from "react-icons/bs";
 import { IoIosTimer } from "react-icons/io";
 import { IoLanguageOutline } from "react-icons/io5";
 import { IoAlertCircleOutline } from "react-icons/io5";
-
+import CompanyProfileImg from "../../assets/company-profile.jpg";
 const CompanyPofile = () => {
   const { id } = useParams();
   const [selected, setSelected] = useState("1");
@@ -62,40 +62,41 @@ const CompanyPofile = () => {
     content = (
       <>
         {/* first Header section  */}
-        <div className="w-full p-5 mx-5 mt-5 mb-2 rounded-md bg-white flex flex-wrap justify-between ">
+        <div className="w-full p-5 mx-5 mt-5 mb-2 rounded-md bg-white dark:bg-dark-card flex flex-wrap justify-between ">
           <div className="flex flex-wrap justify-between  w-full">
             {" "}
             <div className="w-[15%] mr-4">
+              {/* company logic change only for this time  */}
               <img
-                src={logo ? logo : ProfileImg}
+                src={!logo ? logo : CompanyProfileImg}
                 alt="profile pic"
                 className="w-[120px] h-[120px] rounded-full"
               />
             </div>
             <div className="w-[78%]">
-              <h1 className="font-poppins text-2xl font-semibold">
+              <h1 className="font-poppins text-2xl font-semibold  dark:text-dark-heading-color">
                 {company_name}
               </h1>
-              <h3 className="text-[15px] font-medium mt-1 text-[#686767]">
+              <h3 className="text-[15px] font-medium mt-1 text-[#686767] dark:text-dark-text-color ">
                 {address}
               </h3>
-              <h3 className="text-[15px] font-medium  text-[#686767]">
+              <h3 className="text-[15px] font-medium  text-[#686767] dark:text-dark-text-color ">
                 {city + ", " + country}
               </h3>
-              <h3 className="text-[15px] font-medium  text-[#686767]">
+              <h3 className="text-[15px] font-medium  text-[#686767] dark:text-dark-text-color">
                 {`Website : ${website_url}`}
               </h3>
             </div>
-            <div className="w-[40px] cursor-pointer  h-[40px] flex flex-col justify-center align-middle items-center rounded-full bg-[#85858512] mr-2">
+            <div className="w-[40px] cursor-pointer  h-[40px] flex flex-col justify-center align-middle items-center rounded-full bg-[#85858512] dark:bg-dark-box mr-2">
               <Link to={`/company/update/${id}`}>
-                <FiEdit />
+                <FiEdit className="dark:text-dark-text-color" />
               </Link>
             </div>
           </div>
         </div>
 
         {/* toogle button for section toggle  */}
-        <div className="w-full mx-5 rounded-md bg-white flex flex-wrap  ">
+        <div className="w-full mx-5 rounded-md bg-white  dark:bg-dark-card flex flex-wrap  ">
           <Button
             buttonid="1"
             isActive={selected == "1"}
@@ -122,54 +123,66 @@ const CompanyPofile = () => {
           />
         </div>
 
-        <div className="w-full p-5 mx-5 mt-5 mb-2 rounded-md bg-white flex flex-wrap justify-between ">
+        <div className="w-full p-5 mx-5 mt-5 mb-2 rounded-md bg-white  dark:bg-dark-card flex flex-wrap justify-between ">
           {/* Profile Section  */}
           {selected == "1" ? (
             <>
               <div className="w-[50%]">
-                <h1 className="font-semibold mb-2">Basic Information</h1>
+                <h1 className="font-semibold mb-2 dark:text-dark-heading-color">
+                  Basic Information
+                </h1>
 
                 <ProfileSection
                   id={data.data.id}
-                  icon={<CiMail />}
+                  icon={<CiMail className="dark:text-dark-text-color" />}
                   title={email}
                 />
                 <ProfileSection
                   id={data.data.id}
-                  icon={<BsTelephone />}
+                  icon={<BsTelephone className="dark:text-dark-text-color" />}
                   title={phone_number}
                 />
                 <ProfileSection
                   id={data.data.id}
-                  icon={<PiAddressBookThin />}
+                  icon={
+                    <PiAddressBookThin className="dark:text-dark-text-color" />
+                  }
                   title={address}
                 />
                 <ProfileSection
                   id={data.data.id}
-                  icon={<IoLocationOutline />}
+                  icon={
+                    <IoLocationOutline className="dark:text-dark-text-color" />
+                  }
                   title={`Created on ${formattedDate}`}
                 />
               </div>
               <div className="w-[50%] border-l pl-3 ">
-                <h1 className="font-semibold mb-2">Company Settings & Info</h1>
+                <h1 className="font-semibold mb-2 dark:text-dark-heading-color">
+                  Company Settings & Info
+                </h1>
                 <ProfileSection
                   id={data.data.id}
-                  icon={<BsFileEarmarkPostFill />}
+                  icon={
+                    <BsFileEarmarkPostFill className="dark:text-dark-text-color" />
+                  }
                   title={`Post Code : ${postal_code}`}
                 />
                 <ProfileSection
                   id={data.data.id}
-                  icon={<IoIosTimer />}
+                  icon={<IoIosTimer className="dark:text-dark-text-color" />}
                   title={timezone}
                 />
                 <ProfileSection
                   id={data.data.id}
-                  icon={<LiaFaxSolid />}
+                  icon={<LiaFaxSolid className="dark:text-dark-text-color" />}
                   title={fax}
                 />
                 <ProfileSection
                   id={data.data.id}
-                  icon={<IoLanguageOutline />}
+                  icon={
+                    <IoLanguageOutline className="dark:text-dark-text-color" />
+                  }
                   title={language}
                 />
               </div>

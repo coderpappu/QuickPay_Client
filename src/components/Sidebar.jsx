@@ -64,7 +64,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[#0E1A34] shadow-inner text-white w-64 xl:w-64 2xl:w-[284px] flex-shrink-0">
+    <div className="flex flex-col  shadow-inner text-white w-64 xl:w-64 2xl:w-[284px] flex-shrink-0">
       <div className="lg:px-4 xl:px-4 font-poppins text-[15px] text-[#d5d5d5]">
         <div className="py-6">
           <Logo />
