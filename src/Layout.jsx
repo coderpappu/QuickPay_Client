@@ -3,14 +3,23 @@ import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import { useState } from "react";
 import Footer from "./components/Footer";
-
+import { useEffect } from "react";
 const Layout = () => {
   const [darkMode, setDarkMode] = useState(false);
 
+  // Load dark mode state from localStorage on mount
+  useEffect(() => {
+    const savedDarkMode = localStorage.getItem("darkMode");
+    if (savedDarkMode !== null) {
+      setDarkMode(JSON.parse(savedDarkMode));
+    }
+  }, []);
+
   const darkModeHandler = () => {
     setDarkMode(!darkMode);
+    // Save dark mode state to localStorage
+    localStorage.setItem("darkMode", JSON.stringify(!darkMode));
   };
-
   return (
     // main container
     <div
