@@ -4,10 +4,10 @@ import { FcBriefcase } from "react-icons/fc";
 import { FcNightLandscape, FcVoicePresentation } from "react-icons/fc";
 import StatusCard from "../../components/dashboard/StatusCard";
 import {
-    useGetAttendancesQuery,
-    useGetCompanyIdQuery,
-    useGetEmployeesQuery,
-    useGetShiftListQuery,
+  useGetAttendancesQuery,
+  useGetCompanyIdQuery,
+  useGetEmployeesQuery,
+  useGetShiftListQuery,
 } from "../../features/api";
 import DatePicker from "../../utils/DatePicker";
 
