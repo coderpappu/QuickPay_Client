@@ -18,14 +18,16 @@ const Home = () => {
 
   return (
     <div className="">
-      <h1 className="text-6xl text-[#3686FF] font-bold text-center">
+      <h1 className="text-6xl text-dark-heading-color font-bold text-center">
         QuickPay
       </h1>
 
       {!employeeData?.data && <PopUp />}
 
       <div className="mb-2">
-        <h4 className="text-xl font-bold ">Welcome to QuickPay</h4>
+        <h4 className="text-xl font-bold text-dark-heading-color">
+          Welcome to QuickPay
+        </h4>
       </div>
 
       <div className="flex flex-wrap items-center justify-start">
