@@ -32,6 +32,7 @@ const config = {
       addUtilities(newUtilities, ["responsive", "hover"]);
     },
   ],
+  darkMode: "selector",
 };
 
 export default keepTheme(config);
