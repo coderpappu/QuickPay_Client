@@ -6,56 +6,12 @@ import { useGetCompanyIdQuery, useGetUserQuery } from "../features/api";
 import { PiDotDuotone } from "react-icons/pi";
 import { LuListTodo } from "react-icons/lu";
 import { Link } from "react-router-dom";
-
+import { adminMenuItems } from "../utils/adminMenuList";
 const Sidebar = () => {
   const { data: companyId } = useGetCompanyIdQuery();
   const { data } = useGetUserQuery();
   const [activeMenu, setActiveMenu] = useState(null);
   const [activeSubMenu, setActiveSubMenu] = useState(null);
-
-  // Example array with both single-level and nested submenus
-  const menuItems = [
-    {
-      title: "Manage Company",
-      icon: <LuListTodo size={20} />,
-      link: "/",
-    },
-
-    {
-      title: "Dashboard",
-      icon: <AiOutlineProduct size={20} />,
-      subMenu: [{ title: "Admin Dashboard", link: "/" }],
-    },
-
-    {
-      title: "Products",
-      icon: <AiOutlineProduct size={20} />,
-      subMenu: [
-        { title: "Add Product", link: "/add-product" },
-        { title: "Manage Products", link: "/manage-products" },
-      ],
-    },
-    {
-      title: "Settings",
-      icon: <AiOutlineSetting size={20} />,
-      subMenu: [
-        {
-          title: "General Settings",
-          subMenu: [
-            { title: "Profile Settings", link: "/profile-settings" },
-            { title: "Account Settings", link: "/account-settings" },
-          ],
-        },
-        {
-          title: "Security Settings",
-          subMenu: [
-            { title: "Password", link: "/password-settings" },
-            { title: "Two-Factor Auth", link: "/2fa-settings" },
-          ],
-        },
-      ],
-    },
-  ];
 
   const handleMenuClick = (index) => {
     setActiveMenu((prev) => (prev === index ? null : index));
@@ -114,7 +70,7 @@ const Sidebar = () => {
           <Logo />
         </div>
         <ul className="mt-4">
-          {menuItems.map((menu, menuIndex) => (
+          {adminMenuItems.map((menu, menuIndex) => (
             <li key={menuIndex}>
               {menu.subMenu ? (
                 // Handle nested menus

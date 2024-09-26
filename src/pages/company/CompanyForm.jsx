@@ -6,9 +6,9 @@ import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
-    useCreateNewCompanyMutation,
-    useGetCompanyDetailsQuery,
-    useUpdateCompanyMutation,
+  useCreateNewCompanyMutation,
+  useGetCompanyDetailsQuery,
+  useUpdateCompanyMutation,
 } from "../../features/api";
 import UploadForm from "../../helpers/UploadForm";
 import FormSkeleton from "../../skeletons/FormSkeleton";
