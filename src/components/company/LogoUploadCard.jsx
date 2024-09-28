@@ -1,6 +1,6 @@
 import React from "react";
 
-const LogoUploadCard = ({ handleFileChange, selectedFile, LogoImg }) => {
+const LogoUploadCard = ({ handleFileChange, selectedFile, LogoImg, name }) => {
   return (
     <div className="w-[30%] h-auto dark:bg-dark-box rounded-md py-2">
       <div className="border-b border-dark-card dark:border-opacity-35 dark:text-dark-text-color px-4 py-4">
@@ -11,13 +11,13 @@ const LogoUploadCard = ({ handleFileChange, selectedFile, LogoImg }) => {
         <img
           src={selectedFile ? URL.createObjectURL(selectedFile) : LogoImg}
           alt="Quick Pay Logo"
-          className="w-[150px]"
+          className="w-[80px] "
         />
       </div>
 
       <div className=" px-5 py-3">
         <label
-          htmlFor="logo-upload"
+          htmlFor={name}
           className="bg-button-bg text-[10px] px-3 py-2 rounded-lg text-white"
         >
           Choose file here
@@ -25,7 +25,7 @@ const LogoUploadCard = ({ handleFileChange, selectedFile, LogoImg }) => {
         <input
           type="file"
           name="jk"
-          id="logo-upload"
+          id={name}
           accept="image/*"
           onChange={handleFileChange}
           className="bg-button-bg"

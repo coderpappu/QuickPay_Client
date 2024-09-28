@@ -8,11 +8,23 @@ import LogoImg from "../../assets/quickPayLogo.png";
 import LogoUploadCard from "../../components/company/LogoUploadCard";
 const SystemSettings = () => {
   const [activeSetting, setActiveSetting] = useState(1);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState({
+    file1: null,
+    file2: null,
+    file3: null,
+  });
   const handleActiveSettingId = (id) => {
     setActiveSetting(id);
   };
 
+  // Handler for file changes, updating the object state
+  const handleFileChange = (event, fileKey) => {
+    console.log(fileKey);
+    setSelectedFiles((prevState) => ({
+      ...prevState,
+      [fileKey]: event.target.files[0],
+    }));
+  };
   const systemMenuList = [
     {
       title: "Brand Settings",
@@ -68,9 +80,7 @@ const SystemSettings = () => {
     },
   ];
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
+  console.log(selectedFiles);
   return (
     <div>
       {/* heading  */}
@@ -106,19 +116,22 @@ const SystemSettings = () => {
             {/* card content  */}
             <div className="px-6 py-3 flex justify-between ">
               <LogoUploadCard
-                handleFileChange={handleFileChange}
-                selectedFile={selectedFile}
+                handleFileChange={(event) => handleFileChange(event, "file1")}
+                selectedFile={selectedFiles.file1}
                 LogoImg={LogoImg}
+                name="file1"
               />
               <LogoUploadCard
-                handleFileChange={handleFileChange}
-                selectedFile={selectedFile}
+                handleFileChange={(event) => handleFileChange(event, "file2")}
+                selectedFile={selectedFiles.file2}
                 LogoImg={LogoImg}
+                name="file2"
               />
               <LogoUploadCard
-                handleFileChange={handleFileChange}
-                selectedFile={selectedFile}
+                handleFileChange={(event) => handleFileChange(event, "file3")}
+                selectedFile={selectedFiles.file3}
                 LogoImg={LogoImg}
+                name="file3"
               />
             </div>
 
