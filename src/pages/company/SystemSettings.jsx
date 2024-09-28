@@ -1,12 +1,7 @@
 import React from "react";
 import BoardMenuButton from "../../components/company/BoardMenuButton";
 import { useState } from "react";
-import SettingCardHeader from "../../components/company/SettingCardHeader";
-import SettingCardFooter from "../../components/company/SettingCardFooter";
 
-import LogoImg from "../../assets/quickPayLogo.png";
-import LogoUploadCard from "../../components/company/LogoUploadCard";
-import BrandText from "../../components/company/BrandText";
 import BrandCard from "../../components/company/BrandCard";
 const SystemSettings = () => {
   const [activeSetting, setActiveSetting] = useState(1);
