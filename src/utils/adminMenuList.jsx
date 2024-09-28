@@ -112,11 +112,8 @@ const adminMenuItems = [
     icon: <AiOutlineSetting size={20} />,
     subMenu: [
       {
-        title: "General Settings",
-        subMenu: [
-          { title: "Profile Settings", link: "/profile-settings" },
-          { title: "Account Settings", link: "/account-settings" },
-        ],
+        title: "System Settings",
+        link: "/systemsettings",
       },
       {
         title: "Security Settings",

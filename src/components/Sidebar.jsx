@@ -100,7 +100,6 @@ const Sidebar = () => {
                     {menu.icon}
                     <span className="ml-2">{menu.title}</span>
                   </span>
-                  
                 </Link>
               )}
 

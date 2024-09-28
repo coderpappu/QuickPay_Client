@@ -26,6 +26,7 @@ const config = {
         "dark-border-color": "#e5e7eb",
         "button-bg": "#3686FF",
         "button-bg-hover": "#4890fc",
+        "light-text-color": "#a5a5a5b8",
       },
     },
   },

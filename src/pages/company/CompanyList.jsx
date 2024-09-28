@@ -165,7 +165,7 @@ const CompanyList = () => {
     <div>
       <div className="flex flex-wrap justify-between items-center pb-2">
         <div>
-          <h2 className="font-semibold text-lg pb-2 text-dark-heading-color">
+          <h2 className="font-semibold text-lg pb-2 dark:text-dark-heading-color">
             Company
           </h2>
         </div>
@@ -173,7 +173,7 @@ const CompanyList = () => {
 
       <div className="border-solid border-[1px] border-slate-200 bg-[#fff] dark:bg-dark-card dark:border-opacity-10 dark:border-dark-border-color rounded-md p-5 w-full h-auto">
         <div className="flex flex-wrap justify-between mb-12">
-          <div className="font-medium text-base text-dark-border-color	">
+          <div className="font-medium text-base dark:text-dark-border-color	">
             {(companies && companies?.length) || 0} Company Available for Now
           </div>
           <div>

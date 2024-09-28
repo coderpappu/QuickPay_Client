@@ -31,7 +31,7 @@ const Layout = () => {
       </div>
 
       {/* container  */}
-      <div className="xl:w-[80%] 2xl:w-[100%] lg:w-[80%] left-0 pl-[15%] h-auto flex flex-col">
+      <div className="xl:w-[80%] 2xl:w-[100%] lg:w-[80%] left-0 pl-[15%] min-h-screen flex flex-col">
         {/* header  */}
         <Header darkModeHandler={darkModeHandler} darkMode={darkMode} />
 
