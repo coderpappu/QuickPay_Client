@@ -3,12 +3,16 @@ import BoardMenuButton from "../../components/company/BoardMenuButton";
 import { useState } from "react";
 import SettingCardHeader from "../../components/company/SettingCardHeader";
 import SettingCardFooter from "../../components/company/SettingCardFooter";
+
+import LogoImg from "../../assets/quickPayLogo.png";
+import LogoUploadCard from "../../components/company/LogoUploadCard";
 const SystemSettings = () => {
   const [activeSetting, setActiveSetting] = useState(1);
-
+  const [selectedFile, setSelectedFile] = useState(null);
   const handleActiveSettingId = (id) => {
     setActiveSetting(id);
   };
+
   const systemMenuList = [
     {
       title: "Brand Settings",
@@ -63,6 +67,10 @@ const SystemSettings = () => {
       id: 13,
     },
   ];
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
   return (
     <div>
       {/* heading  */}
@@ -96,8 +104,22 @@ const SystemSettings = () => {
             />
 
             {/* card content  */}
-            <div className="px-6 py-3">
-              <h3>here data show </h3>
+            <div className="px-6 py-3 flex justify-between ">
+              <LogoUploadCard
+                handleFileChange={handleFileChange}
+                selectedFile={selectedFile}
+                LogoImg={LogoImg}
+              />
+              <LogoUploadCard
+                handleFileChange={handleFileChange}
+                selectedFile={selectedFile}
+                LogoImg={LogoImg}
+              />
+              <LogoUploadCard
+                handleFileChange={handleFileChange}
+                selectedFile={selectedFile}
+                LogoImg={LogoImg}
+              />
             </div>
 
             {/* card footer  */}
