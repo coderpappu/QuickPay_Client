@@ -23,7 +23,7 @@ const Layout = () => {
   return (
     // main container
     <div
-      className={`bg-[#EBEFF2] w-full dark:bg-dark-bg ${darkMode && "dark"} lg:wrapper-container xl:w-full flex flex-wrap justify-between`}
+      className={`bg-[#EBEFF2] w-full dark:bg-dark-bg ${darkMode && "dark"} h-[100%] lg:wrapper-container xl:w-full flex flex-wrap justify-between`}
     >
       {/* sidebar  */}
       <div className="2xl:w-[15%] xl:w-[20%] lg:w-[20%] fixed h-screen bg-[#0E1A34] ">
@@ -31,7 +31,7 @@ const Layout = () => {
       </div>
 
       {/* container  */}
-      <div className="xl:w-[80%] 2xl:w-[100%] lg:w-[80%] left-0 pl-[15%] h-screen flex flex-col">
+      <div className="xl:w-[80%] 2xl:w-[100%] lg:w-[80%] left-0 pl-[15%] h-auto flex flex-col">
         {/* header  */}
         <Header darkModeHandler={darkModeHandler} darkMode={darkMode} />
 

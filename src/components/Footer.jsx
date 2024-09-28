@@ -18,7 +18,7 @@ const Footer = () => {
         {/* Product Brand Logo  */}
         <div className="w-[80%]">
           <h2 className=" text-sm text-[#0E1A34] dark:text-dark-text-color font-poppins">
-            © 2024 Aluxt ERP
+            © 2024 Quick Pay
           </h2>
         </div>
       </div>
