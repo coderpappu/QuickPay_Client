@@ -1,10 +1,16 @@
 import React from "react";
 
-const LogoUploadCard = ({ handleFileChange, selectedFile, LogoImg, name }) => {
+const LogoUploadCard = ({
+  title,
+  handleFileChange,
+  selectedFile,
+  LogoImg,
+  name,
+}) => {
   return (
-    <div className="w-[30%] h-auto dark:bg-dark-box rounded-md py-2">
-      <div className="border-b border-dark-card dark:border-opacity-35 dark:text-dark-text-color px-4 py-4">
-        Logo Dark
+    <div className="w-[30%] h-auto bg-white shadow-sm border border-dark-box border-opacity-5 dark:bg-dark-box rounded-md py-2">
+      <div className="border-b border-dark-card border-opacity-10 dark:border-opacity-35 dark:text-dark-text-color px-4 py-4">
+        {title}
       </div>
 
       <div className="w-full  px-5 py-3">
