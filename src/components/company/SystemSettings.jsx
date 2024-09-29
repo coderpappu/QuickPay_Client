@@ -4,7 +4,7 @@ import SettingCardHeader from "./SettingCardHeader";
 import SettingCardFooter from "./SettingCardFooter";
 import InputTitle from "./InputTitle";
 import BrandInput from "./BrandInput";
-
+import TextEditor from "./TextEditor";
 const SystemSettings = () => {
   return (
     <BrandCardWrapper>
@@ -86,7 +86,7 @@ const SystemSettings = () => {
           <BrandInput />
         </div>
       </div>
-
+      <TextEditor />
       <SettingCardFooter title="Save" />
     </BrandCardWrapper>
   );
