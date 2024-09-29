@@ -3,114 +3,142 @@ import BrandCardWrapper from "./BrandCardWrapper";
 import SettingCardHeader from "./SettingCardHeader";
 import SettingCardFooter from "./SettingCardFooter";
 import InputTitle from "./InputTitle";
-import BrandInput from "./BrandInput";
-import TextEditor from "./TextEditor";
 import SelectorInput from "./SelectorInput";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
 
-const SystemSettings = () => {
+// Validation schema using Yup
+const validationSchema = Yup.object().shape({
+  brand: Yup.string().required("Company name is required"),
+  address: Yup.string().required("Address is required"),
+  city: Yup.string().required("City is required"),
+  state: Yup.string().required("State is required"),
+  zip: Yup.string().required("Zip/Post Code is required"),
+  country: Yup.string().required("Country is required"),
+  telephone: Yup.string().required("Telephone is required"),
+  companyRegNo: Yup.string().required(
+    "Company Registration Number is required"
+  ),
+  companyStartTime: Yup.string().required("Company Start Time is required"),
+  companyEndTime: Yup.string().required("Company End Time is required"),
+});
+
+// Array of form fields (two fields per row)
+const formFields = [
+  [
+    { name: "brand", title: "Company Name", placeholder: "Enter company name" },
+    { name: "address", title: "Address", placeholder: "Enter address" },
+  ],
+  [
+    { name: "city", title: "City", placeholder: "Enter city" },
+    { name: "state", title: "State", placeholder: "Enter state" },
+  ],
+  [
+    { name: "zip", title: "Zip/Post Code", placeholder: "Enter zip/post code" },
+    { name: "country", title: "Country", placeholder: "Enter country" },
+  ],
+  [
+    { name: "telephone", title: "Telephone", placeholder: "Enter telephone" },
+    {
+      name: "companyRegNo",
+      title: "Company Registration Number",
+      placeholder: "Enter company registration number",
+    },
+  ],
+  [
+    { name: "companyStartTime", title: "Company Start Time *", type: "time" },
+    { name: "companyEndTime", title: "Company End Time *", type: "time" },
+  ],
+  [
+    {
+      name: "faxNo",
+      title: "Fax No",
+      placeholder: "Enter fax number",
+      required: false,
+    },
+    {
+      name: "website_Url",
+      title: "Website URL",
+      placeholder: "https://www.codexdevware.com",
+      required: false,
+    },
+  ],
+];
+
+const CompanySettings = () => {
+  const initialValues = {
+    brand: "",
+    address: "",
+    city: "",
+    state: "",
+    zip: "",
+    country: "",
+    telephone: "",
+    companyRegNo: "",
+    companyStartTime: "",
+    companyEndTime: "",
+    faxNo: "",
+    timezone: "",
+  };
+
   return (
-    <BrandCardWrapper>
-      <SettingCardHeader
-        title="System Settings"
-        subTitle="Edit your system settings"
-      />
-
-      <div className="px-6 py-4">
-        {/* input row  */}
-        <div className="flex flex-wrap justify-between my-3">
-          <div className="w-[49%]">
-            <InputTitle title="Date Format" />
-            <SelectorInput
-              options={[
-                "Jan 01 , 2025",
-                "dd-mm-yyyy",
-                "mm-dd-yyyy",
-                "yyyy-dd-mm",
-              ]}
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={(values) => {
+        console.log("Form Values: ", values);
+      }}
+    >
+      {() => (
+        <Form>
+          <BrandCardWrapper>
+            <SettingCardHeader
+              title="Company Settings"
+              subTitle="Edit your company settings"
             />
-          </div>
-          <div className="w-[49%]">
-            <InputTitle title="Time Format" />
-            <SelectorInput options={["10:30 PM", "10:30 pm", "22:30"]} />
-          </div>
-        </div>
 
-        {/* input row  */}
-        <div className="flex flex-wrap justify-between my-3">
-          <div className="w-[49%]">
-            <InputTitle title="Customer Prefix" />
-            <BrandInput placeText="#CUST" />
-          </div>
-          <div className="w-[49%]">
-            <InputTitle title="Vendor Prefix" />
-            <BrandInput placeText="#VEND" />
-          </div>
-        </div>
-        {/* input row  */}
-        <div className="flex flex-wrap justify-between my-3">
-          <div className="w-[49%]">
-            <InputTitle title="Proposal Prefix" />
-            <BrandInput placeText="#PROP" />
-          </div>
-          <div className="w-[49%]">
-            <InputTitle title="Invoice Prefix" />
-            <BrandInput placeText="#INVO" />
-          </div>
-        </div>
+            <div className="px-6 py-4">
+              {/* Mapping over the formFields array and displaying two fields per row */}
+              {formFields.map((row, rowIndex) => (
+                <div
+                  key={rowIndex}
+                  className="flex flex-wrap justify-between my-3"
+                >
+                  {row.map(({ name, title, placeholder, type = "text" }) => (
+                    <div key={name} className="w-[49%]">
+                      <InputTitle title={title} />
+                      <Field
+                        name={name}
+                        type={type}
+                        placeholder={placeholder || ""}
+                        className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+                      />
+                      <ErrorMessage
+                        name={name}
+                        component="div"
+                        className="text-red-500 text-sm"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ))}
 
-        {/* input row  */}
-        <div className="flex flex-wrap justify-between my-3">
-          <div className="w-[49%]">
-            <InputTitle title="Bill Prefix" />
-            <BrandInput placeText="#BILL" />
-          </div>
-          <div className="w-[49%]">
-            <InputTitle title="Quotation Prefix" />
-            <BrandInput placeText="#QUO" />
-          </div>
-        </div>
+              {/* Timezone Selector */}
+              <div className="flex flex-wrap justify-between my-3">
+                <div className="w-full">
+                  <InputTitle title="Timezone" />
+                  <SelectorInput options={["Select Timezone"]} />
+                </div>
+              </div>
+            </div>
 
-        {/* input row  */}
-        <div className="flex flex-wrap justify-between my-3">
-          <div className="w-[49%]">
-            <InputTitle title="Purchase Prefix" />
-            <BrandInput placeText="#PUR" />
-          </div>
-          <div className="w-[49%]">
-            <InputTitle title="Pos Prefix" />
-            <BrandInput placeText="#QUO" />
-          </div>
-        </div>
-
-        {/* input row  */}
-        <div className="flex flex-wrap justify-between my-3">
-          <div className="w-[49%]">
-            <InputTitle title="Journal Prefix" />
-            <BrandInput placeText="#JUR" />
-          </div>
-          <div className="w-[49%]">
-            <InputTitle title="Expense Prefix" />
-            <BrandInput placeText="#EXP" />
-          </div>
-        </div>
-
-        <div className=" my-3">
-          <InputTitle title="Display Shipping in Proposal / Invoice / Bill" />
-
-          <label className="inline-flex items-center cursor-pointer mt-1">
-            <input type="checkbox" value="" className="sr-only peer" />
-            <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-          </label>
-        </div>
-        <div className=" my-3">
-          <InputTitle title="Proposal/Invoice/Bill/Purchase/POS Footer Title" />
-          <BrandInput />
-        </div>
-      </div>
-      <TextEditor />
-      <SettingCardFooter title="Save" />
-    </BrandCardWrapper>
+            {/* Save Button */}
+            <SettingCardFooter title="Save" />
+          </BrandCardWrapper>
+        </Form>
+      )}
+    </Formik>
   );
 };
 
-export default SystemSettings;
+export default CompanySettings;

@@ -99,7 +99,7 @@ const SystemSettings = () => {
           {activeSetting == 1 && <BrandCard />}
 
           {activeSetting == 2 && <SystemSettingsCard />}
-          {/* {activeSetting == 3 && <CompanySettings />} */}
+          {activeSetting == 3 && <CompanySettings />}
         </div>
       </div>
     </div>
