@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import BrandCard from "../../components/company/BrandCard";
 import SystemSettingsCard from "../../components/company/SystemSettings";
+import CompanySettings from "../../components/company/CompanySettings";
 const SystemSettings = () => {
   const [activeSetting, setActiveSetting] = useState(1);
 
@@ -17,52 +18,56 @@ const SystemSettings = () => {
       id: 1,
     },
     {
-      title: "Company Settings",
+      title: "System Settings",
       id: 2,
     },
     {
-      title: "Currency Settings",
+      title: "Company Settings",
       id: 3,
     },
     {
-      title: "Email Settings",
+      title: "Currency Settings",
       id: 4,
     },
     {
-      title: "Payments Settings",
+      title: "Email Settings",
       id: 5,
     },
     {
-      title: "Zoom Settings",
+      title: "Payments Settings",
       id: 6,
     },
     {
-      title: "Email Notification Settings",
+      title: "Zoom Settings",
       id: 7,
     },
     {
-      title: "Offer Letter Settings",
+      title: "Email Notification Settings",
       id: 8,
     },
     {
-      title: "Joining Letter Settings",
+      title: "Offer Letter Settings",
       id: 9,
     },
     {
-      title: "Experience Certificate Settings",
+      title: "Joining Letter Settings",
       id: 10,
     },
     {
-      title: "NOC Notification Settings",
+      title: "Experience Certificate Settings",
       id: 11,
     },
     {
-      title: "IP Letter Settings",
+      title: "NOC Notification Settings",
       id: 12,
     },
     {
-      title: "Biometric Attendance Settings",
+      title: "IP Letter Settings",
       id: 13,
+    },
+    {
+      title: "Biometric Attendance Settings",
+      id: 14,
     },
   ];
 
@@ -75,7 +80,7 @@ const SystemSettings = () => {
 
       <div className="flex justify-between my-4">
         {/* board of system menu */}
-        <div className="w-[25%] bg-white dark:bg-dark-card rounded-md h-auto ">
+        <div className="w-[25%] bg-white dark:bg-dark-card rounded-md h-full">
           {/* menu button  */}
           {systemMenuList?.map((menu) => (
             <BoardMenuButton
@@ -89,11 +94,12 @@ const SystemSettings = () => {
         </div>
 
         {/* show box  */}
-        <div className="w-[73%]">
+        <div className="w-[73%] overflow-auto  ">
           {/* settings Card  */}
           {activeSetting == 1 && <BrandCard />}
 
           {activeSetting == 2 && <SystemSettingsCard />}
+          {/* {activeSetting == 3 && <CompanySettings />} */}
         </div>
       </div>
     </div>

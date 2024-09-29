@@ -5,6 +5,8 @@ import SettingCardFooter from "./SettingCardFooter";
 import InputTitle from "./InputTitle";
 import BrandInput from "./BrandInput";
 import TextEditor from "./TextEditor";
+import SelectorInput from "./SelectorInput";
+
 const SystemSettings = () => {
   return (
     <BrandCardWrapper>
@@ -14,6 +16,25 @@ const SystemSettings = () => {
       />
 
       <div className="px-6 py-4">
+        {/* input row  */}
+        <div className="flex flex-wrap justify-between my-3">
+          <div className="w-[49%]">
+            <InputTitle title="Date Format" />
+            <SelectorInput
+              options={[
+                "Jan 01 , 2025",
+                "dd-mm-yyyy",
+                "mm-dd-yyyy",
+                "yyyy-dd-mm",
+              ]}
+            />
+          </div>
+          <div className="w-[49%]">
+            <InputTitle title="Time Format" />
+            <SelectorInput options={["10:30 PM", "10:30 pm", "22:30"]} />
+          </div>
+        </div>
+
         {/* input row  */}
         <div className="flex flex-wrap justify-between my-3">
           <div className="w-[49%]">
