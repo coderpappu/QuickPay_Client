@@ -3,6 +3,7 @@ import BoardMenuButton from "../../components/company/BoardMenuButton";
 import { useState } from "react";
 
 import BrandCard from "../../components/company/BrandCard";
+import SystemSettingsCard from "../../components/company/SystemSettings";
 const SystemSettings = () => {
   const [activeSetting, setActiveSetting] = useState(1);
 
@@ -92,7 +93,7 @@ const SystemSettings = () => {
           {/* settings Card  */}
           {activeSetting == 1 && <BrandCard />}
 
-          {activeSetting == 2 && <h2> Loading....</h2>}
+          {activeSetting == 2 && <SystemSettingsCard />}
         </div>
       </div>
     </div>

@@ -1,9 +1,8 @@
 import React from "react";
 
-const BrandText = ({ title, placeText }) => {
+const BrandInput = ({ title, placeText }) => {
   return (
     <>
-      <h2 className="text-sm dark:text-dark-text-color leading-7">{title}</h2>
       <input
         type="text"
         placeholder={placeText}
@@ -13,4 +12,4 @@ const BrandText = ({ title, placeText }) => {
   );
 };
 
-export default BrandText;
+export default BrandInput;

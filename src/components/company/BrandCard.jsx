@@ -3,8 +3,11 @@ import { useState } from "react";
 import SettingCardHeader from "./SettingCardHeader";
 import SettingCardFooter from "./SettingCardFooter";
 import LogoUploadCard from "./LogoUploadCard";
-import BrandText from "./BrandText";
+import BrandInput from "./BrandInput";
 import LogoImg from "../../assets/quickPayLogo.png";
+import BrandCardWrapper from "./BrandCardWrapper";
+import SelectorInput from "./SelectorInput";
+import InputTitle from "./InputTitle";
 const BrandCard = () => {
   const [selectedFiles, setSelectedFiles] = useState({
     file1: null,
@@ -20,7 +23,7 @@ const BrandCard = () => {
     }));
   };
   return (
-    <div className="w-full h-auto bg-white dark:bg-dark-card  rounded-md ">
+    <BrandCardWrapper>
       {/* setting card heading  */}
       <SettingCardHeader
         title="Brand Settings"
@@ -56,23 +59,16 @@ const BrandCard = () => {
         {/* title and text section  */}
         <div className="px-6 py-3 flex justify-between">
           <div className="w-[24%]">
-            <BrandText title="Title Text" placeText="Xceed Bangladesh LTD" />
+            <InputTitle title="Title Text" />
+            <BrandInput placeText="Xceed Bangladesh LTD" />
           </div>
           <div className="w-[24%]">
-            <BrandText title="Footer Text" placeText="@ Quick Pay 2024" />
+            <InputTitle title="Footer Text" />
+            <BrandInput placeText="@ Quick Pay 2024" />
           </div>
           <div className="w-[24%]">
-            <h2 className="text-sm dark:text-dark-text-color leading-7">
-              Default Language
-            </h2>
-            <select
-              type="select"
-              className=" w-full px-2 py-1 border-dark-box border  border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm  focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
-            >
-              <option>Select Language</option>
-              <option>English</option>
-              <option>Bangla</option>
-            </select>
+            <InputTitle title="Default Language" />
+            <SelectorInput options={["Select Language", "Bangla", "English"]} />
           </div>
           <div className="w-[24%]"></div>
         </div>
@@ -80,7 +76,7 @@ const BrandCard = () => {
 
       {/* card footer  */}
       <SettingCardFooter title={"Save"} />
-    </div>
+    </BrandCardWrapper>
   );
 };
 
