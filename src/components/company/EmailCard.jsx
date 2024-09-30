@@ -11,6 +11,7 @@ import InputTitle from "./InputTitle";
 import * as Yup from "yup";
 
 import { Formik, Field, Form, ErrorMessage } from "formik";
+import RadioInput from "./RadioInput";
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -137,89 +138,27 @@ const EmailCard = () => {
                 <div className="w-[48%]  pr-44">
                   <InputTitle title={"Currency Symbol Position"} />
                   <div className="flex flex-wrap justify-between mt-2">
-                    <div className="dark:text-dark-text-color">
-                      <input
-                        type="radio"
-                        name="position"
-                        id="pre"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label htmlFor="pre" className="ml-2 text-sm">
-                        Pre
-                      </label>
-                    </div>
+                    <RadioInput title={"Pre"} />
 
-                    <div className="dark:text-dark-text-color">
-                      <input
-                        type="radio"
-                        name="position"
-                        id="post"
-                        className="w-4 h-4 dark:bg-dark-box"
-                      />
-                      <label htmlFor="post" className="ml-2 text-sm">
-                        Post
-                      </label>
-                    </div>
+                    <RadioInput title={"Post"} />
                   </div>
                 </div>
 
                 <div className="w-[48%]  pr-44">
                   <InputTitle title={"Currency Symbol Space"} />
                   <div className="flex flex-wrap justify-between mt-2">
-                    <div className="dark:text-dark-text-color">
-                      <input
-                        type="radio"
-                        name="space"
-                        id="with"
-                        className="w-4 h-4 dark:bg-dark-box"
-                      />
-                      <label htmlFor="with" className="ml-2 text-sm">
-                        With space
-                      </label>
-                    </div>
-
-                    <div className="dark:text-dark-text-color">
-                      <input
-                        type="radio"
-                        name="space"
-                        id="without"
-                        className="w-4 h-4 dark:bg-dark-box bg-gray-100"
-                      />
-                      <label htmlFor="without" className="ml-2 text-sm">
-                        Without space
-                      </label>
-                    </div>
+                    <RadioInput title={"With Space"} />
+                    <RadioInput title={"Without space"} />
                   </div>
                 </div>
               </div>
 
               <div className="flex justify-between mt-6 px-6">
-                <div className="w-[48%]  pr-11">
+                <div className="w-[48%]  pr-14">
                   <InputTitle title={"Currency Symbol & Name"} />
                   <div className="flex flex-wrap justify-between mt-2">
-                    <div className="dark:text-dark-text-color">
-                      <input
-                        type="radio"
-                        name="symbol"
-                        id="symbol"
-                        className="w-4 h-4 dark:bg-dark-box"
-                      />
-                      <label htmlFor="symbol" className="ml-2 text-sm">
-                        With Currency Symbol
-                      </label>
-                    </div>
-
-                    <div className="dark:text-dark-text-color">
-                      <input
-                        type="radio"
-                        name="symbol"
-                        id="cur_name"
-                        className="w-4 h-4 dark:bg-dark-box "
-                      />
-                      <label htmlFor="cur_name" className="ml-2 text-sm">
-                        With Currency Name
-                      </label>
-                    </div>
+                    <RadioInput title={"With Currency Symbol"} />
+                    <RadioInput title={" With Currency Name"} />
                   </div>
                 </div>
                 <div className="w-[48%]">
