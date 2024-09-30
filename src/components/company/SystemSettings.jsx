@@ -6,6 +6,7 @@ import InputTitle from "./InputTitle";
 import SelectorInput from "./SelectorInput";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { InputBox } from "./BrandInput";
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -107,16 +108,15 @@ const CompanySettings = () => {
                   {row.map(({ name, title, placeholder, type = "text" }) => (
                     <div key={name} className="w-[49%]">
                       <InputTitle title={title} />
-                      <Field
+                      <InputBox
                         name={name}
                         type={type}
                         placeholder={placeholder || ""}
-                        className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
                       />
                       <ErrorMessage
                         name={name}
                         component="div"
-                        className="text-red-500 text-sm"
+                        className="text-red-500 text-sm "
                       />
                     </div>
                   ))}
