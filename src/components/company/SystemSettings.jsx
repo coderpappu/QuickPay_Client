@@ -116,7 +116,7 @@ const CompanySettings = () => {
                       <ErrorMessage
                         name={name}
                         component="div"
-                        className="text-red-500 text-sm "
+                        className="text-red-500 text-sm"
                       />
                     </div>
                   ))}

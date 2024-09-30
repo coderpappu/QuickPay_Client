@@ -5,6 +5,7 @@ import { useState } from "react";
 import BrandCard from "../../components/company/BrandCard";
 import SystemSettingsCard from "../../components/company/SystemSettings";
 import CompanySettings from "../../components/company/CompanySettings";
+import EmailCard from "../../components/company/EmailCard";
 const SystemSettings = () => {
   const [activeSetting, setActiveSetting] = useState(1);
 
@@ -100,6 +101,7 @@ const SystemSettings = () => {
 
           {activeSetting == 2 && <SystemSettingsCard />}
           {activeSetting == 3 && <CompanySettings />}
+          {activeSetting == 4 && <EmailCard />}
         </div>
       </div>
     </div>

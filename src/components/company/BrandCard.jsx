@@ -16,6 +16,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 const validationSchema = Yup.object().shape({
   textTitle: Yup.string().required("Title text is required"),
   footerText: Yup.string().required("Footer text is required"),
+  language: Yup.string().required("Language is required"),
 });
 
 const formFields = [
@@ -44,12 +45,14 @@ const BrandCard = () => {
     file2: null,
     file3: null,
   });
+
   const initialValues = {
     // ... (rest of your initial values)
     textTitle: "",
     footerText: "",
     language: "",
   };
+
   // Handler for file changes, updating the object state
   const handleFileChange = (event, fileKey) => {
     setSelectedFiles((prevState) => ({
@@ -111,11 +114,6 @@ const BrandCard = () => {
                         {name == "language" ? (
                           <>
                             <SelectOptionBox values={["Bangla ", "English"]} />
-                            <ErrorMessage
-                              name={name}
-                              component="div"
-                              className="text-red-500 text-sm"
-                            />
                           </>
                         ) : (
                           <>
@@ -130,7 +128,7 @@ const BrandCard = () => {
                         <ErrorMessage
                           name={name}
                           component="div"
-                          className="text-red-500 text-sm "
+                          className="text-red-500 text-xs "
                         />
                       </div>
                     )
