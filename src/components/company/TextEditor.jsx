@@ -1038,12 +1038,12 @@ const editorConfig = {
 export default function TextEditor() {
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      <div className="relative mx-auto overflow-hidden my-5 w-full max-w-4xl rounded-xl border border-gray-300 dark:border-dark-border-color dark:border-opacity-5 bg-white dark:bg-dark-box text-left font-normal leading-5 text-gray-900">
+      <div className="relative mx-auto overflow-hidden my-5 w-full max-w-full rounded-xl border border-gray-300 dark:border-dark-border-color dark:border-opacity-5 bg-white dark:bg-dark-box text-left font-normal leading-5 text-gray-900">
         <ToolbarPlugin />
         <div className="relative rounded-b-lg border-opacity-5 bg-white dark:bg-dark-box dark:text-dark-text-color">
           <RichTextPlugin
             contentEditable={
-              <ContentEditable className="lexical max-h-[280px] overflow-y-scroll resize-none px-2.5 py-4 text-base caret-gray-900 outline-none" />
+              <ContentEditable className="lexical h-[280px] overflow-y-scroll resize-none px-2.5 py-4 text-base caret-gray-900 outline-none" />
             }
             placeholder={<Placeholder />}
             ErrorBoundary={null}

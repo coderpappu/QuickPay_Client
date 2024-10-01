@@ -5,13 +5,13 @@ import SettingCardFooter from "./SettingCardFooter";
 import TextBoxLetter from "./TextBoxLetter";
 import TextEditor from "./TextEditor";
 
-const JoiningLetterCard = () => {
+const ExperienceLetterCard = () => {
   return (
     <>
       <BrandCardWrapper>
         <SettingCardHeader
-          title="Joining Letter Settings"
-          subTitle="Edit your joining letter"
+          title="Experience Letter Settings"
+          subTitle="Edit your experience letter"
         />
         <div className="px-6 py-3">
           <h2 className="text-white my-2">Palceholder</h2>
@@ -31,8 +31,6 @@ const JoiningLetterCard = () => {
               <TextBoxLetter title="Start Time" varName="start_time" />
               <TextBoxLetter title="End Time" varName="end_time" />
             </div>
-
-            <TextBoxLetter title="Number of Hours" varName="hours" />
           </div>
 
           <TextEditor />
@@ -43,4 +41,4 @@ const JoiningLetterCard = () => {
   );
 };
 
-export default JoiningLetterCard;
+export default ExperienceLetterCard;

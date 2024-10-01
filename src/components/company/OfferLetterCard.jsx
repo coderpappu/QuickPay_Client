@@ -5,13 +5,13 @@ import SettingCardFooter from "./SettingCardFooter";
 import TextBoxLetter from "./TextBoxLetter";
 import TextEditor from "./TextEditor";
 
-const JoiningLetterCard = () => {
+const OfferLetterCard = () => {
   return (
     <>
       <BrandCardWrapper>
         <SettingCardHeader
-          title="Joining Letter Settings"
-          subTitle="Edit your joining letter"
+          title="Offer Letter Settings"
+          subTitle="Edit your offer letter"
         />
         <div className="px-6 py-3">
           <h2 className="text-white my-2">Palceholder</h2>
@@ -43,4 +43,4 @@ const JoiningLetterCard = () => {
   );
 };
 
-export default JoiningLetterCard;
+export default OfferLetterCard;

@@ -12,6 +12,9 @@ import PaymentCard from "../../components/company/PaymentCard";
 import ZoomMeetingCard from "../../components/company/ZoomMeetingCard";
 import NotificationCard from "../../components/company/NotificationCard";
 import JoiningLetterCard from "../../components/company/JoiningLetterCard";
+import OfferLetterCard from "../../components/company/OfferLetterCard";
+import ExperienceLetterCard from "../../components/company/ExpericeLetterCard";
+import NocCard from "../../components/company/NocCard";
 const SystemSettings = () => {
   const [activeSetting, setActiveSetting] = useState(1);
 
@@ -112,7 +115,10 @@ const SystemSettings = () => {
           {activeSetting == 6 && <PaymentCard />}
           {activeSetting == 7 && <ZoomMeetingCard />}
           {activeSetting == 8 && <NotificationCard />}
+          {activeSetting == 9 && <OfferLetterCard />}
           {activeSetting == 10 && <JoiningLetterCard />}
+          {activeSetting == 11 && <ExperienceLetterCard />}
+          {activeSetting == 12 && <NocCard />}
         </div>
       </div>
     </div>
