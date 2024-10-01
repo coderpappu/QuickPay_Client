@@ -15,8 +15,8 @@ import RadioInput from "./RadioInput";
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
-  textTitle: Yup.string().required("Title text is required"),
-  footerText: Yup.string().required("Footer text is required"),
+  currency: Yup.string().required("Currency is required"),
+  currency_symbol: Yup.string().required("Currency symbol is required"),
   language: Yup.string().required("Language is required"),
 });
 
@@ -27,11 +27,13 @@ const formFields = [
       name: "currency",
       title: "Currency*",
       placeholder: "",
+      type: "text",
     },
     {
       name: "currency_symbol",
       title: "Currency Symbol*",
       placeholder: "",
+      type: "text",
     },
   ],
   [
@@ -39,12 +41,14 @@ const formFields = [
       name: "number_format",
       title: "Decimal Number Format",
       placeholder: "",
+      type: "text",
     },
     {
       name: "float_number",
       title: "Float Number",
       placeholder: "",
-      list: ["Commma", "Dot"],
+      list: ["Comma", "Dot"],
+      type: "list",
     },
   ],
   [
@@ -52,13 +56,15 @@ const formFields = [
       name: "decimal_separator",
       title: "Decimal Separator",
       placeholder: "",
-      list: ["Dot", "Commma"],
+      list: ["Dot", "Comma"],
+      type: "list",
     },
     {
       name: "thousands_separator",
       title: "Thousands Separator",
       placeholder: "",
-      list: ["Dot", "Commma"],
+      list: ["Dot", "Comma"],
+      type: "list",
     },
   ],
 ];
@@ -107,12 +113,15 @@ const EmailCard = () => {
               {formFields.map((row, rowIndex) => (
                 <div className="px-6 py-3 flex justify-between" key={rowIndex}>
                   {row.map(
-                    ({ name, title, placeholder, type = "text" }, rowIndex) => (
+                    (
+                      { name, title, placeholder, type = "text", list },
+                      rowIndex
+                    ) => (
                       <div className="w-[48%] relative" key={rowIndex}>
                         <InputTitle title={title} />
-                        {name == "language" ? (
+                        {type == "list" ? (
                           <>
-                            <SelectOptionBox values={["Bangla ", "English"]} />
+                            <SelectOptionBox values={list} />
                           </>
                         ) : (
                           <>
