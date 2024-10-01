@@ -13,6 +13,7 @@ import RadioInput from "./RadioInput";
 import BrandCardWrapper from "./BrandCardWrapper";
 import SettingCardHeader from "./SettingCardHeader";
 import SettingCardFooter from "./SettingCardFooter";
+
 const PaymentCard = () => {
   return (
     <>
