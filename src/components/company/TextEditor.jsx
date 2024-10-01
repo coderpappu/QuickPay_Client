@@ -1043,7 +1043,7 @@ export default function TextEditor() {
         <div className="relative rounded-b-lg border-opacity-5 bg-white dark:bg-dark-box dark:text-dark-text-color">
           <RichTextPlugin
             contentEditable={
-              <ContentEditable className="lexical min-h-[280px] resize-none px-2.5 py-4 text-base caret-gray-900 outline-none" />
+              <ContentEditable className="lexical max-h-[280px] overflow-y-scroll resize-none px-2.5 py-4 text-base caret-gray-900 outline-none" />
             }
             placeholder={<Placeholder />}
             ErrorBoundary={null}
