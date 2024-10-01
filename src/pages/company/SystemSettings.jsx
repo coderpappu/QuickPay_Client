@@ -7,6 +7,8 @@ import SystemSettingsCard from "../../components/company/SystemSettings";
 import CompanySettings from "../../components/company/CompanySettings";
 import EmailCard from "../../components/company/EmailCard";
 import CurrencyCard from "../../components/company/CurrencyCard";
+import { Accordion } from "../../components/company/accordion";
+import PaymentCard from "../../components/company/PaymentCard";
 const SystemSettings = () => {
   const [activeSetting, setActiveSetting] = useState(1);
 
@@ -104,6 +106,7 @@ const SystemSettings = () => {
           {activeSetting == 3 && <CompanySettings />}
           {activeSetting == 4 && <CurrencyCard />}
           {activeSetting == 5 && <EmailCard />}
+          {activeSetting == 6 && <PaymentCard />}
         </div>
       </div>
     </div>
