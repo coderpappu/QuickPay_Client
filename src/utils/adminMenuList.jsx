@@ -9,7 +9,7 @@ const adminMenuItems = [
     icon: <AiOutlineProduct size={20} />,
     subMenu: [
       { title: "Overview", link: "/" },
-      { title: "Reports", link: "/reports" },
+      { title: "Reports", link: "/company/allowance/" },
     ],
   },
   {

@@ -125,7 +125,7 @@ function App() {
               <Route path="company/leave" element={<LeaveSettings />} />
               <Route path="company/leave/type" element={<LeaveTypeList />} />
               <Route path="company/leave/earnleave" element={<EarnLeave />} />
-              
+
               <Route
                 path="company/leave/application"
                 element={<LeaveApplicationList />}

@@ -19,6 +19,9 @@ import BiometricCard from "../../components/company/BiometricCard";
 import BranchCard from "../../components/hrm/BranchCard";
 import DepartmentCard from "../../components/hrm/DepartmentCard";
 import DesignationCard from "../../components/hrm/DesignationCard";
+import LeaveCard from "../../components/hrm/LeaveCard";
+import AllowanceCard from "../../components/hrm/AllowanceCard";
+import DeductionCard from "../../components/hrm/DeductionCard";
 
 const HrmSetup = () => {
   const [activeSetting, setActiveSetting] = useState(1);
@@ -95,11 +98,11 @@ const HrmSetup = () => {
 
           {activeSetting == 2 && <DepartmentCard />}
           {activeSetting == 3 && <DesignationCard />}
-          {activeSetting == 4 && <CurrencyCard />}
+          {activeSetting == 4 && <LeaveCard />}
           {activeSetting == 5 && <EmailCard />}
-          {activeSetting == 6 && <PaymentCard />}
-          {activeSetting == 7 && <ZoomMeetingCard />}
-          {activeSetting == 8 && <NotificationCard />}
+          {activeSetting == 6 && <AllowanceCard />}
+          {activeSetting == 7 && <AllowanceCard />}
+          {activeSetting == 8 && <DeductionCard />}
           {activeSetting == 9 && <OfferLetterCard />}
         </div>
       </div>

@@ -1,6 +1,8 @@
 import React from "react";
 import BrandCardWrapper from "../company/BrandCardWrapper";
-import SettingCardHeader from "../company/SettingCardHeader";
+import SettingCardHeader, {
+  HrmSetupCardHeader,
+} from "../company/SettingCardHeader";
 import SettingCardFooter from "../company/SettingCardFooter";
 import { LiaEdit } from "react-icons/lia";
 import { AiOutlineDelete } from "react-icons/ai";
@@ -9,7 +11,7 @@ const DesignationCard = () => {
   return (
     <>
       <BrandCardWrapper>
-        <SettingCardHeader title="Department" />
+        <HrmSetupCardHeader title="Department" />
         <div className="px-6 py-3">
           {/* header  */}
           <div className="w-full bg-light-bg dark:bg-dark-box rounded-sm py-3 px-3 flex flex-wrap justify-between text-sm">
@@ -30,7 +32,7 @@ const DesignationCard = () => {
             <div className="dark:text-white w-[15%]">
               <div className="flex flex-wrap justify-start gap-2">
                 {/* edit button  */}
-                <div className="w-8 h-8 bg-green-400 rounded-sm p-2 flex justify-center items-center cursor-pointer">
+                <div className="w-8 h-8 bg-indigo-700 rounded-sm p-2 flex justify-center items-center cursor-pointer">
                   <CiEdit size={20} />
                 </div>
 
@@ -49,7 +51,7 @@ const DesignationCard = () => {
             <div className="dark:text-white w-[15%]">
               <div className="flex flex-wrap justify-start gap-2">
                 {/* edit button  */}
-                <div className="w-8 h-8 bg-green-400 rounded-sm p-2 flex justify-center items-center cursor-pointer">
+                <div className="w-8 h-8 bg-indigo-700 rounded-sm p-2 flex justify-center items-center cursor-pointer">
                   <CiEdit size={20} />
                 </div>
 
@@ -68,7 +70,7 @@ const DesignationCard = () => {
             <div className="dark:text-white w-[15%]">
               <div className="flex flex-wrap justify-start gap-2">
                 {/* edit button  */}
-                <div className="w-8 h-8 bg-green-400 rounded-sm p-2 flex justify-center items-center cursor-pointer">
+                <div className="w-8 h-8 bg-indigo-700 rounded-sm p-2 flex justify-center items-center cursor-pointer">
                   <CiEdit size={20} />
                 </div>
 
@@ -80,7 +82,6 @@ const DesignationCard = () => {
             </div>
           </div>
         </div>
-        <SettingCardFooter title="Save" />
       </BrandCardWrapper>
     </>
   );
