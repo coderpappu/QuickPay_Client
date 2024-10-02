@@ -22,6 +22,7 @@ import DesignationCard from "../../components/hrm/DesignationCard";
 import LeaveCard from "../../components/hrm/LeaveCard";
 import AllowanceCard from "../../components/hrm/AllowanceCard";
 import DeductionCard from "../../components/hrm/DeductionCard";
+import LoanCard from "../../components/hrm/LoanCard";
 
 const HrmSetup = () => {
   const [activeSetting, setActiveSetting] = useState(1);
@@ -101,7 +102,7 @@ const HrmSetup = () => {
           {activeSetting == 4 && <LeaveCard />}
           {activeSetting == 5 && <EmailCard />}
           {activeSetting == 6 && <AllowanceCard />}
-          {activeSetting == 7 && <AllowanceCard />}
+          {activeSetting == 7 && <LoanCard />}
           {activeSetting == 8 && <DeductionCard />}
           {activeSetting == 9 && <OfferLetterCard />}
         </div>
