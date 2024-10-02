@@ -3,7 +3,7 @@ import React from "react";
 const TextBoxLetter = ({ title, varName }) => {
   return (
     <div className="w-[30%] p-3">
-      <h2 className="text-xs text-light-text-color">
+      <h2 className="text-xs  dark:text-light-text-color">
         {title} :
         <label htmlFor="" className="text-blue-500">
           {` "{ ${varName} }"`}

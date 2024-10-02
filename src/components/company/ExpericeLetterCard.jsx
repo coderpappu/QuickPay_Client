@@ -15,7 +15,7 @@ const ExperienceLetterCard = () => {
         />
         <div className="px-6 py-3">
           <h2 className="text-white my-2">Palceholder</h2>
-          <div className=" bg-dark-box p-3 rounded-md">
+          <div className=" bg-[#F3F4F6] dark:bg-dark-box p-3 rounded-md">
             <div className="w-full h-auto flex justify-between items-center">
               <TextBoxLetter title="Applicant Name" varName="applicant_name" />
               <TextBoxLetter title="Company Name" varName="company_name" />

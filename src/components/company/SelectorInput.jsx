@@ -1,6 +1,7 @@
 import React from "react";
 
 const SelectorInput = ({ options }) => {
+  console.log(options);
   return (
     <select
       type="select"

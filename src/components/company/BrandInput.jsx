@@ -37,16 +37,17 @@ const InputBox = ({ name, type, placeholder, ...props }) => {
   );
 };
 
-const SelectOptionBox = ({ values }) => {
+const SelectOptionBox = ({ values, name }) => {
+  console.log(values);
   return (
     <Field
       as="select"
-      name={name}
+      name={name || "ok"}
       className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color "
     >
-      <option value="">Select Option</option>
+      {/* <option value="">Select Option</option> */}
       {values.map((option, index) => (
-        <option key={index} value={option}>
+        <option key={index} value={option} name="j">
           {option}
         </option>
       ))}

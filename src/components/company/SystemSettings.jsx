@@ -6,7 +6,7 @@ import InputTitle from "./InputTitle";
 import SelectorInput from "./SelectorInput";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { InputBox } from "./BrandInput";
+import { InputBox, SelectOptionBox } from "./BrandInput";
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -27,60 +27,25 @@ const validationSchema = Yup.object().shape({
 // Array of form fields (two fields per row)
 const formFields = [
   [
-    { name: "brand", title: "Company Name", placeholder: "Enter company name" },
-    { name: "address", title: "Address", placeholder: "Enter address" },
-  ],
-  [
-    { name: "city", title: "City", placeholder: "Enter city" },
-    { name: "state", title: "State", placeholder: "Enter state" },
-  ],
-  [
-    { name: "zip", title: "Zip/Post Code", placeholder: "Enter zip/post code" },
-    { name: "country", title: "Country", placeholder: "Enter country" },
-  ],
-  [
-    { name: "telephone", title: "Telephone", placeholder: "Enter telephone" },
     {
-      name: "companyRegNo",
-      title: "Company Registration Number",
-      placeholder: "Enter company registration number",
-    },
-  ],
-  [
-    { name: "companyStartTime", title: "Company Start Time *", type: "time" },
-    { name: "companyEndTime", title: "Company End Time *", type: "time" },
-  ],
-  [
-    {
-      name: "faxNo",
-      title: "Fax No",
-      placeholder: "Enter fax number",
-      required: false,
+      name: "date_formate",
+      title: "Date Formate",
+      placeholder: "",
+      list: ["Jan 1 2002", "dd-mm-yyyy", "mm-dd-yyyy", "yyyy-dd-mm"],
+      type: "list",
     },
     {
-      name: "website_Url",
-      title: "Website URL",
-      placeholder: "https://www.codexdevware.com",
-      required: false,
+      name: "time_format",
+      title: "Time Format",
+      placeholder: "",
+      list: ["10.30PM", "10.00pm", "22.30"],
+      type: "list",
     },
   ],
 ];
 
 const CompanySettings = () => {
-  const initialValues = {
-    brand: "",
-    address: "",
-    city: "",
-    state: "",
-    zip: "",
-    country: "",
-    telephone: "",
-    companyRegNo: "",
-    companyStartTime: "",
-    companyEndTime: "",
-    faxNo: "",
-    timezone: "",
-  };
+  const initialValues = {};
 
   return (
     <Formik
@@ -105,31 +70,34 @@ const CompanySettings = () => {
                   key={rowIndex}
                   className="flex flex-wrap justify-between my-3"
                 >
-                  {row.map(({ name, title, placeholder, type = "text" }) => (
-                    <div key={name} className="w-[49%]">
-                      <InputTitle title={title} />
-                      <InputBox
-                        name={name}
-                        type={type}
-                        placeholder={placeholder || ""}
-                      />
-                      <ErrorMessage
-                        name={name}
-                        component="div"
-                        className="text-red-500 text-sm"
-                      />
-                    </div>
-                  ))}
+                  {row.map(
+                    ({ name, title, placeholder, type = "text", list }) => (
+                      <div key={name} className="w-[49%]">
+                        <InputTitle title={title} />
+                        {type == "list" ? (
+                          <>
+                            <SelectOptionBox values={list} name={name} />
+                          </>
+                        ) : (
+                          <>
+                            <InputBox
+                              name={name}
+                              type={type}
+                              placeholder={placeholder}
+                            />
+                          </>
+                        )}
+
+                        <ErrorMessage
+                          name={name}
+                          component="div"
+                          className="text-red-500 text-sm"
+                        />
+                      </div>
+                    )
+                  )}
                 </div>
               ))}
-
-              {/* Timezone Selector */}
-              <div className="flex flex-wrap justify-between my-3">
-                <div className="w-full">
-                  <InputTitle title="Timezone" />
-                  <SelectorInput options={["Select Timezone"]} />
-                </div>
-              </div>
             </div>
 
             {/* Save Button */}
