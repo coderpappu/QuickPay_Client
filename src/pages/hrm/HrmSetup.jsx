@@ -18,6 +18,7 @@ import NocCard from "../../components/company/NocCard";
 import BiometricCard from "../../components/company/BiometricCard";
 import BranchCard from "../../components/hrm/BranchCard";
 import DepartmentCard from "../../components/hrm/DepartmentCard";
+import DesignationCard from "../../components/hrm/DesignationCard";
 
 const HrmSetup = () => {
   const [activeSetting, setActiveSetting] = useState(1);
@@ -93,7 +94,7 @@ const HrmSetup = () => {
           {activeSetting == 1 && <BranchCard />}
 
           {activeSetting == 2 && <DepartmentCard />}
-          {activeSetting == 3 && <CompanySettings />}
+          {activeSetting == 3 && <DesignationCard />}
           {activeSetting == 4 && <CurrencyCard />}
           {activeSetting == 5 && <EmailCard />}
           {activeSetting == 6 && <PaymentCard />}
