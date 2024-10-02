@@ -51,6 +51,7 @@ import DeductionForm from "./pages/payroll/deduction/DeductionForm";
 import LoanTypeList from "./pages/payroll/Loan/LoanType/LoanTypeList";
 import LoanTypeForm from "./pages/payroll/Loan/LoanType/LoanTypeForm";
 import SystemSettings from "./pages/company/SystemSettings";
+import HrmSetup from "./pages/hrm/HrmSetup";
 
 function App() {
   return (
@@ -111,6 +112,7 @@ function App() {
 
               <Route path="company/settings" element={<Settings />} />
               <Route path="/systemsettings" element={<SystemSettings />} />
+              <Route path="/hrm-setup" element={<HrmSetup />} />
 
               {/* Attendance  */}
               <Route
@@ -123,6 +125,7 @@ function App() {
               <Route path="company/leave" element={<LeaveSettings />} />
               <Route path="company/leave/type" element={<LeaveTypeList />} />
               <Route path="company/leave/earnleave" element={<EarnLeave />} />
+              
               <Route
                 path="company/leave/application"
                 element={<LeaveApplicationList />}

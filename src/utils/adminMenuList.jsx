@@ -108,6 +108,14 @@ const adminMenuItems = [
     ],
   },
   {
+    title: "HRM System",
+    icon: <AiOutlineProduct size={20} />,
+    subMenu: [
+      { title: "HRM System Setup", link: "/hrm-setup" },
+      { title: "Manage Products", link: "/manage-products" },
+    ],
+  },
+  {
     title: "Settings",
     icon: <AiOutlineSetting size={20} />,
     subMenu: [
