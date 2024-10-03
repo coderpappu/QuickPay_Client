@@ -2,11 +2,17 @@ import { AiOutlineProduct, AiOutlineSetting } from "react-icons/ai";
 import { IoIosArrowForward } from "react-icons/io";
 import { PiDotDuotone } from "react-icons/pi";
 import { LuListTodo } from "react-icons/lu";
+import { LuUsers2 } from "react-icons/lu";
+import { TbMoneybag } from "react-icons/tb";
+import { BsJournalCheck } from "react-icons/bs";
+import { TbCards } from "react-icons/tb";
+import { RxHome } from "react-icons/rx";
 
+import { LuUser2 } from "react-icons/lu";
 const adminMenuItems = [
   {
     title: "Dashboard",
-    icon: <AiOutlineProduct size={20} />,
+    icon: <RxHome size={20} />,
     subMenu: [
       { title: "Overview", link: "/" },
       { title: "Reports", link: "/company/loan/type" },
@@ -14,12 +20,12 @@ const adminMenuItems = [
   },
   {
     title: "Manage Company",
-    icon: <LuListTodo size={20} />,
+    icon: <TbCards size={20} />,
     link: "/company/list",
   },
   {
     title: "HRM system",
-    icon: <AiOutlineProduct size={20} />,
+    icon: <LuUsers2 size={20} />,
     subMenu: [
       { title: "Employee Setup", link: "/employee-setup" },
       {
@@ -79,13 +85,13 @@ const adminMenuItems = [
       {
         title: "HRM Setup",
         icon: <LuListTodo size={20} />,
-        link: "/company/list",
+        link: "/hrm-setup",
       },
     ],
   },
   {
     title: "Banking system",
-    icon: <AiOutlineProduct size={20} />,
+    icon: <TbMoneybag size={20} />,
     subMenu: [
       { title: "Account", link: "/add-product" },
       { title: "Transfer", link: "/manage-products" },
@@ -93,28 +99,13 @@ const adminMenuItems = [
   },
   {
     title: "User Management",
-    icon: <AiOutlineProduct size={20} />,
+    icon: <LuUser2 size={19} />,
     subMenu: [
       { title: "User", link: "/add-product" },
       { title: "Role", link: "/manage-products" },
     ],
   },
-  {
-    title: "Products",
-    icon: <AiOutlineProduct size={20} />,
-    subMenu: [
-      { title: "Add Product", link: "/add-product" },
-      { title: "Manage Products", link: "/manage-products" },
-    ],
-  },
-  {
-    title: "HRM System",
-    icon: <AiOutlineProduct size={20} />,
-    subMenu: [
-      { title: "HRM System Setup", link: "/hrm-setup" },
-      { title: "Manage Products", link: "/manage-products" },
-    ],
-  },
+
   {
     title: "Settings",
     icon: <AiOutlineSetting size={20} />,

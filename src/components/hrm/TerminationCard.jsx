@@ -10,7 +10,7 @@ import { CiEdit } from "react-icons/ci";
 import { useState } from "react";
 import AllowanceForm from "./AllowanceForm";
 
-const LoanCard = () => {
+const TerminationCard = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
 
   const onClose = () => {
@@ -31,16 +31,8 @@ const LoanCard = () => {
         <div className="px-6 py-3">
           {/* header  */}
           <div className="w-full bg-light-bg dark:bg-dark-box rounded-sm py-3 px-3 flex flex-wrap justify-between text-sm">
-            <div className="dark:text-white w-[20%]">
+            <div className="dark:text-white w-[85%]">
               <h3>Name</h3>
-            </div>
-
-            <div className="dark:text-white w-[20%]">
-              <h3>Interest Rate</h3>
-            </div>
-
-            <div className="dark:text-white w-[20%]">
-              <h3>Max Amount</h3>
             </div>
 
             <div className="dark:text-white w-[15%]">
@@ -50,14 +42,8 @@ const LoanCard = () => {
 
           {/* body  */}
           <div className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10">
-            <div className="dark:text-white w-[20%]">
-              <h3>Medical</h3>
-            </div>
-            <div className="dark:text-white w-[20%]">
-              <h3>5%</h3>
-            </div>
-            <div className="dark:text-white w-[20%]">
-              <h3>60000</h3>
+            <div className="dark:text-white w-[85%]">
+              <h3>Payslip Type</h3>
             </div>
 
             <div className="dark:text-white w-[15%]">
@@ -100,4 +86,4 @@ const LoanCard = () => {
   );
 };
 
-export default LoanCard;
+export default TerminationCard;
