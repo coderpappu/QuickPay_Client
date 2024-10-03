@@ -5,14 +5,17 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import {
-    useDeleteAttendanceMutation,
-    useGetAttendancesQuery,
-    useGetCompanyIdQuery,
+  useDeleteAttendanceMutation,
+  useGetAttendancesQuery,
+  useGetCompanyIdQuery,
 } from "../../features/api";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import DatePicker from "../../utils/DatePicker";
 import ErrorMessage from "../../utils/ErrorMessage";
+import { AiOutlineDelete } from "react-icons/ai";
+import { CiEdit } from "react-icons/ci";
+
 const AttendanceList = () => {
   const { data: companyId } = useGetCompanyIdQuery();
   const [deleteAttendance] = useDeleteAttendanceMutation();
@@ -82,7 +85,7 @@ const AttendanceList = () => {
           className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
         >
           <td className="py-2 text-sm text-center">{index + 1}</td>
-          <td className="py-2 text-sm font-semibold pl-10">
+          <td className="py-2 text-sm font-semibold  text-center">
             {attendance?.employee?.name}
           </td>
           <td className="py-2 text-sm text-center">
@@ -113,28 +116,23 @@ const AttendanceList = () => {
           <td className="py-2 text-sm text-center">{attendance?.status}</td>
 
           <td className="py-2 text-sm text-center">
-            <Link to={`/company/employee/details/${attendance?.employee?.id}`}>
-              <div className="grid place-items-center">
-                <LuEye className="text-2xl text-green-500" />
+            <div className="flex flex-wrap justify-center gap-2 m-auto text-white">
+              {/* edit button  */}
+              <div className="w-8 h-8 bg-indigo-600 rounded-sm p-2 flex justify-center items-center cursor-pointer">
+                <Link
+                  to={`/company/employee/details/${attendance?.employee?.id}`}
+                >
+                  <LuEye size={20} />
+                </Link>
               </div>
-            </Link>
-          </td>
-          <td className="py-2 text-sm">
-            {/* <Link to={`/company/update/${attendance.id}`}> */}
-            <div className="grid place-items-center">
-              <TbEdit
-                className="text-2xl text-[#3686FF]"
-                onClick={() => handleEditAttendance()}
-              />
-            </div>
-            {/* </Link> */}
-          </td>
-          <td
-            className="py-2 text-sm"
-            onClick={() => handleDeleteCompany(attendance.id)}
-          >
-            <div className="grid place-items-center">
-              <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
+
+              {/* delete button  */}
+              <div className="w-8 h-8 bg-red-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer">
+                <MdOutlineDeleteOutline
+                  size={20}
+                  onClick={() => handleDeleteCompany(attendance.id)}
+                />
+              </div>
             </div>
           </td>
         </tr>
@@ -144,40 +142,47 @@ const AttendanceList = () => {
     <div>
       <div className="flex flex-wrap justify-between items-center pb-2">
         <div>
-          <h2 className="font-semibold text-lg pb-2">Presents Employee</h2>
+          <h2 className="font-semibold text-lg pb-2 dark:text-dark-heading-color">
+            Presents Employee
+          </h2>
         </div>
       </div>
 
-      <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-auto">
+      <div className="border-solid border-[1px] border-slate-200 bg-white dark:bg-dark-card dark:border-none rounded-md p-5 w-full h-auto">
         <div className="flex flex-wrap justify-between mb-2">
-          <div className="font-medium text-base">
+          <div className="font-medium text-base dark:text-dark-text-color">
             Now {attendances?.data?.length || 0} Employee Available
           </div>
-          <div className="border p-1">
-            <input type="date" value={date} onChange={handleDateChange} />
+          <div className="border dark:border-none">
+            <input
+              type="date"
+              value={date}
+              onChange={handleDateChange}
+              className="dark:bg-dark-box border-none outline-none dark:text-white px-2 py-1 text-[15px] rounded-sm "
+            />
           </div>
         </div>
 
         <div>
           <table className="w-full h-auto table-auto">
             {!isError && (
-              <thead className="border-b border-slate-200 text-left mt-12">
+              <thead className="border-b border-slate-200 dark:border-opacity-10 dark:text-white text-left mt-12">
                 <tr>
-                  <th className="pb-2 text-base text-center">SL</th>
-                  <th className="pb-2 text-base pl-10">Name</th>
-                  <th className="pb-2 text-base text-center">In Time</th>
-                  <th className="pb-2 text-base text-center">Out Time</th>
-                  <th className="pb-2 text-base text-center">Late</th>
-                  <th className="pb-2 text-base text-center">Over Time</th>
-                  <th className="pb-2 text-base text-center">Status</th>
-                  <th className="pb-2 text-base text-center">View</th>
-                  <th className="pb-2 text-base text-center">Update</th>
-                  <th className="pb-2 text-base text-center">Delete</th>
+                  <th className="pb-2 text-[14px] text-center">SL</th>
+                  <th className="pb-2 text-[14px] text-center">Name</th>
+                  <th className="pb-2 text-[14px] text-center">In Time</th>
+                  <th className="pb-2 text-[14px] text-center">Out Time</th>
+                  <th className="pb-2 text-[14px] text-center">Late</th>
+                  <th className="pb-2 text-[14px] text-center">Over Time</th>
+                  <th className="pb-2 text-[14px] text-center">Status</th>
+                  <th className="pb-2 text-[14px] text-center">Action</th>
                 </tr>
               </thead>
             )}
 
-            <tbody>{content}</tbody>
+            <tbody className="dark:text-dark-text-color text-sm">
+              {content}
+            </tbody>
           </table>
         </div>
       </div>

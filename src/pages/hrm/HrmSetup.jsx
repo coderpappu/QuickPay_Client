@@ -25,6 +25,7 @@ import DeductionCard from "../../components/hrm/DeductionCard";
 import LoanCard from "../../components/hrm/LoanCard";
 import PaySlipCard from "../../components/hrm/PayslipCard";
 import TerminationCard from "../../components/hrm/TerminationCard";
+import EarnLeave from "../leave/earnLeave/EarnLeave";
 
 const HrmSetup = () => {
   const [activeSetting, setActiveSetting] = useState(1);
@@ -51,24 +52,28 @@ const HrmSetup = () => {
       id: 4,
     },
     {
-      title: "Payslip Type",
+      title: "Earn Leave",
       id: 5,
     },
     {
-      title: "Allowance Option",
+      title: "Payslip Type",
       id: 6,
     },
     {
-      title: "Loan Option",
+      title: "Allowance Option",
       id: 7,
     },
     {
-      title: "Deduction Option",
+      title: "Loan Option",
       id: 8,
     },
     {
-      title: "Termination Type",
+      title: "Deduction Option",
       id: 9,
+    },
+    {
+      title: "Termination Type",
+      id: 10,
     },
   ];
 
@@ -102,11 +107,12 @@ const HrmSetup = () => {
           {activeSetting == 2 && <DepartmentCard />}
           {activeSetting == 3 && <DesignationCard />}
           {activeSetting == 4 && <LeaveCard />}
-          {activeSetting == 5 && <PaySlipCard />}
-          {activeSetting == 6 && <AllowanceCard />}
-          {activeSetting == 7 && <LoanCard />}
-          {activeSetting == 8 && <DeductionCard />}
-          {activeSetting == 9 && <TerminationCard />}
+          {activeSetting == 5 && <EarnLeave />}
+          {activeSetting == 6 && <PaySlipCard />}
+          {activeSetting == 7 && <AllowanceCard />}
+          {activeSetting == 8 && <LoanCard />}
+          {activeSetting == 9 && <DeductionCard />}
+          {activeSetting == 10 && <TerminationCard />}
         </div>
       </div>
     </div>

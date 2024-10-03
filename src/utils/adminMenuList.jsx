@@ -38,9 +38,14 @@ const adminMenuItems = [
       {
         title: "Leave Management",
         subMenu: [
-          { title: "Manage Leave", link: "/profile-settings" },
-          { title: "Attendance", link: "/account-settings" },
-          { title: "Biometric ", link: "/account-settings" },
+          { title: "Leave Application", link: "/company/leave/application" },
+        ],
+      },
+      {
+        title: "Attendance ",
+        subMenu: [
+          { title: "Attendance List", link: "/employee/attendences" },
+          { title: "Manual Attendance ", link: "/employee/attendence" },
         ],
       },
       {

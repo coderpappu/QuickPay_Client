@@ -7,6 +7,8 @@ import {
   useUpdateLeaveApplicationMutation,
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
+import { AiOutlineDelete } from "react-icons/ai";
+import { CiEdit } from "react-icons/ci";
 
 // Modal Component
 // eslint-disable-next-line react/prop-types
@@ -20,16 +22,20 @@ const Modal = ({ isOpen, onClose, onSave, leaveData, setLeaveData }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-5 rounded-md w-96">
-        <h3 className="text-xl font-semibold mb-4">Edit Leave Application</h3>
+      <div className="bg-white dark:bg-dark-card p-5 rounded-md w-96">
+        <h3 className="text-xl font-semibold mb-4 dark:text-dark-heading-color">
+          Edit Leave Application
+        </h3>
         <form>
           <div className="mb-4">
-            <label className="block text-sm font-medium">Status</label>
+            <label className="block text-sm font-medium dark:text-light-bg">
+              Status
+            </label>
             <select
               name="status"
               value={leaveData.status}
               onChange={handleChange}
-              className="w-full mt-2 p-2 border border-gray-300 rounded-md"
+              className=" mt-2 p-2  w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color "
             >
               <option value="PENDING">PENDING</option>
               <option value="APPROVED">APPROVED</option>
@@ -37,24 +43,28 @@ const Modal = ({ isOpen, onClose, onSave, leaveData, setLeaveData }) => {
             </select>
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium">Paid Status</label>
+            <label className="block text-sm font-medium dark:text-light-bg">
+              Paid Status
+            </label>
             <select
               name="paid_status"
               value={leaveData.paid_status}
               onChange={handleChange}
-              className="w-full mt-2 p-2 border border-gray-300 rounded-md"
+              className=" mt-2 p-2  w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
             >
               <option value="PAID">PAID</option>
               <option value="UNPAID">UNPAID</option>
             </select>
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium">Note</label>
+            <label className="block text-sm font-medium dark:text-light-bg">
+              Note
+            </label>
             <textarea
               name="note"
               value={leaveData.note}
               onChange={handleChange}
-              className="w-full mt-2 p-2 border border-gray-300 rounded-md"
+              className=" mt-2 p-2  w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
             />
           </div>
           <div className="flex justify-end">
@@ -128,11 +138,11 @@ const LeaveApplicationList = () => {
   const statusColorHandler = (status) => {
     switch (status) {
       case "PENDING":
-        return "bg-[#ffffcd] text-[#f7d000]";
+        return "bg-yellow-300 text-black";
       case "APPROVED":
-        return "bg-[#DDF6E1] text-[#1DCF33]";
+        return "bg-green-500 text-white";
       case "REJECTED":
-        return "bg-[#ffd4d4] text-[#ff0d0d]";
+        return "bg-red-500 text-white";
       default:
         return "text-gray-500";
     }
@@ -140,17 +150,18 @@ const LeaveApplicationList = () => {
 
   if (!isLoading && !isError) {
     content = (
-      <tbody>
+      <tbody className="dark:text-dark-text-color">
         {leaveApplicationList?.data?.map((leave, index) => (
           <tr
             key={leave?.id}
-            className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
+            className={index % 2 === 0 ? "" : "bg-gray-50  rounded-sm"}
           >
             <td className="py-2 text-sm ">{++index}</td>
             <td className="py-2 text-sm ">{leave?.LeaveType?.name}</td>
+            <td className="py-2 text-sm ">{leave?.created_at}</td>
             <td className="py-2 text-sm ">{leave?.start_date}</td>
             <td className="py-2 text-sm ">{leave?.end_date}</td>
-            <td className="py-2 text-sm ">2</td>
+            <td className="py-2 text-sm ">{leave?.leaveDuration}</td>
             <td className="py-2 text-sm ">{leave?.reason}</td>
             <td className="py-2 text-sm ">{leave?.paid_status}</td>
             <td className="py-2 text-sm ">{leave?.note || "..."}</td>
@@ -162,12 +173,15 @@ const LeaveApplicationList = () => {
                 {leave?.status}
               </div>
             </td>
-            <td className="py-2 text-sm text-center flex justify-center items-center">
-              <LiaEditSolid
-                size={23}
-                color="#3686FF"
-                onClick={() => openModal(leave)}
-              />
+            <td className="py-2 text-sm text-center flex justify-center items-center gap-2">
+              <div>
+                <div className="w-8 h-8 bg-indigo-600 text-white rounded-sm p-2 flex justify-center items-center cursor-pointer">
+                  <CiEdit size={20} onClick={() => openModal(leave)} />
+                </div>
+              </div>
+              <div className="w-8 h-8 bg-red-500 text-white text-center flex justify-center items-center rounded-sm p-2 cursor-pointer">
+                <AiOutlineDelete size={20} />
+              </div>
             </td>
           </tr>
         ))}
@@ -176,38 +190,46 @@ const LeaveApplicationList = () => {
   }
 
   return (
-    <div className="border-solid border-[1px] mt-3 border-slate-200 bg-white rounded-md p-5 w-full h-auto">
-      <div className="flex flex-wrap justify-between items-center mb-4">
-        <div>All Leave Request</div>
+    <>
+      <div>
+        <h2 className="font-semibold text-lg pb-2 dark:text-dark-heading-color">
+          Employee Leave Applications
+        </h2>
       </div>
-      <table className="w-full h-auto">
-        <thead className="border-b border-slate-200 text-left mt-8">
-          <tr>
-            <th className="pb-2 text-base ">SL</th>
-            <th className="pb-2 text-base ">Leave Type</th>
-            <th className="pb-2 text-base ">From</th>
-            <th className="pb-2 text-base ">To</th>
-            <th className="pb-2 text-base ">Days</th>
-            <th className="pb-2 text-base ">Reason</th>
-            <th className="pb-2 text-base ">Paid Status</th>
-            <th className="pb-2 text-base ">Note</th>
-            <th className="pb-2 text-base ">Approved By</th>
-            <th className="pb-2 text-base text-center">Status</th>
-            <th className="pb-2 text-base text-center">Action</th>
-          </tr>
-        </thead>
-        {content}
-      </table>
+      <div className="border-solid border-[1px] mt-3 border-slate-200 dark:border-dark-border-color dark:border-opacity-10 bg-white dark:bg-dark-box rounded-md p-5 w-full h-auto ">
+        <div className="flex flex-wrap justify-between items-center mb-4">
+          {/* <div className="dark:text-light-bg"></div> */}
+        </div>
+        <table className="w-full h-auto">
+          <thead className="border-b border-slate-200 dark:border-dark-border-color dark:border-opacity-10 dark:text-white mt-8 text-left ">
+            <tr>
+              <th className="pb-2 text-[14px] w-[3%]">SL</th>
+              <th className="pb-2 text-[14px] w-[10%]">Leave Type</th>
+              <th className="pb-2 text-[14px] w-[10%]">Applied on</th>
+              <th className="pb-2 text-[14px] w-[10%]">Start Date</th>
+              <th className="pb-2 text-[14px] w-[10%]">End Date</th>
+              <th className="pb-2 text-[14px] w-[5%]">Days</th>
+              <th className="pb-2 text-[14px] w-[10%]">Reason</th>
+              <th className="pb-2 text-[14px] w-[10%]">Paid Status</th>
+              <th className="pb-2 text-[14px] w-[10%]">Note</th>
+              <th className="pb-2 text-[14px] w-[8%]">Approved By</th>
+              <th className="pb-2 text-[14px] w-[10%] text-center">Status</th>
+              <th className="pb-2 text-[14px] w-[10%] text-center">Action</th>
+            </tr>
+          </thead>
+          {content}
+        </table>
 
-      {/* Modal Popup for editing */}
-      <Modal
-        isOpen={modalOpen}
-        onClose={closeModal}
-        onSave={saveLeaveData}
-        leaveData={leaveData}
-        setLeaveData={setLeaveData}
-      />
-    </div>
+        {/* Modal Popup for editing */}
+        <Modal
+          isOpen={modalOpen}
+          onClose={closeModal}
+          onSave={saveLeaveData}
+          leaveData={leaveData}
+          setLeaveData={setLeaveData}
+        />
+      </div>
+    </>
   );
 };
 

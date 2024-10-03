@@ -73,37 +73,40 @@ const ManualAttendance = () => {
 
   if (!isLoading && !isError && employees?.data?.length >= 0)
     content = employees?.data?.map((employee, index) => (
-      <tr key={employee?.id} className="w-full">
-        <td className="py-2 text-sm text-center ">{index + 1}</td>
-        <td className="py-2 text-sm font-semibold pl-10 ">{employee?.name}</td>
-        <td className="py-2 text-sm font-semibold pl-10 ">
+      <tr key={employee?.id} className="w-full dark:text-dark-text-color">
+        <td className="py-2 text-sm  ">{index + 1}</td>
+        <td className="py-2 text-sm">{employee?.name}</td>
+        <td className="py-2 text-sm ">
           {employee?.EmployeeDepartment?.[0]?.department?.name}
         </td>
-        <td className="py-2 text-sm font-semibold pl-10 ">
+        <td className="py-2 text-sm ">
+          {employee?.EmployeeDepartment?.[0]?.department?.name}
+        </td>
+        <td className="py-2 text-sm  ">
           {employee?.EmployeeShift?.[0]?.shift?.name}
         </td>
-        <td className="py-2 text-sm text-center">
+        <td className="py-2 text-sm ">
           <input
             type="time"
             placeholder="00.00"
             value={checkInTimes[employee?.id] || ""}
             onChange={(e) => handleCheckInChange(employee?.id, e.target.value)}
-            className="p-2 w-[80px] bg-[#F0F3FF] rounded-sm focus:outline-[#6D28D8] text-center"
+            className="p-2 w-[80px] bg-[#F0F3FF] dark:bg-dark-box rounded-sm focus:outline-[#6D28D8] text-center"
           />
         </td>
 
-        <td className="py-2 text-sm text-center">
+        <td className="py-2 text-sm ">
           <input
             type="time"
             placeholder="03.00"
             value={checkOutTimes[employee?.id] || ""}
             onChange={(e) => handleCheckOutChange(employee?.id, e.target.value)}
-            className="p-2 w-[80px] bg-[#F0F3FF] rounded-sm focus:outline-[#6D28D8] text-center"
+            className="p-2 w-[80px] bg-[#F0F3FF] dark:bg-dark-box rounded-sm focus:outline-[#6D28D8] text-center"
           />
         </td>
 
         <td className="py-2 text-sm ">
-          <div className="grid place-items-center">
+          <div className="grid ">
             <MdOutlineCheckCircle
               className="text-2xl text-green-600 cursor-pointer"
               onClick={() =>
@@ -119,41 +122,39 @@ const ManualAttendance = () => {
     <div>
       <div className="flex flex-wrap justify-between items-center pb-2">
         <div>
-          <h2 className="font-semibold text-lg pb-2"> All Employee </h2>
+          <h2 className="font-semibold text-lg pb-2 dark:text-dark-heading-color">
+            {" "}
+            All Employee Attendance{" "}
+          </h2>
         </div>
       </div>
 
-      <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-auto">
+      <div className="border-solid border-[1px] border-slate-200 bg-white dark:bg-dark-card dark:border-none rounded-md p-5 px-8 w-full h-auto">
         <div className="flex flex-wrap justify-between mb-3">
-          <div className="font-medium text-base">
+          <div className="font-medium text-base dark:text-dark-text-color">
             Now 150 employees are available
           </div>
           <div>
             <input
               type="text"
               placeholder="Search"
-              className="p-2 border-solid bg-[#F0F3FF] rounded-md focus:outline-[#6D28D8]"
+              className="p-2 border-solid bg-[#F0F3FF] dark:bg-dark-box rounded-md focus:outline-[#6D28D8]"
             />
           </div>
         </div>
         <div>
-          <table className="w-full h-auto">
+          <table className="w-full h-auto ">
             {!isError && (
-              <thead className="border-b border-slate-200 text-left  mt-12">
+              <thead className="border-b border-slate-200 dark:border-opacity-10 dark:text-white text-left  mt-12">
                 <tr>
-                  <th className="pb-2 text-base text-center w-[8%]">SL</th>
-                  <th className="pb-2 text-base pl-10 w-[22%]">Name</th>
-                  <th className="pb-2 text-base text-center w-[14%]">
-                    Department
-                  </th>
-                  <th className="pb-2 text-base text-center w-[14%]">Shift</th>
-                  <th className="pb-2 text-base text-center w-[14%]">
-                    In Time
-                  </th>
-                  <th className="pb-2 text-base text-center w-[14%]">
-                    Out Time
-                  </th>
-                  <th className="pb-2 text-base text-center w-[14%]">Update</th>
+                  <th className="pb-2 text-sm  w-[8%]">SL</th>
+                  <th className="pb-2 text-sm  w-[14%]">Name</th>
+                  <th className="pb-2 text-sm  w-[14%]">Branch</th>
+                  <th className="pb-2 text-sm  w-[14%]">Department</th>
+                  <th className="pb-2 text-sm  w-[14%]">Shift</th>
+                  <th className="pb-2 text-sm  w-[14%]">In Time</th>
+                  <th className="pb-2 text-sm  w-[14%]">Out Time</th>
+                  <th className="pb-2 text-sm  w-[5%]">Update</th>
                 </tr>
               </thead>
             )}
