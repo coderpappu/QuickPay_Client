@@ -196,7 +196,7 @@ const LeaveApplicationList = () => {
           Employee Leave Applications
         </h2>
       </div>
-      <div className="border-solid border-[1px] mt-3 border-slate-200 dark:border-dark-border-color dark:border-opacity-10 bg-white dark:bg-dark-box rounded-md p-5 w-full h-auto ">
+      <div className="border-solid border-[1px] mt-3 border-slate-200 dark:border-none  bg-white dark:bg-dark-card rounded-md p-5 w-full h-auto ">
         <div className="flex flex-wrap justify-between items-center mb-4">
           {/* <div className="dark:text-light-bg"></div> */}
         </div>

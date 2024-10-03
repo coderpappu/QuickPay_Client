@@ -6,21 +6,23 @@ import { useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { Link, useParams } from "react-router-dom";
 import AboutCard from "../../components/employee/AboutCard";
+
 import {
   useGetEmployeeDetailsQuery,
   useGetEmployeesQuery,
   useGetUserQuery,
 } from "../../features/api";
+
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import JobDetails from "../../components/employee/JobDetails";
 import SalarySettingsForm from "./SalarySetting/SalarySetting";
 const Profile = () => {
+  
   const id = useParams()?.id;
+
   const { data: employeeData } = useGetUserQuery();
 
-  const { data, isLoading, isError } = useGetEmployeeDetailsQuery(
-    id || employeeData?.data?.id
-  );
+  const { data, isLoading, isError } = useGetEmployeeDetailsQuery(id || employeeData?.data?.id);
 
   const [selected, setSelected] = useState("1");
 
@@ -28,6 +30,7 @@ const Profile = () => {
   const handleSelect = (id) => {
     setSelected(id);
   };
+
   let content;
 
   if (isLoading && !isError) content = <ListSkeleton />;
