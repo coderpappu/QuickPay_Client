@@ -16,7 +16,7 @@ import FormSkeleton from "../../../skeletons/FormSkeleton";
 const LeaveTypeSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   code: Yup.string().required("Code is required"),
-  // type: Yup.string().required("Leave Type is required"),
+  type: Yup.string().required("Leave Type is required"),
   day: Yup.string().required("Day is required"),
 });
 
@@ -67,14 +67,14 @@ const LeaveTypeForm = ({ leaveTypeId, setIsPopupOpen }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+      <div className="bg-white dark:bg-dark-card rounded-lg shadow-lg w-full max-w-md p-6 relative">
         <button
           className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none"
           onClick={() => setIsPopupOpen(false)}
         >
           &#x2715;
         </button>
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
           {leaveTypeId ? "Edit Leave Type" : "Add Leave Type"}
         </h2>
         <Formik
@@ -133,7 +133,7 @@ const LeaveTypeForm = ({ leaveTypeId, setIsPopupOpen }) => {
               <div className="mb-4">
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                 >
                   Name
                 </label>
@@ -141,7 +141,7 @@ const LeaveTypeForm = ({ leaveTypeId, setIsPopupOpen }) => {
                   type="text"
                   name="name"
                   id="name"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm dark:bg-dark-box dark:border-none dark:text-dark-text-color"
                 />
                 <ErrorMessage
                   name="name"
@@ -153,7 +153,7 @@ const LeaveTypeForm = ({ leaveTypeId, setIsPopupOpen }) => {
               <div className="mb-4">
                 <label
                   htmlFor="code"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700  dark:text-dark-text-color"
                 >
                   Code
                 </label>
@@ -161,19 +161,19 @@ const LeaveTypeForm = ({ leaveTypeId, setIsPopupOpen }) => {
                   type="text"
                   name="code"
                   id="code"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm dark:bg-dark-box dark:border-none dark:text-dark-text-color"
                 />
                 <ErrorMessage
                   name="code"
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="text-red-500 text-sm mt-1 "
                 />
               </div>
 
               <div className="mb-4">
                 <label
                   htmlFor="type"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700  dark:text-dark-text-color"
                 >
                   Type
                 </label>
@@ -181,7 +181,7 @@ const LeaveTypeForm = ({ leaveTypeId, setIsPopupOpen }) => {
                   as="select"
                   name="type"
                   id="type"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm dark:bg-dark-box dark:border-none dark:text-dark-text-color"
                 >
                   <option value="">Select</option>
                   <option value="Paid">Paid</option>
@@ -197,7 +197,7 @@ const LeaveTypeForm = ({ leaveTypeId, setIsPopupOpen }) => {
               <div className="mb-4">
                 <label
                   htmlFor="day"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700  dark:text-dark-text-color"
                 >
                   Day
                 </label>
@@ -206,7 +206,7 @@ const LeaveTypeForm = ({ leaveTypeId, setIsPopupOpen }) => {
                   name="day"
                   id="day"
                   placeHolder="Number of day"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm dark:bg-dark-box dark:border-none dark:text-dark-text-color"
                 />
                 <ErrorMessage
                   name="day"
@@ -218,7 +218,7 @@ const LeaveTypeForm = ({ leaveTypeId, setIsPopupOpen }) => {
               <div className="mb-4">
                 <label
                   htmlFor="description"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700  dark:text-dark-text-color"
                 >
                   Description
                 </label>
@@ -226,7 +226,7 @@ const LeaveTypeForm = ({ leaveTypeId, setIsPopupOpen }) => {
                   type="text"
                   name="description"
                   id="description"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-g ray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm dark:bg-dark-box dark:border-none dark:text-dark-text-color"
                 />
                 <ErrorMessage
                   name="description"
@@ -239,7 +239,7 @@ const LeaveTypeForm = ({ leaveTypeId, setIsPopupOpen }) => {
                 <button
                   type="button"
                   onClick={() => setIsPopupOpen(false)}
-                  className="mr-4 px-4 py-2 bg-gray-300 rounded-md text-sm font-medium text-gray-800 hover:bg-gray-400"
+                  className="mr-4 px-4 py-2 bg-gray-300 dark:bg-dark-box dark:text-white rounded-md text-sm font-medium text-gray-800 "
                 >
                   Cancel
                 </button>
