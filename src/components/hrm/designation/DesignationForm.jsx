@@ -4,41 +4,43 @@ import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 
 import {
-  useCreateDepartmentMutation,
+  useCreateNewDesignationMutation,
   useGetCompanyIdQuery,
-  useGetDepartmentDetailsQuery,
-  useUpdateDepartmentMutation,
+  useGetDesignationDetailsQuery,
+  useGetDesignationsQuery,
+  useUpdateDesignationMutation,
 } from "../../../features/api";
 
 import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
 
-const DepartmentSchema = Yup.object().shape({
-  name: Yup.string().required("Department Name is required"),
+const designationSchema = Yup.object().shape({
+  name: Yup.string().required("Designation name is required"),
 });
 
 // eslint-disable-next-line react/prop-types
-const DepartmentForm = ({ departmentId, setIsPopupOpen }) => {
+const DesignationForm = ({ designationId, setIsPopupOpen }) => {
+  console.log(designationId);
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [createDepartment, { isLoading, isError, isSuccess, error }] =
-    useCreateDepartmentMutation();
+  const [createDesignation, { isLoading, isError, isSuccess, error }] =
+    useCreateNewDesignationMutation();
 
-  const [updateDept] = useUpdateDepartmentMutation();
+  const [updateDesignation] = useUpdateDesignationMutation();
 
   const { data: company_id } = useGetCompanyIdQuery();
 
   const {
-    data: departmentData,
-    isLoading: departmentLoading,
-    isError: departmentError,
-  } = useGetDepartmentDetailsQuery(departmentId, { skip: !departmentId });
+    data: designationData,
+    isLoading: designationLoading,
+    isError: designationError,
+  } = useGetDesignationDetailsQuery(designationId, { skip: !designationId });
 
-  if (departmentLoading && !departmentError) return <CardSkeleton />;
-  if (!departmentLoading && departmentError)
+  if (designationLoading && !designationError) return <CardSkeleton />;
+  if (!designationLoading && designationError)
     return <ErrorMessage message={error?.data?.message} />;
 
-  let name = departmentData?.data?.name;
+  let name = designationData?.data?.name;
 
   const initialValues = {
     name: name || "",
@@ -49,19 +51,19 @@ const DepartmentForm = ({ departmentId, setIsPopupOpen }) => {
       <Formik
         enableReinitialize={true}
         initialValues={initialValues}
-        validationSchema={DepartmentSchema}
+        validationSchema={designationSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           try {
-            if (departmentId == null) {
-              await createDepartment({
+            if (designationId == null) {
+              await createDesignation({
                 ...values,
                 company_id: company_id,
               }).unwrap(); // Unwrap the promise for proper error handling
               setIsPopupOpen(false);
               resetForm(); // Reset Formik form state\
             } else {
-              await updateDept({
-                id: departmentId,
+              await updateDesignation({
+                id: designationId,
                 ...values,
                 company_id: company_id,
               }).unwrap(); // Unwrap the promise for proper error handling
@@ -69,7 +71,7 @@ const DepartmentForm = ({ departmentId, setIsPopupOpen }) => {
               resetForm(); // Reset Formik form state
             }
 
-            toast.success("Department saved successfully!");
+            toast.success("Desigantion saved successfully!");
           } catch (error) {
             toast.error(error?.data?.message);
           } finally {
@@ -80,13 +82,13 @@ const DepartmentForm = ({ departmentId, setIsPopupOpen }) => {
         {({ isSubmitting }) => (
           <Form className="max-w-4xl mx-auto px-4 py-6">
             <div className="space-y-4">
-              {/* Form field for department name */}
+              {/* Form field for designation name */}
               <div>
                 <label
                   htmlFor="name"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Department Name
+                  Designation Name
                 </label>
                 <Field
                   type="text"
@@ -117,4 +119,4 @@ const DepartmentForm = ({ departmentId, setIsPopupOpen }) => {
   );
 };
 
-export default DepartmentForm;
+export default DesignationForm;

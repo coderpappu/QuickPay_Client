@@ -14,10 +14,11 @@ import {
   useGetDepartmentsQuery,
   useDeleteDepartmentMutation,
 } from "../../../features/api";
-
+import toast from "react-hot-toast";
 import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
 import ErrorMessage from "../../../utils/ErrorMessage";
 import DepartmentForm from "./DepartmentForm";
+import ConfirmDialog from "../../../helpers/ConfirmDialog";
 
 const DepartmentCard = () => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const DepartmentCard = () => {
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteDeduction] = useDeleteDepartmentMutation();
+  const [deleteDepartment] = useDeleteDepartmentMutation();
 
   const {
     data: departmentList,
@@ -44,6 +45,36 @@ const DepartmentCard = () => {
     error,
   } = useGetDepartmentsQuery(companyId);
 
+  const handleDeleteDepartment = async (id) => {
+    const confirm = () =>
+      toast(
+        (t) => (
+          <ConfirmDialog
+            onConfirm={async () => {
+              toast.dismiss(t.id);
+              try {
+                deleteDepartment(id).then((res) => {
+                  if (res.error != null) {
+                    toast.error(res.error.data.message);
+                  } else {
+                    toast.success("Department deleted successfully");
+                  }
+                });
+              } catch (error) {
+                toast.error(error.message || "Failed to delete department");
+              }
+            }}
+            onCancel={() => toast.dismiss(t.id)}
+            title="Department"
+          />
+        ),
+        {
+          duration: Infinity,
+        }
+      );
+
+    confirm();
+  };
   if (isLoading && !isError) return <CardSkeleton />;
   if (!isLoading && isError)
     return <ErrorMessage message={error?.data?.message} />;
@@ -87,7 +118,10 @@ const DepartmentCard = () => {
                     </div>
 
                     {/* delete button  */}
-                    <div className="w-8 h-8 bg-red-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer">
+                    <div
+                      className="w-8 h-8 bg-red-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
+                      onClick={() => handleDeleteDepartment(department?.id)}
+                    >
                       <AiOutlineDelete size={20} />
                     </div>
                   </div>
@@ -110,7 +144,10 @@ const DepartmentCard = () => {
                   </button>
                 </div>
                 <div className="mt-4">
-                  <DepartmentForm departmentId={selectedDepartmentId} />
+                  <DepartmentForm
+                    departmentId={selectedDepartmentId}
+                    setIsPopupOpen={setIsPopupOpen}
+                  />
                 </div>
               </div>
             </div>
