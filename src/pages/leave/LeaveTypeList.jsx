@@ -4,23 +4,18 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
 import {
-    useDeleteLeaveTypeMutation,
-    useGetCompanyIdQuery,
-    useGetLeaveTypeListQuery,
-    useSetCompanyIdMutation
+  useDeleteLeaveTypeMutation,
+  useGetCompanyIdQuery,
+  useGetLeaveTypeListQuery,
+  useSetCompanyIdMutation,
 } from "../../features/api";
+
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import ErrorMessage from "../../utils/ErrorMessage";
 import LeaveTypeForm from "./LeaveTypeForm";
 
 const LeaveTypeList = () => {
-  //   const {
-  //     data: companyData,
-  //     isLoading,
-  //     isError,
-  //     refetch,
-  //   } = useGetCompaniesQuery();
   const navigate = useNavigate();
 
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility

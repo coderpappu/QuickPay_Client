@@ -19,7 +19,7 @@ import BiometricCard from "../../components/company/BiometricCard";
 import BranchCard from "../../components/hrm/BranchCard";
 import DepartmentCard from "../../components/hrm/department/DepartmentCard";
 import DesignationCard from "../../components/hrm/designation/DesignationCard";
-import LeaveCard from "../../components/hrm/LeaveCard";
+import LeaveCard from "../../components/hrm/Leave/LeaveCard";
 import AllowanceCard from "../../components/hrm/AllowanceCard";
 import DeductionCard from "../../components/hrm/DeductionCard";
 import LoanCard from "../../components/hrm/LoanCard";
