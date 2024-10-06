@@ -4,10 +4,10 @@ import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
-    useCreateNewDesignationMutation,
-    useGetCompanyIdQuery,
-    useGetDesignationDetailsQuery,
-    useUpdateDesignationMutation,
+  useCreateNewDesignationMutation,
+  useGetCompanyIdQuery,
+  useGetDesignationDetailsQuery,
+  useUpdateDesignationMutation,
 } from "../../features/api";
 import FormSkeleton from "../../skeletons/FormSkeleton";
 
@@ -15,17 +15,17 @@ const DesignationSchema = Yup.object().shape({
   name: Yup.string().required("Designation Name is required"),
 });
 
-const DesignationForm = () => {
+const DesignationForm = ({ departmentId }) => {
   const navigate = useNavigate();
 
-  const { id } = useParams();
+  // const { id } = useParams();
 
   const [createNewDesignation] = useCreateNewDesignationMutation();
   const [updateDesignation] = useUpdateDesignationMutation();
   const [initialValues, setInitialValues] = useState({ name: "" });
 
   const { data: designation, isLoading: isDesignationLoading } =
-    useGetDesignationDetailsQuery(id, { skip: !id });
+    useGetDesignationDetailsQuery(departmentId, { skip: !departmentId });
 
   useEffect(() => {
     if (designation?.data) {
@@ -51,7 +51,7 @@ const DesignationForm = () => {
         validationSchema={DesignationSchema}
         onSubmit={async (values, { setSubmitting }) => {
           const { name } = values;
-          if (id == null) {
+          if (departmentId == null) {
             await createNewDesignation({ name, company_id: companyId })
               .then((res) => {
                 if (res.error != null) {
@@ -66,7 +66,11 @@ const DesignationForm = () => {
                 toast.error(error);
               });
           } else {
-            await updateDesignation({ id, name, company_id: companyId })
+            await updateDesignation({
+              departmentId,
+              name,
+              company_id: companyId,
+            })
               .then((res) => {
                 if (res?.error != null) {
                   toast.error(res?.error?.data?.message);

@@ -17,7 +17,7 @@ import ExperienceLetterCard from "../../components/company/ExpericeLetterCard";
 import NocCard from "../../components/company/NocCard";
 import BiometricCard from "../../components/company/BiometricCard";
 import BranchCard from "../../components/hrm/BranchCard";
-import DepartmentCard from "../../components/hrm/DepartmentCard";
+import DepartmentCard from "../../components/hrm/department/DepartmentCard";
 import DesignationCard from "../../components/hrm/DesignationCard";
 import LeaveCard from "../../components/hrm/LeaveCard";
 import AllowanceCard from "../../components/hrm/AllowanceCard";

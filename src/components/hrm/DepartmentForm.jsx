@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
   useCreateAllowanceMutation,
+  useCreateDepartmentMutation,
   useCreateGradeMutation,
   useCreateLeaveTypeMutation,
   useGetAllowanceDetailsQuery,
@@ -13,26 +14,24 @@ import {
   useGetLeaveTypeDetailsQuery,
   useGetTypeListQuery,
   useUpdateAllowanceMutation,
+  useUpdateDepartmentMutation,
   useUpdateGradeMutation,
   useUpdateLeaveTypeMutation,
 } from "../../features/api";
 
 import FormSkeleton from "../../skeletons/FormSkeleton";
 import { InputBox } from "../company/BrandInput";
-const allowanceSchema = Yup.object().shape({
-  name: Yup.string().required("Name is required"),
-  type: Yup.string().required("Type is required"),
-  basic_percentage: Yup.number().required("Basic percentage is required"),
-  limit_per_month: Yup.number().required("Limit per month is required"),
+
+const departmentSchema = Yup.object().shape({
+  name: Yup.string().required("Department name is required"),
 });
 
-const AllowanceForm = ({ onClose }) => {
-  
+const DepartmentForm = ({ onClose }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: companyId } = useGetCompanyIdQuery();
-  const [createAllowance] = useCreateAllowanceMutation();
-  const [updateAllowance] = useUpdateAllowanceMutation();
+  const [createDepartment] = useCreateDepartmentMutation();
+  const [updateDepartment] = useUpdateDepartmentMutation();
 
   const {
     data: types,
@@ -44,9 +43,6 @@ const AllowanceForm = ({ onClose }) => {
 
   const [initialValues, setInitialValues] = useState({
     name: "",
-    type: "",
-    basic_percentage: "",
-    limit_per_month: "",
   });
 
   const { data: allowanceDetails, isLoading: isWeekendLoading } =
@@ -230,4 +226,4 @@ const AllowanceForm = ({ onClose }) => {
   );
 };
 
-export default AllowanceForm;
+export default DepartmentForm;

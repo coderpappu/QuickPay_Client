@@ -92,6 +92,7 @@ const Modal = ({ isOpen, onClose, onSave, leaveData, setLeaveData }) => {
 const LeaveApplicationList = () => {
   const [editRow, setEditRow] = useState(null); // Row being edited
   const [modalOpen, setModalOpen] = useState(false); // Modal visibility
+
   const [leaveData, setLeaveData] = useState({
     status: "",
     paid_status: "",

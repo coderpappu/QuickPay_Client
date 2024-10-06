@@ -2,20 +2,25 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
+
 import {
-    useCreateDepartmentMutation,
-    useGetCompanyIdQuery,
-    useGetDepartmentDetailsQuery,
-    useUpdateDepartmentMutation,
-} from "../../features/api";
+  useCreateDepartmentMutation,
+  useGetCompanyIdQuery,
+  useGetDepartmentDetailsQuery,
+  useUpdateDepartmentMutation,
+} from "../../../features/api";
+
+import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
 
 const DepartmentSchema = Yup.object().shape({
   name: Yup.string().required("Department Name is required"),
 });
 
-const DepartmentForm = () => {
+// eslint-disable-next-line react/prop-types
+const DepartmentForm = ({ departmentId }) => {
   const navigate = useNavigate();
   const { id } = useParams();
+
   const [createDepartment, { isLoading, isError, isSuccess, error }] =
     useCreateDepartmentMutation();
 
@@ -23,7 +28,15 @@ const DepartmentForm = () => {
 
   const { data: company_id } = useGetCompanyIdQuery();
 
-  const { data: departmentData } = useGetDepartmentDetailsQuery(id);
+  const {
+    data: departmentData,
+    isLoading: departmentLoading,
+    isError: departmentError,
+  } = useGetDepartmentDetailsQuery(departmentId, { skip: !departmentId });
+
+  if (departmentLoading && !departmentError) return <CardSkeleton />;
+  if (!departmentLoading && departmentError)
+    return <ErrorMessage message={error?.data?.message} />;
 
   let name = departmentData?.data?.name;
 
@@ -39,16 +52,16 @@ const DepartmentForm = () => {
         validationSchema={DepartmentSchema}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           try {
-            if (!id) {
+            if (departmentId == null) {
               await createDepartment({
                 ...values,
                 company_id: company_id,
               }).unwrap(); // Unwrap the promise for proper error handling
 
-              resetForm(); // Reset Formik form state
+              resetForm(); // Reset Formik form state\
             } else {
               await updateDept({
-                id,
+                id: departmentId,
                 ...values,
                 company_id: company_id,
               }).unwrap(); // Unwrap the promise for proper error handling
@@ -57,6 +70,7 @@ const DepartmentForm = () => {
             }
 
             toast.success("Department saved successfully!");
+
             navigate("/department/list"); // Redirect to a list or another page
           } catch (error) {
             toast.error(error?.data?.message);

@@ -14,7 +14,7 @@ import Settings from "./pages/company/Settings";
 import AddShift from "./pages/company/shift/AddShift";
 import EditShift from "./pages/company/shift/EditShift";
 import ShiftList from "./pages/company/shift/ShiftList";
-import DepartmentForm from "./pages/department/DepartmentForm";
+import DepartmentForm from "./../src/components/hrm/department/DepartmentForm";
 import DepartmentList from "./pages/department/DepartmentList";
 import DepartmentSetting from "./pages/department/DepartmentSettings";
 import DesignationList from "./pages/designation/DesignationList";

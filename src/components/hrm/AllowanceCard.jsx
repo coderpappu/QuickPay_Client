@@ -17,8 +17,6 @@ const AllowanceCard = () => {
     setIsPopupOpen(false);
   };
 
-  console.log(isPopupOpen);
-
   const handleOpen = () => {
     setIsPopupOpen(true);
   };

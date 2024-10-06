@@ -24,7 +24,7 @@ const HrmSetupCardHeader = ({ title, handleOpen, isPopupOpen }) => {
 
       <div
         className="w-8 h-8 bg-green-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
-        onClick={handleOpen}
+        onClick={() => handleOpen()}
       >
         <IoAdd color="#fff" />
       </div>
