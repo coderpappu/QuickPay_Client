@@ -19,9 +19,7 @@ const designationSchema = Yup.object().shape({
 
 // eslint-disable-next-line react/prop-types
 const DesignationForm = ({ designationId, setIsPopupOpen }) => {
-  console.log(designationId);
   const navigate = useNavigate();
-  const { id } = useParams();
 
   const [createDesignation, { isLoading, isError, isSuccess, error }] =
     useCreateNewDesignationMutation();
@@ -86,7 +84,7 @@ const DesignationForm = ({ designationId, setIsPopupOpen }) => {
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                 >
                   Designation Name
                 </label>
@@ -94,7 +92,7 @@ const DesignationForm = ({ designationId, setIsPopupOpen }) => {
                   type="text"
                   name="name"
                   id="name"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-none dark:bg-dark-box dark:text-dark-text-color rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
                 <ErrorMessage
                   name="name"
