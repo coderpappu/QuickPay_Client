@@ -8,10 +8,10 @@ import DepartmentCard from "../../components/hrm/department/DepartmentCard";
 import DesignationCard from "../../components/hrm/designation/DesignationCard";
 import EarnLeave from "../../components/hrm/Leave/EarnLeave";
 import LeaveCard from "../../components/hrm/Leave/LeaveCard";
-import LoanCard from "../../components/hrm/LoanCard";
+import LoanCard from "../../components/hrm/loan/LoanCard";
 import PaySlipCard from "../../components/hrm/PayslipCard";
-import TerminationCard from "../../components/hrm/TerminationCard";
 import SectionCard from "../../components/hrm/section/SectionCard";
+import TerminationCard from "../../components/hrm/TerminationCard";
 
 import ShiftCard from "../../components/hrm/shift/ShiftCard";
 
