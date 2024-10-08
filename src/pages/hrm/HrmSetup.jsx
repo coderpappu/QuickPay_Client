@@ -13,6 +13,8 @@ import PaySlipCard from "../../components/hrm/PayslipCard";
 import TerminationCard from "../../components/hrm/TerminationCard";
 import SectionCard from "../../components/hrm/section/SectionCard";
 
+import ShiftCard from "../../components/hrm/shift/ShiftCard";
+
 const HrmSetup = () => {
   const [activeSetting, setActiveSetting] = useState(1);
 
@@ -65,6 +67,10 @@ const HrmSetup = () => {
       title: "Section",
       id: 11,
     },
+    {
+      title: "Shift",
+      id: 12,
+    },
   ];
 
   return (
@@ -104,6 +110,7 @@ const HrmSetup = () => {
           {activeSetting == 9 && <DeductionCard />}
           {activeSetting == 10 && <TerminationCard />}
           {activeSetting == 11 && <SectionCard />}
+          {activeSetting == 12 && <ShiftCard />}
         </div>
       </div>
     </div>

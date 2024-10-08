@@ -3,9 +3,9 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import {
-    useDeleteShiftMutation,
-    useGetCompanyIdQuery,
-    useGetShiftListQuery,
+  useDeleteShiftMutation,
+  useGetCompanyIdQuery,
+  useGetShiftListQuery,
 } from "../../../features/api";
 
 import toast from "react-hot-toast";
