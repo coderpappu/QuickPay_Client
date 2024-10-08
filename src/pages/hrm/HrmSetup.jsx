@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import BoardMenuButton from "../../components/company/BoardMenuButton";
 
 import AllowanceCard from "../../components/hrm/allowance/AllowanceCard";
-import BranchCard from "../../components/hrm/BranchCard";
+import BranchCard from "../../components/hrm/branch/BranchCard";
 import DeductionCard from "../../components/hrm/deduction/DeductionCard";
 import DepartmentCard from "../../components/hrm/department/DepartmentCard";
 import DesignationCard from "../../components/hrm/designation/DesignationCard";

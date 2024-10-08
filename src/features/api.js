@@ -254,6 +254,49 @@ export const apiSlice = createApi({
       invalidatesTags: ["Attendance"],
     }),
 
+    // branch related endpoint
+
+    createBranch: builder.mutation({
+      query: (credentials) => ({
+        url: "/branch/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["branch"],
+    }),
+
+    getBranchList: builder.query({
+      query: (companyId) => ({
+        url: `/branch/list`,
+        method: "GET",
+        params: { companyId },
+      }),
+      providesTags: ["branch"],
+    }),
+
+    getBranchDetails: builder.query({
+      query: (id) => `/branch/details/${id}`,
+      providesTags: ["branch"],
+    }),
+
+    updateBranch: builder.mutation({
+      query: ({ id, ...credentials }) => ({
+        url: `/branch/update/${id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["branch"],
+    }),
+
+    deleteBranch: builder.mutation({
+      query: (id) => ({
+        url: `/branch/delete`,
+        method: "DELETE",
+        params: { id },
+      }),
+      invalidatesTags: ["branch"],
+    }),
+
     // Departement related endpoints
     createDepartment: builder.mutation({
       query: (credentials) => ({
@@ -839,6 +882,16 @@ export const {
   useDeleteShiftMutation,
   useGetShiftDetailsQuery,
   useUpdateShiftMutation,
+
+  // branch
+  useCreateBranchMutation,
+  useUpdateBranchMutation,
+  useGetBranchDetailsQuery,
+  useGetBranchListQuery,
+  useDeleteBranchMutation,
+
+  // Department
+
   useDeleteDepartmentMutation,
 
   useCreateDepartmentMutation,
