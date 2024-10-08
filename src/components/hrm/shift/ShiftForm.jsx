@@ -38,6 +38,7 @@ const shiftSchema = Yup.object().shape({
 });
 
 const ShiftForm = ({ shiftId, onClose }) => {
+  console.log(shiftId);
   const navigate = useNavigate();
 
   const { data: companyId } = useGetCompanyIdQuery();

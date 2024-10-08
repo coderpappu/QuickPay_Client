@@ -217,11 +217,11 @@ export const apiSlice = createApi({
     }),
 
     updateShift: builder.mutation({
-      query: (credentials) => ({
-        url: `/shift/update/${credentials.helperKeys.id}`,
+      query: ({ id, ...credentials }) => ({
+        url: `/shift/update/${id}`,
         method: "PUT",
-        body: credentials.databody,
-        params: { company_Id: credentials.helperKeys.company_Id },
+        body: credentials,
+        // params: { company_Id: credentials.helperKeys.company_Id },
       }),
       invalidatesTags: ["Shift"],
     }),
