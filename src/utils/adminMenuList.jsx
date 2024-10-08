@@ -15,7 +15,8 @@ const adminMenuItems = [
     icon: <RxHome size={20} />,
     subMenu: [
       { title: "Overview", link: "/" },
-      { title: "Reports", link: "/company/loan/type" },
+      { title: "Reports", link: "section/list" },
+      { title: "Reports", link: "section/create" },
     ],
   },
   {
