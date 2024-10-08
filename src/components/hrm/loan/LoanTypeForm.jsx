@@ -33,7 +33,7 @@ const loanTypeSchema = Yup.object().shape({
   maxAmount: Yup.string().required("Max amount is required"),
 });
 
-const LoanTypeForm = ({ deductionId, onClose }) => {
+const LoanTypeForm = ({ loanTypeId, onClose }) => {
   const navigate = useNavigate();
   const { data: companyId } = useGetCompanyIdQuery();
   const [createLoanType] = useCreateLoanTypeMutation();
@@ -43,24 +43,22 @@ const LoanTypeForm = ({ deductionId, onClose }) => {
     data: loanTypeDetails,
     isLoading,
     isError,
-  } = useGetLoanDetailsQuery(companyId, {
-    skip: !companyId,
+  } = useGetLoanDetailsQuery(loanTypeId, {
+    skip: !loanTypeId,
   });
 
   const [initialValues, setInitialValues] = useState({
     name: "",
-    type: "",
-    basic_percentage: "",
-    limit_per_month: "",
+    interestRate: "",
+    maxAmount: "",
   });
 
   useEffect(() => {
     if (loanTypeDetails?.data) {
       setInitialValues({
         name: loanTypeDetails?.data?.name,
-        type: loanTypeDetails?.data?.type,
-        basic_percentage: loanTypeDetails?.data?.basic_percentage,
-        limit_per_month: loanTypeDetails?.data?.limit_per_month,
+        interestRate: loanTypeDetails?.data?.interestRate,
+        maxAmount: loanTypeDetails?.data?.maxLoanAmount,
       });
     }
   }, [loanTypeDetails]);
@@ -75,45 +73,41 @@ const LoanTypeForm = ({ deductionId, onClose }) => {
           &#x2715;
         </button>
         <h2 className="text-xl font-semibold  dark:text-dark-heading-color mb-4">
-          {deductionId ? "Edit Allowance" : "Add Allowance"}
+          {loanTypeId ? "Edit Loan Type" : "Add Loan Type"}
         </h2>
         <Formik
           enableReinitialize
           initialValues={initialValues}
           validationSchema={loanTypeSchema}
           onSubmit={async (values, { setSubmitting }) => {
-            const { name, type, basic_percentage, limit_per_month } = values;
-
+            const { name, interestRate, maxAmount } = values;
             try {
-              if (!deductionId) {
-                await createDeduction({
+              if (!loanTypeId) {
+                await createLoanType({
                   name,
-                  type,
-                  basic_percentage,
-                  limit_per_month,
-                  company_id: companyId,
+                  interestRate,
+                  maxLoanAmount: maxAmount,
+                  companyId,
                 }).then((res) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Allowance added successfully");
-                    navigate("/company/allowance");
+                    toast.success("Loan type added successfully");
                     onClose();
                   }
                 });
               } else {
-                await updateDeduction({
-                  id: deductionId,
+                await updateLoanType({
+                  id: loanTypeId,
                   name,
-                  type,
-                  basic_percentage,
-                  limit_per_month,
-                  company_id: companyId,
+                  interestRate,
+                  maxLoanAmount: maxAmount,
+                  companyId,
                 }).then((res) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Deduction updated successfully");
+                    toast.success("Loan type updated successfully");
                     onClose();
                   }
                 });
@@ -145,15 +139,15 @@ const LoanTypeForm = ({ deductionId, onClose }) => {
 
               <div className="mb-4">
                 <label
-                  htmlFor="type"
+                  htmlFor="interestRate"
                   className="block text-sm font-medium dark:text-dark-text-color"
                 >
-                  Deduction Type
+                  Interest Rate
                 </label>
 
-                <InputBox name="type" type="text" placeholder="Type" />
+                <InputBox name="interestRate" type="number" />
                 <ErrorMessage
-                  name="type"
+                  name="interestRate"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
@@ -161,39 +155,19 @@ const LoanTypeForm = ({ deductionId, onClose }) => {
 
               <div className="mb-4">
                 <label
-                  htmlFor="basic_percentage"
+                  htmlFor="maxAmount"
                   className="block text-sm font-medium dark:text-dark-text-color"
                 >
-                  Basic Percentage
+                  Max Amount
                 </label>
 
                 <InputBox
-                  name="basic_percentage"
+                  name="maxAmount"
                   type="number"
-                  placeholder="Basic Percentage"
+                  placeholder="Max Loan Amount"
                 />
                 <ErrorMessage
-                  name="basic_percentage"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-
-              <div className="mb-4">
-                <label
-                  htmlFor="limit_per_month"
-                  className="block text-sm font-medium dark:text-dark-text-color"
-                >
-                  Limit Per Month
-                </label>
-
-                <InputBox
-                  name="limit_per_month"
-                  type="number"
-                  placeholder="Limit per month"
-                />
-                <ErrorMessage
-                  name="limit_per_month"
+                  name="maxAmount"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
@@ -207,12 +181,13 @@ const LoanTypeForm = ({ deductionId, onClose }) => {
                 >
                   Cancel
                 </button>
+
                 <button
                   type="submit"
                   disabled={isSubmitting}
                   className="px-4 py-2 bg-[#3686FF] rounded-md text-sm font-medium text-white "
                 >
-                  {deductionId ? "Update" : "Add"}
+                  {loanTypeId ? "Update" : "Save"}
                 </button>
               </div>
             </Form>

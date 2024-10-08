@@ -12,16 +12,18 @@ import toast from "react-hot-toast";
 import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
 import ErrorMessage from "../../../utils/ErrorMessage";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
+import LoanTypeForm from "./LoanTypeForm";
 
 const LoanCard = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
-
+  const [selectedLoanTypeId, setSelectedLoanTypeId] = useState(null);
   const onClose = () => {
     setIsPopupOpen(false);
   };
 
-  const handleOpen = () => {
+  const handleOpen = (id) => {
     setIsPopupOpen(true);
+    setSelectedLoanTypeId(id);
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
@@ -42,7 +44,7 @@ const LoanCard = () => {
             onConfirm={async () => {
               toast.dismiss(t.id);
               try {
-                await deleteLoanType(id).then((res) => {
+                await deleteLoanType({ loanTypeId: id }).then((res) => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
@@ -90,7 +92,7 @@ const LoanCard = () => {
           <div className="flex flex-wrap justify-start gap-2">
             {/* edit button  */}
             <div className="w-8 h-8 bg-indigo-600 rounded-sm p-2 flex justify-center items-center cursor-pointer">
-              <CiEdit size={20} />
+              <CiEdit size={20} onClick={() => handleOpen(loanType?.id)} />
             </div>
 
             {/* delete button  */}
@@ -151,7 +153,10 @@ const LoanCard = () => {
                 </button>
               </div>
               <div className="mt-4">
-                <AllowanceForm onClose={onClose} />
+                <LoanTypeForm
+                  loanTypeId={selectedLoanTypeId}
+                  onClose={onClose}
+                />
               </div>
             </div>
           </div>

@@ -771,7 +771,7 @@ export const apiSlice = createApi({
     }),
 
     deleteLoanType: builder.mutation({
-      query: (loanTypeId) => ({
+      query: ({ loanTypeId }) => ({
         url: `/loan/type/delete/`,
         method: "DELETE",
         params: { loanTypeId },
