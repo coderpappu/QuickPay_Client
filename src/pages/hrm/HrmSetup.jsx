@@ -1,31 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import BoardMenuButton from "../../components/company/BoardMenuButton";
-import { useState } from "react";
 
-import BrandCard from "../../components/company/BrandCard";
-import SystemSettingsCard from "../../components/company/SystemSettings";
-import CompanySettings from "../../components/company/CompanySettings";
-import EmailCard from "../../components/company/EmailCard";
-import CurrencyCard from "../../components/company/CurrencyCard";
-import { Accordion } from "../../components/company/accordion";
-import PaymentCard from "../../components/company/PaymentCard";
-import ZoomMeetingCard from "../../components/company/ZoomMeetingCard";
-import NotificationCard from "../../components/company/NotificationCard";
-import JoiningLetterCard from "../../components/company/JoiningLetterCard";
-import OfferLetterCard from "../../components/company/OfferLetterCard";
-import ExperienceLetterCard from "../../components/company/ExpericeLetterCard";
-import NocCard from "../../components/company/NocCard";
-import BiometricCard from "../../components/company/BiometricCard";
+import AllowanceCard from "../../components/hrm/allowance/AllowanceCard";
 import BranchCard from "../../components/hrm/BranchCard";
+import DeductionCard from "../../components/hrm/DeductionCard";
 import DepartmentCard from "../../components/hrm/department/DepartmentCard";
 import DesignationCard from "../../components/hrm/designation/DesignationCard";
+import EarnLeave from "../../components/hrm/Leave/EarnLeave";
 import LeaveCard from "../../components/hrm/Leave/LeaveCard";
-import AllowanceCard from "../../components/hrm/AllowanceCard";
-import DeductionCard from "../../components/hrm/DeductionCard";
 import LoanCard from "../../components/hrm/LoanCard";
 import PaySlipCard from "../../components/hrm/PayslipCard";
 import TerminationCard from "../../components/hrm/TerminationCard";
-import EarnLeave from "../leave/earnLeave/EarnLeave";
 
 const HrmSetup = () => {
   const [activeSetting, setActiveSetting] = useState(1);

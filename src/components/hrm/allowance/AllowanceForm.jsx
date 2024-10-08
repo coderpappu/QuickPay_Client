@@ -15,10 +15,10 @@ import {
   useUpdateAllowanceMutation,
   useUpdateGradeMutation,
   useUpdateLeaveTypeMutation,
-} from "../../features/api";
+} from "../../../features/api";
 
-import FormSkeleton from "../../skeletons/FormSkeleton";
-import { InputBox } from "../company/BrandInput";
+import FormSkeleton from "../../../skeletons/FormSkeleton";
+import { InputBox } from "../../company/BrandInput";
 const allowanceSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   type: Yup.string().required("Type is required"),
@@ -26,10 +26,9 @@ const allowanceSchema = Yup.object().shape({
   limit_per_month: Yup.number().required("Limit per month is required"),
 });
 
-const AllowanceForm = ({ onClose }) => {
-  
+const AllowanceForm = ({ allowanceId, onClose }) => {
   const navigate = useNavigate();
-  const { id } = useParams();
+
   const { data: companyId } = useGetCompanyIdQuery();
   const [createAllowance] = useCreateAllowanceMutation();
   const [updateAllowance] = useUpdateAllowanceMutation();
@@ -50,7 +49,7 @@ const AllowanceForm = ({ onClose }) => {
   });
 
   const { data: allowanceDetails, isLoading: isWeekendLoading } =
-    useGetAllowanceDetailsQuery(id, { skip: !id });
+    useGetAllowanceDetailsQuery(allowanceId, { skip: !allowanceId });
 
   useEffect(() => {
     if (allowanceDetails?.data) {
@@ -81,7 +80,7 @@ const AllowanceForm = ({ onClose }) => {
           &#x2715;
         </button>
         <h2 className="text-xl font-semibold  dark:text-dark-heading-color mb-4">
-          {id ? "Edit Allowance" : "Add Allowance"}
+          {allowanceId ? "Edit Allowance" : "Add Allowance"}
         </h2>
         <Formik
           enableReinitialize
@@ -91,7 +90,7 @@ const AllowanceForm = ({ onClose }) => {
             const { name, type, basic_percentage, limit_per_month } = values;
 
             try {
-              if (!id) {
+              if (!allowanceId) {
                 await createAllowance({
                   name,
                   type,
@@ -109,7 +108,7 @@ const AllowanceForm = ({ onClose }) => {
                 });
               } else {
                 await updateAllowance({
-                  id,
+                  id: allowanceId,
                   name,
                   type,
                   basic_percentage,
@@ -219,7 +218,7 @@ const AllowanceForm = ({ onClose }) => {
                   disabled={isSubmitting}
                   className="px-4 py-2 bg-[#3686FF] rounded-md text-sm font-medium text-white "
                 >
-                  {id ? "Update" : "Add"}
+                  {allowanceId ? "Update" : "Add"}
                 </button>
               </div>
             </Form>

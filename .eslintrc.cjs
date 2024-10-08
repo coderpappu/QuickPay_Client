@@ -19,5 +19,6 @@ module.exports = {
     ],
     "no-console": "warn",
     "no-unused-vars": "off",
+    "react/prop-types": "off",
   },
 };

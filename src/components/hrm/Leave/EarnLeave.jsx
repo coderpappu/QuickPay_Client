@@ -8,14 +8,13 @@ import {
 
 const EarnLeave = () => {
   const navigate = useNavigate();
-
   const [isUpdate, setIsUpdate] = useState(false);
   const [workDay, setWorkDay] = useState(0);
   const [leaveDay, setLeaveDay] = useState(0);
-
   const { data: companyId } = useGetCompanyIdQuery();
 
   const { data: earnLeaveData } = useGetEarnLeaveQuery(companyId);
+
   const [updateEarnLeaveData] = useCreateEarnLeaveMutation();
 
   const updateFormHandler = (e) => {
@@ -34,6 +33,7 @@ const EarnLeave = () => {
     });
     setIsUpdate(!isUpdate);
   };
+
   return (
     <div>
       <div className="flex flex-wrap justify-between items-center pb-2">

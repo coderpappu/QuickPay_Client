@@ -8,7 +8,6 @@ import { LiaEdit } from "react-icons/lia";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { useState } from "react";
-import AllowanceForm from "./AllowanceForm";
 
 const PaySlipCard = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility

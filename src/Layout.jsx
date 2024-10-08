@@ -6,7 +6,6 @@ import Footer from "./components/Footer";
 import { useEffect } from "react";
 
 const Layout = () => {
-  
   const [darkMode, setDarkMode] = useState(false);
 
   // Load dark mode state from localStorage on mount
@@ -22,7 +21,6 @@ const Layout = () => {
     // Save dark mode state to localStorage
     localStorage.setItem("darkMode", JSON.stringify(!darkMode));
   };
-
 
   return (
     // main container
