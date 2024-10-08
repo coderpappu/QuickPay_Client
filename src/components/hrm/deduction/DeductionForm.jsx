@@ -11,6 +11,7 @@ import {
   useGetAllowanceDetailsQuery,
   useGetCompanyIdQuery,
   useGetDeductionDetailsQuery,
+  useGetDeductionListQuery,
   useGetGradeDetailsQuery,
   useGetLeaveTypeDetailsQuery,
   useGetTypeListQuery,
@@ -21,6 +22,7 @@ import {
 } from "../../../features/api";
 
 import FormSkeleton from "../../../skeletons/FormSkeleton";
+import { InputBox } from "../../company/BrandInput";
 
 const deductionSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -37,10 +39,10 @@ const DeductionForm = ({ deductionId, onClose }) => {
   const [updateDeduction] = useUpdateDeductionMutation();
 
   const {
-    data: types,
+    data: deductionTypes,
     isLoading,
     isError,
-  } = useGetTypeListQuery(companyId, {
+  } = useGetDeductionListQuery(companyId, {
     skip: !companyId,
   });
 
@@ -75,15 +77,15 @@ const DeductionForm = ({ deductionId, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+      <div className="bg-white dark:bg-dark-card rounded-lg shadow-lg w-full max-w-md p-6 relative">
         <button
           className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none"
           onClick={onClose}
         >
           &#x2715;
         </button>
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          {deductionId ? "Edit Grade" : "Add Grade"}
+        <h2 className="text-xl font-semibold  dark:text-dark-heading-color mb-4">
+          {deductionId ? "Edit Allowance" : "Add Allowance"}
         </h2>
         <Formik
           enableReinitialize
@@ -104,8 +106,8 @@ const DeductionForm = ({ deductionId, onClose }) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Deduction added successfully");
-                    navigate("/company/deduction");
+                    toast.success("Allowance added successfully");
+                    navigate("/company/allowance");
                     onClose();
                   }
                 });
@@ -122,7 +124,6 @@ const DeductionForm = ({ deductionId, onClose }) => {
                     toast.error(res?.error?.data?.message);
                   } else {
                     toast.success("Deduction updated successfully");
-                    navigate("/company/deduction");
                     onClose();
                   }
                 });
@@ -139,16 +140,12 @@ const DeductionForm = ({ deductionId, onClose }) => {
               <div className="mb-4">
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium dark:text-dark-text-color"
                 >
                   Name
                 </label>
-                <Field
-                  type="text"
-                  name="name"
-                  id="name"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
-                />
+
+                <InputBox name="name" type="text" placeholder="Name" />
                 <ErrorMessage
                   name="name"
                   component="div"
@@ -159,16 +156,12 @@ const DeductionForm = ({ deductionId, onClose }) => {
               <div className="mb-4">
                 <label
                   htmlFor="type"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium dark:text-dark-text-color"
                 >
-                  Allowance Type
+                  Deduction Type
                 </label>
-                <Field
-                  type="text"
-                  name="type"
-                  id="type"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
-                />
+
+                <InputBox name="type" type="text" placeholder="Type" />
                 <ErrorMessage
                   name="type"
                   component="div"
@@ -179,15 +172,15 @@ const DeductionForm = ({ deductionId, onClose }) => {
               <div className="mb-4">
                 <label
                   htmlFor="basic_percentage"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium dark:text-dark-text-color"
                 >
                   Basic Percentage
                 </label>
-                <Field
-                  type="number"
+
+                <InputBox
                   name="basic_percentage"
-                  id="basic_percentage"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
+                  type="number"
+                  placeholder="Basic Percentage"
                 />
                 <ErrorMessage
                   name="basic_percentage"
@@ -199,15 +192,15 @@ const DeductionForm = ({ deductionId, onClose }) => {
               <div className="mb-4">
                 <label
                   htmlFor="limit_per_month"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium dark:text-dark-text-color"
                 >
                   Limit Per Month
                 </label>
-                <Field
-                  type="number"
+
+                <InputBox
                   name="limit_per_month"
-                  id="limit_per_month"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
+                  type="number"
+                  placeholder="Limit per month"
                 />
                 <ErrorMessage
                   name="limit_per_month"
@@ -220,14 +213,14 @@ const DeductionForm = ({ deductionId, onClose }) => {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="mr-4 px-4 py-2 bg-gray-300 rounded-md text-sm font-medium text-gray-800 hover:bg-gray-400"
+                  className="mr-4 px-4 py-2 bg-white rounded-md text-sm font-medium text-gray-800 border border-dark-border-color dark:border-opacity-10 "
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 bg-[#3686FF] rounded-md text-sm font-medium text-white hover:bg-[#5A21B3]"
+                  className="px-4 py-2 bg-[#3686FF] rounded-md text-sm font-medium text-white "
                 >
                   {deductionId ? "Update" : "Add"}
                 </button>

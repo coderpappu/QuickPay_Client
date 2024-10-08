@@ -920,7 +920,7 @@ export const {
   useGetSalarySettingQuery,
 
   // Loan Type Endpoint
-  
+
   useCreateLoanTypeMutation,
   useGetLoanTypeListQuery,
   useGetLoanDetailsQuery,
@@ -931,6 +931,3 @@ export const {
   useGetRootSettingQuery,
   useGetEmployeeSettingQuery,
 } = apiSlice;
-
-
-

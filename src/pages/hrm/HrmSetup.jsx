@@ -3,7 +3,7 @@ import BoardMenuButton from "../../components/company/BoardMenuButton";
 
 import AllowanceCard from "../../components/hrm/allowance/AllowanceCard";
 import BranchCard from "../../components/hrm/BranchCard";
-import DeductionCard from "../../components/hrm/DeductionCard";
+import DeductionCard from "../../components/hrm/deduction/DeductionCard";
 import DepartmentCard from "../../components/hrm/department/DepartmentCard";
 import DesignationCard from "../../components/hrm/designation/DesignationCard";
 import EarnLeave from "../../components/hrm/Leave/EarnLeave";
