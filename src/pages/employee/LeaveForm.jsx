@@ -28,6 +28,7 @@ const leaveSchema = Yup.object().shape({
 const LeaveForm = ({ onClose }) => {
   const navigate = useNavigate();
   const { id } = useParams();
+
   const { data: companyId } = useGetCompanyIdQuery();
   const [createEmployeeLeave] = useEmployeeCreateLeaveMutation();
   const [updateWeekend] = useUpdateWeekendMutation();
@@ -63,10 +64,6 @@ const LeaveForm = ({ onClose }) => {
       });
     }
   }, [weekend]);
-
-  if (companyId == null) {
-    navigate("/");
-  }
 
   if (isWeekendLoading || isLoading) {
     return <FormSkeleton />;

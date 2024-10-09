@@ -99,7 +99,8 @@ const LeaveApplicationList = () => {
     note: "",
   });
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  // const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = "f1e6968d-3ccb-4b62-8a3a-e3a7ab6a2128";
   const [applicationUpdate] = useUpdateLeaveApplicationMutation();
 
   const {

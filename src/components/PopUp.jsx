@@ -1,13 +1,13 @@
 import {
-    Dialog,
-    DialogBackdrop,
-    DialogPanel,
-    DialogTitle,
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  DialogTitle,
 } from "@headlessui/react";
 import {
-    useGetCompaniesQuery,
-    useGetCompanyIdQuery,
-    useSetCompanyIdMutation,
+  useGetCompaniesQuery,
+  useGetCompanyIdQuery,
+  useSetCompanyIdMutation,
 } from "../features/api";
 
 import { useState } from "react";

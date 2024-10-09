@@ -53,6 +53,7 @@ import LoanTypeForm from "./pages/payroll/Loan/LoanType/LoanTypeForm";
 import SystemSettings from "./pages/company/SystemSettings";
 import HrmSetup from "./pages/hrm/HrmSetup";
 import EmployeeProfile from "./pages/employee/EmployeeProfile";
+import EmployeeLeaveApplication from "./pages/leave/EmployeeLeaveApplication";
 
 function App() {
   return (
@@ -61,7 +62,19 @@ function App() {
         {/* Private routes that require user authentication */}
         <Route path="/" element={<PrivateRoute />}>
           <Route path="/" element={<Layout />}>
+            {/* employee dashboard route  */}
             <Route path="employee/profile" element={<EmployeeProfile />} />
+
+            <Route
+              path="company/leave/application"
+              element={<LeaveApplicationList />}
+            />
+            <Route path="/leave/form" element={<LeaveForm />} />
+            <Route
+              path="/employee/leave/application"
+              element={<EmployeeLeaveApplication />}
+            />
+
             <Route index element={<Home />} />
             <Route path="company/list" element={<CompanyList />} />
 
@@ -127,11 +140,7 @@ function App() {
               <Route path="company/leave" element={<LeaveSettings />} />
               <Route path="company/leave/type" element={<LeaveTypeList />} />
               <Route path="company/leave/earnleave" element={<EarnLeave />} />
-              
-              <Route
-                path="company/leave/application"
-                element={<LeaveApplicationList />}
-              />
+
               <Route
                 path="company/leave/form/:id"
                 element={<LeaveTypeForm />}
@@ -172,7 +181,6 @@ function App() {
         {/* Public routes */}
 
         <Route path="employee/login" element={<LoginEmployee />} />
-
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registration" element={<RegistraionPage />} />
         <Route path="*" element={<NotFound />} />

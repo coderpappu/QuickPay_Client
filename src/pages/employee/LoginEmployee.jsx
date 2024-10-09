@@ -12,6 +12,7 @@ import {
 const LoginEmployee = () => {
   const navigate = useNavigate();
   const [login, { error, isLoading }] = useLoginEmployeeMutation();
+  const [setCompanyId] = useSetCompanyIdMutation();
 
   const handleLogin = async (email, password) => {
     try {
@@ -20,9 +21,10 @@ const LoginEmployee = () => {
       if (!data) {
         toast.error("Email or password is incorrect!");
       }
+      
+      setCompanyId(data?.data?.user?.company_id);
 
-      localStorage.setItem("token", data?.data?.accessToken);
-
+      localStorage.setItem("token", data?.data?.accessToken); 
       navigate("/");
     } catch (error) {
       toast.error(error.message);
