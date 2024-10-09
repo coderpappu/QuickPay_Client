@@ -6,12 +6,13 @@ import { useGetCompanyIdQuery, useGetUserQuery } from "../features/api";
 import { PiDotDuotone } from "react-icons/pi";
 import { LuListTodo } from "react-icons/lu";
 import { Link } from "react-router-dom";
-import { adminMenuItems } from "../utils/adminMenuList";
+import { adminMenuItems, employeeMenuItems } from "../utils/MenuList";
 const Sidebar = () => {
   const { data: companyId } = useGetCompanyIdQuery();
-  const { data } = useGetUserQuery();
+  const { data: userData } = useGetUserQuery();
   const [activeMenu, setActiveMenu] = useState(null);
   const [activeSubMenu, setActiveSubMenu] = useState(null);
+  const [activeUserType, setActiveUserType] = useState(null);
 
   const handleMenuClick = (index) => {
     setActiveMenu((prev) => (prev === index ? null : index));
@@ -21,6 +22,16 @@ const Sidebar = () => {
   const handleSubMenuClick = (index) => {
     setActiveSubMenu(index);
   };
+
+  // Determine the correct menu items based on user type
+  let currentMenuItems;
+  if (userData?.data && userData?.data?.type === "SUPER_ADMIN") {
+    currentMenuItems = adminMenuItems;
+  } else {
+    currentMenuItems = employeeMenuItems;
+  }
+
+  console.log(currentMenuItems);
 
   // Recursive function to render nested submenus
   const renderSubMenu = (subMenus) => {
@@ -70,7 +81,7 @@ const Sidebar = () => {
           <Logo />
         </div>
         <ul className="mt-4">
-          {adminMenuItems.map((menu, menuIndex) => (
+          {currentMenuItems.map((menu, menuIndex) => (
             <li key={menuIndex}>
               {menu.subMenu ? (
                 // Handle nested menus

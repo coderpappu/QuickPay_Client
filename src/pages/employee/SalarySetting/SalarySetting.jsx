@@ -93,13 +93,15 @@ const SalarySettings = () => {
   if (allowanceError || deductionError || gradeError) return "Error ";
 
   return (
-    <div className="w-full mx-5 mt-5 mb-2 rounded-md flex flex-wrap justify-between p-4 bg-white">
-      <h1 className="text-xl font-medium mb-4">Salary Settings</h1>
+    <div className="w-full mx-5 mt-5 mb-2 rounded-md flex flex-wrap justify-between p-4 bg-white dark:bg-dark-card">
+      <h1 className="text-xl font-medium mb-4 dark:text-dark-heading-color">
+        Salary Settings
+      </h1>
 
       <form onSubmit={handleSubmit} className="w-full">
         {/* Allowances Section */}
         <div className="mb-4">
-          <h2 className="text-lg font-semibold mb-2">Allowances</h2>
+          <h2 className="text-lg font-semibold mb-2 ">Allowances</h2>
           {allowancesList?.data?.map((allowance) => (
             <div key={allowance?.id} className="flex items-center mb-1">
               <input
@@ -118,7 +120,7 @@ const SalarySettings = () => {
 
         {/* Deductions Section */}
         <div className="mb-4">
-          <h2 className="text-lg font-semibold mb-2">Deductions</h2>
+          <h2 className="text-lg font-semibold mb-2 ">Deductions</h2>
           {deductionsList?.data?.map((deduction) => (
             <div key={deduction.id} className="flex items-center mb-1">
               <input
@@ -137,7 +139,7 @@ const SalarySettings = () => {
 
         {/* Grade Selection */}
         <div className="mb-4">
-          <label className="block text-lg font-semibold mb-1">Grade</label>
+          <label className="block text-lg font-semibold mb-1 ">Grade</label>
           <select
             value={selectedGrade}
             onChange={handleGradeChange}

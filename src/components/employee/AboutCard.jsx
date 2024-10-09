@@ -7,8 +7,10 @@ import PersonalInfo from "../../components/employee/PersonalInfo";
 const AboutCard = ({ employeeDetails }) => {
   return (
     <div className="w-full   mx-5 mt-5 mb-2 rounded-mde flex flex-wrap justify-between ">
-      <div className="w-[49%] relative p-4 bg-white rounded-md">
-        <h1 className="text-xl font-medium mb-4">Personal Information </h1>
+      <div className="w-[49%] relative p-4 bg-white dark:bg-dark-card rounded-md">
+        <h1 className="text-xl font-medium mb-4 dark:text-dark-heading-color">
+          Personal Information{" "}
+        </h1>
         <PersonalInfo title="Mobile Number" data={employeeDetails?.phone} />
         {employeeDetails?.id_type == "NID" ? (
           <PersonalInfo title="ID Number" data={employeeDetails?.id_number} />
@@ -31,8 +33,10 @@ const AboutCard = ({ employeeDetails }) => {
         </div>
       </div>
 
-      <div className="w-[49%] relative p-4 bg-white rounded-md">
-        <h1 className="text-xl font-medium mb-4">Emergency Contact</h1>
+      <div className="w-[49%] relative p-4 bg-white dark:bg-dark-card rounded-md">
+        <h1 className="text-xl font-medium mb-4 dark:text-dark-heading-color">
+          Emergency Contact
+        </h1>
         <PersonalInfo title="Primary Name" data="John Doe" />
         <PersonalInfo title="Relationship" data="Father" />
         <PersonalInfo title="Phone" data="9876543210, 9876543210" />

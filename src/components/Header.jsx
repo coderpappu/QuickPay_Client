@@ -92,7 +92,7 @@ const Header = ({ darkModeHandler, darkMode }) => {
                   <FiUser className="dark:text-white" />
                   {userData?.data?.type == "employee" ? (
                     <Link
-                      to="employee/details"
+                      to="employee/profile"
                       className="font-medium text-sm dark:text-white"
                     >
                       Profile

@@ -52,6 +52,7 @@ import LoanTypeList from "./pages/payroll/Loan/LoanType/LoanTypeList";
 import LoanTypeForm from "./pages/payroll/Loan/LoanType/LoanTypeForm";
 import SystemSettings from "./pages/company/SystemSettings";
 import HrmSetup from "./pages/hrm/HrmSetup";
+import EmployeeProfile from "./pages/employee/EmployeeProfile";
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
         {/* Private routes that require user authentication */}
         <Route path="/" element={<PrivateRoute />}>
           <Route path="/" element={<Layout />}>
+            <Route path="employee/profile" element={<EmployeeProfile />} />
             <Route index element={<Home />} />
             <Route path="company/list" element={<CompanyList />} />
 
@@ -85,7 +87,7 @@ function App() {
                 element={<Profile />}
               />
 
-              <Route path="/employee/details" element={<Profile />} />
+              <Route path="employee/profile" element={<EmployeeProfile />} />
 
               <Route path="company/shift/list" element={<ShiftList />} />
               <Route path="company/add/shift" element={<AddShift />} />
@@ -125,7 +127,7 @@ function App() {
               <Route path="company/leave" element={<LeaveSettings />} />
               <Route path="company/leave/type" element={<LeaveTypeList />} />
               <Route path="company/leave/earnleave" element={<EarnLeave />} />
-
+              
               <Route
                 path="company/leave/application"
                 element={<LeaveApplicationList />}
