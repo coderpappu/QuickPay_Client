@@ -9,6 +9,7 @@ import {
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
+import DatePicker from "../../utils/DatePicker";
 
 // Modal Component
 // eslint-disable-next-line react/prop-types
@@ -99,8 +100,8 @@ const LeaveApplicationList = () => {
     note: "",
   });
 
-  // const { data: companyId } = useGetCompanyIdQuery();
-  const companyId = "f1e6968d-3ccb-4b62-8a3a-e3a7ab6a2128";
+  const { data: companyId } = useGetCompanyIdQuery();
+
   const [applicationUpdate] = useUpdateLeaveApplicationMutation();
 
   const {
@@ -160,9 +161,9 @@ const LeaveApplicationList = () => {
           >
             <td className="py-2 text-sm ">{++index}</td>
             <td className="py-2 text-sm ">{leave?.LeaveType?.name}</td>
-            <td className="py-2 text-sm ">{leave?.created_at}</td>
-            <td className="py-2 text-sm ">{leave?.start_date}</td>
-            <td className="py-2 text-sm ">{leave?.end_date}</td>
+            <td className="py-2 text-sm ">{DatePicker(leave?.created_at)}</td>
+            <td className="py-2 text-sm ">{DatePicker(leave?.start_date)}</td>
+            <td className="py-2 text-sm ">{DatePicker(leave?.end_date)}</td>
             <td className="py-2 text-sm ">{leave?.leaveDuration}</td>
             <td className="py-2 text-sm ">{leave?.reason}</td>
             <td className="py-2 text-sm ">{leave?.paid_status}</td>

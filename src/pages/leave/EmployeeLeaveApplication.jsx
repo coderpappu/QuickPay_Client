@@ -8,6 +8,7 @@ import { LiaEdit } from "react-icons/lia";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { useState } from "react";
+import DatePicker from "../../utils/DatePicker";
 // import AllowanceForm from "./AllowanceForm";
 // import {
 //   useDeleteAllowanceMutation,
@@ -78,14 +79,14 @@ const EmployeeLeaveApplication = () => {
         </div>
 
         <div className="dark:text-white w-[14%]">
-          <h3>{application?.start_date}</h3>
+          <h3>{DatePicker(application?.start_date)}</h3>
         </div>
 
         <div className="dark:text-white w-[14%]">
-          <h3>{application?.end_date}</h3>
+          <h3>{DatePicker(application?.end_date)}</h3>
         </div>
         <div className="dark:text-white w-[14%]">
-          <h3>{application?.created_at}</h3>
+          <h3>{DatePicker(application?.created_at)}</h3>
         </div>
         <div className="dark:text-white w-[14%]">
           <h3>{application?.reason}</h3>
