@@ -4,11 +4,11 @@ import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
-    useCreateLeaveTypeMutation,
-    useGetCompanyIdQuery,
-    useGetLeaveTypeDetailsQuery,
-    useGetTypeListQuery,
-    useUpdateLeaveTypeMutation
+  useCreateLeaveTypeMutation,
+  useGetCompanyIdQuery,
+  useGetLeaveTypeDetailsQuery,
+  useGetTypeListQuery,
+  useUpdateLeaveTypeMutation,
 } from "../../features/api";
 
 import FormSkeleton from "../../skeletons/FormSkeleton";
@@ -17,7 +17,7 @@ const LeaveTypeSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   code: Yup.string().required("Code is required"),
   // type: Yup.string().required("Leave Type is required"),
-  day: Yup.string().required("Day is required"),
+  day: Yup.number().required("Day is required"),
 });
 
 const LeaveTypeForm = ({ onClose }) => {
@@ -39,13 +39,14 @@ const LeaveTypeForm = ({ onClose }) => {
     name: "",
     code: "",
     type: "",
-    day: "",
+    day: 0,
     description: "",
   });
 
   const { data: leaveType, isLoading: isWeekendLoading } =
     useGetLeaveTypeDetailsQuery(id, { skip: !id });
 
+  console.log("Leave Data: ", leaveType);
   useEffect(() => {
     if (leaveType?.data) {
       setInitialValues({
@@ -204,7 +205,7 @@ const LeaveTypeForm = ({ onClose }) => {
                   Day
                 </label>
                 <Field
-                  type="text"
+                  type="number"
                   name="day"
                   id="day"
                   placeHolder="Number of day"

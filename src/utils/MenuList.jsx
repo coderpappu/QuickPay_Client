@@ -16,7 +16,9 @@ const adminMenuItems = [
     subMenu: [
       { title: "Overview", link: "/" },
       { title: "Reports", link: "/company/loan/type" },
-      { title: "Reports", link: "section/create" },
+      { title: "Reports", link: "company/weekend/create" },
+      { title: "Holiday Type", link: "/holiday/type/add" },
+      { title: "Holiday Form", link: "/holidayform/" },
     ],
   },
   {
@@ -28,7 +30,7 @@ const adminMenuItems = [
     title: "HRM system",
     icon: <LuUsers2 size={20} />,
     subMenu: [
-      { title: "Employee Setup", link: "/employee-setup" },
+      { title: "Employee Setup", link: "/company/employee/registration" },
       {
         title: "Payroll Setup",
         subMenu: [

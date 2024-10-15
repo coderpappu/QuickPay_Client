@@ -25,6 +25,7 @@ import {
   useGetAllLeaveApplicationQuery,
   useGetCompanyIdQuery,
 } from "../../features/api";
+import LeaveForm from "../employee/LeaveForm";
 const EmployeeLeaveApplication = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [selectAllowanceId, setSelectAllowanceId] = useState(null);
@@ -156,10 +157,7 @@ const EmployeeLeaveApplication = () => {
                 </button>
               </div>
               <div className="mt-4">
-                {/* <AllowanceForm
-                  allowanceId={selectAllowanceId}
-                  onClose={onClose}
-                /> */}
+                <LeaveForm allowanceId={selectAllowanceId} onClose={onClose} />
               </div>
             </div>
           </div>

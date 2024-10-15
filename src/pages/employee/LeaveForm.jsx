@@ -83,7 +83,7 @@ const LeaveForm = ({ onClose }) => {
           &#x2715;
         </button>
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          {id ? "Edit Holiday" : "Add Holiday"}
+          {id ? "Edit Application" : "Leave Application"}
         </h2>
         <Formik
           enableReinitialize
