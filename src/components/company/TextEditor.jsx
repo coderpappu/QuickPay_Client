@@ -55,6 +55,7 @@ import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import SettingCardFooter from "./SettingCardFooter";
 
 const LowPriority = 1;
 
@@ -1047,22 +1048,24 @@ function SaveOnClickPlugin({ onSave }) {
   };
 
   return (
-    <button onClick={handleSave} className="save-button">
-      Save
-    </button>
+    <>
+      {/* <button onClick={handleSave} className="save-button">
+        Save
+      </button> */}
+      <SettingCardFooter title="Update" handleUpdate={handleSave} />
+    </>
   );
 }
 
-export default function TextEditor() {
+export default function TextEditor({ checkSave }) {
   const [savedData, setSavedData] = useState(null);
 
   // Handle save and display editor state
   const handleSave = (editorState) => {
-    setSavedData(JSON.stringify(editorState));
-    localStorage.setItem("data", savedData);
-    // For JSON
+    setSavedData(JSON.stringify(editorState)); // For JSON
     // Or you can just use plain text if needed:
     // setSavedData(editorState);
+    checkSave(editorState);
   };
 
   return (
@@ -1081,9 +1084,10 @@ export default function TextEditor() {
           <ListPlugin />
           <LinkPlugin />
           {/* SaveOnClickPlugin to save the editor content when button is clicked */}
-          <SaveOnClickPlugin onSave={handleSave} />
         </div>
       </div>
+
+      <SaveOnClickPlugin onSave={handleSave} />
     </LexicalComposer>
   );
 }

@@ -847,6 +847,16 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["Section"],
     }),
+
+    // application format
+    createLeaveApplicationFormat: builder.mutation({
+      query: (credentials) => ({
+        url: "/applicationformat/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["leaveApplicationFormat"],
+    }),
   }),
 });
 
@@ -983,4 +993,7 @@ export const {
   useSetSettingMutation,
   useGetRootSettingQuery,
   useGetEmployeeSettingQuery,
+
+  // applicationFormat
+  useCreateLeaveApplicationFormatMutation,
 } = apiSlice;

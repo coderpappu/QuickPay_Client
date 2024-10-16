@@ -4,15 +4,22 @@ import SettingCardHeader from "./SettingCardHeader";
 import SettingCardFooter from "./SettingCardFooter";
 import TextBoxLetter from "./TextBoxLetter";
 import TextEditor from "./TextEditor";
+import { useCreateLeaveApplicationFormatMutation } from "../../features/api";
 
 const JoiningLetterCard = () => {
   const [editorState, setEditorState] = useState(null); // Store the editor's state
   const [isSaving, setIsSaving] = useState(false); // Track saving status
   const [error, setError] = useState(null); // Store potential errors
 
-  const handleSave = async () => {
-    console.log(editorState);
+  const [editorData, setEditorData] = useState(null); // Store the editor's state data
+  // const [] = useCreateLeaveApplicationFormatMutation();
+
+  // Define handleEditorData as a function that accepts editor state data
+  const handleEditorData = (data) => {
+    // Set the received data from the editor
+    setEditorData(data);
   };
+
   return (
     <>
       <BrandCardWrapper>
@@ -22,6 +29,7 @@ const JoiningLetterCard = () => {
         />
         <div className="px-6 py-3">
           <h2 className="text-white my-2">Palceholder</h2>
+
           <div className=" bg-[#F3F4F6] dark:bg-dark-box p-3 rounded-md">
             <div className="w-full h-auto flex justify-between items-center">
               <TextBoxLetter title="Applicant Name" varName="applicant_name" />
@@ -42,12 +50,9 @@ const JoiningLetterCard = () => {
             <TextBoxLetter title="Number of Hours" varName="hours" />
           </div>
 
-          <TextEditor
-            initialEditorState={editorState}
-            onChange={(newEditorState) => setEditorState(newEditorState)}
-          />
+          <TextEditor checkSave={handleEditorData} />
         </div>
-        <SettingCardFooter title="Update" handleUpdate={handleSave} />
+        {/* <SettingCardFooter title="Update" handleUpdate={handleSave} /> */}
       </BrandCardWrapper>
     </>
   );

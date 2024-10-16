@@ -116,7 +116,7 @@ const EmployeeRegistrationForm = () => {
             try {
               await createEmployee({
                 ...values,
-                fingerprint_id: "72c78f25-d786-4256-9ed2-85e6873ab361",
+                fingerprint_id: "bf84d050-3e51-4f60-918e-72668d1b0a85",
               }).unwrap();
               toast.success("Employee registered successfully");
               navigate("/employee/list");

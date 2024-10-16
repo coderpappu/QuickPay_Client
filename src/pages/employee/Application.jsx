@@ -60,10 +60,10 @@ function Application() {
       margin: 10,
     });
   };
+  
   return (
     <div className="text-white">
       <button onClick={() => downloadBtn()}>Download PDF</button>
-
       <div id="container">
         {letterData.root.children.map((child, index) => renderElement(child))}
       </div>
