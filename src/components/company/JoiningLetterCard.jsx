@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import BrandCardWrapper from "./BrandCardWrapper";
 import SettingCardHeader from "./SettingCardHeader";
 import SettingCardFooter from "./SettingCardFooter";
@@ -6,6 +6,13 @@ import TextBoxLetter from "./TextBoxLetter";
 import TextEditor from "./TextEditor";
 
 const JoiningLetterCard = () => {
+  const [editorState, setEditorState] = useState(null); // Store the editor's state
+  const [isSaving, setIsSaving] = useState(false); // Track saving status
+  const [error, setError] = useState(null); // Store potential errors
+
+  const handleSave = async () => {
+    console.log(editorState);
+  };
   return (
     <>
       <BrandCardWrapper>
@@ -35,9 +42,12 @@ const JoiningLetterCard = () => {
             <TextBoxLetter title="Number of Hours" varName="hours" />
           </div>
 
-          <TextEditor />
+          <TextEditor
+            initialEditorState={editorState}
+            onChange={(newEditorState) => setEditorState(newEditorState)}
+          />
         </div>
-        <SettingCardFooter title="Update" />
+        <SettingCardFooter title="Update" handleUpdate={handleSave} />
       </BrandCardWrapper>
     </>
   );

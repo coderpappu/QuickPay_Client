@@ -54,6 +54,7 @@ import SystemSettings from "./pages/company/SystemSettings";
 import HrmSetup from "./pages/hrm/HrmSetup";
 import EmployeeProfile from "./pages/employee/EmployeeProfile";
 import EmployeeLeaveApplication from "./pages/leave/EmployeeLeaveApplication";
+import Application from "./pages/employee/Application";
 
 function App() {
   return (
@@ -172,6 +173,8 @@ function App() {
               />
 
               {/* Loan  */}
+              <Route path="/account-settings" element={<Application />} />
+
               <Route path="/company/loan/type" element={<LoanTypeList />} />
               <Route path="/company/loan/type/:id" element={<LoanTypeForm />} />
             </Route>

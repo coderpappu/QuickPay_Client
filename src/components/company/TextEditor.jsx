@@ -1034,8 +1034,37 @@ const editorConfig = {
     LinkNode,
   ],
 };
+// Custom Save Plugin
+function SaveOnClickPlugin({ onSave }) {
+  const [editor] = useLexicalComposerContext();
+
+  // Save function to be called when "Save" button is clicked
+  const handleSave = () => {
+    editor.update(() => {
+      const editorStateJSON = editor.getEditorState().toJSON(); // Or getTextContent() for plain text
+      onSave(editorStateJSON);
+    });
+  };
+
+  return (
+    <button onClick={handleSave} className="save-button">
+      Save
+    </button>
+  );
+}
 
 export default function TextEditor() {
+  const [savedData, setSavedData] = useState(null);
+
+  // Handle save and display editor state
+  const handleSave = (editorState) => {
+    setSavedData(JSON.stringify(editorState));
+    localStorage.setItem("data", savedData);
+    // For JSON
+    // Or you can just use plain text if needed:
+    // setSavedData(editorState);
+  };
+
   return (
     <LexicalComposer initialConfig={editorConfig}>
       <div className="relative mx-auto overflow-hidden my-5 w-full max-w-full rounded-xl border border-gray-300 dark:border-dark-border-color dark:border-opacity-5 bg-white dark:bg-dark-box text-left font-normal leading-5 text-gray-900">
@@ -1051,6 +1080,8 @@ export default function TextEditor() {
           <AutoFocusPlugin />
           <ListPlugin />
           <LinkPlugin />
+          {/* SaveOnClickPlugin to save the editor content when button is clicked */}
+          <SaveOnClickPlugin onSave={handleSave} />
         </div>
       </div>
     </LexicalComposer>
