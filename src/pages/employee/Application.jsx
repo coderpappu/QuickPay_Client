@@ -6,25 +6,39 @@ import {
   useGetLeaveApplicationFormatQuery,
 } from "../../features/api";
 import { useParams } from "react-router-dom";
-
+import formatTimeTo12Hour from "../../utils/timeConverter";
+import DatePicker from "../../utils/DatePicker";
 function Application() {
   const [letterData, setLetterData] = useState(null);
   const [date, setDate] = useState("10");
-  const [employee_name, setEmployeeName] = useState("John Doe");
+  const [name, setEmployeeName] = useState("John Doe");
+  const [start_date, setStart_date] = useState("John Doe");
   const [address, setAddress] = useState("Raozan");
   const [appName, setAppName] = useState("My Company");
   let { id } = useParams();
 
+  const [applicationData, setApplicationData] = useState({
+    name: "",
+    mail: "",
+    department: "",
+    designation: "",
+    start_date: "",
+    end_date: "",
+    leave_type: "",
+    leave_days: "",
+    leave_reason: "",
+    leave_date: "",
+  });
+
   // Fetching company ID
   const { data: company_id } = useGetCompanyIdQuery();
-  const { data: applicationData } = useGetLeaveApplicationDetailsQuery(id);
-
-  console.log(applicationData);
+  const { data: applicationDetails } = useGetLeaveApplicationDetailsQuery(id);
 
   // Fetching leave application format
   const { data: leaveApplicationFormat, isLoading } =
     useGetLeaveApplicationFormatQuery(company_id);
 
+  // application format load
   useEffect(() => {
     if (!isLoading && leaveApplicationFormat?.data?.formatData) {
       try {
@@ -38,6 +52,17 @@ function Application() {
     }
   }, [isLoading, leaveApplicationFormat]);
 
+  // set the data in state
+  useEffect(() => {
+    setApplicationData((prevData) => ({
+      ...prevData,
+      name: applicationDetails?.data?.Employee?.name,
+      mail: applicationDetails?.data?.Employee?.email,
+      start_date: applicationDetails?.data?.start_date,
+      end_date: applicationDetails?.data?.end_date,
+    }));
+  }, []);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -50,9 +75,11 @@ function Application() {
   const replacePlaceholders = (text) => {
     const placeholderValues = {
       date,
-      employee_name,
-      app_name: appName,
+      name: applicationData?.name,
+      days_of_week: applicationData?.mail,
       address,
+      start_date: DatePicker(applicationData?.start_date),
+      end_date: DatePicker(applicationData?.end_date),
     };
     return text.replace(
       /{(\w+)}/g,
