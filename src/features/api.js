@@ -857,6 +857,14 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["leaveApplicationFormat"],
     }),
+
+    getLeaveApplicationFormat: builder.query({
+      query: (company_id) => ({
+        url: `/applicationformat/leaveapplicationformat/`,
+        params: { company_id: company_id },
+      }),
+      providesTags: ["leaveApplicationFormat"],
+    }),
   }),
 });
 
@@ -996,4 +1004,5 @@ export const {
 
   // applicationFormat
   useCreateLeaveApplicationFormatMutation,
+  useGetLeaveApplicationFormatQuery,
 } = apiSlice;

@@ -16,6 +16,7 @@ import OfferLetterCard from "../../components/company/OfferLetterCard";
 import ExperienceLetterCard from "../../components/company/ExpericeLetterCard";
 import NocCard from "../../components/company/NocCard";
 import BiometricCard from "../../components/company/BiometricCard";
+import LeaveApplicationCard from "../../components/company/LeaveApplicationCard";
 const SystemSettings = () => {
   const [activeSetting, setActiveSetting] = useState(1);
 
@@ -69,13 +70,17 @@ const SystemSettings = () => {
       id: 11,
     },
     {
-      title: "NOC Notification Settings",
+      title: "Leave Application Settings",
       id: 12,
+    },
+    {
+      title: "NOC Notification Settings",
+      id: 13,
     },
 
     {
       title: "Biometric Attendance Settings",
-      id: 13,
+      id: 14,
     },
   ];
 
@@ -116,8 +121,9 @@ const SystemSettings = () => {
           {activeSetting == 9 && <OfferLetterCard />}
           {activeSetting == 10 && <JoiningLetterCard />}
           {activeSetting == 11 && <ExperienceLetterCard />}
-          {activeSetting == 12 && <NocCard />}
-          {activeSetting == 13 && <BiometricCard />}
+          {activeSetting == 12 && <LeaveApplicationCard />}
+          {activeSetting == 13 && <NocCard />}
+          {activeSetting == 14 && <BiometricCard />}
         </div>
       </div>
     </div>

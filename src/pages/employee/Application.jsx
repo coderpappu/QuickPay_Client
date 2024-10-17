@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import generatePDF, { Resolution, Margin } from "react-to-pdf";
 import { usePDF } from "react-to-pdf";
 import html2pdf from "html2pdf.js";
+import {
+  useGetCompanyIdQuery,
+  useGetLeaveApplicationFormatQuery,
+} from "../../features/api";
 
 function Application() {
   const [letterData, setLetterData] = useState(null);
@@ -10,18 +14,27 @@ function Application() {
   const [address, setAddress] = useState("Raozan");
   const [appName, setAppName] = useState("My Company");
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
+  const { data: company_id } = useGetCompanyIdQuery();
+
+  const { data: leaveApplicationFormat, isLoading } =
+    useGetLeaveApplicationFormatQuery(company_id);
+
+  // if (isLoading) return "Loading......";
+
   useEffect(() => {
     // Fetch letter data from localStorage
-    const data = localStorage.getItem("data");
+    // const data = localStorage.getItem("data");
 
-    // const {} = useGet
+    let parsedData = JSON.parse(leaveApplicationFormat?.data?.formatData);
+    setLetterData(parsedData);
 
-    if (data) {
-      const parsedData = JSON.parse(data);
-      setLetterData(parsedData);
-    }
-  }, []);
+    // if (data) {
+    //   const parsedData = JSON.parse(data);
+    //   setLetterData(parsedData);
+    // }
+  }, [leaveApplicationFormat]);
 
+  console.log(letterData);
   if (!letterData) {
     return <div>Loading...</div>;
   }
