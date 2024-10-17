@@ -174,6 +174,7 @@ function App() {
 
               {/* Loan  */}
               <Route path="/account-settings" element={<Application />} />
+              <Route path="/leave/application/:id" element={<Application />} />
 
               <Route path="/company/loan/type" element={<LoanTypeList />} />
               <Route path="/company/loan/type/:id" element={<LoanTypeForm />} />

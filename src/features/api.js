@@ -608,6 +608,12 @@ export const apiSlice = createApi({
       query: (id) => `/leave/type/details/${id}`,
       providesTags: ["leaveType"],
     }),
+
+    getLeaveApplicationDetails: builder.query({
+      query: (id) => `/leave/application/details/${id}`,
+      providesTags: ["leaveApplication"],
+    }),
+
     deleteLeaveType: builder.mutation({
       query: (id) => ({
         url: `/leave/type/delete/`,
@@ -1005,4 +1011,5 @@ export const {
   // applicationFormat
   useCreateLeaveApplicationFormatMutation,
   useGetLeaveApplicationFormatQuery,
+  useGetLeaveApplicationDetailsQuery,
 } = apiSlice;

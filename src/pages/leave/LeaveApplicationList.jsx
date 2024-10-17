@@ -10,6 +10,8 @@ import ListSkeleton from "../../skeletons/ListSkeleton";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import DatePicker from "../../utils/DatePicker";
+import { PiEyeLight } from "react-icons/pi";
+import { Link } from "react-router-dom";
 
 // Modal Component
 // eslint-disable-next-line react/prop-types
@@ -151,6 +153,8 @@ const LeaveApplicationList = () => {
     }
   };
 
+  console.log(leaveApplicationList);
+
   if (!isLoading && !isError) {
     content = (
       <tbody className="dark:text-dark-text-color">
@@ -178,10 +182,18 @@ const LeaveApplicationList = () => {
             </td>
             <td className="py-2 text-sm text-center flex justify-center items-center gap-2">
               <div>
+                <Link to={`/leave/application/${leave?.id}`}>
+                  <div className="w-8 h-8 bg-green-600 text-white rounded-sm p-2 flex justify-center items-center cursor-pointer">
+                    <PiEyeLight size={20} onClick={() => openModal(leave)} />
+                  </div>
+                </Link>
+              </div>
+              <div>
                 <div className="w-8 h-8 bg-indigo-600 text-white rounded-sm p-2 flex justify-center items-center cursor-pointer">
                   <CiEdit size={20} onClick={() => openModal(leave)} />
                 </div>
               </div>
+
               <div className="w-8 h-8 bg-red-500 text-white text-center flex justify-center items-center rounded-sm p-2 cursor-pointer">
                 <AiOutlineDelete size={20} />
               </div>

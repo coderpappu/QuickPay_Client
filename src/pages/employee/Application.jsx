@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import html2pdf from "html2pdf.js";
 import {
   useGetCompanyIdQuery,
+  useGetLeaveApplicationDetailsQuery,
   useGetLeaveApplicationFormatQuery,
 } from "../../features/api";
+import { useParams } from "react-router-dom";
 
 function Application() {
   const [letterData, setLetterData] = useState(null);
@@ -11,9 +13,13 @@ function Application() {
   const [employee_name, setEmployeeName] = useState("John Doe");
   const [address, setAddress] = useState("Raozan");
   const [appName, setAppName] = useState("My Company");
+  let { id } = useParams();
 
   // Fetching company ID
   const { data: company_id } = useGetCompanyIdQuery();
+  const { data: applicationData } = useGetLeaveApplicationDetailsQuery(id);
+
+  console.log(applicationData);
 
   // Fetching leave application format
   const { data: leaveApplicationFormat, isLoading } =
