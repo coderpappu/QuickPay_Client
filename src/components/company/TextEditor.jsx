@@ -1065,7 +1065,7 @@ export default function TextEditor({ checkSave }) {
     setSavedData(JSON.stringify(editorState)); // For JSON
     // Or you can just use plain text if needed:
     // setSavedData(editorState);
-    checkSave(editorState);
+    checkSave(JSON.stringify(editorState));
   };
 
   return (

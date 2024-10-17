@@ -14,6 +14,8 @@ function Application() {
     // Fetch letter data from localStorage
     const data = localStorage.getItem("data");
 
+    // const {} = useGet
+
     if (data) {
       const parsedData = JSON.parse(data);
       setLetterData(parsedData);
@@ -60,7 +62,7 @@ function Application() {
       margin: 10,
     });
   };
-  
+
   return (
     <div className="text-white">
       <button onClick={() => downloadBtn()}>Download PDF</button>

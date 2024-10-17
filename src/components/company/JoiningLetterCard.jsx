@@ -4,19 +4,25 @@ import SettingCardHeader from "./SettingCardHeader";
 import SettingCardFooter from "./SettingCardFooter";
 import TextBoxLetter from "./TextBoxLetter";
 import TextEditor from "./TextEditor";
-import { useCreateLeaveApplicationFormatMutation } from "../../features/api";
+import {
+  useCreateLeaveApplicationFormatMutation,
+  useGetCompanyIdQuery,
+} from "../../features/api";
 
 const JoiningLetterCard = () => {
   const [editorState, setEditorState] = useState(null); // Store the editor's state
   const [isSaving, setIsSaving] = useState(false); // Track saving status
   const [error, setError] = useState(null); // Store potential errors
+  const { data: company_id } = useGetCompanyIdQuery();
 
   const [editorData, setEditorData] = useState(null); // Store the editor's state data
-  // const [] = useCreateLeaveApplicationFormatMutation();
+  const [createLeaveAppliationFormat] =
+    useCreateLeaveApplicationFormatMutation();
 
   // Define handleEditorData as a function that accepts editor state data
   const handleEditorData = (data) => {
     // Set the received data from the editor
+    createLeaveAppliationFormat({ formatData: data, company_id });
     setEditorData(data);
   };
 
