@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import generatePDF, { Resolution, Margin } from "react-to-pdf";
-import { usePDF } from "react-to-pdf";
 import html2pdf from "html2pdf.js";
 import {
   useGetCompanyIdQuery,
@@ -13,62 +11,68 @@ function Application() {
   const [employee_name, setEmployeeName] = useState("John Doe");
   const [address, setAddress] = useState("Raozan");
   const [appName, setAppName] = useState("My Company");
-  const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
+
+  // Fetching company ID
   const { data: company_id } = useGetCompanyIdQuery();
 
+  // Fetching leave application format
   const { data: leaveApplicationFormat, isLoading } =
     useGetLeaveApplicationFormatQuery(company_id);
 
-  // if (isLoading) return "Loading......";
-
   useEffect(() => {
-    // Fetch letter data from localStorage
-    // const data = localStorage.getItem("data");
+    if (!isLoading && leaveApplicationFormat?.data?.formatData) {
+      try {
+        const parsedData = JSON.parse(leaveApplicationFormat?.data?.formatData);
+        setLetterData(parsedData);
+      } catch (error) {
+        console.error("Error parsing the letter data: ", error);
+      }
+    } else if (!isLoading && !leaveApplicationFormat?.data?.formatData) {
+      console.error("Leave application format data is undefined or empty");
+    }
+  }, [isLoading, leaveApplicationFormat]);
 
-    let parsedData = JSON.parse(leaveApplicationFormat?.data?.formatData);
-    setLetterData(parsedData);
-
-    // if (data) {
-    //   const parsedData = JSON.parse(data);
-    //   setLetterData(parsedData);
-    // }
-  }, [leaveApplicationFormat]);
-
-  console.log(letterData);
-  if (!letterData) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
-  const renderElement = (child) => {
+
+  if (!letterData) {
+    return <div>Error: Unable to load leave application format data</div>;
+  }
+
+  // Function to replace placeholders
+  const replacePlaceholders = (text) => {
+    const placeholderValues = {
+      date,
+      employee_name,
+      app_name: appName,
+      address,
+    };
+    return text.replace(
+      /{(\w+)}/g,
+      (match, placeholder) => placeholderValues[placeholder] || match
+    );
+  };
+
+  // Function to render elements (headings, paragraphs, etc.)
+  const renderElement = (child, index) => {
     if (child.type === "heading") {
       const TagName = child.tag.toLowerCase();
       return React.createElement(
         TagName,
-        { key: child.tag },
+        { key: index },
         child.children.map((text) => replacePlaceholders(text.text))
       );
     } else if (child.type === "paragraph") {
       return (
-        <p key={child.tag}>
+        <p key={index}>
           {child.children.map((text) => replacePlaceholders(text.text))}
         </p>
       );
     }
   };
-  const replacePlaceholders = (text) => {
-    return text.replace(/{(\w+)}/g, (match, placeholder) => {
-      const placeholderValues = {
-        date,
-        employee_name,
-        app_name: appName,
-        address,
-      };
-      if (placeholderValues.hasOwnProperty(placeholder)) {
-        return placeholderValues[placeholder];
-      } else {
-        return match;
-      }
-    });
-  };
+
+  // Function to handle PDF download
   const downloadBtn = () => {
     var element = document.getElementById("container");
     html2pdf(element, {
@@ -80,7 +84,9 @@ function Application() {
     <div className="text-white">
       <button onClick={() => downloadBtn()}>Download PDF</button>
       <div id="container">
-        {letterData.root.children.map((child, index) => renderElement(child))}
+        {letterData.root.children.map((child, index) =>
+          renderElement(child, index)
+        )}
       </div>
     </div>
   );
