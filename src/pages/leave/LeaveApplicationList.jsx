@@ -153,8 +153,6 @@ const LeaveApplicationList = () => {
     }
   };
 
-  console.log(leaveApplicationList);
-
   if (!isLoading && !isError) {
     content = (
       <tbody className="dark:text-dark-text-color">

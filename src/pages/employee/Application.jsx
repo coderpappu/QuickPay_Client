@@ -27,10 +27,10 @@ function Application() {
     leave_type: "",
     leave_days: "",
     leave_reason: "",
-    leave_date: "",
+    // leave_date: "",
   });
 
-  // Fetching company ID
+  // Fetching com3pany ID
   const { data: company_id } = useGetCompanyIdQuery();
   const { data: applicationDetails } = useGetLeaveApplicationDetailsQuery(id);
 
@@ -74,12 +74,14 @@ function Application() {
   // Function to replace placeholders
   const replacePlaceholders = (text) => {
     const placeholderValues = {
-      date,
       name: applicationData?.name,
-      days_of_week: applicationData?.mail,
-      address,
+      mail: applicationData?.mail,
       start_date: DatePicker(applicationData?.start_date),
+      leave_type: "SICK",
+      leave_reason: "Sick",
       end_date: DatePicker(applicationData?.end_date),
+      designation: "Software Engineer",
+      department: "Developer",
     };
     return text.replace(
       /{(\w+)}/g,
