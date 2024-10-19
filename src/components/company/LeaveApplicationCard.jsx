@@ -22,6 +22,7 @@ const LeaveApplicationCard = () => {
   // Define handleEditorData as a function that accepts editor state data
   const handleEditorData = (data) => {
     // Set the received data from the editor
+    console.log(data);
     createLeaveAppliationFormat({ formatData: data, company_id });
     setEditorData(data);
   };

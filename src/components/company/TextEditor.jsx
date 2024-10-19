@@ -9,15 +9,18 @@ import {
   Typography,
   ListItemPrefix,
 } from "@material-tailwind/react";
-
+import {
+  $createParagraphNode,
+  $getRoot,
+  $getSelection,
+  $isRangeSelection,
+} from "lexical";
 // lexical
 import {
   $getNodeByKey,
-  $getSelection,
-  $isRangeSelection,
   FORMAT_TEXT_COMMAND,
-  $createParagraphNode,
   SELECTION_CHANGE_COMMAND,
+  $createTextNode,
 } from "lexical";
 import {
   $isListNode,
@@ -1018,12 +1021,18 @@ function ToolbarPlugin() {
     </div>
   );
 }
-
+const initialEditorState = () => {
+  const root = $getRoot();
+  const paragraph = $createParagraphNode();
+  paragraph.append($createTextNode("This is a sample text."));
+  root.append(paragraph);
+};
 const editorConfig = {
   namespace: "MyEditor",
   onError(error) {
     throw error;
   },
+  initialEditorState: initialEditorState,
   nodes: [
     HeadingNode,
     ListNode,
@@ -1059,6 +1068,7 @@ function SaveOnClickPlugin({ onSave }) {
 
 export default function TextEditor({ checkSave }) {
   const [savedData, setSavedData] = useState(null);
+  const [initialContent, setInitialContent] = useState();
 
   // Handle save and display editor state
   const handleSave = (editorState) => {
@@ -1067,6 +1077,22 @@ export default function TextEditor({ checkSave }) {
     // setSavedData(editorState);
     checkSave(JSON.stringify(editorState));
   };
+
+  const initialEditorState = () => {
+    if (initialContent) {
+      return initialContent; // Return fetched content as initial state
+    }
+    // Default initial state if no content is fetched
+    return {}; // Adjust according to your default structure
+  };
+  const EMPTY_CONTENT =
+  '{"root":{"children":[{"children":[],"direction":null,"format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"root","version":1}}';
+
+const initialConfig = {
+  ...
+  editorState: EMPTY_CONTENT,
+  ...
+}
 
   return (
     <LexicalComposer initialConfig={editorConfig}>
@@ -1077,6 +1103,7 @@ export default function TextEditor({ checkSave }) {
             contentEditable={
               <ContentEditable className="lexical h-[280px] overflow-y-scroll resize-none px-2.5 py-4 text-base caret-gray-900 outline-none" />
             }
+          
             placeholder={<Placeholder />}
             ErrorBoundary={null}
           />
