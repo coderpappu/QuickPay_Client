@@ -60,6 +60,16 @@ function Application() {
       mail: applicationDetails?.data?.Employee?.email,
       start_date: applicationDetails?.data?.start_date,
       end_date: applicationDetails?.data?.end_date,
+      leave_type: applicationDetails?.data?.leave_type,
+      leave_days: applicationDetails?.data?.leave_days,
+      leave_reason: applicationDetails?.data?.reason,
+      designation:
+        applicationDetails?.data?.Employee?.EmployeeDesignation?.[0]
+          ?.designation?.name,
+      department:
+        applicationDetails?.data?.Employee?.EmployeeDepartment?.[0]?.department
+          ?.name,
+      leave_type: applicationDetails?.data?.LeaveType?.name,
     }));
   }, []);
 
@@ -77,11 +87,11 @@ function Application() {
       name: applicationData?.name,
       mail: applicationData?.mail,
       start_date: DatePicker(applicationData?.start_date),
-      leave_type: "SICK",
-      leave_reason: "Sick",
+      leave_type: applicationData?.leave_type,
+      leave_reason: applicationData?.leave_reason,
       end_date: DatePicker(applicationData?.end_date),
-      designation: "Software Engineer",
-      department: "Developer",
+      designation: applicationData?.designation,
+      department: applicationData?.department,
     };
     return text.replace(
       /{(\w+)}/g,
