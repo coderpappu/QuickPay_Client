@@ -13,6 +13,8 @@ import CompanyLogo from "../../assets/xceed-bangladesh-logo.png";
 import { FiPhone } from "react-icons/fi";
 import { CiLocationOn } from "react-icons/ci";
 import { MdOutlineEmail } from "react-icons/md";
+import { TfiPrinter } from "react-icons/tfi";
+
 function Application() {
   const [letterData, setLetterData] = useState(null);
   const [date, setDate] = useState("10");
@@ -32,10 +34,11 @@ function Application() {
     leave_type: "",
     leave_days: "",
     leave_reason: "",
+    createDate: "",
     // leave_date: "",
   });
 
-  // Fetching com3pany ID
+  // Fetching company ID
   const { data: company_id } = useGetCompanyIdQuery();
   const { data: applicationDetails } = useGetLeaveApplicationDetailsQuery(id);
 
@@ -75,6 +78,7 @@ function Application() {
         applicationDetails?.data?.Employee?.EmployeeDepartment?.[0]?.department
           ?.name,
       leave_type: applicationDetails?.data?.LeaveType?.name,
+      createDate: applicationDetails?.data?.created_at,
     }));
   }, []);
 
@@ -106,7 +110,6 @@ function Application() {
 
   // Function to render elements (headings, paragraphs, etc.)
   const renderElement = (child, index) => {
-    console.log(child);
     if (child.type === "heading") {
       const TagName = child.tag.toLowerCase();
       return React.createElement(
@@ -152,16 +155,27 @@ function Application() {
     var element = document.getElementById("container");
     html2pdf(element, {
       margin: 10,
+      filename:
+        applicationDetails?.data?.Employee?.name +
+        "-" +
+        DatePicker(applicationData?.createDate) +
+        ".pdf",
     });
   };
 
   return (
-    <div className="text-white">
-      <button onClick={() => downloadBtn()}>Download PDF</button>
-      <div
-        id="container"
-        className="dark:bg-dark-box p-8 rounded-sm w-[1000px] h-[900px]"
-      >
+    <div className="text-white w-[1000px]">
+      <div className="flex justify-end">
+        <button
+          className="bg-green-600 px-3 py-3 rounded-sm mb-2 flex  gap-2 items-center"
+          onClick={() => downloadBtn()}
+        >
+          {" "}
+          <TfiPrinter />
+          Download PDF
+        </button>
+      </div>
+      <div id="container" className="dark:bg-dark-box p-8 rounded-sm  h-auto">
         <div className="flex justify-between items-center mb-8">
           <img src={CompanyLogo} alt="" className="w-[180px] h-auto" />
         </div>
@@ -169,7 +183,7 @@ function Application() {
           renderElement(child, index)
         )}
 
-        <div className="mt-14 flex  gap-14  ">
+        <div className="mt-[250px] flex  gap-14  ">
           <div className="flex justify-between items-center w-[170px]">
             <div className="p-2 rounded-full bg-blue-500">
               <FiPhone color="white" />
