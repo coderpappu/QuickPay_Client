@@ -164,7 +164,7 @@ function Application() {
   };
 
   return (
-    <div className="text-white w-[1000px]">
+    <div className="text-white w-[1000px] m-auto">
       <div className="flex justify-end">
         <button
           className="bg-green-600 px-3 py-3 rounded-sm mb-2 flex  gap-2 items-center"
@@ -175,7 +175,7 @@ function Application() {
           Download PDF
         </button>
       </div>
-      <div id="container" className="dark:bg-dark-box p-8 rounded-sm  h-auto">
+      <div id="container" className="bg-dark-box p-8 rounded-sm  h-auto">
         <div className="flex justify-between items-center mb-8">
           <img src={CompanyLogo} alt="" className="w-[180px] h-auto" />
         </div>

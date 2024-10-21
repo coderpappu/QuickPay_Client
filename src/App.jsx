@@ -96,6 +96,7 @@ function App() {
                 path="company/employee/registration"
                 element={<EmployeeRegistration />}
               />
+
               <Route
                 path="company/employee/details/:id"
                 element={<Profile />}
@@ -108,10 +109,12 @@ function App() {
               <Route path="company/edit/shift/:id" element={<EditShift />} />
 
               <Route path="department/list" element={<DepartmentList />} />
+
               <Route
                 path="department/update/:id"
                 element={<DepartmentForm />}
               />
+
               <Route path="department/create" element={<DepartmentSetting />} />
               <Route path="designation/list" element={<DesignationList />} />
               <Route
@@ -122,6 +125,7 @@ function App() {
                 path="designation/update/:id"
                 element={<DesignationSetting />}
               />
+
               <Route path="section/list" element={<SectionList />} />
               <Route path="section/create" element={<SectionSettings />} />
               <Route path="section/update/:id" element={<SectionSettings />} />

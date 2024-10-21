@@ -30,7 +30,7 @@ const adminMenuItems = [
     title: "HRM system",
     icon: <LuUsers2 size={20} />,
     subMenu: [
-      { title: "Employee Setup", link: "/company/employee/registration" },
+      { title: "Employee Setup", link: "/company/employee" },
       {
         title: "Payroll Setup",
         subMenu: [
