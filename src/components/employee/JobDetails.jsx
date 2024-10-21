@@ -37,6 +37,11 @@ const JobDetails = ({ employeeDetails }) => {
           }
         />
 
+        <PersonalInfo
+          title="Grade"
+          data={employeeDetails?.Employeegrade[0]?.grade.name || "No Section"}
+        />
+
         <div className="absolute right-1 top-2  w-[40px] cursor-pointer  h-[40px] flex flex-col justify-center align-middle items-center rounded-full bg-[#85858512] mr-2">
           <Link
           // to={`/company/update/${data._id}`}

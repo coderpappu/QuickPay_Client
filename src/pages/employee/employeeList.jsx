@@ -1,25 +1,39 @@
-import toast from "react-hot-toast";
-import { LuEye } from "react-icons/lu";
-import { MdOutlineDeleteOutline } from "react-icons/md";
-import { TbEdit } from "react-icons/tb";
-import { Link } from "react-router-dom";
+import React from "react";
+import BrandCardWrapper from "../../components/company/BrandCardWrapper";
+import SettingCardHeader, {
+  HrmSetupCardHeader,
+} from "../../components/company/SettingCardHeader";
+import SettingCardFooter from "../../components/company/SettingCardFooter";
+import { IoAdd } from "react-icons/io5";
+import { LiaEdit } from "react-icons/lia";
+import { AiOutlineDelete } from "react-icons/ai";
+import { CiEdit } from "react-icons/ci";
+
 import {
-    useDeleteEmployeeMutation,
-    useGetCompanyIdQuery,
-    useGetEmployeesQuery,
-    useSetCompanyIdMutation
+  useDeleteEmployeeMutation,
+  useGetCompanyIdQuery,
+  useGetEmployeesQuery,
+  useSetCompanyIdMutation,
 } from "../../features/api";
+
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import ErrorMessage from "../../utils/ErrorMessage";
 
-const EmployeeList = () => {
-  //   const {
-  //     data: companyData,
-  //     isLoading,
-  //     isError,
-  //     refetch,
-  //   } = useGetCompaniesQuery();
+import toast from "react-hot-toast";
+
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+const LeaveCard = () => {
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
+  const [leaveTypeId, setleaveTypeId] = useState(null);
+
+  const handleOpen = (id) => {
+    setIsPopupOpen(true);
+    setleaveTypeId(id);
+  };
+
   const { data: companyId } = useGetCompanyIdQuery();
   const [deleteEmployee] = useDeleteEmployeeMutation();
   const [setCompanyId] = useSetCompanyIdMutation();
@@ -31,15 +45,7 @@ const EmployeeList = () => {
     error,
   } = useGetEmployeesQuery(companyId);
 
-  const handleActivate = (id) => {
-    setCompanyId(id);
-  };
-
-  const handleDeactivate = () => {
-    // setCompanyId(null);
-  };
-
-  const handleDeleteCompany = async (id) => {
+  const handleDeleteEmployee = async (id) => {
     const confirm = () =>
       toast(
         (t) => (
@@ -51,14 +57,15 @@ const EmployeeList = () => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
-                    toast.success("Company deleted successfully");
+                    toast.success("Employee deleted successfully");
                   }
                 });
               } catch (error) {
-                toast.error(error.message || "Failed to delete company");
+                toast.error(error.message || "Failed to delete employee");
               }
             }}
             onCancel={() => toast.dismiss(t.id)}
+            title="employee account"
           />
         ),
         {
@@ -68,126 +75,149 @@ const EmployeeList = () => {
 
     confirm();
   };
-  let content;
 
+  let content;
   if (isLoading && !isError) content = <ListSkeleton />;
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
-
   let employees;
-
   if (!isLoading && !isError) {
     employees = employeesData?.data;
     content = (
       <>
         {employees?.map((employee, index) => (
-          <tr
-            key={employee?.id}
-            className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
-          >
-            <td className="py-2 text-sm text-center">{index + 1}</td>
-            <td className="py-2 text-sm font-semibold pl-10">
-              {employee?.name}
-            </td>
-            <td className="py-2 text-sm text-center">{employee.email}</td>
-            <td className="py-2 text-sm text-center">
-              {employee?.EmployeeDepartment?.[0]?.department?.name}
-            </td>
-            <td className="py-2 text-sm text-center">
-              {employee?.EmployeeShift?.[0]?.shift?.name}
-            </td>
-
-            <td className="py-2 text-sm text-center">
-              {employee.id === companyId ? (
-                <button
-                  className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-3 rounded text-sm w-28"
-                  onClick={handleDeactivate}
-                >
-                  Deactivate
-                </button>
-              ) : (
-                <button
-                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-sm w-28"
-                  onClick={() => handleActivate(employee?.id)}
-                >
-                  Activate
-                </button>
-              )}
-            </td>
-            <td className="py-2 text-sm text-center">
-              <Link to={`/company/employee/details/${employee?.id}`}>
-                <div className="grid place-items-center">
-                  <LuEye className="text-2xl text-green-500" />
-                </div>
-              </Link>
-            </td>
-            <td className="py-2 text-sm">
-              <Link to={`/company/update/${employee?.id}`}>
-                <div className="grid place-items-center">
-                  <TbEdit className="text-2xl text-[#3686FF]" />
-                </div>
-              </Link>
-            </td>
-            <td
-              className="py-2 text-sm"
-              onClick={() => handleDeleteCompany(employee?.id)}
+          <>
+            <div
+              key={employee.id}
+              className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
             >
-              <div className="grid place-items-center">
-                <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
+              <div className="dark:text-white w-[5%]">
+                <h3>{++index}</h3>
               </div>
-            </td>
-          </tr>
+              <div className="dark:text-white w-[15%]">
+                <Link to={`/company/employee/details/${employee?.id}`}>
+                  <div className="w-[60%] px-2 py-2 border border-dark-heading-color text-dark-heading-color rounded-md text-center">
+                    <h3>{employee?.employeeId}</h3>
+                  </div>
+                </Link>
+              </div>
+
+              <div className="dark:text-white w-[20%]">
+                <h3>{employee?.name}</h3>
+              </div>
+
+              <div className="dark:text-white w-[15%]">
+                <h3>{employee?.EmployeeDepartment?.[0]?.department?.name}</h3>
+              </div>
+
+              <div className="dark:text-white w-[15%]">
+                <h3>{employee?.EmployeeDesignation[0]?.designation?.name}</h3>
+              </div>
+
+              <div className="dark:text-white w-[15%]">
+                <h3>{employee?.EmployeeSection?.[0]?.section?.name}</h3>
+              </div>
+              <div className="dark:text-white w-[10%]">
+                <div className="flex flex-wrap justify-start gap-2">
+                  {/* edit button  */}
+                  <div className="w-8 h-8 bg-green-400 rounded-sm p-2 flex justify-center items-center cursor-pointer">
+                    <CiEdit size={20} />
+                  </div>
+
+                  {/* delete button  */}
+                  <div
+                    onClick={() => handleDeleteEmployee(employee?.id)}
+                    className="w-8 h-8 bg-red-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
+                  >
+                    <AiOutlineDelete size={20} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
         ))}
       </>
     );
   }
-  return (
-    <div>
-      <div className="flex flex-wrap justify-between items-center pb-2">
-        <div>
-          <h2 className="font-semibold text-lg pb-2">Employee</h2>
-        </div>
-      </div>
 
-      <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-auto">
-        <div className="flex flex-wrap justify-between mb-4">
-          <div className="font-medium text-base">
-            {/* {companies && companies?.length} Company Available for Now */}
-          </div>
+  return (
+    <>
+      <BrandCardWrapper>
+        <div className="flex justify-between items-center border-b border-dark-box border-opacity-5 dark:border-dark-border-color dark:border-opacity-5 px-6 py-4">
           <div>
-            <Link
-              to="/company/employee/registration"
-              className="px-5 py-2 rounded-[3px] text-white bg-[#3686FF] transition hover:bg-[#7f39f0]"
-            >
-              Add Employee
+            <h3 className="text-base leading-6 dark:text-dark-heading-color">
+              Employee List
+            </h3>
+            {/* <p className="text-xs text-light-text-color">{subTitle}</p> */}
+          </div>
+
+          <div
+            className="w-8 h-8 bg-green-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
+            onClick={() => handleOpen()}
+          >
+            <Link to="/company/employee/registration">
+              <IoAdd color="#fff" />
             </Link>
           </div>
         </div>
+        <div className="px-6 py-3">
+          {/* header  */}
+          <div className="w-full bg-light-bg dark:bg-dark-box rounded-sm py-3 px-3 flex flex-wrap justify-between text-sm">
+            <div className="dark:text-white w-[5%]">
+              <h3>SL</h3>
+            </div>
+            <div className="dark:text-white w-[15%]">
+              <h3>Employee ID</h3>
+            </div>
+            <div className="dark:text-white w-[20%]">
+              <h3>Name</h3>
+            </div>
 
-        <div>
-          <table className="w-full h-auto">
-            {!isError && (
-              <thead className="border-b border-slate-200 text-left mt-8">
-                <tr>
-                  <th className="pb-2 text-base text-center">SL</th>
-                  <th className="pb-2 text-base pl-10">Name</th>
-                  <th className="pb-2 text-base text-center">Email</th>
-                  <th className="pb-2 text-base text-center">Department</th>
-                  <th className="pb-2 text-base text-center">Shift</th>
-                  <th className="pb-2 text-base text-center">Status</th>
-                  <th className="pb-2 text-base text-center">View</th>
-                  <th className="pb-2 text-base text-center">Update</th>
-                  <th className="pb-2 text-base text-center">Delete</th>
-                </tr>
-              </thead>
-            )}
+            <div className="dark:text-white w-[15%]">
+              <h3>Department</h3>
+            </div>
 
-            <tbody>{content}</tbody>
-          </table>
+            <div className="dark:text-white w-[15%]">
+              <h3>Designation</h3>
+            </div>
+
+            <div className="dark:text-white w-[15%]">
+              <h3>Section</h3>
+            </div>
+            <div className="dark:text-white w-[10%]">
+              <h3>Action</h3>
+            </div>
+          </div>
+
+          {/* body  */}
+          {content}
         </div>
-      </div>
-    </div>
+        {/* {isPopupOpen && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <div className="bg-white dark:bg-dark-card  rounded-lg p-6 w-full max-w-md">
+              <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-dark-border-color dark:border-opacity-5">
+                <h3 className="text-lg font-medium text-gray-800 dark:text-white">
+                  Designation
+                </h3>
+                <button
+                  className="text-gray-500 hover:text-gray-800"
+                  onClick={() => setIsPopupOpen(false)} // Close popup
+                >
+                  &times;
+                </button>
+              </div>
+              <div className="mt-4">
+                <LeaveTypeForm
+                  leaveTypeId={leaveTypeId}
+                  setIsPopupOpen={setIsPopupOpen}
+                />
+              </div>
+            </div>
+          </div>
+        )} */}
+      </BrandCardWrapper>
+    </>
   );
 };
 
-export default EmployeeList;
+export default LeaveCard;

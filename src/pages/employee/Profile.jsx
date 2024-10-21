@@ -23,6 +23,7 @@ const Profile = () => {
   const { data, isLoading, isError } = useGetEmployeeDetailsQuery(
     id || employeeData?.data?.id
   );
+
   const [selected, setSelected] = useState("1");
   // handle function for button state
   const handleSelect = (id) => {
