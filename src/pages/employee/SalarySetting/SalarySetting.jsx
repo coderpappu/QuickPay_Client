@@ -8,12 +8,14 @@ import {
   useGetGradeListQuery,
   useGetSalarySettingQuery,
 } from "../../../features/api";
+import { useParams } from "react-router-dom";
 
 const SalarySettings = () => {
   const [selectedAllowances, setSelectedAllowances] = useState([]);
   const [selectedDeductions, setSelectedDeductions] = useState([]);
   const [selectedGrade, setSelectedGrade] = useState("");
   const { data: companyId } = useGetCompanyIdQuery();
+  const id = useParams()?.id;
 
   const {
     data: allowancesList,
@@ -82,6 +84,7 @@ const SalarySettings = () => {
       deductionIds: selectedDeductions.map((id) => ({ id, checked: true })),
       gradeId: selectedGrade,
       companyId: companyId,
+      employeeId: id,
     };
     createSalarySetting(salaryData);
 
