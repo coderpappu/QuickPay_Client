@@ -1,37 +1,69 @@
-// src/utils/fileUpload.js
-import { storage } from "../utils/firebase";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { useEffect, useState } from "react";
+import fileUpload from "./fileUpload"; // Adjust path as necessary
 import toast from "react-hot-toast";
+import { ErrorMessage } from "formik";
 
-const fileUpload = async ({ file, setProgress }) => {
-  if (!file) {
-    toast.error("Choose a file first");
-    return null;
-  }
+const UploadForm = ({ setFieldValue, canSubmit, setCanSubmit, name }) => {
+  const [file, setFile] = useState(null);
+  const [progress, setProgress] = useState(0);
 
-  const storageRef = ref(storage, `files/${file.name}`);
-  const uploadTask = uploadBytesResumable(storageRef, file);
+  const handleChange = (e) => {
+    if (e.target.files[0]) {
+      setCanSubmit(false);
+      setFile(e.target.files[0]);
+    }
+  };
 
-  return new Promise((resolve, reject) => {
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        // console.log(`Upload is ${progress}% done`);
-        setProgress(progress);
-      },
-      (error) => {
-        toast.error(error.message);
-        reject(error);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          resolve(downloadURL);
-        });
+  const handleUpload = async () => {
+    try {
+      const downloadURL = await fileUpload({ file, setProgress });
+      if (downloadURL) {
+        setFieldValue(name, downloadURL); // Update the image URL in the parent component
+        toast.success("File uploaded successfully!");
+        setCanSubmit(true);
       }
-    );
-  });
+    } catch (error) {
+      toast.error("Failed to upload file");
+      setCanSubmit(true); // Allow form submission in case of an error
+    }
+  };
+
+  useEffect(() => {
+    if (file !== null) {
+      handleUpload();
+    }
+  }, [file]);
+
+  return (
+    <div>
+      <label
+        htmlFor="image"
+        className="block text-sm font-medium text-gray-700"
+      >
+        Image
+      </label>
+      <input
+        type="file"
+        name="image"
+        id="image"
+        onChange={handleChange}
+        className="mt-1 block w-full text-gray-500"
+      />
+      {progress > 0 && (
+        <div className="w-full bg-gray-200 h-4 rounded-md overflow-hidden">
+          <div
+            className="bg-blue-500 h-full"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+      )}
+      <ErrorMessage
+        name="image"
+        component="div"
+        className="text-red-500 text-sm mt-1"
+      />
+    </div>
+  );
 };
 
-export default fileUpload;
+export default UploadForm;

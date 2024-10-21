@@ -14,6 +14,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import {
   useCreateNewEmployeeMutation,
   useGetCompanyIdQuery,
@@ -25,7 +26,7 @@ import {
 import UploadForm from "../../helpers/UploadForm";
 import { useState } from "react";
 import Box from "@mui/material/Box";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const steps = ["Personal Information", "Status", "Contacts", "Job Details"];
 
 const EmployeeRegistrationForm = () => {
@@ -37,9 +38,10 @@ const EmployeeRegistrationForm = () => {
   const { data: sections } = useGetSectionsQuery(CompanyId);
   const { data: shifts } = useGetShiftListQuery(CompanyId);
   const [createEmployee] = useCreateNewEmployeeMutation();
-
+  const [imageUrl, setImageUrl] = useState(null);
   // multi form state
   const [activeStep, setActiveStep] = useState(0);
+  const [canSubmit, setCanSubmit] = useState(false); // Initial value
 
   const initialValues = {
     name: "",
@@ -84,17 +86,27 @@ const EmployeeRegistrationForm = () => {
     setActiveStep(0);
   };
 
+  /// delete the logo from any online storage.
+  const handleDeleteLogo = () => {
+    initialValues({
+      ...initialValues,
+      image: null,
+    });
+  };
+
   return (
-    <Box>
+    <Box className="dark:bg-dark-card py-[5%] px-[10%] rounded-md">
       <div className="w-full  text-center mt-3 mb-7">
-        <h2 className="text-2xl font-semibold text-[#0c2580]">
+        <h2 className="text-2xl font-semibold text-[#0c2580] dark:text-dark-heading-color">
           Employee Registration{" "}
         </h2>
       </div>
       <Stepper activeStep={activeStep} className="my-5">
         {steps.map((label, index) => (
           <Step key={label}>
-            <StepLabel>{label}</StepLabel>
+            <StepLabel>
+              <p className="dark:text-dark-text-color">{label}</p>
+            </StepLabel>
           </Step>
         ))}
       </Stepper>
@@ -116,6 +128,7 @@ const EmployeeRegistrationForm = () => {
             try {
               await createEmployee({
                 ...values,
+
                 fingerprint_id: "bf84d050-3e51-4f60-918e-72668d1b0a85",
               }).unwrap();
               toast.success("Employee registered successfully");
@@ -136,9 +149,15 @@ const EmployeeRegistrationForm = () => {
             {step === 1 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
+                  <UploadForm
+                    setFieldValue={setFieldValue}
+                    canSubmit={true}
+                    setCanSubmit={() => {}}
+                    name="image"
+                  />
                   <label
                     htmlFor="name"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Name
                   </label>
@@ -147,7 +166,7 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="name"
                     id="name"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 dark:bg-dark-box  border border-gray-300 dark:border-dark-border-color dark:border-opacity-10 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="name"
@@ -158,7 +177,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="email"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Email
                   </label>
@@ -166,7 +185,7 @@ const EmployeeRegistrationForm = () => {
                     type="email"
                     name="email"
                     id="email"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="email"
@@ -177,7 +196,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="phone"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Phone
                   </label>
@@ -185,7 +204,7 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="phone"
                     id="phone"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="phone"
@@ -196,7 +215,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="present_address"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Present Address
                   </label>
@@ -204,7 +223,7 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="present_address"
                     id="present_address"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="present_address"
@@ -215,7 +234,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="permanent_address"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Permanent Address
                   </label>
@@ -223,7 +242,7 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="permanent_address"
                     id="permanent_address"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="permanent_address"
@@ -234,7 +253,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="gender"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Gender
                   </label>
@@ -242,7 +261,7 @@ const EmployeeRegistrationForm = () => {
                     as="select"
                     name="gender"
                     id="gender"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   >
                     <option>Select</option>
                     <option value="male">Male</option>
@@ -262,7 +281,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="religion"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700  dark:text-dark-text-color"
                   >
                     Religion
                   </label>
@@ -270,7 +289,7 @@ const EmployeeRegistrationForm = () => {
                     as="select"
                     name="religion"
                     id="religion"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   >
                     <option>Select</option>
                     <option value="ISLAM">ISLAM</option>
@@ -287,7 +306,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="birth_date"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Birth Date
                   </label>
@@ -295,7 +314,7 @@ const EmployeeRegistrationForm = () => {
                     type="date"
                     name="birth_date"
                     id="birth_date"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="birth_date"
@@ -306,7 +325,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="joining_date"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Joining Date
                   </label>
@@ -314,7 +333,7 @@ const EmployeeRegistrationForm = () => {
                     type="date"
                     name="joining_date"
                     id="joining_date"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="joining_date"
@@ -325,7 +344,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="terminate_date"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Terminate Date
                   </label>
@@ -334,7 +353,7 @@ const EmployeeRegistrationForm = () => {
                     type="date"
                     name="terminate_date"
                     id="terminate_date"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="terminate_date"
@@ -345,7 +364,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="reference"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Reference
                   </label>
@@ -354,7 +373,7 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="reference"
                     id="reference"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="reference"
@@ -366,7 +385,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="job_status"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Job Status
                   </label>
@@ -375,7 +394,7 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="job_status"
                     id="job_status"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="job_status"
@@ -390,7 +409,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="spouse_name"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Spouse Name
                   </label>
@@ -399,7 +418,7 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="spouse_name"
                     id="spouse_name"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="spouse_name"
@@ -410,7 +429,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="emergency_contact"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Emergency Contact
                   </label>
@@ -419,7 +438,7 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="emergency_contact"
                     id="emergency_contact"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="emergency_contact"
@@ -430,7 +449,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="id_type"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Id Type
                   </label>
@@ -439,7 +458,7 @@ const EmployeeRegistrationForm = () => {
                     as="select"
                     name="id_type"
                     id="id_type"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   >
                     <option value="PASSPORT">PASSPORT</option>
                     <option value="NID">NID</option>
@@ -454,7 +473,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="id_number"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     ID Number
                   </label>
@@ -463,7 +482,7 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="id_number"
                     id="id_number"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="id_number"
@@ -479,7 +498,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="designationId"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Designation
                   </label>
@@ -487,7 +506,7 @@ const EmployeeRegistrationForm = () => {
                     as="select"
                     name="designationId"
                     id="designationId"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   >
                     <option value="">Select Designation</option>
                     {designations?.data?.map((designation) => (
@@ -505,7 +524,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="departmentId"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Department
                   </label>
@@ -513,7 +532,7 @@ const EmployeeRegistrationForm = () => {
                     as="select"
                     name="departmentId"
                     id="departmentId"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   >
                     <option value="">Select Department</option>
                     {departments?.data?.map((department) => (
@@ -531,7 +550,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="sectionId"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Section
                   </label>
@@ -539,7 +558,7 @@ const EmployeeRegistrationForm = () => {
                     as="select"
                     name="sectionId"
                     id="sectionId"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   >
                     <option>Select Section</option>
                     {sections?.data?.map((section) => (
@@ -557,7 +576,7 @@ const EmployeeRegistrationForm = () => {
                 <div>
                   <label
                     htmlFor="shiftId"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Shift
                   </label>
@@ -565,7 +584,7 @@ const EmployeeRegistrationForm = () => {
                     as="select"
                     name="shiftId"
                     id="shiftId"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   >
                     <option value="">Select Shift</option>
                     {shifts?.data?.map((shift) => (
