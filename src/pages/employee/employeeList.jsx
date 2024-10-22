@@ -96,7 +96,7 @@ const LeaveCard = () => {
               </div>
               <div className="dark:text-white w-[15%]">
                 <Link to={`/company/employee/details/${employee?.id}`}>
-                  <div className="w-[60%] px-2 py-2 border border-dark-heading-color text-dark-heading-color rounded-md text-center">
+                  <div className="w-[60%] px-2 py-2 hover:bg-button-bg hover:text-white transition-all duration-150 border border-dark-heading-color text-dark-heading-color rounded-md text-center">
                     <h3>{employee?.employeeId}</h3>
                   </div>
                 </Link>
