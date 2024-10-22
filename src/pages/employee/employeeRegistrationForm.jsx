@@ -27,7 +27,13 @@ import UploadForm from "../../helpers/UploadForm";
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-const steps = ["Personal Information", "Status", "Contacts", "Job Details"];
+const steps = [
+  "Personal Information",
+  "Status",
+  "Contacts",
+  "Job Details",
+  "Profile",
+];
 
 const EmployeeRegistrationForm = () => {
   const { data: CompanyId } = useGetCompanyIdQuery();
@@ -70,7 +76,7 @@ const EmployeeRegistrationForm = () => {
     shiftId: "",
   };
 
-  const isLastStep = step === 4;
+  const isLastStep = step === 5;
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -149,16 +155,6 @@ const EmployeeRegistrationForm = () => {
             {step === 1 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <UploadForm
-                    setFieldValue={(field, value) => {
-                      setImageUrl(value); // Update the image URL state
-                    }}
-                    canSubmit={canSubmit}
-                    setCanSubmit={setCanSubmit}
-                    uploadedImageUrl={imageUrl}
-                    name="image"
-                  />
-
                   <label
                     htmlFor="name"
                     className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
@@ -604,6 +600,20 @@ const EmployeeRegistrationForm = () => {
                   />
                 </div>
               </div>
+            )}
+
+            {step === 5 && (
+              <>
+                <UploadForm
+                  setFieldValue={(field, value) => {
+                    setImageUrl(value); // Update the image URL state
+                  }}
+                  canSubmit={canSubmit}
+                  setCanSubmit={setCanSubmit}
+                  uploadedImageUrl={imageUrl}
+                  name="image"
+                />
+              </>
             )}
 
             <div className="flex justify-between mt-6">
