@@ -31,8 +31,6 @@ const Sidebar = () => {
     currentMenuItems = employeeMenuItems;
   }
 
-  console.log(currentMenuItems);
-
   // Recursive function to render nested submenus
   const renderSubMenu = (subMenus) => {
     return (

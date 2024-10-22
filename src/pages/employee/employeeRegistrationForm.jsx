@@ -41,8 +41,8 @@ const EmployeeRegistrationForm = () => {
   const [imageUrl, setImageUrl] = useState(null);
   // multi form state
   const [activeStep, setActiveStep] = useState(0);
-  const [canSubmit, setCanSubmit] = useState(false); // Initial value
 
+  const [canSubmit, setCanSubmit] = useState(true);
   const initialValues = {
     name: "",
     email: "",
@@ -128,7 +128,7 @@ const EmployeeRegistrationForm = () => {
             try {
               await createEmployee({
                 ...values,
-
+                image: imageUrl,
                 fingerprint_id: "bf84d050-3e51-4f60-918e-72668d1b0a85",
               }).unwrap();
               toast.success("Employee registered successfully");
@@ -150,11 +150,15 @@ const EmployeeRegistrationForm = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <UploadForm
-                    setFieldValue={setFieldValue}
-                    canSubmit={true}
-                    setCanSubmit={() => {}}
+                    setFieldValue={(field, value) => {
+                      setImageUrl(value); // Update the image URL state
+                    }}
+                    canSubmit={canSubmit}
+                    setCanSubmit={setCanSubmit}
+                    uploadedImageUrl={imageUrl}
                     name="image"
                   />
+
                   <label
                     htmlFor="name"
                     className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"

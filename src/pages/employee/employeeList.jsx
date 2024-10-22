@@ -88,7 +88,7 @@ const LeaveCard = () => {
         {employees?.map((employee, index) => (
           <>
             <div
-              key={employee.id}
+              key={employee?.id}
               className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
             >
               <div className="dark:text-white w-[5%]">
