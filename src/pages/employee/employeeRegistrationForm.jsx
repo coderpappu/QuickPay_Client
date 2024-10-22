@@ -1,6 +1,6 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import EmployeeSchema from "./EmployeeSchema";
 import * as React from "react";
@@ -20,13 +20,17 @@ import {
   useGetCompanyIdQuery,
   useGetDepartmentsQuery,
   useGetDesignationsQuery,
+  useGetEmployeeDetailsQuery,
   useGetSectionsQuery,
   useGetShiftListQuery,
+  useUpdateEmployeeMutation,
 } from "../../features/api";
 import UploadForm from "../../helpers/UploadForm";
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect } from "react";
+
 const steps = [
   "Personal Information",
   "Status",
@@ -36,6 +40,7 @@ const steps = [
 ];
 
 const EmployeeRegistrationForm = () => {
+  const { id } = useParams();
   const { data: CompanyId } = useGetCompanyIdQuery();
   const navigate = useNavigate();
   const [step, setStep] = useState(1); // State to track current step
@@ -44,36 +49,47 @@ const EmployeeRegistrationForm = () => {
   const { data: sections } = useGetSectionsQuery(CompanyId);
   const { data: shifts } = useGetShiftListQuery(CompanyId);
   const [createEmployee] = useCreateNewEmployeeMutation();
+  const [updateEmployee] = useUpdateEmployeeMutation();
+
   const [imageUrl, setImageUrl] = useState(null);
   // multi form state
   const [activeStep, setActiveStep] = useState(0);
 
   const [canSubmit, setCanSubmit] = useState(true);
+
+  const {
+    data: employeeData,
+    isLoading,
+    isError,
+  } = useGetEmployeeDetailsQuery(id);
+
   const initialValues = {
-    name: "",
-    email: "",
-    phone: "",
-    present_address: "",
-    permanent_address: "",
-    gender: "",
-    religion: "MUSLIM",
-    birth_date: "",
-    joining_date: "",
-    terminate_date: "",
-    image: "",
-    job_status: "PERMANENT",
-    reference: "",
-    spouse_name: "",
-    emergency_contact: "",
-    id_type: "NID",
-    id_number: "",
-    status: "ACTIVE",
+    name: employeeData?.data?.[0]?.name || "",
+    email: employeeData?.data?.[0]?.email || "",
+    phone: employeeData?.data?.[0]?.phone || "",
+    present_address: employeeData?.data?.[0]?.present_address || "",
+    permanent_address: employeeData?.data?.[0]?.email || "",
+    gender: employeeData?.data?.[0]?.gender || "",
+    religion: employeeData?.data?.[0]?.religion || "MUSLIM",
+    birth_date: employeeData?.data?.[0]?.birth_date || "",
+    joining_date: employeeData?.data?.[0]?.joining_date || "",
+    terminate_date: employeeData?.data?.[0]?.terminate_date || "",
+    image: employeeData?.data?.[0]?.image || "",
+    job_status: employeeData?.data?.[0]?.job_status || "PERMANENT",
+    reference: employeeData?.data?.[0]?.reference || "",
+    spouse_name: employeeData?.data?.[0]?.spouse_name || "",
+    emergency_contact: employeeData?.data?.[0]?.emergency_contact || "",
+    id_type: employeeData?.data?.[0]?.id_type || "NID",
+    id_number: employeeData?.data?.[0]?.id_number || "",
+    status: employeeData?.data?.[0]?.status || "ACTIVE",
     company_id: CompanyId,
-    fingerprint_id: "",
-    designationId: "",
-    departmentId: "",
-    sectionId: "",
-    shiftId: "",
+    fingerprint_id: employeeData?.data?.[0]?.fingerprint_id || "",
+    designationId:
+      employeeData?.data?.[0]?.EmployeeDesignation?.[0]?.designation_id || "",
+    departmentId:
+      employeeData?.data?.[0]?.EmployeeDepartment?.[0]?.department_id || "",
+    sectionId: employeeData?.data?.[0]?.EmployeeSection?.[0]?.section_id || "",
+    shiftId: employeeData?.data?.[0]?.EmployeeShift?.[0]?.shift_id || "",
   };
 
   const isLastStep = step === 5;
@@ -104,7 +120,7 @@ const EmployeeRegistrationForm = () => {
     <Box className="dark:bg-dark-card py-[5%] px-[10%] rounded-md">
       <div className="w-full  text-center mt-3 mb-7">
         <h2 className="text-2xl font-semibold text-[#0c2580] dark:text-dark-heading-color">
-          Employee Registration{" "}
+          {id ? "Edit Employee" : "Employee Registration"}
         </h2>
       </div>
       <Stepper activeStep={activeStep} className="my-5">
@@ -127,25 +143,31 @@ const EmployeeRegistrationForm = () => {
       )}
 
       <Formik
-        initialValues={initialValues}
+        initialValues={initialValues} // Use the state that was set with employee data
         validationSchema={EmployeeSchema(step)}
         onSubmit={async (values, { setSubmitting }) => {
-          if (isLastStep) {
-            try {
+          try {
+            if (id) {
+              // Update existing employee
+              await updateEmployee({
+                ...values,
+                image: imageUrl,
+                fingerprint_id: "bf84d050-3e51-4f60-918e-72668d1b0a85",
+              }).unwrap();
+              toast.success("Employee updated successfully");
+            } else {
+              // Create new employee
               await createEmployee({
                 ...values,
                 image: imageUrl,
                 fingerprint_id: "bf84d050-3e51-4f60-918e-72668d1b0a85",
               }).unwrap();
               toast.success("Employee registered successfully");
-              navigate("/employee/list");
-            } catch (error) {
-              toast.error(error?.data?.message);
-            } finally {
-              setSubmitting(false);
             }
-          } else {
-            handleNext();
+            navigate("/employee/list");
+          } catch (error) {
+            toast.error(error?.data?.message);
+          } finally {
             setSubmitting(false);
           }
         }}
@@ -560,7 +582,7 @@ const EmployeeRegistrationForm = () => {
                     id="sectionId"
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                   >
-                    <option>Select Section</option>
+                    <option value="">Select Section</option>
                     {sections?.data?.map((section) => (
                       <option key={section.id} value={section.id}>
                         {section.name}
@@ -627,7 +649,8 @@ const EmployeeRegistrationForm = () => {
                 </Button>
               )}
               <Button
-                type="submit"
+                type={isLastStep ? "submit" : "button"} // Change type based on step
+                onClick={isLastStep ? undefined : handleNext} // Handle next click
                 disabled={isSubmitting}
                 variant={isLastStep ? "contained" : "outlined"}
                 size={"large"}

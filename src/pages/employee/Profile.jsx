@@ -38,8 +38,6 @@ const Profile = () => {
 
   let employeeDetails = data?.data[0];
 
-  console.log(employeeDetails?.image);
-  
   return (
     <div>
       <h2> Employee / Profile</h2>

@@ -121,7 +121,9 @@ const LeaveCard = () => {
                 <div className="flex flex-wrap justify-start gap-2">
                   {/* edit button  */}
                   <div className="w-8 h-8 bg-green-400 rounded-sm p-2 flex justify-center items-center cursor-pointer">
-                    <CiEdit size={20} />
+                    <Link to={`/company/employee/update/${employee?.id}`}>
+                      <CiEdit size={20} />
+                    </Link>
                   </div>
 
                   {/* delete button  */}

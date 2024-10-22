@@ -96,7 +96,11 @@ function App() {
                 path="company/employee/registration"
                 element={<EmployeeRegistration />}
               />
-
+              {/* employee account edit route  */}
+              <Route
+                path="company/employee/update/:id"
+                element={<EmployeeRegistration />}
+              />
               <Route
                 path="company/employee/details/:id"
                 element={<Profile />}

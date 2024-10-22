@@ -112,6 +112,7 @@ export const apiSlice = createApi({
       }),
       providesTags: ["Employee"],
     }),
+
     getEmployee: builder.query({
       query: () => "/employee/getemployee",
 
@@ -149,14 +150,14 @@ export const apiSlice = createApi({
       invalidatesTags: ["Employee"],
     }),
 
-    // updateCompany: builder.mutation({
-    //   query: ({ id, ...credentials }) => ({
-    //     url: `/company/updatecompany/${id}`,
-    //     method: "PUT",
-    //     body: credentials,
-    //   }),
-    //   invalidatesTags: ["Company"],
-    // }),
+    updateEmployee: builder.mutation({
+      query: ({ id, ...credentials }) => ({
+        url: `/employee/update/${id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["Employee"],
+    }),
 
     // deleteCompany: builder.mutation({
     //   query: (id) => ({
@@ -895,6 +896,7 @@ export const {
   useGetEmployeeDetailsQuery,
   useDeleteEmployeeMutation,
   useCreateNewEmployeeMutation,
+  useUpdateEmployeeMutation,
 
   // useGetCompanyDetailsQuery,
   // useCreateNewCompanyMutation,
