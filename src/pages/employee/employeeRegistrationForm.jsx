@@ -154,7 +154,16 @@ const EmployeeRegistrationForm = () => {
               await updateEmployee({
                 id,
                 ...values,
-                image: imageUrl,
+                image: imageUrl || employeeData?.data?.[0]?.image,
+                employeeDesginationId:
+                  employeeData?.data?.[0]?.EmployeeDesignation?.[0]?.id,
+                employeeDepartmentId:
+                  employeeData?.data?.[0]?.EmployeeDepartment?.[0]?.id,
+                employeeSectionId:
+                  employeeData?.data?.[0]?.EmployeeSection?.[0]?.id,
+                employeeShiftId:
+                  employeeData?.data?.[0]?.EmployeeShift?.[0]?.id,
+
                 fingerprint_id: "bf84d050-3e51-4f60-918e-72668d1b0a85",
               }).unwrap();
               toast.success("Employee updated successfully");
@@ -167,7 +176,7 @@ const EmployeeRegistrationForm = () => {
               }).unwrap();
               toast.success("Employee registered successfully");
             }
-            navigate("/employee/list");
+            navigate("/company/employee");
           } catch (error) {
             toast.error(error?.data?.message);
           } finally {
