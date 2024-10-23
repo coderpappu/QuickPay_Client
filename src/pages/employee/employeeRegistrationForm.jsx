@@ -44,6 +44,7 @@ const EmployeeRegistrationForm = () => {
   const { data: CompanyId } = useGetCompanyIdQuery();
   const navigate = useNavigate();
   const [step, setStep] = useState(1); // State to track current step
+
   const { data: departments } = useGetDepartmentsQuery(CompanyId);
   const { data: designations } = useGetDesignationsQuery(CompanyId);
   const { data: sections } = useGetSectionsQuery(CompanyId);
@@ -57,7 +58,7 @@ const EmployeeRegistrationForm = () => {
   // multi form state
   const [activeStep, setActiveStep] = useState(0);
 
-  const [canSubmit, setCanSubmit] = useState(true);
+  const [canSubmit, setCanSubmit] = useState(false);
 
   const {
     data: employeeData,
@@ -97,11 +98,13 @@ const EmployeeRegistrationForm = () => {
   const isLastStep = step === 5;
 
   const handleNext = () => {
+    event.preventDefault();
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setStep((prev) => prev + 1);
   };
 
   const handlePrevious = () => {
+    event.preventDefault();
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
     setStep((prev) => prev - 1);
   };
@@ -116,6 +119,11 @@ const EmployeeRegistrationForm = () => {
       ...initialValues,
       image: null,
     });
+  };
+
+  const handleUploadComplete = (uploadedImageUrl) => {
+    setImageUrl(uploadedImageUrl); // Set uploaded image URL
+    setCanSubmit(true); // Allow form submission now that upload is done
   };
 
   return (
@@ -675,7 +683,7 @@ const EmployeeRegistrationForm = () => {
                 ) : (
                   <UploadForm
                     setFieldValue={(field, value) => {
-                      setImageUrl(value); // Update the image URL state
+                      handleUploadComplete(value); // Handle upload completion
                     }}
                     canSubmit={canSubmit}
                     setCanSubmit={setCanSubmit}
