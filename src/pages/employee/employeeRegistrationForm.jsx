@@ -51,6 +51,8 @@ const EmployeeRegistrationForm = () => {
   const [createEmployee] = useCreateNewEmployeeMutation();
   const [updateEmployee] = useUpdateEmployeeMutation();
 
+  const [editModeUploader, setEditModeUploader] = useState(false);
+
   const [imageUrl, setImageUrl] = useState(null);
   // multi form state
   const [activeStep, setActiveStep] = useState(0);
@@ -150,6 +152,7 @@ const EmployeeRegistrationForm = () => {
             if (id) {
               // Update existing employee
               await updateEmployee({
+                id,
                 ...values,
                 image: imageUrl,
                 fingerprint_id: "bf84d050-3e51-4f60-918e-72668d1b0a85",
@@ -626,15 +629,51 @@ const EmployeeRegistrationForm = () => {
 
             {step === 5 && (
               <>
-                <UploadForm
-                  setFieldValue={(field, value) => {
-                    setImageUrl(value); // Update the image URL state
-                  }}
-                  canSubmit={canSubmit}
-                  setCanSubmit={setCanSubmit}
-                  uploadedImageUrl={imageUrl}
-                  name="image"
-                />
+                <label htmlFor="image">Upload Image</label>
+                {id ? (
+                  <>
+                    {!editModeUploader && (
+                      <div className="flex justify-center mt-4">
+                        <img
+                          className="h-64 w-64 rounded-full object-cover object-center"
+                          src={employeeData?.data?.[0]?.image}
+                          alt="Uploaded Preview"
+                        />
+                      </div>
+                    )}
+                    <div>
+                      {editModeUploader ? (
+                        <UploadForm
+                          setFieldValue={(field, value) => {
+                            setImageUrl(value); // Update the image URL state
+                          }}
+                          canSubmit={canSubmit}
+                          setCanSubmit={setCanSubmit}
+                          uploadedImageUrl={imageUrl}
+                          name="image"
+                        />
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => setEditModeUploader(true)}
+                          className="mt-4 p-2 text-blue-500 border border-blue-500 rounded"
+                        >
+                          Change Profile
+                        </button>
+                      )}{" "}
+                    </div>
+                  </>
+                ) : (
+                  <UploadForm
+                    setFieldValue={(field, value) => {
+                      setImageUrl(value); // Update the image URL state
+                    }}
+                    canSubmit={canSubmit}
+                    setCanSubmit={setCanSubmit}
+                    uploadedImageUrl={imageUrl}
+                    name="image"
+                  />
+                )}
               </>
             )}
 
