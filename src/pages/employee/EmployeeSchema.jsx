@@ -59,7 +59,7 @@ const EmployeeSchema = (step) => {
     case 3:
       return Step3Schema;
     case 4:
-      return Step3Schema;
+      return Step4Schema;
     default:
       return Step1Schema;
   }

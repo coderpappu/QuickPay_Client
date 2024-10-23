@@ -96,75 +96,82 @@ const SalarySettings = () => {
   if (allowanceError || deductionError || gradeError) return "Error ";
 
   return (
-    <div className="w-full mx-5 mt-5 mb-2 rounded-md flex flex-wrap justify-between p-4 bg-white dark:bg-dark-card">
-      <h1 className="text-xl font-medium mb-4 dark:text-dark-heading-color">
-        Salary Settings
-      </h1>
+    <div className="w-full   mx-5 mt-5 mb-2 rounded-mde flex flex-wrap justify-between ">
+      <div className="w-[49%] relative p-4 bg-white dark:bg-dark-card rounded-md">
+        <h1 className="text-xl font-medium mb-4 dark:text-dark-heading-color">
+          Salary Settings
+        </h1>
 
-      <form onSubmit={handleSubmit} className="w-full">
-        {/* Allowances Section */}
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold mb-2 ">Allowances</h2>
-          {allowancesList?.data?.map((allowance) => (
-            <div key={allowance?.id} className="flex items-center mb-1">
-              <input
-                type="checkbox"
-                id={allowance?.id}
-                checked={selectedAllowances.includes(allowance?.id)}
-                onChange={() => handleAllowanceChange(allowance?.id)}
-                className="mr-2"
-              />
-              <label htmlFor={allowance?.id} className="text-gray-700">
-                {allowance?.name}
-              </label>
-            </div>
-          ))}
-        </div>
-
-        {/* Deductions Section */}
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold mb-2 ">Deductions</h2>
-          {deductionsList?.data?.map((deduction) => (
-            <div key={deduction.id} className="flex items-center mb-1">
-              <input
-                type="checkbox"
-                id={deduction.id}
-                checked={selectedDeductions.includes(deduction.id)}
-                onChange={() => handleDeductionChange(deduction.id)}
-                className="mr-2"
-              />
-              <label htmlFor={deduction.id} className="text-gray-700">
-                {deduction.name}
-              </label>
-            </div>
-          ))}
-        </div>
-
-        {/* Grade Selection */}
-        <div className="mb-4">
-          <label className="block text-lg font-semibold mb-1 ">Grade</label>
-          <select
-            value={selectedGrade}
-            onChange={handleGradeChange}
-            className="w-full border rounded-md p-2"
-          >
-            <option value="">Select Grade</option>
-            {gradeList?.data?.map((grade) => (
-              <option key={grade?.id} value={grade?.id}>
-                {grade?.name}
-              </option>
+        <form onSubmit={handleSubmit} className="w-full">
+          {/* Allowances Section */}
+          <div className="mb-4">
+            <h2 className="text-sm font-semibold mb-2 text-[#3c3c3c] dark:text-dark-text-color">
+              Allowances
+            </h2>
+            {allowancesList?.data?.map((allowance) => (
+              <div key={allowance?.id} className="flex items-center mb-1">
+                <input
+                  type="checkbox"
+                  id={allowance?.id}
+                  checked={selectedAllowances.includes(allowance?.id)}
+                  onChange={() => handleAllowanceChange(allowance?.id)}
+                  className="mr-2"
+                />
+                <label htmlFor={allowance?.id} className="text-gray-700">
+                  {allowance?.name}
+                </label>
+              </div>
             ))}
-          </select>
-        </div>
+          </div>
 
-        {/* Submit Button */}
-        <button type="submit" className="bg-blue-500 text-white rounded-md p-2">
-          Save Settings
-        </button>
-      </form>
+          {/* Deductions Section */}
+          <div className="mb-4">
+            <h2 className="text-sm font-semibold mb-2 dark:text-dark-text-color">
+              Deductions
+            </h2>
+            {deductionsList?.data?.map((deduction) => (
+              <div key={deduction.id} className="flex items-center mb-1">
+                <input
+                  type="checkbox"
+                  id={deduction.id}
+                  checked={selectedDeductions.includes(deduction.id)}
+                  onChange={() => handleDeductionChange(deduction.id)}
+                  className="mr-2"
+                />
+                <label htmlFor={deduction.id} className="text-gray-700">
+                  {deduction.name}
+                </label>
+              </div>
+            ))}
+          </div>
 
-      <div className="absolute right-1 top-2 w-[40px] h-[40px] flex justify-center items-center rounded-full bg-[#85858512]">
-        <FiEdit className="text-[#3686FF]" />
+          {/* Grade Selection */}
+          <div className="mb-4">
+            <label className="block text-sm font-semibold mb-2 text-[#3c3c3c] dark:text-dark-text-color">
+              Grade
+            </label>
+            <select
+              value={selectedGrade}
+              onChange={handleGradeChange}
+              className="w-full border rounded-md p-2 dark:bg-dark-box border-none dark:text-dark-text-color"
+            >
+              <option value="">Select Grade</option>
+              {gradeList?.data?.map((grade) => (
+                <option key={grade?.id} value={grade?.id}>
+                  {grade?.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="bg-blue-500 text-white rounded-md px-4 py-2 mt-3 text-sm "
+          >
+            Save
+          </button>
+        </form>
       </div>
     </div>
   );

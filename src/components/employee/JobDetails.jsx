@@ -11,6 +11,8 @@ const JobDetails = ({ employeeDetails }) => {
         <h1 className="text-xl font-medium mb-4 dark:text-dark-heading-color">
           Job Details{" "}
         </h1>
+
+        
         <PersonalInfo
           title="Department"
           data={

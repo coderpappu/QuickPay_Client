@@ -97,7 +97,7 @@ const EmployeeRegistrationForm = () => {
 
   const isLastStep = step === 5;
 
-  const handleNext = () => {
+  const handleNext = async () => {
     event.preventDefault();
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setStep((prev) => prev + 1);
@@ -192,7 +192,7 @@ const EmployeeRegistrationForm = () => {
           }
         }}
       >
-        {({ isSubmitting, setFieldValue }) => (
+        {({ isSubmitting, setFieldValue, validateForm }) => (
           <Form>
             {step === 1 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -705,8 +705,27 @@ const EmployeeRegistrationForm = () => {
                 </Button>
               )}
               <Button
-                type={isLastStep ? "submit" : "button"} // Change type based on step
-                onClick={isLastStep ? undefined : handleNext} // Handle next click
+                type="submit" // Always set to button
+                onClick={async () => {
+                  // Mark fields as touched to show validation messages
+
+                  if (isLastStep) {
+                    const errors = await validateForm(); // Validate the entire form
+                    if (Object.keys(errors).length === 0) {
+                      //handleSubmit(); // If no errors, submit the form
+                    } else {
+                      //console.log("Validation errors:", errors);
+                    }
+                  } else {
+                    const errors = await validateForm(); // Validate the current step
+                    if (Object.keys(errors).length === 0) {
+                      handleNext(); // Move to the next step if no errors
+                    } else {
+                      // Optional: You can display a message or perform other actions here
+                      //console.log("Validation errors:", errors);
+                    }
+                  }
+                }}
                 disabled={isSubmitting}
                 variant={isLastStep ? "contained" : "outlined"}
                 size={"large"}
