@@ -8,21 +8,21 @@ import { LiaEdit } from "react-icons/lia";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import {
-  useDeleteDeductionMutation,
+  useDeleteGradeMutation,
   useGetCompanyIdQuery,
-  useGetDeductionListQuery,
+  useGetGradeListQuery,
 } from "../../../features/api";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import toast from "react-hot-toast";
 import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
 import ErrorMessage from "../../../utils/ErrorMessage";
-import DeductionForm from "../../../components/hrm/deduction/DeductionForm";
-import { useState } from "react";
 
-const DeductionCard = () => {
-  
+import { useState } from "react";
+import GradeForm from "./GradeForm";
+
+const GradeCard = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
-  const [selectDeductionId, setSelectDeductionId] = useState(null);
+  const [selectgradeId, setSelectgradeId] = useState(null);
 
   const onClose = () => {
     setIsPopupOpen(false);
@@ -30,20 +30,27 @@ const DeductionCard = () => {
 
   const handleOpen = (id = null) => {
     setIsPopupOpen(true);
-    setSelectDeductionId(id);
+    setSelectgradeId(id);
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteDeduction] = useDeleteDeductionMutation();
+  const [deletegrade] = useDeleteGradeMutation();
+
+  //   const {
+  //     data: gradeList,
+  //     isLoading,
+  //     isError,
+  //     error,
+  //   } = useGetgradeListQuery(companyId);
 
   const {
-    data: deductionList,
+    data: gradeList,
     isLoading,
     isError,
     error,
-  } = useGetDeductionListQuery(companyId);
+  } = useGetGradeListQuery(companyId);
 
-  const handleDeleteDeduction = async (id) => {
+  const handleDeleteGrade = async (id) => {
     const confirm = () =>
       toast(
         (t) => (
@@ -51,19 +58,19 @@ const DeductionCard = () => {
             onConfirm={async () => {
               toast.dismiss(t.id);
               try {
-                deleteDeduction(id).then((res) => {
+                deletegrade(id).then((res) => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
-                    toast.success("Deduction deleted successfully");
+                    toast.success("grade deleted successfully");
                   }
                 });
               } catch (error) {
-                toast.error(error.message || "Failed to delete deduction");
+                toast.error(error.message || "Failed to delete grade");
               }
             }}
             onCancel={() => toast.dismiss(t.id)}
-            title="Deduction"
+            title="grade"
           />
         ),
         {
@@ -79,37 +86,34 @@ const DeductionCard = () => {
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  if (!isLoading && !isError && deductionList?.data)
-    content = deductionList?.data?.map((deduction) => (
+  if (!isLoading && !isError && gradeList?.data)
+    content = gradeList?.data?.map((grade) => (
       <div
-        key={deduction?.id}
+        key={grade?.id}
         className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
       >
         <div className="dark:text-white w-[20%]">
-          <h3>{deduction?.name}</h3>
+          <h3>{grade?.name}</h3>
         </div>
         <div className="dark:text-white w-[20%]">
-          <h3>{deduction?.type}</h3>
+          <h3>{grade?.basic_salary}</h3>
         </div>
         <div className="dark:text-white w-[20%]">
-          <h3>{deduction?.basic_percentage}</h3>
-        </div>
-        <div className="dark:text-white w-[20%]">
-          <h3>{deduction?.limit_per_month}</h3>
+          <h3>{grade?.overtime_rate}</h3>
         </div>
 
         <div className="dark:text-white w-[15%]">
           <div className="flex flex-wrap justify-start gap-2">
             {/* edit button  */}
             <div className="w-8 h-8 bg-indigo-600 rounded-sm p-2 flex justify-center items-center cursor-pointer">
-              <CiEdit size={20} onClick={() => handleOpen(deduction?.id)} />
+              <CiEdit size={20} onClick={() => handleOpen(grade?.id)} />
             </div>
 
             {/* delete button  */}
             <div className="w-8 h-8 bg-red-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer">
               <AiOutlineDelete
                 size={20}
-                onClick={() => handleDeleteDeduction(deduction?.id)}
+                onClick={() => handleDeleteGrade(grade?.id)}
               />
             </div>
           </div>
@@ -121,7 +125,7 @@ const DeductionCard = () => {
     <>
       <BrandCardWrapper>
         <HrmSetupCardHeader
-          title="Deduction"
+          title="grade"
           handleOpen={handleOpen}
           isPopupOpen={isPopupOpen}
         />
@@ -133,15 +137,11 @@ const DeductionCard = () => {
             </div>
 
             <div className="dark:text-white w-[20%]">
-              <h3>Type</h3>
+              <h3>Basic Salary</h3>
             </div>
 
             <div className="dark:text-white w-[20%]">
-              <h3>Basic Percentage</h3>
-            </div>
-
-            <div className="dark:text-white w-[20%]">
-              <h3>Limit Per Month</h3>
+              <h3>Over Rate </h3>
             </div>
 
             <div className="dark:text-white w-[15%]">
@@ -157,7 +157,7 @@ const DeductionCard = () => {
             <div className="bg-white rounded-lg p-6 w-full max-w-md">
               <div className="flex justify-between items-center pb-3 border-b border-gray-200">
                 <h3 className="text-lg font-medium text-gray-800">
-                  Deduction List
+                  Grade List
                 </h3>
                 <button
                   className="text-gray-500 hover:text-gray-800"
@@ -167,10 +167,7 @@ const DeductionCard = () => {
                 </button>
               </div>
               <div className="mt-4">
-                <DeductionForm
-                  deductionId={selectDeductionId}
-                  onClose={onClose}
-                />
+                <GradeForm gradeId={selectgradeId} onClose={onClose} />
               </div>
             </div>
           </div>
@@ -180,4 +177,4 @@ const DeductionCard = () => {
   );
 };
 
-export default DeductionCard;
+export default GradeCard;
