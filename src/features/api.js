@@ -872,6 +872,16 @@ export const apiSlice = createApi({
       }),
       providesTags: ["leaveApplicationFormat"],
     }),
+
+    // document type endpoint
+    createDocsType: builder.mutation({
+      query: (credentials) => ({
+        url: "/docstype/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["docsType"],
+    }),
   }),
 });
 
@@ -1014,4 +1024,7 @@ export const {
   useCreateLeaveApplicationFormatMutation,
   useGetLeaveApplicationFormatQuery,
   useGetLeaveApplicationDetailsQuery,
+
+  // docs type Routes
+  useCreateDocsTypeMutation,
 } = apiSlice;

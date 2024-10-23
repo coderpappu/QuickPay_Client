@@ -76,6 +76,10 @@ const HrmSetup = () => {
       title: "Grade",
       id: 13,
     },
+    {
+      title: "Document Type",
+      id: 14,
+    },
   ];
 
   return (
@@ -117,6 +121,7 @@ const HrmSetup = () => {
           {activeSetting == 11 && <SectionCard />}
           {activeSetting == 12 && <ShiftCard />}
           {activeSetting == 13 && <GradeCard />}
+          {activeSetting == 14 && <GradeCard />}
         </div>
       </div>
     </div>
