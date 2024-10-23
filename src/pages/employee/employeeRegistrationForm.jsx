@@ -64,7 +64,11 @@ const EmployeeRegistrationForm = () => {
     data: employeeData,
     isLoading,
     isError,
+    error,
   } = useGetEmployeeDetailsQuery(id);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <ErrorMessage message={error} />;
 
   const initialValues = {
     name: employeeData?.data?.[0]?.name || "",
@@ -114,12 +118,12 @@ const EmployeeRegistrationForm = () => {
   };
 
   /// delete the logo from any online storage.
-  const handleDeleteLogo = () => {
-    initialValues({
-      ...initialValues,
-      image: null,
-    });
-  };
+  // const handleDeleteLogo = () => {
+  //   initialValues({
+  //     ...initialValues,
+  //     image: null,
+  //   });
+  // };
 
   const handleUploadComplete = (uploadedImageUrl) => {
     setImageUrl(uploadedImageUrl); // Set uploaded image URL
