@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react";
 import html2pdf from "html2pdf.js";
+import React, { useEffect, useState } from "react";
+import { CiLocationOn } from "react-icons/ci";
+import { FiPhone } from "react-icons/fi";
+import { MdOutlineEmail } from "react-icons/md";
+import { TfiPrinter } from "react-icons/tfi";
+import { useParams } from "react-router-dom";
+import "../../Applicaion.css";
+import CompanyLogo from "../../assets/xceed-bangladesh-logo.png";
 import {
   useGetCompanyIdQuery,
   useGetLeaveApplicationDetailsQuery,
   useGetLeaveApplicationFormatQuery,
 } from "../../features/api";
-import "../../Applicaion.css";
-import { useParams } from "react-router-dom";
-import formatTimeTo12Hour from "../../utils/timeConverter";
 import DatePicker from "../../utils/DatePicker";
-import CompanyLogo from "../../assets/xceed-bangladesh-logo.png";
-import { FiPhone } from "react-icons/fi";
-import { CiLocationOn } from "react-icons/ci";
-import { MdOutlineEmail } from "react-icons/md";
-import { TfiPrinter } from "react-icons/tfi";
 
 function Application() {
   const [letterData, setLetterData] = useState(null);

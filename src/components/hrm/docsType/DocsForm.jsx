@@ -52,7 +52,7 @@ const DocsTypeForm = ({ docsTypeId, onClose }) => {
   };
 
   if (companyId == null) {
-    navigate("/");
+    navigate("/hrm-setup");
   }
 
   return (
@@ -85,7 +85,7 @@ const DocsTypeForm = ({ docsTypeId, onClose }) => {
                     toast.error(res?.error?.data?.message);
                   } else {
                     toast.success("Docs type added successfully");
-                    navigate("/company/allowance");
+                    navigate("/hrm-setup");
                     onClose();
                   }
                 });
