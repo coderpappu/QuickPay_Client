@@ -18,13 +18,12 @@ import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import toast from "react-hot-toast";
 import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
 import ErrorMessage from "../../../utils/ErrorMessage";
-
+import DocsTypeForm from "./DocsForm";
 import { useState } from "react";
-import GradeForm from "./DocsForm";
 
 const DocsTypeCard = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
-  const [selectgradeId, setSelectgradeId] = useState(null);
+  const [selectDocsTypeId, setSelectDocsTypeId] = useState(null);
 
   const onClose = () => {
     setIsPopupOpen(false);
@@ -32,7 +31,7 @@ const DocsTypeCard = () => {
 
   const handleOpen = (id = null) => {
     setIsPopupOpen(true);
-    setSelectgradeId(id);
+    setSelectDocsTypeId(id);
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
@@ -164,7 +163,7 @@ const DocsTypeCard = () => {
                 </button>
               </div>
               <div className="mt-4">
-                <GradeForm gradeId={selectgradeId} onClose={onClose} />
+                <DocsTypeForm docsTypeId={selectDocsTypeId} onClose={onClose} />
               </div>
             </div>
           </div>

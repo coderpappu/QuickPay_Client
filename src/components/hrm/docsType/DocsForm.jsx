@@ -13,11 +13,13 @@ import {
   useGetCompanyIdQuery,
   useGetDeductionDetailsQuery,
   useGetDeductionListQuery,
+  useGetDocsTypeDetailsQuery,
   useGetGradeDetailsQuery,
   useGetLeaveTypeDetailsQuery,
   useGetTypeListQuery,
   useUpdateAllowanceMutation,
   useUpdateDeductionMutation,
+  useUpdateDocsTypeMutation,
   useUpdateGradeMutation,
   useUpdateLeaveTypeMutation,
 } from "../../../features/api";
@@ -30,44 +32,27 @@ const docsTypeSchema = Yup.object().shape({
   status: Yup.string().required("Status is required"),
 });
 
-const DocsTypeForm = ({ gradeId, onClose }) => {
+const DocsTypeForm = ({ docsTypeId, onClose }) => {
   const navigate = useNavigate();
   const { data: companyId } = useGetCompanyIdQuery();
   const [createDocsType] = useCreateDocsTypeMutation();
-  const [updateGrade] = useUpdateGradeMutation();
+  const [updateDocsType] = useUpdateDocsTypeMutation();
 
   const {
-    data: deductionTypes,
-    isLoading,
+    data: docsTypeDetails,
+    isLoading: isDocsTypeLoading,
     isError,
-  } = useGetDeductionListQuery(companyId, {
-    skip: !companyId,
-  });
+  } = useGetDocsTypeDetailsQuery(docsTypeId, { skip: !docsTypeId });
 
-  const [initialValues, setInitialValues] = useState({
-    name: "",
-    status: "",
-  });
+  if (isDocsTypeLoading && !isError) return <FormSkeleton />;
 
-  const { data: gradeDetails, isLoading: gradeLoading } =
-    useGetGradeDetailsQuery(gradeId, { skip: !gradeId });
-
-  useEffect(() => {
-    if (gradeDetails?.data) {
-      setInitialValues({
-        name: gradeDetails?.data?.name,
-        basic_salary: gradeDetails?.data?.basic_salary,
-        overtime_rate: gradeDetails?.data?.overtime_rate,
-      });
-    }
-  }, [gradeDetails]);
+  const initialValues = {
+    name: docsTypeDetails?.data?.name || "",
+    status: docsTypeDetails?.data?.status || "",
+  };
 
   if (companyId == null) {
     navigate("/");
-  }
-
-  if (gradeLoading || isLoading) {
-    return <FormSkeleton />;
   }
 
   return (
@@ -80,7 +65,7 @@ const DocsTypeForm = ({ gradeId, onClose }) => {
           &#x2715;
         </button>
         <h2 className="text-xl font-semibold  dark:text-dark-heading-color mb-4">
-          {gradeId ? "Edit Docs Type" : "Add Docs Type"}
+          {docsTypeId ? "Edit Docs Type" : "Add Docs Type"}
         </h2>
         <Formik
           enableReinitialize
@@ -90,7 +75,7 @@ const DocsTypeForm = ({ gradeId, onClose }) => {
             const { name, status } = values;
 
             try {
-              if (!gradeId) {
+              if (!docsTypeId) {
                 await createDocsType({
                   name,
                   status,
@@ -105,8 +90,8 @@ const DocsTypeForm = ({ gradeId, onClose }) => {
                   }
                 });
               } else {
-                await updateGrade({
-                  id: gradeId,
+                await updateDocsType({
+                  id: docsTypeId,
                   name,
                   status,
                   company_id: companyId,
@@ -114,7 +99,7 @@ const DocsTypeForm = ({ gradeId, onClose }) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Grade updated successfully");
+                    toast.success("Docs type updated successfully");
                     onClose();
                   }
                 });
@@ -185,7 +170,7 @@ const DocsTypeForm = ({ gradeId, onClose }) => {
                   disabled={isSubmitting}
                   className="px-4 py-2 bg-[#3686FF] rounded-md text-sm font-medium text-white "
                 >
-                  {gradeId ? "Update" : "Add"}
+                  {docsTypeId ? "Update" : "Add"}
                 </button>
               </div>
             </Form>

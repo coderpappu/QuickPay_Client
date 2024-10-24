@@ -899,6 +899,24 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["docsType"],
     }),
+
+    updateDocsType: builder.mutation({
+      query: ({ id, ...credentials }) => ({
+        url: `/docstype/update/${id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["docsType"],
+    }),
+
+    getDocsTypeDetails: builder.query({
+      query: (id) => ({
+        url: `/docstype/details`,
+        params: { id },
+      }),
+
+      providesTags: ["docsType"],
+    }),
   }),
 });
 
@@ -1046,4 +1064,6 @@ export const {
   useCreateDocsTypeMutation,
   useGetAllDocsTypeListQuery,
   useDeleteDocsTypeMutation,
+  useUpdateDocsTypeMutation,
+  useGetDocsTypeDetailsQuery,
 } = apiSlice;
