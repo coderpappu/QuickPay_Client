@@ -15,6 +15,7 @@ import TerminationCard from "../../components/hrm/TerminationCard";
 
 import ShiftCard from "../../components/hrm/shift/ShiftCard";
 import GradeCard from "../../components/hrm/grade/GradeCard";
+import DocsTypeCard from "../../components/hrm/docsType/DocsType";
 
 const HrmSetup = () => {
   const [activeSetting, setActiveSetting] = useState(1);
@@ -121,7 +122,7 @@ const HrmSetup = () => {
           {activeSetting == 11 && <SectionCard />}
           {activeSetting == 12 && <ShiftCard />}
           {activeSetting == 13 && <GradeCard />}
-          {activeSetting == 14 && <GradeCard />}
+          {activeSetting == 14 && <DocsTypeCard />}
         </div>
       </div>
     </div>

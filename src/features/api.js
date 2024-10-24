@@ -882,6 +882,23 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["docsType"],
     }),
+
+    getAllDocsTypeList: builder.query({
+      query: (companyId) => ({
+        url: `/docstype/list`,
+        params: { companyId },
+      }),
+      providesTags: ["docsType"],
+    }),
+
+    deleteDocsType: builder.mutation({
+      query: (docsTypeId) => ({
+        url: `/docstype/delete/`,
+        method: "DELETE",
+        params: { docsTypeId },
+      }),
+      invalidatesTags: ["docsType"],
+    }),
   }),
 });
 
@@ -1027,4 +1044,6 @@ export const {
 
   // docs type Routes
   useCreateDocsTypeMutation,
+  useGetAllDocsTypeListQuery,
+  useDeleteDocsTypeMutation,
 } = apiSlice;

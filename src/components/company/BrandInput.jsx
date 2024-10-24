@@ -38,7 +38,6 @@ const InputBox = ({ name, type, placeholder, ...props }) => {
 };
 
 const SelectOptionBox = ({ values, name }) => {
-  console.log(values);
   return (
     <Field
       as="select"
