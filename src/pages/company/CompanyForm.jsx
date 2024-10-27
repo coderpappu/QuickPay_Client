@@ -10,7 +10,6 @@ import {
   useGetCompanyDetailsQuery,
   useUpdateCompanyMutation,
 } from "../../features/api";
-import UploadForm from "../../helpers/UploadForm";
 import FormSkeleton from "../../skeletons/FormSkeleton";
 
 const SignupSchema = Yup.object().shape({
@@ -77,9 +76,9 @@ const CompanyForm = () => {
     logo: company?.data?.logo || null,
   };
 
-  const handleDeleteLogo = () => {
+  const handleDeleteLogo = (setFieldValue) => {
+    setFieldValue("logo", null);
     setCanSubmit(true);
-    // setFieldValue("logo", null);
   };
 
   if (isLoading) {
@@ -99,10 +98,8 @@ const CompanyForm = () => {
         try {
           let response;
           if (id) {
-            // Update existing company
             response = await updateCompany({ id, ...values });
           } else {
-            // Create a new company
             response = await createNewCompany(values);
           }
 
@@ -165,26 +162,28 @@ const CompanyForm = () => {
             ))}
             <div>
               {initialValues.logo ? (
-                <div className="flex">
+                <div className="flex items-center">
                   <img
                     src={initialValues.logo}
                     className="w-40vw"
                     alt="Company Logo"
-                  ></img>
+                  />
                   <button
                     className="text-red-500 hover:text-red-700 ml-2"
                     type="button"
-                    onClick={handleDeleteLogo}
+                    onClick={() => handleDeleteLogo(setFieldValue)}
                   >
                     <FontAwesomeIcon icon={faTrash} />
                   </button>
                 </div>
               ) : (
-                <UploadForm
-                  setFieldValue={setFieldValue}
-                  canSubmit={canSubmit}
-                  setCanSubmit={setCanSubmit}
+                <input
+                  type="file"
                   name="logo"
+                  onChange={(event) => {
+                    setFieldValue("logo", event.currentTarget.files[0]);
+                  }}
+                  className="block w-full mt-2"
                 />
               )}
             </div>

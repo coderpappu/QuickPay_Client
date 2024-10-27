@@ -7,11 +7,10 @@ import * as Yup from "yup";
 
 import { useEffect, useState } from "react";
 import {
-    useCreateNewCompanyMutation,
-    useGetCompanyDetailsQuery,
-    useUpdateCompanyMutation,
+  useCreateNewCompanyMutation,
+  useGetCompanyDetailsQuery,
+  useUpdateCompanyMutation,
 } from "../features/api";
-import UploadForm from "../helpers/UploadForm";
 
 const SignupSchema = Yup.object().shape({
   company_name: Yup.string().required("Company Name is required"),
@@ -201,7 +200,7 @@ const CompanyForm = () => {
                 { label: "State", name: "state", type: "text" },
                 { label: "Postal Code", name: "postal_code", type: "text" },
                 { label: "Email", name: "email", type: "email" },
-                { label: "Phone Number", name: "phone_number", type: "text" },
+                { label: "Phone Numfber", name: "phone_number", type: "text" },
                 { label: "Mobile Number", name: "mobile_number", type: "text" },
                 { label: "Fax", name: "fax", type: "text" },
                 { label: "Website URL", name: "website_url", type: "url" },
@@ -254,7 +253,8 @@ const CompanyForm = () => {
                   </div>
                 ) : (
                   <>
-                    <UploadForm setFieldValue={setFieldValue} />
+                    {/* <UploadForm setFieldValue={setFieldValue} /> */}
+                    <input type="file" />
                   </>
                 )}
               </div>
