@@ -1,9 +1,12 @@
 import { Toaster } from "react-hot-toast";
 import { Route, Routes } from "react-router-dom";
+import DepartmentForm from "./../src/components/hrm/department/DepartmentForm";
 import "./App.css";
+import LeaveApplicationListCard from "./components/hrm/Leave/LeaveApplicationListCard";
 import Layout from "./Layout";
 import Calendar from "./pages/calendar/Calendar";
 import Holiday from "./pages/calendar/holiday/Holiday";
+import HolidayForm from "./pages/calendar/holiday/HolidayForm";
 import { default as TypeForm } from "./pages/calendar/holiday/type/TypeForm";
 import Weekend from "./pages/calendar/weekend/Weekend";
 import WeekendSetting from "./pages/calendar/weekend/WeekendSettings";
@@ -14,18 +17,37 @@ import Settings from "./pages/company/Settings";
 import AddShift from "./pages/company/shift/AddShift";
 import EditShift from "./pages/company/shift/EditShift";
 import ShiftList from "./pages/company/shift/ShiftList";
-import DepartmentForm from "./../src/components/hrm/department/DepartmentForm";
+import SystemSettings from "./pages/company/SystemSettings";
 import DepartmentList from "./pages/department/DepartmentList";
 import DepartmentSetting from "./pages/department/DepartmentSettings";
 import DesignationList from "./pages/designation/DesignationList";
 import DesignationSetting from "./pages/designation/DesignationSettings";
+import Application from "./pages/employee/Application";
 import AttendanceList from "./pages/employee/AttendancesList";
 import EmployeeList from "./pages/employee/employeeList";
+import EmployeeProfile from "./pages/employee/EmployeeProfile";
 import EmployeeRegistration from "./pages/employee/employeeRegistrationForm";
+import Leave from "./pages/employee/Leave";
+import LeaveForm from "./pages/employee/LeaveForm";
+import LoginEmployee from "./pages/employee/LoginEmployee";
 import ManualAttendance from "./pages/employee/ManualAttendance";
 import Profile from "./pages/employee/Profile";
 import Home from "./pages/Home";
+import HrmSetup from "./pages/hrm/HrmSetup";
+import EarnLeave from "./pages/leave/earnLeave/EarnLeave";
+import EmployeeLeaveApplication from "./pages/leave/EmployeeLeaveApplication";
+import LeaveSettings from "./pages/leave/LeaveSettings";
+import LeaveTypeForm from "./pages/leave/LeaveTypeForm";
+import LeaveTypeList from "./pages/leave/LeaveTypeList";
 import NotFound from "./pages/NotFound";
+import AllowanceForm from "./pages/payroll/allowance/AllowanceForm";
+import AllowanceList from "./pages/payroll/allowance/AllowanceList";
+import DeductionForm from "./pages/payroll/deduction/DeductionForm";
+import DeductionList from "./pages/payroll/deduction/DeductionList";
+import GradeForm from "./pages/payroll/grade/gradeForm";
+import GradeList from "./pages/payroll/grade/gradeList";
+import LoanTypeForm from "./pages/payroll/Loan/LoanType/LoanTypeForm";
+import LoanTypeList from "./pages/payroll/Loan/LoanType/LoanTypeList";
 import SectionList from "./pages/section/SectionList";
 import SectionSettings from "./pages/section/SectionSettings";
 import LoginPage from "./pages/user/LoginPage";
@@ -33,28 +55,6 @@ import ProfileUpdate from "./pages/user/ProfileUpdate";
 import RegistraionPage from "./pages/user/RegistraionPage";
 import CompanyPrivateRoute from "./privateRoute/CompanyPrivateRoute";
 import PrivateRoute from "./privateRoute/PrivateRoute";
-import HolidayForm from "./pages/calendar/holiday/HolidayForm";
-import LoginEmployee from "./pages/employee/LoginEmployee";
-import Leave from "./pages/employee/Leave";
-import LeaveSettings from "./pages/leave/LeaveSettings";
-import LeaveTypeList from "./pages/leave/LeaveTypeList";
-import LeaveForm from "./pages/employee/LeaveForm";
-import LeaveTypeForm from "./pages/leave/LeaveTypeForm";
-import LeaveApplicationList from "./pages/leave/LeaveApplicationList";
-import EarnLeave from "./pages/leave/earnLeave/EarnLeave";
-import GradeList from "./pages/payroll/grade/gradeList";
-import GradeForm from "./pages/payroll/grade/gradeForm";
-import AllowanceList from "./pages/payroll/allowance/AllowanceList";
-import AllowanceForm from "./pages/payroll/allowance/AllowanceForm";
-import DeductionList from "./pages/payroll/deduction/DeductionList";
-import DeductionForm from "./pages/payroll/deduction/DeductionForm";
-import LoanTypeList from "./pages/payroll/Loan/LoanType/LoanTypeList";
-import LoanTypeForm from "./pages/payroll/Loan/LoanType/LoanTypeForm";
-import SystemSettings from "./pages/company/SystemSettings";
-import HrmSetup from "./pages/hrm/HrmSetup";
-import EmployeeProfile from "./pages/employee/EmployeeProfile";
-import EmployeeLeaveApplication from "./pages/leave/EmployeeLeaveApplication";
-import Application from "./pages/employee/Application";
 
 function App() {
   return (
@@ -68,7 +68,7 @@ function App() {
 
             <Route
               path="company/leave/application"
-              element={<LeaveApplicationList />}
+              element={<LeaveApplicationListCard />}
             />
             <Route path="/leave/form" element={<LeaveForm />} />
             <Route
