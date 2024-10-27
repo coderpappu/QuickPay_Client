@@ -1,17 +1,18 @@
 import React from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
-import BrandCardWrapper from "../../company/BrandCardWrapper";
-import { HrmSetupCardHeader } from "../../company/SettingCardHeader";
-
+import { PiEyeLight } from "react-icons/pi";
 import {
   useDeleteApplicationMutation,
   useGetAllLeaveApplicationQuery,
   useGetCompanyIdQuery,
 } from "../../../features/api";
+import BrandCardWrapper from "../../company/BrandCardWrapper";
+import { HrmSetupCardHeader } from "../../company/SettingCardHeader";
 
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import DatePicker from "../../../utils/DatePicker";
 import ErrorMessage from "../../../utils/ErrorMessage";
@@ -136,7 +137,15 @@ const LeaveApplicationListCard = () => {
               </div>
             </div>
 
-            <div className=" dark:text-white w-[8%] flex  space-x-2 fex flex-wrap  gap-2">
+            <div className=" text-white w-[10%] flex  space-x-2 fex flex-wrap  gap-2">
+              <div>
+                <Link to={`/leave/application/${application?.id}`}>
+                  <div className="w-8 h-8 bg-green-600  rounded-sm p-2 flex justify-center items-center cursor-pointer">
+                    <PiEyeLight size={20} />
+                  </div>
+                </Link>
+              </div>
+
               {/* edit button  */}
               <div className="w-8 h-8 bg-indigo-700 rounded-sm p-2 flex justify-center items-center cursor-pointer">
                 <CiEdit size={20} onClick={() => handleOpen(application?.id)} />
@@ -204,7 +213,7 @@ const LeaveApplicationListCard = () => {
             <div className="dark:text-white w-[8%]">
               <h3>Status</h3>
             </div>
-            <div className="dark:text-white w-[8%]">
+            <div className="dark:text-white w-[10%]">
               <h3>Action</h3>
             </div>
           </div>

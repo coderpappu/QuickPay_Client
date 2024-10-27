@@ -1,16 +1,12 @@
 import React, { useState } from "react";
 import BrandCardWrapper from "../../components/company/BrandCardWrapper";
-import {
-  HrmSetupCardHeader,
-} from "../../components/company/SettingCardHeader";
+import { HrmSetupCardHeader } from "../../components/company/SettingCardHeader";
 import DatePicker from "../../utils/DatePicker";
-
-
 
 import CardSkeleton from "../../components/skeletons/hrm-card-skeletons/card";
 import {
   useGetAllEmployeeLeaveListQuery,
-  useGetCompanyIdQuery
+  useGetCompanyIdQuery,
 } from "../../features/api";
 import ErrorMessage from "../../utils/ErrorMessage";
 import LeaveForm from "../employee/LeaveForm";

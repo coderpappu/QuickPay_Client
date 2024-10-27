@@ -1,5 +1,6 @@
 import html2pdf from "html2pdf.js";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { CiLocationOn } from "react-icons/ci";
 import { FiPhone } from "react-icons/fi";
 import { MdOutlineEmail } from "react-icons/md";
@@ -52,10 +53,10 @@ function Application() {
         const parsedData = JSON.parse(leaveApplicationFormat?.data?.formatData);
         setLetterData(parsedData);
       } catch (error) {
-        console.error("Error parsing the letter data: ", error);
+        toast.alert("Error parsing the letter data: ", error);
       }
     } else if (!isLoading && !leaveApplicationFormat?.data?.formatData) {
-      console.error("Leave application format data is undefined or empty");
+      toast.alert("Error: Unable to load leave application format data");
     }
   }, [isLoading, leaveApplicationFormat]);
 
@@ -174,7 +175,10 @@ function Application() {
           Download PDF
         </button>
       </div>
-      <div id="container" className="bg-dark-box p-8 rounded-sm  h-auto">
+      <div
+        id="container"
+        className="dark:bg-dark-box dark:text-white text-black p-8 rounded-sm  h-auto"
+      >
         <div className="flex justify-between items-center mb-8">
           <img src={CompanyLogo} alt="" className="w-[180px] h-auto" />
         </div>
