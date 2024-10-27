@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import {
@@ -6,12 +7,11 @@ import {
   useGetCompanyIdQuery,
   useGetLoanTypeListQuery,
 } from "../../.././features/api";
+import ConfirmDialog from "../../../helpers/ConfirmDialog";
+import ErrorMessage from "../../../utils/ErrorMessage";
 import BrandCardWrapper from "../../company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../company/SettingCardHeader";
-import toast from "react-hot-toast";
 import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
-import ErrorMessage from "../../../utils/ErrorMessage";
-import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import LoanTypeForm from "./LoanTypeForm";
 
 const LoanCard = () => {

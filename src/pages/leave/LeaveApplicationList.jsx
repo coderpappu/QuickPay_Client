@@ -1,17 +1,16 @@
-import { ErrorMessage } from "formik";
 import React, { useState } from "react";
-import { LiaEditSolid } from "react-icons/lia";
+import { AiOutlineDelete } from "react-icons/ai";
+import { CiEdit } from "react-icons/ci";
+import { PiEyeLight } from "react-icons/pi";
+import { Link } from "react-router-dom";
 import {
   useGetAllLeaveApplicationQuery,
   useGetCompanyIdQuery,
   useUpdateLeaveApplicationMutation,
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
-import { AiOutlineDelete } from "react-icons/ai";
-import { CiEdit } from "react-icons/ci";
 import DatePicker from "../../utils/DatePicker";
-import { PiEyeLight } from "react-icons/pi";
-import { Link } from "react-router-dom";
+import ErrorMessage from "../../utils/ErrorMessage";
 
 // Modal Component
 // eslint-disable-next-line react/prop-types
@@ -116,8 +115,7 @@ const LeaveApplicationList = () => {
   let content;
 
   if (isLoading && !isError) content = <ListSkeleton />;
-  if (!isLoading && isError)
-    content = <ErrorMessage message={error?.data?.message} />;
+  if (!isLoading && isError) content = <ErrorMessage  message={error?.data?.message}/>;
 
   const openModal = (leave) => {
     setLeaveData({
@@ -154,8 +152,11 @@ const LeaveApplicationList = () => {
   };
 
   if (!isLoading && !isError) {
+
+
     content = (
-      <tbody className="dark:text-dark-text-color">
+   <>
+   
         {leaveApplicationList?.data?.map((leave, index) => (
           <tr
             key={leave?.id}
@@ -198,7 +199,9 @@ const LeaveApplicationList = () => {
             </td>
           </tr>
         ))}
-      </tbody>
+     
+     
+     </>
     );
   }
 
@@ -230,7 +233,10 @@ const LeaveApplicationList = () => {
               <th className="pb-2 text-[14px] w-[10%] text-center">Action</th>
             </tr>
           </thead>
-          {content}
+        <tbody>
+
+        {content}
+        </tbody>
         </table>
 
         {/* Modal Popup for editing */}
