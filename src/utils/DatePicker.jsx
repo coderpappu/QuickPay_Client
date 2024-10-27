@@ -1,4 +1,3 @@
-import React from "react";
 
 const DatePicker = () => {
   let dateCheck = new Date();

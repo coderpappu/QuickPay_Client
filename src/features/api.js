@@ -633,6 +633,14 @@ export const apiSlice = createApi({
       invalidatesTags: ["leaveType"],
     }),
 
+    deleteApplication: builder.mutation({
+      query: (applicationId) => ({
+        url: `/leave/application/delete`,
+        method: "DELETE",
+        params: { applicationId },
+      }),
+      invalidatesTags: ["leaveApplication"],
+    }),
     // payroll
 
     // Grade
@@ -1027,6 +1035,7 @@ export const {
   useCalculationLeaveDaysQuery,
   useGetEarnLeaveQuery,
   useCreateEarnLeaveMutation,
+  useDeleteApplicationMutation,
 
   // Grade Endpoint
   useCreateGradeMutation,

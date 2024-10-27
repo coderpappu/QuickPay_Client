@@ -1,12 +1,10 @@
 import React from "react";
-import BrandCardWrapper from "../../company/BrandCardWrapper";
-import SettingCardHeader, {
-  HrmSetupCardHeader,
-} from "../../company/SettingCardHeader";
-import SettingCardFooter from "../../company/SettingCardFooter";
-import { LiaEdit } from "react-icons/lia";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
+import BrandCardWrapper from "../../company/BrandCardWrapper";
+import {
+  HrmSetupCardHeader,
+} from "../../company/SettingCardHeader";
 
 import {
   useDeleteLeaveTypeMutation,
@@ -14,11 +12,11 @@ import {
   useGetLeaveTypeListQuery,
 } from "../../../features/api";
 
-import toast from "react-hot-toast";
-import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
-import ErrorMessage from "../../../utils/ErrorMessage";
-import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import ConfirmDialog from "../../../helpers/ConfirmDialog";
+import ErrorMessage from "../../../utils/ErrorMessage";
+import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
 import LeaveTypeForm from "./LeaveTypeForm";
 
 const LeaveCard = () => {

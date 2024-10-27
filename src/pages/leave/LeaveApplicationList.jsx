@@ -115,7 +115,8 @@ const LeaveApplicationList = () => {
   let content;
 
   if (isLoading && !isError) content = <ListSkeleton />;
-  if (!isLoading && isError) content = <ErrorMessage  message={error?.data?.message}/>;
+  if (!isLoading && isError)
+    content = <ErrorMessage message={error?.data?.message} />;
 
   const openModal = (leave) => {
     setLeaveData({
@@ -152,11 +153,8 @@ const LeaveApplicationList = () => {
   };
 
   if (!isLoading && !isError) {
-
-
     content = (
-   <>
-   
+      <>
         {leaveApplicationList?.data?.map((leave, index) => (
           <tr
             key={leave?.id}
@@ -199,9 +197,7 @@ const LeaveApplicationList = () => {
             </td>
           </tr>
         ))}
-     
-     
-     </>
+      </>
     );
   }
 
@@ -233,10 +229,7 @@ const LeaveApplicationList = () => {
               <th className="pb-2 text-[14px] w-[10%] text-center">Action</th>
             </tr>
           </thead>
-        <tbody>
-
-        {content}
-        </tbody>
+          <tbody>{content}</tbody>
         </table>
 
         {/* Modal Popup for editing */}
