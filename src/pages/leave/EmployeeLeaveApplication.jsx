@@ -1,31 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import BrandCardWrapper from "../../components/company/BrandCardWrapper";
-import SettingCardHeader, {
+import {
   HrmSetupCardHeader,
 } from "../../components/company/SettingCardHeader";
-import SettingCardFooter from "../../components/company/SettingCardFooter";
-import { LiaEdit } from "react-icons/lia";
-import { AiOutlineDelete } from "react-icons/ai";
-import { CiEdit } from "react-icons/ci";
-import { useState } from "react";
 import DatePicker from "../../utils/DatePicker";
-// import AllowanceForm from "./AllowanceForm";
-// import {
-//   useDeleteAllowanceMutation,
-//   useGetAllowanceListQuery,
-//   useGetCompanyIdQuery,
-// } from "../../../features/api";
 
-import ConfirmDialog from "../../helpers/ConfirmDialog";
-import toast from "react-hot-toast";
+
 
 import CardSkeleton from "../../components/skeletons/hrm-card-skeletons/card";
-import ErrorMessage from "../../utils/ErrorMessage";
 import {
   useGetAllEmployeeLeaveListQuery,
-  useGetAllLeaveApplicationQuery,
-  useGetCompanyIdQuery,
+  useGetCompanyIdQuery
 } from "../../features/api";
+import ErrorMessage from "../../utils/ErrorMessage";
 import LeaveForm from "../employee/LeaveForm";
 const EmployeeLeaveApplication = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
@@ -47,7 +34,7 @@ const EmployeeLeaveApplication = () => {
     isLoading,
     isError,
     error,
-  } = useGetAllLeaveApplicationQuery(companyId);
+  } = useGetAllEmployeeLeaveListQuery(companyId);
 
   const statusColorHandler = (status) => {
     switch (status) {

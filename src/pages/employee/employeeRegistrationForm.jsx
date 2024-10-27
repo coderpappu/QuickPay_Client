@@ -1,20 +1,12 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { useNavigate, useParams } from "react-router-dom";
-import toast from "react-hot-toast";
-import EmployeeSchema from "./EmployeeSchema";
-import * as React from "react";
-import Stepper from "@mui/material/Stepper";
+import Button from "@mui/material/Button";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import Button from "@mui/material/Button";
+import Stepper from "@mui/material/Stepper";
 import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import * as React from "react";
+import toast from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useCreateNewEmployeeMutation,
   useGetCompanyIdQuery,
@@ -25,12 +17,11 @@ import {
   useGetShiftListQuery,
   useUpdateEmployeeMutation,
 } from "../../features/api";
+import EmployeeSchema from "./EmployeeSchema";
 
-import UploadForm from "../../helpers/UploadForm";
-import { useState } from "react";
 import Box from "@mui/material/Box";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect } from "react";
+import { useState } from "react";
+import UploadForm from "../../helpers/UploadForm";
 
 const steps = [
   "Personal Information",
@@ -177,7 +168,7 @@ const EmployeeRegistrationForm = () => {
                 employeeShiftId:
                   employeeData?.data?.[0]?.EmployeeShift?.[0]?.id,
 
-                fingerprint_id: "bf84d050-3e51-4f60-918e-72668d1b0a85",
+                fingerprint_id: "5211a050-2537-43eb-bcc1-337cc9bd0cc8",
               }).unwrap();
               toast.success("Employee updated successfully");
             } else {
@@ -185,7 +176,7 @@ const EmployeeRegistrationForm = () => {
               await createEmployee({
                 ...values,
                 image: imageUrl,
-                fingerprint_id: "bf84d050-3e51-4f60-918e-72668d1b0a85",
+                fingerprint_id: "5211a050-2537-43eb-bcc1-337cc9bd0cc8",
               }).unwrap();
               toast.success("Employee registered successfully");
             }

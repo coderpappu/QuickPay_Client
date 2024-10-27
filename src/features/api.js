@@ -556,6 +556,7 @@ export const apiSlice = createApi({
       }),
       providesTags: ["leaveType"],
     }),
+
     getAllEmployeeLeaveList: builder.query({
       query: (companyId) => ({
         url: `/leave/list`,
@@ -567,6 +568,14 @@ export const apiSlice = createApi({
     getAllLeaveApplication: builder.query({
       query: (companyId) => ({
         url: `/leave/application/list`,
+        params: { companyId },
+      }),
+      providesTags: ["leaveApplication"],
+    }),
+
+    getAllEmployeeApplication: builder.query({
+      query: (companyId) => ({
+        url: `/leave/application/employee/list`,
         params: { companyId },
       }),
       providesTags: ["leaveApplication"],
@@ -1011,6 +1020,7 @@ export const {
   useGetLeaveTypeDetailsQuery,
   useDeleteLeaveTypeMutation,
   useEmployeeCreateLeaveMutation,
+  useGetAllEmployeeApplicationQuery,
   useGetAllEmployeeLeaveListQuery,
   useGetAllLeaveApplicationQuery,
   useUpdateLeaveApplicationMutation,
