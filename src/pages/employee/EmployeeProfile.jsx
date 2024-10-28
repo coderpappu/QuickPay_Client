@@ -1,22 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import ProfileImg from "../../assets/profile-placeholder.png";
-import InfoBox from "../../components/employee/InfoBox";
 import Button from "../../components/company/Button";
-import { useState } from "react";
-import { FiEdit } from "react-icons/fi";
-import { Link, useParams } from "react-router-dom";
 import AboutCard from "../../components/employee/AboutCard";
+import InfoBox from "../../components/employee/InfoBox";
 
 import {
   useGetEmployeeDetailsQuery,
-  useGetEmployeesQuery,
   useGetUserQuery,
 } from "../../features/api";
 
-import ListSkeleton from "../../skeletons/ListSkeleton";
 import JobDetails from "../../components/employee/JobDetails";
+import ListSkeleton from "../../skeletons/ListSkeleton";
 import SalarySettingsForm from "./SalarySetting/SalarySetting";
-import AdminDashboard from "../dashboard/AdminDashboard";
 const EmployeeProfile = () => {
   const id = useParams()?.id;
 

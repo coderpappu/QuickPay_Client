@@ -941,6 +941,9 @@ export const apiSlice = createApi({
         url: "/upload-asset",
         method: "POST",
         body: credentials,
+        headers: {
+          "Content-Type": undefined,
+        },
       }),
     }),
   }),

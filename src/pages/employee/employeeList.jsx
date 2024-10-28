@@ -1,13 +1,8 @@
 import React from "react";
-import BrandCardWrapper from "../../components/company/BrandCardWrapper";
-import SettingCardHeader, {
-  HrmSetupCardHeader,
-} from "../../components/company/SettingCardHeader";
-import SettingCardFooter from "../../components/company/SettingCardFooter";
-import { IoAdd } from "react-icons/io5";
-import { LiaEdit } from "react-icons/lia";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
+import { IoAdd } from "react-icons/io5";
+import BrandCardWrapper from "../../components/company/BrandCardWrapper";
 
 import {
   useDeleteEmployeeMutation,
