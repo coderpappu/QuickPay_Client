@@ -1,20 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import ProfileImg from "../../assets/profile-placeholder.png";
-import InfoBox from "../../components/employee/InfoBox";
 import Button from "../../components/company/Button";
-import { useState } from "react";
-import { FiEdit } from "react-icons/fi";
-import { Link, useParams } from "react-router-dom";
 import AboutCard from "../../components/employee/AboutCard";
+import InfoBox from "../../components/employee/InfoBox";
 
 import {
   useGetEmployeeDetailsQuery,
-  useGetEmployeesQuery,
   useGetUserQuery,
 } from "../../features/api";
 
-import ListSkeleton from "../../skeletons/ListSkeleton";
+import AssetCard from "../../components/employee/AssetCard";
 import JobDetails from "../../components/employee/JobDetails";
+import ListSkeleton from "../../skeletons/ListSkeleton";
 import SalarySettingsForm from "./SalarySetting/SalarySetting";
 
 const Profile = () => {
@@ -105,13 +103,14 @@ const Profile = () => {
           button_id="4"
           isActive={selected == "4"}
           handleSelect={handleSelect}
-          title={"Bank etc"}
+          title={"Assets"}
         />
       </div>
 
       {selected == "1" && <AboutCard employeeDetails={employeeDetails} />}
       {selected == "2" && <JobDetails employeeDetails={employeeDetails} />}
       {selected == "3" && <SalarySettingsForm />}
+      {selected == "4" && <AssetCard />}
     </div>
   );
 };

@@ -98,22 +98,22 @@ const CompanyForm = () => {
         try {
           // Create FormData object
           const formData = new FormData();
-          // formData.append("company_name", values.company_name);
-          // formData.append("address", values.address);
-          // formData.append("country", values.country);
-          // formData.append("city", values.city);
-          // formData.append("state", values.state);
-          // formData.append("postal_code", values.postal_code);
-          // formData.append("email", values.email);
-          // formData.append("phone_number", values.phone_number);
-          // formData.append("mobile_number", values.mobile_number);
-          // formData.append("fax", values.fax);
-          // formData.append("website_url", values.website_url);
-          // formData.append("date_format", values.date_format);
-          // formData.append("timezone", values.timezone);
-          // formData.append("language", values.language);
-          // formData.append("currency_code", values.currency_code);
-          // formData.append("currency_symbol", values.currency_symbol);
+          formData.append("company_name", values.company_name);
+          formData.append("address", values.address);
+          formData.append("country", values.country);
+          formData.append("city", values.city);
+          formData.append("state", values.state);
+          formData.append("postal_code", values.postal_code);
+          formData.append("email", values.email);
+          formData.append("phone_number", values.phone_number);
+          formData.append("mobile_number", values.mobile_number);
+          formData.append("fax", values.fax);
+          formData.append("website_url", values.website_url);
+          formData.append("date_format", values.date_format);
+          formData.append("timezone", values.timezone);
+          formData.append("language", values.language);
+          formData.append("currency_code", values.currency_code);
+          formData.append("currency_symbol", values.currency_symbol);
 
           // Append the logo file if it exists
           if (values.logo) {

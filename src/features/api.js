@@ -12,7 +12,7 @@ export const apiSlice = createApi({
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
-      headers.set("Content-Type", "application/json");
+      // headers.set("Content-Type", "application/json");
       return headers;
     },
   }),
@@ -934,6 +934,15 @@ export const apiSlice = createApi({
 
       providesTags: ["docsType"],
     }),
+
+    // image uploader
+    uploadImage: builder.mutation({
+      query: (credentials) => ({
+        url: "/upload-asset",
+        method: "POST",
+        body: credentials,
+      }),
+    }),
   }),
 });
 
@@ -1085,4 +1094,7 @@ export const {
   useDeleteDocsTypeMutation,
   useUpdateDocsTypeMutation,
   useGetDocsTypeDetailsQuery,
+
+  // upload image
+  useUploadImageMutation,
 } = apiSlice;
