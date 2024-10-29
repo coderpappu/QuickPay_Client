@@ -49,7 +49,7 @@ const AssetCard = () => {
 
   return (
     <div className="w-full mx-5 mt-5 mb-2 rounded-md flex flex-wrap justify-between">
-      <div className="w-[49%] relative p-4 bg-white dark:bg-dark-card rounded-md">
+      <div className="w-[49%] h-[500px] relative p-4 bg-white dark:bg-dark-card rounded-md">
         <h1 className="text-xl font-medium mb-4 dark:text-dark-heading-color">
           Asset Upload
         </h1>
@@ -166,9 +166,9 @@ const AssetCard = () => {
             )}
           </Formik>
         ) : (
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap justify-start items-center gap-3">
             {employeeAsset?.map((asset) => (
-              <div className="w-[150px] h-[150px]" key={asset?.id}>
+              <div className="w-[130px] h-[170px]" key={asset?.id}>
                 <h2 className="my-2 dark:text-dark-text-color">
                   {asset?.asset?.documentType?.name}
                 </h2>
