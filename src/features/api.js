@@ -946,6 +946,15 @@ export const apiSlice = createApi({
         },
       }),
     }),
+
+    getEmployeeAsset: builder.query({
+      query: (employeeId) => ({
+        url: `/assets/${employeeId}`,
+        params: { employeeId },
+      }),
+
+      providesTags: ["docsType"],
+    }),
   }),
 });
 
@@ -1100,4 +1109,5 @@ export const {
 
   // upload image
   useUploadImageMutation,
+  useGetEmployeeAssetQuery,
 } = apiSlice;
