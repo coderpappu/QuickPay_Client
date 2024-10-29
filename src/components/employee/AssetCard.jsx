@@ -1,26 +1,48 @@
 import { Form, Formik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import {
   useGetAllDocsTypeListQuery,
   useGetCompanyIdQuery,
+  useGetEmployeeDetailsQuery,
   useUploadImageMutation,
 } from "../../features/api";
 import { modifyPayload } from "../../utils/modifyPayload";
 
 const AssetCard = () => {
+  const { id } = useParams();
+
   const { data: companyId } = useGetCompanyIdQuery();
   const [uploadImage] = useUploadImageMutation();
+
+  // Use an object to manage previews for each doc by its ID
+  const [imagePreviews, setImagePreviews] = useState({});
+  const [employeeData, setEmployeeData] = useState();
+  const [docType, setDocType] = useState();
+
+  const {
+    data: employeeDetails,
+    isLoading: isEmployeeLoading,
+    isError: isEmployeeError,
+  } = useGetEmployeeDetailsQuery(id);
+
   const {
     data: docsList,
     isLoading,
     isError,
   } = useGetAllDocsTypeListQuery(companyId);
 
-  // Use an object to manage previews for each doc by its ID
-  const [imagePreviews, setImagePreviews] = useState({});
+  useEffect(() => {
+    if (docsList?.data) {
+      setDocType(docsList?.data?.[0]);
+    }
+  }, [docsList]);
 
-  if (isLoading && !isError) return <p>Loading...</p>;
-  if (isError) return <p>Error fetching data</p>;
+  useEffect(() => {
+    if (employeeDetails?.data) {
+      setEmployeeData(employeeDetails?.data?.[0]);
+    }
+  }, [employeeDetails]);
 
   const initialValues = { file: null };
 
@@ -49,8 +71,11 @@ const AssetCard = () => {
               initialValues={initialValues}
               onSubmit={async (values, { setSubmitting }) => {
                 const formData = modifyPayload({
-                  companyName: "codex",
-                  employeeName: "pappu",
+                  employee_id: employeeData?.id,
+                  documentType_id: docType?.id,
+                  company_id: employeeData?.company?.id,
+                  companyName: employeeData?.company?.company_name,
+                  employeeName: employeeData?.name,
                   file: values.file,
                 });
 
