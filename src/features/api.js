@@ -945,6 +945,7 @@ export const apiSlice = createApi({
           "Content-Type": undefined,
         },
       }),
+      invalidatesTags: ["assetUp"],
     }),
 
     getEmployeeAsset: builder.query({
@@ -953,7 +954,7 @@ export const apiSlice = createApi({
         params: { employeeId },
       }),
 
-      providesTags: ["docsType"],
+      providesTags: ["assetUp"],
     }),
   }),
 });
