@@ -956,6 +956,15 @@ export const apiSlice = createApi({
 
       providesTags: ["assetUp"],
     }),
+
+    deleteEmployeeAsset: builder.mutation({
+      query: (assetId) => ({
+        url: `/assets`,
+        method: "DELETE",
+        params: { assetId },
+      }),
+      invalidatesTags: ["assetUp"],
+    }),
   }),
 });
 
@@ -1111,4 +1120,5 @@ export const {
   // upload image
   useUploadImageMutation,
   useGetEmployeeAssetQuery,
+  useDeleteEmployeeAssetMutation,
 } = apiSlice;

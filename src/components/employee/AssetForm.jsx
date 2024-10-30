@@ -9,9 +9,10 @@ import {
   useGetEmployeeDetailsQuery,
   useUploadImageMutation,
 } from "../../features/api";
+
 import { modifyPayload } from "../../utils/modifyPayload";
 
-const AssetForm = () => {
+const AssetForm = ({ mode, setMode }) => {
   const [employeeData, setEmployeeData] = useState();
   const [imagePreviews, setImagePreviews] = useState({});
   const [editModeAsset, setEditModeAsset] = useState();
@@ -75,11 +76,14 @@ const AssetForm = () => {
           await Promise.all(uploadPromises);
 
           toast.success("Files uploaded successfully");
+          2;
         } catch (error) {
           toast.error("Some files failed to upload");
         } finally {
           setSubmitting(false);
         }
+
+        setMode(!mode);
       }}
     >
       {({ setFieldValue, isSubmitting }) => (
@@ -143,19 +147,19 @@ const AssetForm = () => {
                       />
                     </div>
                   )}
-
-                  {employeeAsset?.length > 0 && (
-                    <div className="w-[120px] h-auto">
-                      <img
-                        src={
-                          employeeAsset?.filter(
-                            (item) => item?.asset?.documentType_id === doc.id
-                          )?.[0]?.imageUrl
-                        }
-                        alt="check"
-                      />
-                    </div>
-                  )}
+                  <div className="w-[120px] h-auto">
+                    {employeeAsset?.map(
+                      (asset) =>
+                        asset?.asset?.id && (
+                          <img
+                            src={
+                              asset?.asset?.documentType_id == doc.id &&
+                              asset.imageUrl
+                            }
+                          />
+                        )
+                    )}
+                  </div>
                 </div>
               </div>
             ))}

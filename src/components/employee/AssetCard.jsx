@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineCancel } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
 import {
+  useDeleteEmployeeAssetMutation,
   useGetAllDocsTypeListQuery,
   useGetCompanyIdQuery,
   useGetEmployeeAssetQuery,
@@ -23,6 +26,7 @@ const AssetCard = () => {
   const { data: employeeAsset } = useGetEmployeeAssetQuery(id);
   const { data: employeeDetails } = useGetEmployeeDetailsQuery(id);
   const { data: docsList } = useGetAllDocsTypeListQuery(companyId);
+  const [deleteAsset] = useDeleteEmployeeAssetMutation();
 
   useEffect(() => {
     if (employeeDetails?.data) {
@@ -45,7 +49,17 @@ const AssetCard = () => {
       }));
     }
   };
-
+  const handleDeleteAsset = async (assetId) => {
+    console.log(assetId);
+    try {
+      await deleteAsset(assetId);
+      toast.success("Asset deleted successfully");
+      // Optionally refresh or update state to reflect deletion
+    } catch (error) {
+      toast.error("Failed to delete asset");
+      console.error(error);
+    }
+  };
   const handleEdit = () => {
     setMode(!mode);
     setImagePreviews({});
@@ -54,26 +68,54 @@ const AssetCard = () => {
     <div className="w-full mx-5 mt-5 mb-2 rounded-md flex flex-wrap justify-between">
       <div className=" h-auto relative p-4 bg-white dark:bg-dark-card rounded-md">
         <h1 className="text-xl font-medium mb-4 dark:text-dark-heading-color">
-          Asset Upload
+          Assets
         </h1>
         {mode ? (
-          <AssetForm />
+          <AssetForm mode={mode} setMode={setMode} />
         ) : (
-          <div className="flex flex-wrap justify-start items-center gap-3">
-            {employeeAsset?.map((asset) => (
-              <div className="w-[130px] h-[170px]" key={asset?.id}>
-                <h2 className="my-2 dark:text-dark-text-color">
-                  {asset?.asset?.documentType?.name}
+          <div>
+            <div className="flex gap-2 my-4">
+              <h2 className="text-xs font-medium dark:text-dark-text-color">
+                These file are you need to upload -{" "}
+              </h2>
+              {docsList?.data?.map((doc) => (
+                <h2
+                  key={doc?.id}
+                  className="text-xs font-medium dark:text-dark-text-color flex"
+                >
+                  {" "}
+                  {doc?.status == "IS_REQUIRED" ? (
+                    <h2 className="text-red-600">*</h2>
+                  ) : (
+                    ""
+                  )}
+                  {doc?.name}
                 </h2>
-                <Link to={asset?.imageUrl}>
-                  <img
-                    src={asset?.imageUrl}
-                    alt=""
-                    className="w-[130px] h-[130px]"
-                  />
-                </Link>
-              </div>
-            ))}
+              ))}
+            </div>
+            <div className="flex flex-wrap justify-start items-center gap-3">
+              {employeeAsset?.map((asset) => (
+                <div className="w-[170px] h-[170px]" key={asset?.id}>
+                  <div className="w-[140px] flex flex-wrap justify-between items-center">
+                    {" "}
+                    <h2 className="my-2 dark:text-dark-text-color">
+                      {asset?.asset?.documentType?.name}
+                    </h2>
+                    <AiOutlineDelete
+                      className="text-red-600 cursor-pointer"
+                      onClick={() => handleDeleteAsset(asset?.asset?.id)}
+                    />
+                  </div>
+                  <Link to={asset?.imageUrl}>
+                    <img
+                      src={asset?.imageUrl}
+                      alt=""
+                      className="w-[140px] h-[140px]"
+                    />
+                  </Link>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
