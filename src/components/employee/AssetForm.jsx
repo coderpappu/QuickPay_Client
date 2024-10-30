@@ -65,6 +65,7 @@ const AssetForm = ({ mode, setMode }) => {
 
               try {
                 let response = await uploadImage(formData).unwrap();
+                toast.success("Files uploaded successfully");
               } catch (error) {
                 toast.error(`Upload error for document ID ${docId}`);
               }
@@ -75,7 +76,6 @@ const AssetForm = ({ mode, setMode }) => {
         try {
           await Promise.all(uploadPromises);
 
-          toast.success("Files uploaded successfully");
           2;
         } catch (error) {
           toast.error("Some files failed to upload");

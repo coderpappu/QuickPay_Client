@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineCancel } from "react-icons/md";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   useDeleteEmployeeAssetMutation,
   useGetAllDocsTypeListQuery,
@@ -13,12 +13,14 @@ import {
   useUploadImageMutation,
 } from "../../features/api";
 import AssetForm from "./AssetForm";
+import ImageModal from "./ImageModal";
 
 const AssetCard = () => {
   const [imagePreviews, setImagePreviews] = useState({});
-
   const [employeeData, setEmployeeData] = useState();
   const [mode, setMode] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState("");
 
   const { id } = useParams();
   const { data: companyId } = useGetCompanyIdQuery();
@@ -49,8 +51,8 @@ const AssetCard = () => {
       }));
     }
   };
+
   const handleDeleteAsset = async (assetId) => {
-    console.log(assetId);
     try {
       await deleteAsset(assetId);
       toast.success("Asset deleted successfully");
@@ -60,13 +62,27 @@ const AssetCard = () => {
       console.error(error);
     }
   };
+
   const handleEdit = () => {
     setMode(!mode);
     setImagePreviews({});
   };
+
+  // Function to open modal with selected image
+  const openModal = (imageUrl) => {
+    setSelectedImageUrl(imageUrl);
+    setModalOpen(true);
+  };
+
+  // Function to close modal
+  const closeModal = () => {
+    setModalOpen(false);
+    setSelectedImageUrl("");
+  };
+
   return (
     <div className="w-full mx-5 mt-5 mb-2 rounded-md flex flex-wrap justify-between">
-      <div className=" h-auto relative p-4 bg-white dark:bg-dark-card rounded-md">
+      <div className="h-auto relative p-4 bg-white dark:bg-dark-card rounded-md">
         <h1 className="text-xl font-medium mb-4 dark:text-dark-heading-color">
           Assets
         </h1>
@@ -76,18 +92,15 @@ const AssetCard = () => {
           <div>
             <div className="flex gap-2 my-4">
               <h2 className="text-xs font-medium dark:text-dark-text-color">
-                These file are you need to upload -{" "}
+                These files are you need to upload -{" "}
               </h2>
               {docsList?.data?.map((doc) => (
                 <h2
                   key={doc?.id}
                   className="text-xs font-medium dark:text-dark-text-color flex"
                 >
-                  {" "}
-                  {doc?.status == "IS_REQUIRED" ? (
-                    <h2 className="text-red-600">*</h2>
-                  ) : (
-                    ""
+                  {doc?.status === "IS_REQUIRED" && (
+                    <span className="text-red-600">*</span>
                   )}
                   {doc?.name}
                 </h2>
@@ -97,7 +110,6 @@ const AssetCard = () => {
               {employeeAsset?.map((asset) => (
                 <div className="w-[170px] h-[170px]" key={asset?.id}>
                   <div className="w-[140px] flex flex-wrap justify-between items-center">
-                    {" "}
                     <h2 className="my-2 dark:text-dark-text-color">
                       {asset?.asset?.documentType?.name}
                     </h2>
@@ -106,19 +118,27 @@ const AssetCard = () => {
                       onClick={() => handleDeleteAsset(asset?.asset?.id)}
                     />
                   </div>
-                  <Link to={asset?.imageUrl}>
-                    <img
-                      src={asset?.imageUrl}
-                      alt=""
-                      className="w-[140px] h-[140px]"
-                    />
-                  </Link>
+                  {/* Open modal on image click */}
+                  <img
+                    src={asset?.imageUrl}
+                    alt=""
+                    className="w-[140px] h-[140px] cursor-pointer"
+                    onClick={() => openModal(asset.imageUrl)} // Open modal with image URL
+                  />
                 </div>
               ))}
             </div>
           </div>
         )}
 
+        {/* Modal for displaying the image */}
+        <ImageModal
+          isOpen={modalOpen}
+          onClose={closeModal}
+          imageUrl={selectedImageUrl}
+        />
+
+        {/* Toggle mode button */}
         {mode ? (
           <div
             className="absolute right-1 top-2 w-[40px] cursor-pointer h-[40px] flex flex-col justify-center align-middle items-center rounded-full bg-[#85858512] mr-2"
