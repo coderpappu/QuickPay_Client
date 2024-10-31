@@ -178,7 +178,9 @@ const EmployeeRegistrationForm = () => {
                 image: imageUrl,
                 fingerprint_id: "5211a050-2537-43eb-bcc1-337cc9bd0cc8",
               }).unwrap();
+
               toast.success("Employee registered successfully");
+              
             }
             navigate("/company/employee");
           } catch (error) {

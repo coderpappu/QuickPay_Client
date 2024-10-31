@@ -15,21 +15,27 @@ import ListSkeleton from "../../skeletons/ListSkeleton";
 import ErrorMessage from "../../utils/ErrorMessage";
 
 const CompanyList = () => {
+  const [deleteCompany] = useDeleteCompanyMutation();
+
+  const { data: companyId } = useGetCompanyIdQuery();
+
   const {
     data: companyData,
     isLoading,
     isError,
     error,
   } = useGetCompaniesQuery();
-
-  const [deleteCompany] = useDeleteCompanyMutation();
   const [setCompanyId] = useSetCompanyIdMutation();
-  const { data: companyId } = useGetCompanyIdQuery();
 
+  // Effect to set company ID from local storage on component mount
   useEffect(() => {
     const storedCompanyId = localStorage.getItem("companyId");
     if (storedCompanyId) {
-      setCompanyId(storedCompanyId);
+      setCompanyId(storedCompanyId)
+        .unwrap()
+        .catch((error) => {
+          console.error("Failed to set company ID:", error);
+        });
     }
   }, [setCompanyId]);
 
@@ -55,6 +61,9 @@ const CompanyList = () => {
       });
   };
 
+  // Render loading or error states
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
   const handleDeleteCompany = async (id) => {
     const confirm = () =>
       toast(
@@ -101,7 +110,9 @@ const CompanyList = () => {
       {companies?.map((company, index) => (
         <tr
           key={company.id}
-          className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm "}
+          className={
+            index % 2 === 0 ? "" : "dark:bg-dark-box bg-gray-50 rounded-sm "
+          }
         >
           <td className="py-2 text-sm text-center  dark:text-dark-text-color">
             {index + 1}

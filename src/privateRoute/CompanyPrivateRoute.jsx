@@ -1,30 +1,21 @@
+import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useGetCompanyIdQuery } from "../features/api";
 
 const CompanyPrivateRoute = () => {
-  const {
-    data: companyId,
-    isLoading,
-    isSuccess,
-    isError,
-  } = useGetCompanyIdQuery();
+  const { data: companyId, isLoading, isError } = useGetCompanyIdQuery();
   const navigate = useNavigate();
 
   if (isLoading) {
     return "Loading...";
   }
 
-  if (isError) {
-    navigate("/company/list");
-    return null; // or loading indicator if needed
+  if (isError || !companyId) {
+    navigate("/company/list"); // Redirect to the company list if no valid company ID
+    return null; // Prevent rendering of Outlet
   }
 
-  if (isSuccess && companyId) {
-    return <Outlet />;
-  }
-
-  // Handle any other cases (e.g., success but no companyId)
-  return null; // or redirect or loading indicator
+  return <Outlet />; // Render child routes if company ID is valid
 };
 
 export default CompanyPrivateRoute;

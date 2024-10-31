@@ -59,7 +59,6 @@ const AssetCard = () => {
       // Optionally refresh or update state to reflect deletion
     } catch (error) {
       toast.error("Failed to delete asset");
-      console.error(error);
     }
   };
 
