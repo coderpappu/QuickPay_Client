@@ -108,7 +108,7 @@ const AssetCard = () => {
             </div>
             <div className="flex flex-wrap justify-start items-center gap-3">
               {employeeAsset?.map((asset) => (
-                <div className="w-[170px] h-[170px]" key={asset?.id}>
+                <div className="w-[170px] h-[181px]" key={asset?.id}>
                   <div className="w-[140px] flex flex-wrap justify-between items-center">
                     <h2 className="my-2 dark:text-dark-text-color">
                       {asset?.asset?.documentType?.name}
