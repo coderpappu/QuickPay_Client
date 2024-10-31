@@ -1,16 +1,20 @@
+import { Field } from "formik";
 import React from "react";
 
-const SelectorInput = ({ options }) => {
-  console.log(options);
+const SelectorInput = ({ options, name }) => {
   return (
-    <select
-      type="select"
-      className=" w-full px-2 py-1 border-dark-box border  border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm  focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+    <Field
+      as="select"
+      name={name}
+      className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
     >
-      {options?.map((optionValue, index) => (
-        <option key={index}>{optionValue}</option>
+      <option value="" label="Select Time Zone" /> {/* Default option */}
+      {options.map((optionValue, index) => (
+        <option key={index} value={optionValue}>
+          {optionValue}
+        </option>
       ))}
-    </select>
+    </Field>
   );
 };
 

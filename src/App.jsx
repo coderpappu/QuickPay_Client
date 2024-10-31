@@ -2,6 +2,7 @@ import { Toaster } from "react-hot-toast";
 import { Route, Routes } from "react-router-dom";
 import DepartmentForm from "./../src/components/hrm/department/DepartmentForm";
 import "./App.css";
+import CompanySettings from "./components/company/CompanySettings";
 import LeaveApplicationListCard from "./components/hrm/Leave/LeaveApplicationListCard";
 import Layout from "./Layout";
 import Calendar from "./pages/calendar/Calendar";
@@ -82,7 +83,7 @@ function App() {
             <Route path="profile" element={<Profile />} />
             <Route path="profile/:id" element={<ProfileUpdate />} />
 
-            <Route path="company/create" element={<CompanySettingsPage />} />
+            <Route path="company/create" element={<CompanySettings />} />
             <Route
               path="company/update/:id"
               element={<CompanySettingsPage />}

@@ -1,16 +1,14 @@
-import React from "react";
-import { useState } from "react";
-import SettingCardHeader from "./SettingCardHeader";
-import SettingCardFooter from "./SettingCardFooter";
-import LogoUploadCard from "./LogoUploadCard";
-import BrandInput, { InputBox, SelectOptionBox } from "./BrandInput";
+import React, { useState } from "react";
+import * as Yup from "yup";
 import LogoImg from "../../assets/quickPayLogo.png";
 import BrandCardWrapper from "./BrandCardWrapper";
-import SelectorInput from "./SelectorInput";
+import { InputBox, SelectOptionBox } from "./BrandInput";
 import InputTitle from "./InputTitle";
-import * as Yup from "yup";
+import LogoUploadCard from "./LogoUploadCard";
+import SettingCardFooter from "./SettingCardFooter";
+import SettingCardHeader from "./SettingCardHeader";
 
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { ErrorMessage, Form, Formik } from "formik";
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({

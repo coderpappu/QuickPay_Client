@@ -1,33 +1,36 @@
+import { ErrorMessage, Form, Formik } from "formik";
 import React from "react";
+import * as Yup from "yup";
+import { useCreateNewCompanyMutation } from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
-import SettingCardHeader from "./SettingCardHeader";
-import SettingCardFooter from "./SettingCardFooter";
+import { InputBox } from "./BrandInput"; // Ensure this imports your updated InputBox
 import InputTitle from "./InputTitle";
 import SelectorInput from "./SelectorInput";
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import InputBox from "./BrandInput";
+import SettingCardFooter from "./SettingCardFooter";
+import SettingCardHeader from "./SettingCardHeader";
+
+import { modifyPayload } from "../../utils/modifyPayload";
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
-  brand: Yup.string().required("Company name is required"),
+  company_name: Yup.string().required("Company name is required"),
   address: Yup.string().required("Address is required"),
   city: Yup.string().required("City is required"),
   state: Yup.string().required("State is required"),
-  zip: Yup.string().required("Zip/Post Code is required"),
+  postal_code: Yup.string().notRequired(),
   country: Yup.string().required("Country is required"),
-  telephone: Yup.string().required("Telephone is required"),
-  companyRegNo: Yup.string().required(
-    "Company Registration Number is required"
-  ),
-  companyStartTime: Yup.string().required("Company Start Time is required"),
-  companyEndTime: Yup.string().required("Company End Time is required"),
+  phone_number: Yup.string().required("Phone number is required"),
+  company_registration_no: Yup.string().notRequired(),
+
+  faxNo: Yup.string().notRequired(),
+  website_Url: Yup.string().notRequired(),
+  timezone: Yup.string().notRequired(),
 });
 
 // Array of form fields (two fields per row)
 const formFields = [
   [
-    { name: "brand", title: "Company Name", placeholder: "Enter company name" },
+    { name: "company_name", title: "Name", placeholder: "Enter company name" },
     { name: "address", title: "Address", placeholder: "Enter address" },
   ],
   [
@@ -35,20 +38,24 @@ const formFields = [
     { name: "state", title: "State", placeholder: "Enter state" },
   ],
   [
-    { name: "zip", title: "Zip/Post Code", placeholder: "Enter zip/post code" },
+    {
+      name: "postal_code",
+      title: "Zip/Post Code",
+      placeholder: "Enter zip/post code",
+    },
     { name: "country", title: "Country", placeholder: "Enter country" },
   ],
   [
-    { name: "telephone", title: "Telephone", placeholder: "Enter telephone" },
     {
-      name: "companyRegNo",
+      name: "phone_number",
+      title: "Phone Number",
+      placeholder: "Enter phone number",
+    },
+    {
+      name: "company_registration_no",
       title: "Company Registration Number",
       placeholder: "Enter company registration number",
     },
-  ],
-  [
-    { name: "companyStartTime", title: "Company Start Time *", type: "time" },
-    { name: "companyEndTime", title: "Company End Time *", type: "time" },
   ],
   [
     {
@@ -58,27 +65,49 @@ const formFields = [
       required: false,
     },
     {
+      name: "date_format",
+      title: "Date Format*",
+      type: "select",
+      options: ["MM/DD/YYYY", "DD/MM/YYYY", "YYYY-MM-DD"],
+    },
+  ],
+  [
+    {
       name: "website_Url",
       title: "Website URL",
       placeholder: "https://www.codexdevware.com",
       required: false,
     },
+    {
+      name: "timezone",
+      title: "Time Zone",
+      placeholder: "",
+      type: "select",
+      options: [
+        "Coordinated Universal Time (UTC)",
+        // Add other time zones as needed
+        // ...
+        "Bangladesh Standard Time (BST) - UTC+6",
+      ],
+    },
   ],
 ];
 
 const CompanySettings = () => {
+  const [createNewCompany] = useCreateNewCompanyMutation();
+
   const initialValues = {
-    brand: "",
+    company_name: "",
     address: "",
     city: "",
     state: "",
-    zip: "",
+    postal_code: "",
     country: "",
-    telephone: "",
-    companyRegNo: "",
-    companyStartTime: "",
-    companyEndTime: "",
+    phone_number: "",
+    company_registration_no: "",
+    date_format: "",
     faxNo: "",
+    website_Url: "",
     timezone: "",
   };
 
@@ -87,17 +116,18 @@ const CompanySettings = () => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={(values) => {
-        console.log("Form Values: ", values);
+        let modifyValue = modifyPayload(values);
+
+        createNewCompany(values); // Call your mutation here if needed
       }}
     >
-      {() => (
-        <Form>
+      {({ handleSubmit, setFieldValue }) => (
+        <Form onSubmit={handleSubmit}>
           <BrandCardWrapper>
             <SettingCardHeader
               title="Company Settings"
               subTitle="Edit your company settings"
             />
-
             <div className="px-6 py-4">
               {/* Mapping over the formFields array and displaying two fields per row */}
               {formFields.map((row, rowIndex) => (
@@ -105,35 +135,32 @@ const CompanySettings = () => {
                   key={rowIndex}
                   className="flex flex-wrap justify-between my-3"
                 >
-                  {row.map(({ name, title, placeholder, type = "text" }) => (
-                    <div key={name} className="w-[49%]">
-                      <InputTitle title={title} />
-                      <InputBox
-                        name={name}
-                        type={type}
-                        placeholder={placeholder || ""}
-                        className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
-                      />
-                      <ErrorMessage
-                        name={name}
-                        component="div"
-                        className="text-red-500 text-xs"
-                      />
-                    </div>
-                  ))}
+                  {row.map(
+                    ({ name, title, placeholder, type = "text", options }) => (
+                      <div key={name} className="w-[49%]">
+                        <InputTitle title={title} />
+                        {/* Conditional rendering based on field type */}
+                        {type === "select" ? (
+                          <SelectorInput options={options} name={name} />
+                        ) : (
+                          <InputBox
+                            name={name}
+                            type={type}
+                            placeholder={placeholder || ""}
+                          />
+                        )}
+                        <ErrorMessage
+                          name={name}
+                          component="div"
+                          className="text-red-500 text-xs"
+                        />
+                      </div>
+                    )
+                  )}
                 </div>
               ))}
-
-              {/* Timezone Selector */}
-              <div className="flex flex-wrap justify-between my-3">
-                <div className="w-full">
-                  <InputTitle title="Timezone" />
-                  <SelectorInput options={["Select Timezone"]} />
-                </div>
-              </div>
             </div>
 
-            {/* Save Button */}
             <SettingCardFooter title="Save" />
           </BrandCardWrapper>
         </Form>

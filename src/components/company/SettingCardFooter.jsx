@@ -6,6 +6,7 @@ const SettingCardFooter = ({ title, handleUpdate }) => {
       <button
         className="px-8 py-2 rounded-md text-white bg-button-bg"
         onClick={() => handleUpdate()}
+        type="submit"
       >
         {title}
       </button>

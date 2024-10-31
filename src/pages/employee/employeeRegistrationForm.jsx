@@ -173,6 +173,7 @@ const EmployeeRegistrationForm = () => {
               toast.success("Employee updated successfully");
             } else {
               // Create new employee
+
               await createEmployee({
                 ...values,
                 image: imageUrl,
@@ -180,7 +181,6 @@ const EmployeeRegistrationForm = () => {
               }).unwrap();
 
               toast.success("Employee registered successfully");
-              
             }
             navigate("/company/employee");
           } catch (error) {

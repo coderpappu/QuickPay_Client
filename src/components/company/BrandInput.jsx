@@ -1,5 +1,5 @@
+import { Field } from "formik";
 import React from "react";
-import { Formik, Field, Form, ErrorMessage } from "formik";
 
 const BrandInput = ({ title, placeText, type = "text" }) => {
   return (
@@ -25,15 +25,22 @@ const BrandInput = ({ title, placeText, type = "text" }) => {
 //   );
 // };
 
-const InputBox = ({ name, type, placeholder, ...props }) => {
+const InputBox = ({ name, type = "text", placeholder, ...props }) => {
   return (
-    <Field
-      name={name}
-      type={type || "text"}
-      placeholder={placeholder || ""}
-      className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
-      {...props} // Pass any additional props to the Field component
-    />
+    <div>
+      <Field
+        name={name}
+        type={type}
+        placeholder={placeholder || ""}
+        className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+        {...props} // Pass any additional props to the Field component
+      />
+      {/* <ErrorMessage
+        name={name}
+        component="div"
+        className="text-red-500 text-xs"
+      /> */}
+    </div>
   );
 };
 
