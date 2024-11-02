@@ -977,6 +977,15 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["brand"],
     }),
+
+    getbrand: builder.query({
+      query: (companyId) => ({
+        url: `/systemSettings/getbrand`,
+        params: { companyId },
+      }),
+
+      providesTags: ["brand"],
+    }),
   }),
 });
 
@@ -1136,4 +1145,7 @@ export const {
 
   //brand route
   useCreateBrandMutation,
+  useGetbrandQuery,
+  // useUpdateBrandMutation,
+  // useDeleteBrandMutation,
 } = apiSlice;

@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import LogoImg from "../../assets/quickPayLogo.png";
 import {
   useCreateBrandMutation,
+  useGetbrandQuery,
   useGetCompanyDetailsQuery,
   useGetCompanyIdQuery,
 } from "../../features/api";
@@ -35,24 +36,28 @@ const formFields = [
 ];
 
 const BrandCard = () => {
-  const [createBrnad] = useCreateBrandMutation();
+  const [createBrand] = useCreateBrandMutation();
   const { data: companyId, isLoading: isCompanyIdLoading } =
     useGetCompanyIdQuery();
-
   const { data: companyData } = useGetCompanyDetailsQuery(companyId);
-
   const [selectedFiles, setSelectedFiles] = useState({
-    file1: null,
+    file1: "",
     file2: null,
     file3: null,
   });
+  // Fetch existing brand details
+  const { data: brandData, isLoading, isError } = useGetbrandQuery(companyId); // Assuming this fetches existing brand data
 
+  if (isLoading && !isError) return "Loading...";
+
+  // Set initial values based on fetched brand data
   const initialValues = {
-    titleText: "",
-    footerText: "",
-    language: "",
+    titleText: brandData?.data?.titleText || "",
+    footerText: brandData?.data?.footerText || "",
+    language: brandData?.data?.language || "",
   };
 
+  // Handle file changes
   const handleFileChange = (event, fileKey) => {
     setSelectedFiles((prevState) => ({
       ...prevState,
@@ -60,6 +65,7 @@ const BrandCard = () => {
     }));
   };
 
+  // Handle form submission
   const handleSubmit = async (values) => {
     const formData = new FormData();
 
@@ -78,9 +84,8 @@ const BrandCard = () => {
     });
 
     try {
-      let createBrand = await createBrnad(formData).unwrap();
-      console.log(createBrand);
-      toast.success(createBrand?.message);
+      let createBrandResponse = await createBrand(formData).unwrap();
+      toast.success(createBrandResponse?.message);
     } catch (error) {
       toast.error(error?.data?.message);
     }
@@ -91,6 +96,7 @@ const BrandCard = () => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
+      enableReinitialize // This allows Formik to reinitialize when initialValues change
     >
       {() => (
         <Form>
@@ -105,21 +111,21 @@ const BrandCard = () => {
                   title="Logo Dark"
                   handleFileChange={(event) => handleFileChange(event, "file1")}
                   selectedFile={selectedFiles.file1}
-                  LogoImg={LogoImg}
+                  LogoImg={brandData?.data?.darkImageUrl || LogoImg} // Use selected file or default logo image
                   name="file1"
                 />
                 <LogoUploadCard
                   title="Logo Light"
                   handleFileChange={(event) => handleFileChange(event, "file2")}
                   selectedFile={selectedFiles.file2}
-                  LogoImg={LogoImg}
+                  LogoImg={brandData?.data?.lightImageUrl || LogoImg}
                   name="file2"
                 />
                 <LogoUploadCard
                   title="Favicon"
                   handleFileChange={(event) => handleFileChange(event, "file3")}
                   selectedFile={selectedFiles.file3}
-                  LogoImg={LogoImg}
+                  LogoImg={brandData?.data?.favImageUrl || LogoImg}
                   name="file3"
                 />
               </div>
