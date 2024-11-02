@@ -16,6 +16,8 @@ import LogoUploadCard from "./LogoUploadCard";
 import SettingCardFooter from "./SettingCardFooter";
 import SettingCardHeader from "./SettingCardHeader";
 
+// task  : initial state data not set properly when edit is clicked
+
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
   titleText: Yup.string().required("Title text is required"),
