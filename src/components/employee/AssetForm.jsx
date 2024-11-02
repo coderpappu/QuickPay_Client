@@ -12,7 +12,6 @@ import {
 import { modifyPayload } from "../../utils/modifyPayload";
 
 const AssetForm = ({ mode, setMode }) => {
-  
   const [employeeData, setEmployeeData] = useState();
   const [imagePreviews, setImagePreviews] = useState({});
 

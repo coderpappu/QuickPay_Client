@@ -53,7 +53,7 @@ const SelectOptionBox = ({ values, name }) => {
     >
       {/* <option value="">Select Option</option> */}
       {values.map((option, index) => (
-        <option key={index} value={option} name="j">
+        <option key={index} value={option} name={option}>
           {option}
         </option>
       ))}

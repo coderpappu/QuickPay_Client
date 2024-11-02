@@ -965,6 +965,18 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["assetUp"],
     }),
+
+    createBrand: builder.mutation({
+      query: (credentials) => ({
+        url: "/systemSettings/create",
+        method: "POST",
+        body: credentials,
+        headers: {
+          "Content-Type": undefined,
+        },
+      }),
+      invalidatesTags: ["brand"],
+    }),
   }),
 });
 
@@ -1121,4 +1133,7 @@ export const {
   useUploadImageMutation,
   useGetEmployeeAssetQuery,
   useDeleteEmployeeAssetMutation,
+
+  //brand route
+  useCreateBrandMutation,
 } = apiSlice;

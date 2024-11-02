@@ -24,7 +24,7 @@ const LogoUploadCard = ({
       <div className=" px-5 py-3">
         <label
           htmlFor={name}
-          className="bg-button-bg text-[10px] px-3 py-2 rounded-lg text-white"
+          className="bg-button-bg text-[10px] px-3 py-2 rounded-md text-white"
         >
           Choose file here
         </label>

@@ -1,6 +1,13 @@
+import { ErrorMessage, Form, Formik } from "formik";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import * as Yup from "yup";
 import LogoImg from "../../assets/quickPayLogo.png";
+import {
+  useCreateBrandMutation,
+  useGetCompanyDetailsQuery,
+  useGetCompanyIdQuery,
+} from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox, SelectOptionBox } from "./BrandInput";
 import InputTitle from "./InputTitle";
@@ -8,36 +15,32 @@ import LogoUploadCard from "./LogoUploadCard";
 import SettingCardFooter from "./SettingCardFooter";
 import SettingCardHeader from "./SettingCardHeader";
 
-import { ErrorMessage, Form, Formik } from "formik";
-
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
-  textTitle: Yup.string().required("Title text is required"),
+  titleText: Yup.string().required("Title text is required"),
   footerText: Yup.string().required("Footer text is required"),
   language: Yup.string().required("Language is required"),
 });
 
 const formFields = [
-  // ... (rest of your form fields)
   [
-    {
-      name: "textTitle",
-      title: "Text Title",
-      placeholder: "Enter title text",
-    },
+    { name: "titleText", title: "Title Text", placeholder: "Enter title text" },
     {
       name: "footerText",
       title: "Footer Text",
       placeholder: "Enter footer text",
     },
-    {
-      name: "language",
-      title: "Select Language",
-    },
+    { name: "language", title: "Select Language" },
   ],
 ];
 
 const BrandCard = () => {
+  const [createBrnad] = useCreateBrandMutation();
+  const { data: companyId, isLoading: isCompanyIdLoading } =
+    useGetCompanyIdQuery();
+
+  const { data: companyData } = useGetCompanyDetailsQuery(companyId);
+
   const [selectedFiles, setSelectedFiles] = useState({
     file1: null,
     file2: null,
@@ -45,13 +48,11 @@ const BrandCard = () => {
   });
 
   const initialValues = {
-    // ... (rest of your initial values)
-    textTitle: "",
+    titleText: "",
     footerText: "",
     language: "",
   };
 
-  // Handler for file changes, updating the object state
   const handleFileChange = (event, fileKey) => {
     setSelectedFiles((prevState) => ({
       ...prevState,
@@ -59,25 +60,46 @@ const BrandCard = () => {
     }));
   };
 
+  const handleSubmit = async (values) => {
+    const formData = new FormData();
+
+    // Append form fields
+    formData.append("titleText", values.titleText);
+    formData.append("footerText", values.footerText);
+    formData.append("language", values.language);
+    formData.append("companyName", companyData?.data?.company_name);
+    formData.append("company_id", companyData?.data?.id);
+
+    // Append files
+    Object.keys(selectedFiles).forEach((key) => {
+      if (selectedFiles[key]) {
+        formData.append(key, selectedFiles[key]);
+      }
+    });
+
+    try {
+      let createBrand = await createBrnad(formData).unwrap();
+      console.log(createBrand);
+      toast.success(createBrand?.message);
+    } catch (error) {
+      toast.error(error?.data?.message);
+    }
+  };
+
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values) => {
-        console.log("Form Values: ", values);
-      }}
+      onSubmit={handleSubmit}
     >
       {() => (
         <Form>
           <BrandCardWrapper>
-            {/* setting card heading  */}
             <SettingCardHeader
               title="Brand Settings"
               subTitle="Edit your brand details"
             />
-
             <div className="py-3">
-              {/* card content  */}
               <div className="px-6 py-3 flex justify-between ">
                 <LogoUploadCard
                   title="Logo Dark"
@@ -101,41 +123,33 @@ const BrandCard = () => {
                   name="file3"
                 />
               </div>
-
-              {/* title and text section  */}
               {formFields.map((row, rowIndex) => (
                 <div className="px-6 py-3 flex justify-between" key={rowIndex}>
-                  {row.map(
-                    ({ name, title, placeholder, type = "text" }, rowIndex) => (
-                      <div className="w-[24%] relative" key={rowIndex}>
-                        <InputTitle title={title} />
-                        {name == "language" ? (
-                          <>
-                            <SelectOptionBox values={["Bangla ", "English"]} />
-                          </>
-                        ) : (
-                          <>
-                            <InputBox
-                              name={name}
-                              type={type}
-                              placeholder={placeholder}
-                            />
-                          </>
-                        )}
-
-                        <ErrorMessage
+                  {row.map(({ name, title, placeholder }, rowIndex) => (
+                    <div className="w-[24%] relative" key={rowIndex}>
+                      <InputTitle title={title} />
+                      {name === "language" ? (
+                        <SelectOptionBox
+                          values={["Bangla ", "English"]}
                           name={name}
-                          component="div"
-                          className="text-red-500 text-xs "
                         />
-                      </div>
-                    )
-                  )}
+                      ) : (
+                        <InputBox
+                          name={name}
+                          type="text"
+                          placeholder={placeholder}
+                        />
+                      )}
+                      <ErrorMessage
+                        name={name}
+                        component="div"
+                        className="text-red-500 text-xs"
+                      />
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
-
-            {/* card footer  */}
             <SettingCardFooter title={"Save"} />
           </BrandCardWrapper>
         </Form>
