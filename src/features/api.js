@@ -968,7 +968,7 @@ export const apiSlice = createApi({
 
     createBrand: builder.mutation({
       query: (credentials) => ({
-        url: "/systemSettings/create",
+        url: "/systemSettings/create/brandsetting",
         method: "POST",
         body: credentials,
         headers: {
@@ -985,6 +985,16 @@ export const apiSlice = createApi({
       }),
 
       providesTags: ["brand"],
+    }),
+
+    // system setting route
+    createSystemSettings: builder.mutation({
+      query: (credentials) => ({
+        url: "/systemSettings/create/createBrandSetting",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["systemSettings"],
     }),
   }),
 });
@@ -1148,4 +1158,10 @@ export const {
   useGetbrandQuery,
   // useUpdateBrandMutation,
   // useDeleteBrandMutation,
+
+  // system setting route
+  useCreateSystemSettingsMutation,
+  // useGetSystemSettingsQuery,
+  // useUpdateSystemSettingsMutation,
+  // useDeleteSystemSettingsMutation,
 } = apiSlice;

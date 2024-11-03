@@ -1,37 +1,28 @@
+import { ErrorMessage, Form, Formik } from "formik";
 import React from "react";
-import BrandCardWrapper from "./BrandCardWrapper";
-import SettingCardHeader from "./SettingCardHeader";
-import SettingCardFooter from "./SettingCardFooter";
-import InputTitle from "./InputTitle";
-import SelectorInput from "./SelectorInput";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import toast from "react-hot-toast";
 import * as Yup from "yup";
+import { useCreateSystemSettingsMutation } from "../../features/api";
+import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox, SelectOptionBox } from "./BrandInput";
+import InputTitle from "./InputTitle";
+import SettingCardFooter from "./SettingCardFooter";
+import SettingCardHeader from "./SettingCardHeader";
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
-  brand: Yup.string().required("Company name is required"),
-  address: Yup.string().required("Address is required"),
-  city: Yup.string().required("City is required"),
-  state: Yup.string().required("State is required"),
-  zip: Yup.string().required("Zip/Post Code is required"),
-  country: Yup.string().required("Country is required"),
-  telephone: Yup.string().required("Telephone is required"),
-  companyRegNo: Yup.string().required(
-    "Company Registration Number is required"
-  ),
-  companyStartTime: Yup.string().required("Company Start Time is required"),
-  companyEndTime: Yup.string().required("Company End Time is required"),
+  date_format: Yup.string().required("Date format is required"),
+  time_format: Yup.string().required("Time format is required"),
 });
 
 // Array of form fields (two fields per row)
 const formFields = [
   [
     {
-      name: "date_formate",
-      title: "Date Formate",
+      name: "date_format",
+      title: "Date Format",
       placeholder: "",
-      list: ["Jan 1 2002", "dd-mm-yyyy", "mm-dd-yyyy", "yyyy-dd-mm"],
+      list: ["dd-mm-yyyy", "mm-dd-yyyy", "yyyy-dd-mm"],
       type: "list",
     },
     {
@@ -45,14 +36,24 @@ const formFields = [
 ];
 
 const CompanySettings = () => {
-  const initialValues = {};
+  const [createSystemSetting] = useCreateSystemSettingsMutation();
+
+  const initialValues = {
+    date_format: "",
+    time_format: "",
+  };
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values) => {
-        console.log("Form Values: ", values);
+      onSubmit={async (values) => {
+        try {
+          await createSystemSetting(values);
+          toast.success("Settings updated successfully!");
+        } catch (error) {
+          toast.error("Something went wrong!");
+        }
       }}
     >
       {() => (
