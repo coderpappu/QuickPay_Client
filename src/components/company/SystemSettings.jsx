@@ -2,7 +2,11 @@ import { ErrorMessage, Form, Formik } from "formik";
 import React from "react";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
-import { useCreateSystemSettingsMutation } from "../../features/api";
+import {
+  useCreateSystemSettingsMutation,
+  useGetCompanyIdQuery,
+  useGetSystemSettingsQuery,
+} from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox, SelectOptionBox } from "./BrandInput";
 import InputTitle from "./InputTitle";
@@ -22,14 +26,14 @@ const formFields = [
       name: "date_format",
       title: "Date Format",
       placeholder: "",
-      list: ["dd-mm-yyyy", "mm-dd-yyyy", "yyyy-dd-mm"],
+      list: ["MM-DD-YYYY", "DD-MM-YYYY", "YYYY-MM-DD"],
       type: "list",
     },
     {
       name: "time_format",
       title: "Time Format",
       placeholder: "",
-      list: ["10.30PM", "10.00pm", "22.30"],
+      list: ["HH:mm:ss", "hh:mm", "hh:mm A", "hh:mm a"],
       type: "list",
     },
   ],
@@ -37,10 +41,21 @@ const formFields = [
 
 const CompanySettings = () => {
   const [createSystemSetting] = useCreateSystemSettingsMutation();
+  const { data: companyId } = useGetCompanyIdQuery();
+  const {
+    data: systemSettingData,
+    isLoading,
+    isError,
+  } = useGetSystemSettingsQuery(companyId);
+
+  if (isLoading && !isError) return <div>Loading...</div>;
+  if (isError) return "Something went wrong!";
+  if (!isLoading && !isError && !systemSettingData?.data)
+    return <div>No data found!</div>;
 
   const initialValues = {
-    date_format: "",
-    time_format: "",
+    date_format: systemSettingData?.data?.date_format || "",
+    time_format: systemSettingData?.data?.time_format || "",
   };
 
   return (
@@ -49,7 +64,7 @@ const CompanySettings = () => {
       validationSchema={validationSchema}
       onSubmit={async (values) => {
         try {
-          await createSystemSetting(values);
+          await createSystemSetting({ ...values, company_id: companyId });
           toast.success("Settings updated successfully!");
         } catch (error) {
           toast.error("Something went wrong!");

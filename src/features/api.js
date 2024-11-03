@@ -990,11 +990,20 @@ export const apiSlice = createApi({
     // system setting route
     createSystemSettings: builder.mutation({
       query: (credentials) => ({
-        url: "/systemSettings/create/createBrandSetting",
+        url: "/systemSettings/create/systemsettings",
         method: "POST",
         body: credentials,
       }),
       invalidatesTags: ["systemSettings"],
+    }),
+
+    getSystemSettings: builder.query({
+      query: (companyId) => ({
+        url: `/systemSettings/getsystemsettings`,
+        params: { companyId },
+      }),
+
+      providesTags: ["systemSettings"],
     }),
   }),
 });
@@ -1161,6 +1170,8 @@ export const {
 
   // system setting route
   useCreateSystemSettingsMutation,
+  useGetSystemSettingsQuery,
+
   // useGetSystemSettingsQuery,
   // useUpdateSystemSettingsMutation,
   // useDeleteSystemSettingsMutation,
