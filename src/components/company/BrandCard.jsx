@@ -1,5 +1,5 @@
 import { ErrorMessage, Form, Formik } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
 import {
@@ -8,7 +8,6 @@ import {
   useGetCompanyDetailsQuery,
   useGetCompanyIdQuery,
 } from "../../features/api";
-import { modifyPayload } from "../../utils/modifyPayload";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox, SelectOptionBox } from "./BrandInput";
 import InputTitle from "./InputTitle";
@@ -46,12 +45,7 @@ const BrandCard = () => {
   // Fetch existing brand details
   const { data: brandData, isLoading, isError } = useGetbrandQuery(companyId); // Assuming this fetches existing brand data
 
-  const initialSelectedFiles = {
-    file1: brandData?.data?.darkImageUrl || "",
-    file2: brandData?.data?.lightImageUrl || null,
-    file3: brandData?.data?.favImageUrl || null,
-  };
-
+  // Set initial values based on fetched brand data
   // Set initial values based on fetched brand data
   const initialValues = {
     titleText: brandData?.data?.titleText || "",
@@ -60,40 +54,37 @@ const BrandCard = () => {
     darkLogo: brandData?.data?.darkImageUrl || "",
     lightLogo: brandData?.data?.lightImageUrl || "",
     favLogo: brandData?.data?.favImageUrl || "",
+    darkLogoPreview: brandData?.data?.darkImageUrl || "",
+    lightLogoPreview: brandData?.data?.lightImageUrl || "",
+    favLogoPreview: brandData?.data?.favImageUrl || "",
   };
 
-  const [selectedFiles, setSelectedFiles] = useState({});
-
   if (isLoading && !isError) return "Loading...";
-  // Handle file changes
-  const handleFileChange = (event, fileKey, setFieldValue) => {
-    setSelectedFiles((prevState) => ({
-      ...prevState,
-      [fileKey]: event.target.files[0],
-    }));
 
-    setFieldValue(fileKey, event.target.files[0]);
+  // Handle file changes
+  // Handle file changes to show image preview
+  const handleFileChange = (event, fileKey, setFieldValue) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Set the file object for submission
+      setFieldValue(fileKey, file);
+
+      // Create a preview URL for the file and store it in a corresponding preview key
+      const previewKey = `${fileKey}Preview`;
+      setFieldValue(previewKey, URL.createObjectURL(file));
+    }
   };
 
   // Handle form submission
   const handleSubmit = async (values) => {
     const formData = new FormData();
 
-    let modifyData = modifyPayload({
-      ...values,
-      company_id: companyData?.data?.id,
-      companyName: companyData?.data?.company_name,
-    });
+    // let modifyData = modifyPayload({
+    //   ...values,
+    //   company_id: companyData?.data?.id,
+    //   companyName: companyData?.data?.company_name,
+    // });
 
-    // console.log(modifyData);
-
-    // Append form fields
-    // formData.append("titleText", values.titleText);
-    // formData.append("footerText", values.footerText);
-    // formData.append("language", values.language);
-    // formData.append("darkLogo", values.darkLogo);
-    // formData.append("lightLogo", values.lightLogo);
-    // formData.append("favLogo", values.favLogo);
     formData.append("companyName", companyData?.data?.company_name);
     formData.append("company_id", companyData?.data?.id);
 
@@ -119,7 +110,7 @@ const BrandCard = () => {
       onSubmit={handleSubmit}
       enableReinitialize // This allows Formik to reinitialize when initialValues change
     >
-      {({ setFieldValue }) => (
+      {({ setFieldValue, values }) => (
         <Form>
           <BrandCardWrapper>
             <SettingCardHeader
@@ -133,7 +124,7 @@ const BrandCard = () => {
                   handleFileChange={(event) =>
                     handleFileChange(event, "darkLogo", setFieldValue)
                   }
-                  selectedFile={selectedFiles.file1}
+                  selectedFile={values.darkLogoPreview} // Show the preview image
                   name="darkLogo"
                 />
                 <LogoUploadCard
@@ -141,7 +132,7 @@ const BrandCard = () => {
                   handleFileChange={(event) =>
                     handleFileChange(event, "lightLogo", setFieldValue)
                   }
-                  selectedFile={selectedFiles.file2}
+                  selectedFile={values.lightLogoPreview} // Show the preview image
                   name="lightLogo"
                 />
                 <LogoUploadCard
@@ -149,15 +140,8 @@ const BrandCard = () => {
                   handleFileChange={(event) =>
                     handleFileChange(event, "favLogo", setFieldValue)
                   }
-                  selectedFile={selectedFiles.file3}
+                  selectedFile={values.favLogoPreview} // Show the preview image
                   name="favLogo"
-                />
-                <input
-                  type="file"
-                  name="filecheck"
-                  onChange={(event) =>
-                    handleFileChange(event, "filecheck", setFieldValue)
-                  }
                 />
               </div>
               {formFields.map((row, rowIndex) => (

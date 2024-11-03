@@ -10,7 +10,7 @@ const LogoUploadCard = ({ title, handleFileChange, selectedFile, name }) => {
 
       <div className="w-full  px-5 py-3">
         <img
-          src={selectedFile ? URL.createObjectURL(selectedFile) : LogoImg}
+          src={selectedFile ? selectedFile : LogoImg}
           alt="Quick Pay Logo"
           className="w-[80px] "
         />
