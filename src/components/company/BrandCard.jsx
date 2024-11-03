@@ -2,13 +2,13 @@ import { ErrorMessage, Form, Formik } from "formik";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
-import LogoImg from "../../assets/quickPayLogo.png";
 import {
   useCreateBrandMutation,
   useGetbrandQuery,
   useGetCompanyDetailsQuery,
   useGetCompanyIdQuery,
 } from "../../features/api";
+import { modifyPayload } from "../../utils/modifyPayload";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox, SelectOptionBox } from "./BrandInput";
 import InputTitle from "./InputTitle";
@@ -42,46 +42,65 @@ const BrandCard = () => {
   const { data: companyId, isLoading: isCompanyIdLoading } =
     useGetCompanyIdQuery();
   const { data: companyData } = useGetCompanyDetailsQuery(companyId);
-  const [selectedFiles, setSelectedFiles] = useState({
-    file1: "",
-    file2: null,
-    file3: null,
-  });
+
   // Fetch existing brand details
   const { data: brandData, isLoading, isError } = useGetbrandQuery(companyId); // Assuming this fetches existing brand data
 
-  if (isLoading && !isError) return "Loading...";
+  const initialSelectedFiles = {
+    file1: brandData?.data?.darkImageUrl || "",
+    file2: brandData?.data?.lightImageUrl || null,
+    file3: brandData?.data?.favImageUrl || null,
+  };
 
   // Set initial values based on fetched brand data
   const initialValues = {
     titleText: brandData?.data?.titleText || "",
     footerText: brandData?.data?.footerText || "",
     language: brandData?.data?.language || "",
+    darkLogo: brandData?.data?.darkImageUrl || "",
+    lightLogo: brandData?.data?.lightImageUrl || "",
+    favLogo: brandData?.data?.favImageUrl || "",
   };
 
+  const [selectedFiles, setSelectedFiles] = useState({});
+
+  if (isLoading && !isError) return "Loading...";
   // Handle file changes
-  const handleFileChange = (event, fileKey) => {
+  const handleFileChange = (event, fileKey, setFieldValue) => {
     setSelectedFiles((prevState) => ({
       ...prevState,
       [fileKey]: event.target.files[0],
     }));
+
+    setFieldValue(fileKey, event.target.files[0]);
   };
 
   // Handle form submission
   const handleSubmit = async (values) => {
     const formData = new FormData();
 
+    let modifyData = modifyPayload({
+      ...values,
+      company_id: companyData?.data?.id,
+      companyName: companyData?.data?.company_name,
+    });
+
+    // console.log(modifyData);
+
     // Append form fields
-    formData.append("titleText", values.titleText);
-    formData.append("footerText", values.footerText);
-    formData.append("language", values.language);
+    // formData.append("titleText", values.titleText);
+    // formData.append("footerText", values.footerText);
+    // formData.append("language", values.language);
+    // formData.append("darkLogo", values.darkLogo);
+    // formData.append("lightLogo", values.lightLogo);
+    // formData.append("favLogo", values.favLogo);
     formData.append("companyName", companyData?.data?.company_name);
     formData.append("company_id", companyData?.data?.id);
 
     // Append files
-    Object.keys(selectedFiles).forEach((key) => {
-      if (selectedFiles[key]) {
-        formData.append(key, selectedFiles[key]);
+    Object.keys(values).forEach((key) => {
+      if (values[key]) {
+        formData.append(key, values[key]);
       }
     });
 
@@ -100,7 +119,7 @@ const BrandCard = () => {
       onSubmit={handleSubmit}
       enableReinitialize // This allows Formik to reinitialize when initialValues change
     >
-      {() => (
+      {({ setFieldValue }) => (
         <Form>
           <BrandCardWrapper>
             <SettingCardHeader
@@ -111,24 +130,34 @@ const BrandCard = () => {
               <div className="px-6 py-3 flex justify-between ">
                 <LogoUploadCard
                   title="Logo Dark"
-                  handleFileChange={(event) => handleFileChange(event, "file1")}
+                  handleFileChange={(event) =>
+                    handleFileChange(event, "darkLogo", setFieldValue)
+                  }
                   selectedFile={selectedFiles.file1}
-                  LogoImg={brandData?.data?.darkImageUrl || LogoImg} // Use selected file or default logo image
-                  name="file1"
+                  name="darkLogo"
                 />
                 <LogoUploadCard
                   title="Logo Light"
-                  handleFileChange={(event) => handleFileChange(event, "file2")}
+                  handleFileChange={(event) =>
+                    handleFileChange(event, "lightLogo", setFieldValue)
+                  }
                   selectedFile={selectedFiles.file2}
-                  LogoImg={brandData?.data?.lightImageUrl || LogoImg}
-                  name="file2"
+                  name="lightLogo"
                 />
                 <LogoUploadCard
                   title="Favicon"
-                  handleFileChange={(event) => handleFileChange(event, "file3")}
+                  handleFileChange={(event) =>
+                    handleFileChange(event, "favLogo", setFieldValue)
+                  }
                   selectedFile={selectedFiles.file3}
-                  LogoImg={brandData?.data?.favImageUrl || LogoImg}
-                  name="file3"
+                  name="favLogo"
+                />
+                <input
+                  type="file"
+                  name="filecheck"
+                  onChange={(event) =>
+                    handleFileChange(event, "filecheck", setFieldValue)
+                  }
                 />
               </div>
               {formFields.map((row, rowIndex) => (

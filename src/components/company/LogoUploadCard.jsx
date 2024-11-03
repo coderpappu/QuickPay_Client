@@ -1,12 +1,7 @@
 import React from "react";
+import LogoImg from "../../assets/quickPayLogo.png";
 
-const LogoUploadCard = ({
-  title,
-  handleFileChange,
-  selectedFile,
-  LogoImg,
-  name,
-}) => {
+const LogoUploadCard = ({ title, handleFileChange, selectedFile, name }) => {
   return (
     <div className="w-[30%] h-auto bg-white shadow-sm border border-dark-box border-opacity-5 dark:bg-dark-box rounded-md py-2">
       <div className="border-b border-dark-card border-opacity-10 dark:border-opacity-35 dark:text-dark-text-color px-4 py-4">
