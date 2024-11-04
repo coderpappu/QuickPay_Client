@@ -1,23 +1,21 @@
+import { ErrorMessage, Form, Formik } from "formik";
 import React from "react";
-import { useState } from "react";
-import SettingCardHeader from "./SettingCardHeader";
-import SettingCardFooter from "./SettingCardFooter";
-import LogoUploadCard from "./LogoUploadCard";
-import BrandInput, { InputBox, SelectOptionBox } from "./BrandInput";
-import LogoImg from "../../assets/quickPayLogo.png";
-import BrandCardWrapper from "./BrandCardWrapper";
-import SelectorInput from "./SelectorInput";
-import InputTitle from "./InputTitle";
 import * as Yup from "yup";
-
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import {
+  useCreateCurrencySettingMutation,
+  useGetCompanyIdQuery,
+} from "../../features/api";
+import BrandCardWrapper from "./BrandCardWrapper";
+import { InputBox, SelectOptionBox } from "./BrandInput";
+import InputTitle from "./InputTitle";
 import RadioInput from "./RadioInput";
+import SettingCardFooter from "./SettingCardFooter";
+import SettingCardHeader from "./SettingCardHeader";
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
   currency: Yup.string().required("Currency is required"),
   currency_symbol: Yup.string().required("Currency symbol is required"),
-  language: Yup.string().required("Language is required"),
 });
 
 const formFields = [
@@ -70,6 +68,10 @@ const formFields = [
 ];
 
 const CurrencyCard = () => {
+  const { data: companyId } = useGetCompanyIdQuery();
+
+  const [createCurrencySetting] = useCreateCurrencySettingMutation();
+
   const initialValues = {
     currency: "", // Initial value for the currency field
     currency_symbol: "", // Initial value for the currency symbol field
@@ -87,8 +89,8 @@ const CurrencyCard = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values) => {
-        console.log("Form Values: ", values);
+      onSubmit={async (values) => {
+        await createCurrencySetting({ ...values, companyId });
       }}
     >
       {() => (
@@ -113,7 +115,7 @@ const CurrencyCard = () => {
                         <InputTitle title={title} />
                         {type == "list" ? (
                           <>
-                            <SelectOptionBox values={list} />
+                            <SelectOptionBox values={list} name={name} />
                           </>
                         ) : (
                           <>

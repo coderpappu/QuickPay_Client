@@ -1005,6 +1005,16 @@ export const apiSlice = createApi({
 
       providesTags: ["systemSettings"],
     }),
+
+    // currency setting route
+    createCurrencySetting: builder.mutation({
+      query: (credentials) => ({
+        url: "/systemSettings/create/currencysettings",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["currency"],
+    }),
   }),
 });
 
@@ -1175,4 +1185,10 @@ export const {
   // useGetSystemSettingsQuery,
   // useUpdateSystemSettingsMutation,
   // useDeleteSystemSettingsMutation,
+
+  // currency setting route
+  useCreateCurrencySettingMutation,
+  // useGetCurrencySettingQuery,
+  // useUpdateCurrencySettingMutation,
+  // useDeleteCurrencySettingMutation,
 } = apiSlice;
