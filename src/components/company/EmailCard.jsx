@@ -1,23 +1,19 @@
+import { ErrorMessage, Form, Formik } from "formik";
 import React from "react";
-import { useState } from "react";
-import SettingCardHeader from "./SettingCardHeader";
-import SettingCardFooter from "./SettingCardFooter";
-import LogoUploadCard from "./LogoUploadCard";
-import BrandInput, { InputBox, SelectOptionBox } from "./BrandInput";
-import LogoImg from "../../assets/quickPayLogo.png";
-import BrandCardWrapper from "./BrandCardWrapper";
-import SelectorInput from "./SelectorInput";
-import InputTitle from "./InputTitle";
+import { toast } from "react-hot-toast";
 import * as Yup from "yup";
-
-import { Formik, Field, Form, ErrorMessage } from "formik";
-import RadioInput from "./RadioInput";
+import {
+  useCreateEmailSettingMutation,
+  useGetCompanyIdQuery,
+} from "../../features/api";
+import BrandCardWrapper from "./BrandCardWrapper";
+import { InputBox, SelectOptionBox } from "./BrandInput";
+import InputTitle from "./InputTitle";
+import SettingCardFooter from "./SettingCardFooter";
+import SettingCardHeader from "./SettingCardHeader";
 
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
-  currency: Yup.string().required("Currency is required"),
-  currency_symbol: Yup.string().required("Currency symbol is required"),
-  language: Yup.string().required("Language is required"),
   driver: Yup.string().required("Mail Driver is required"),
   host: Yup.string().required("Host is required"),
   port: Yup.string().required("Mail Port is required"),
@@ -25,7 +21,7 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required("Mail Password is required"),
   encryption: Yup.string().required("Mail Encryption is required"),
   address: Yup.string().required("Mail from Address is required"),
-  from_name: Yup.string().required("Mail From Name is required"),
+  fromName: Yup.string().required("Mail From Name is required"),
 });
 
 const formFields = [
@@ -78,7 +74,7 @@ const formFields = [
       type: "text",
     },
     {
-      name: "from_name",
+      name: "fromName",
       title: "Mail From Name",
       placeholder: "Enter mail from name",
       type: "text",
@@ -87,6 +83,9 @@ const formFields = [
 ];
 
 const EmailCard = () => {
+  const { data: company_id } = useGetCompanyIdQuery();
+  const [createEmailSettings] = useCreateEmailSettingMutation();
+
   const initialValues = {
     driver: "",
     host: "",
@@ -95,15 +94,23 @@ const EmailCard = () => {
     password: "",
     encryption: "",
     address: "",
-    from_name: "",
+    fromName: "",
   };
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values) => {
-        console.log("Form Values: ", values);
+      onSubmit={async (values) => {
+        try {
+          const emailSetting = await createEmailSettings({
+            ...values,
+            company_id,
+          });
+          toast.success(emailSetting?.data?.message);
+        } catch (error) {
+          toast.error(error.message);
+        }
       }}
     >
       {() => (

@@ -1023,6 +1023,16 @@ export const apiSlice = createApi({
       }),
       providesTags: ["currency"],
     }),
+
+    // email setting route
+    createEmailSetting: builder.mutation({
+      query: (credentials) => ({
+        url: "/systemSettings/create/emailsettings",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["emailSetting"],
+    }),
   }),
 });
 
@@ -1199,4 +1209,8 @@ export const {
   useGetCurrencySettingQuery,
   // useUpdateCurrencySettingMutation,
   // useDeleteCurrencySettingMutation,
+
+  // email setting route
+  useCreateEmailSettingMutation,
+  // useGetEmailSettingQuery,
 } = apiSlice;
