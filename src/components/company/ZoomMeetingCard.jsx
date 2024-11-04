@@ -4,6 +4,7 @@ import * as Yup from "yup"; // Import Yup for validation
 import {
   useCreateZoomSettingMutation,
   useGetCompanyIdQuery,
+  useGetZoomSettingQuery,
 } from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox } from "./BrandInput";
@@ -15,11 +16,19 @@ const ZoomMeetingCard = () => {
   const [createZoomSetting] = useCreateZoomSettingMutation();
   const { data: company_id } = useGetCompanyIdQuery();
 
+  const {
+    data: zoomSettings,
+    isLoading,
+    isError,
+  } = useGetZoomSettingQuery(company_id);
+
+  if (isLoading && !isError) return <div>Loading...</div>;
+
   // Initial form values
   const initialValues = {
-    zoom_id: "",
-    client_id: "",
-    secret_key: "",
+    zoom_id: zoomSettings?.data?.zoom_id || "",
+    client_id: zoomSettings?.data?.client_id || "",
+    secret_key: zoomSettings?.data?.secret_key || "",
   };
 
   // Validation schema

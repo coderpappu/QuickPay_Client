@@ -1069,6 +1069,14 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["zoomSetting"],
     }),
+
+    getZoomSetting: builder.query({
+      query: (companyId) => ({
+        url: `/systemSettings/getzoomsettings`,
+        params: { companyId },
+      }),
+      providesTags: ["zoomSetting"],
+    }),
   }),
 });
 
@@ -1256,7 +1264,5 @@ export const {
 
   // zoom setting route
   useCreateZoomSettingMutation,
-  // useGetZoomSettingQuery,
-  // useUpdateZoomSettingMutation,
-  // useDeleteZoomSettingMutation,
+  useGetZoomSettingQuery,
 } = apiSlice;
