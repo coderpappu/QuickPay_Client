@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import {
   useCreateEmailSettingMutation,
   useGetCompanyIdQuery,
+  useGetEmailSettingQuery,
 } from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox, SelectOptionBox } from "./BrandInput";
@@ -85,16 +86,23 @@ const formFields = [
 const EmailCard = () => {
   const { data: company_id } = useGetCompanyIdQuery();
   const [createEmailSettings] = useCreateEmailSettingMutation();
+  const {
+    data: emailSettings,
+    isLoading,
+    isError,
+  } = useGetEmailSettingQuery(company_id);
+
+  if (isLoading && !isError) return <div>Loading...</div>;
 
   const initialValues = {
-    driver: "",
-    host: "",
-    port: "",
-    username: "",
-    password: "",
-    encryption: "",
-    address: "",
-    fromName: "",
+    driver: emailSettings?.data?.driver || "",
+    host: emailSettings?.data?.host || "",
+    port: emailSettings?.data?.port || "",
+    username: emailSettings?.data?.username || "",
+    password: emailSettings?.data?.password || "",
+    encryption: emailSettings?.data?.encryption || "",
+    address: emailSettings?.data?.address || "",
+    fromName: emailSettings?.data?.fromName || "",
   };
 
   return (

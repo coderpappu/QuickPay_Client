@@ -1033,6 +1033,14 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["emailSetting"],
     }),
+
+    getEmailSetting: builder.query({
+      query: (companyId) => ({
+        url: `/systemSettings/getemailsettings`,
+        params: { companyId },
+      }),
+      providesTags: ["emailSetting"],
+    }),
   }),
 });
 
@@ -1212,5 +1220,5 @@ export const {
 
   // email setting route
   useCreateEmailSettingMutation,
-  // useGetEmailSettingQuery,
+  useGetEmailSettingQuery,
 } = apiSlice;
