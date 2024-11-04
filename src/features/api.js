@@ -1059,6 +1059,16 @@ export const apiSlice = createApi({
       }),
       providesTags: ["paymentSetting"],
     }),
+
+    // zoom setting route
+    createZoomSetting: builder.mutation({
+      query: (credentials) => ({
+        url: "/systemSettings/create/zoomsettings",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["zoomSetting"],
+    }),
   }),
 });
 
@@ -1243,4 +1253,10 @@ export const {
   // payment Setting routes
   useCreatePaymentSettingsMutation,
   useGetPaymentSettingsQuery,
+
+  // zoom setting route
+  useCreateZoomSettingMutation,
+  // useGetZoomSettingQuery,
+  // useUpdateZoomSettingMutation,
+  // useDeleteZoomSettingMutation,
 } = apiSlice;
