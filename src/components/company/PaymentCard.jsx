@@ -3,6 +3,10 @@ import { ArrowRight } from "lucide-react";
 import React from "react";
 import * as Yup from "yup";
 import {
+  useCreatePaymentSettingsMutation,
+  useGetCompanyIdQuery,
+} from "../../features/api";
+import {
   Accordion,
   AccordionHeader,
   AccordionItem,
@@ -18,7 +22,7 @@ import SettingCardHeader from "./SettingCardHeader";
 const validationSchema = Yup.object().shape({
   bankDetails: Yup.string().required("Bank details are required"),
   stripeKey: Yup.string().required("Stripe Key is required"),
-  stripeSecret: Yup.string().required("Stripe Secret is required"),
+  stripeSecretKey: Yup.string().required("Stripe Secret is required"),
   paypalMode: Yup.string().required("Please select Paypal Mode"),
   paypalClientId: Yup.string().required("Client ID is required"),
   paypalSecretKey: Yup.string().required("Secret Key is required"),
@@ -27,16 +31,21 @@ const validationSchema = Yup.object().shape({
 const initialValues = {
   bankDetails: "",
   stripeKey: "",
-  stripeSecret: "",
+  stripeSecretKey: "",
   paypalMode: "",
   paypalClientId: "",
   paypalSecretKey: "",
 };
 
 const PaymentCard = () => {
+  const { data: companyId } = useGetCompanyIdQuery();
+
+  const [paymentSettings] = useCreatePaymentSettingsMutation();
+
   const handleSubmit = async (values) => {
     // Handle form submission, e.g., by sending data to your API
     console.log("Form Data:", values);
+    await paymentSettings({ ...values, company_id: companyId });
   };
 
   return (
@@ -107,12 +116,12 @@ const PaymentCard = () => {
                       <div className="w-[48%]">
                         <PaymentInput
                           title="Stripe Secret"
-                          name="stripeSecret"
+                          name="stripeSecretKey"
                           placeholder="Enter stripe secret"
                           component={Field}
                         />
                         <ErrorMessage
-                          name="stripeSecret"
+                          name="stripeSecretKey"
                           component="div"
                           className="text-red-500 text-xs"
                         />
@@ -134,14 +143,14 @@ const PaymentCard = () => {
                         title="Sandbox"
                         name="paypalMode"
                         type="radio"
-                        value="sandbox"
+                        value="Sandbox"
                         onClick={() => setFieldValue("paypalMode", "sandbox")}
                       />
                       <RadioInput
                         title="Live"
                         name="paypalMode"
                         type="radio"
-                        value="live"
+                        value="Live"
                         onClick={() => setFieldValue("paypalMode", "live")}
                       />
                       <ErrorMessage

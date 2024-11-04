@@ -1041,6 +1041,16 @@ export const apiSlice = createApi({
       }),
       providesTags: ["emailSetting"],
     }),
+
+    // payment setting route
+    createPaymentSettings: builder.mutation({
+      query: (credentials) => ({
+        url: "/systemSettings/create/paymentsettings",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["paymentSetting"],
+    }),
   }),
 });
 
@@ -1221,4 +1231,8 @@ export const {
   // email setting route
   useCreateEmailSettingMutation,
   useGetEmailSettingQuery,
+
+  // payment Setting routes
+  useCreatePaymentSettingsMutation,
+  // useGetPaymentSettingsQuery,
 } = apiSlice;
