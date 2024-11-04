@@ -1051,6 +1051,14 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["paymentSetting"],
     }),
+
+    getPaymentSettings: builder.query({
+      query: (companyId) => ({
+        url: `/systemSettings/getpaymentsettings`,
+        params: { companyId },
+      }),
+      providesTags: ["paymentSetting"],
+    }),
   }),
 });
 
@@ -1234,5 +1242,5 @@ export const {
 
   // payment Setting routes
   useCreatePaymentSettingsMutation,
-  // useGetPaymentSettingsQuery,
+  useGetPaymentSettingsQuery,
 } = apiSlice;

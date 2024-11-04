@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import {
   useCreatePaymentSettingsMutation,
   useGetCompanyIdQuery,
+  useGetPaymentSettingsQuery,
 } from "../../features/api";
 import {
   Accordion,
@@ -28,23 +29,25 @@ const validationSchema = Yup.object().shape({
   paypalSecretKey: Yup.string().required("Secret Key is required"),
 });
 
-const initialValues = {
-  bankDetails: "",
-  stripeKey: "",
-  stripeSecretKey: "",
-  paypalMode: "",
-  paypalClientId: "",
-  paypalSecretKey: "",
-};
-
 const PaymentCard = () => {
   const { data: companyId } = useGetCompanyIdQuery();
 
   const [paymentSettings] = useCreatePaymentSettingsMutation();
+  const { data: paymentSettingsData, isLoading } =
+    useGetPaymentSettingsQuery(companyId);
+
+  if (isLoading) return <p>Loading...</p>;
+
+  const initialValues = {
+    bankDetails: paymentSettingsData?.data?.bankDetails || "",
+    stripeKey: paymentSettingsData?.data?.stripeKey || "",
+    stripeSecretKey: paymentSettingsData?.data?.stripeSecretKey || "",
+    paypalMode: paymentSettingsData?.data?.paypalMode || "",
+    paypalClientId: paymentSettingsData?.data?.paypalClientId || "",
+    paypalSecretKey: paymentSettingsData?.data?.paypalSecretKey || "",
+  };
 
   const handleSubmit = async (values) => {
-    // Handle form submission, e.g., by sending data to your API
-    console.log("Form Data:", values);
     await paymentSettings({ ...values, company_id: companyId });
   };
 

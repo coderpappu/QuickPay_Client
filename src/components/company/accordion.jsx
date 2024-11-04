@@ -1,7 +1,7 @@
 // @ts-nocheck
-import React, { ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import React from "react";
 import { cn } from "../../utils/uiSetup";
 
 const AccordionContext = React.createContext({});
@@ -68,51 +68,53 @@ export function AccordionItem({ children, value }) {
     </div>
   );
 }
-
-export function AccordionHeader({ children, icon }) {
+export function AccordionHeader({ children, icon, isEnabled, onToggle }) {
   const { isActive, value, onChangeIndex } = useAccordion();
 
   return (
     <motion.div
-      className={`p-4 cursor-pointer transition-all font-medium  text-sm  dark:text-white text-black dark:bg-dark-box   dark:hover:text-white hover:text-black flex justify-between items-center ${
-        isActive ? "active   bg-[#fff] " : "dark:bg-[#11112b] "
-      }
-      `}
+      className={`p-4 cursor-pointer transition-all font-medium text-sm dark:text-white text-black dark:bg-dark-box dark:hover:text-white hover:text-black flex justify-between items-center ${
+        isActive ? "active bg-[#fff]" : "dark:bg-[#11112b]"
+      }`}
       onClick={() => onChangeIndex(value)}
     >
       {children}
 
       <div className="flex gap-3 items-center">
-        <label className="inline-flex items-center  cursor-pointer">
+        <label className="inline-flex items-center cursor-pointer">
           <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300 mr-2 items-center">
             Enable
           </span>
 
-          <input type="checkbox" value="" className="sr-only peer" />
+          <input
+            type="checkbox"
+            className="sr-only peer"
+            checked={isEnabled}
+            onClick={() => {
+              onToggle(!isEnabled); // Toggle the value
+            }}
+          />
           <div className="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
         </label>
         {icon ? (
           <div
             className={`${
-              isActive ? "rotate-90 " : "rotate-0 "
+              isActive ? "rotate-90" : "rotate-0"
             } transition-transform bg-white p-1 rounded-full`}
           >
             {icon}
           </div>
         ) : (
-          (<>
-            <ChevronDown
-              className={`${
-                isActive ? "rotate-180 " : "rotate-0 "
-              } transition-transform`}
-            />
-          </>)()
+          <ChevronDown
+            className={`${
+              isActive ? "rotate-180" : "rotate-0"
+            } transition-transform`}
+          />
         )}
       </div>
     </motion.div>
   );
 }
-
 export function AccordionPanel({ children }) {
   const { isActive } = useAccordion();
 
