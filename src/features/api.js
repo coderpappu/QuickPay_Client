@@ -1015,6 +1015,14 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["currency"],
     }),
+
+    getCurrencySetting: builder.query({
+      query: (companyId) => ({
+        url: `/systemSettings/getcurrencysettings`,
+        params: { companyId },
+      }),
+      providesTags: ["currency"],
+    }),
   }),
 });
 
@@ -1188,7 +1196,7 @@ export const {
 
   // currency setting route
   useCreateCurrencySettingMutation,
-  // useGetCurrencySettingQuery,
+  useGetCurrencySettingQuery,
   // useUpdateCurrencySettingMutation,
   // useDeleteCurrencySettingMutation,
 } = apiSlice;

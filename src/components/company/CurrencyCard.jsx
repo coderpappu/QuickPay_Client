@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import {
   useCreateCurrencySettingMutation,
   useGetCompanyIdQuery,
+  useGetCurrencySettingQuery,
 } from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox, SelectOptionBox } from "./BrandInput";
@@ -71,18 +72,28 @@ const CurrencyCard = () => {
   const { data: companyId } = useGetCompanyIdQuery();
 
   const [createCurrencySetting] = useCreateCurrencySettingMutation();
+  const {
+    data: currencySettingData,
+    isLoading,
+    isError,
+  } = useGetCurrencySettingQuery(companyId);
+
+  if (isLoading && !isError) return <div>Loading...</div>;
 
   const initialValues = {
-    currency: "", // Initial value for the currency field
-    currency_symbol: "", // Initial value for the currency symbol field
-    number_format: "", // Initial value for the number format field
-    float_number: "", // Initial value for the float number field
-    decimal_separator: "", // Initial value for the decimal separator field
-    thousands_separator: "", // Initial value for the thousands separator field
-    // Radio button states
-    currencySymbolPosition: "Pre", // Default to "Pre"
-    currencySymbolSpace: "With Space", // Default to "With Space"
-    currencySymbolAndName: "With Currency Symbol", // Default to "With Currency Symbol"
+    currency: currencySettingData?.data?.currency || "",
+    currency_symbol: currencySettingData?.data?.symbol || "",
+    number_format: currencySettingData?.data?.decimal_format || "",
+    float_number: currencySettingData?.data?.float_format || "",
+    decimal_separator: currencySettingData?.data?.decimal_format || "",
+    thousands_separator: currencySettingData?.data?.thousand_separator || "",
+
+    currencySymbolPosition:
+      currencySettingData?.data?.currency_position || "Pre",
+    currencySymbolSpace:
+      currencySettingData?.data?.currency_space || "With Space",
+    currencySymbolAndName:
+      currencySettingData?.data?.currency_symbol_name || "With Currency Symbol",
   };
 
   return (
@@ -141,17 +152,33 @@ const CurrencyCard = () => {
                 <div className="w-[48%]  pr-44">
                   <InputTitle title={"Currency Symbol Position"} />
                   <div className="flex flex-wrap justify-between mt-2">
-                    <RadioInput title={"Pre"} />
+                    <RadioInput
+                      title={"Pre"}
+                      name={"currencySymbolPosition"}
+                      value="Pre"
+                    />
 
-                    <RadioInput title={"Post"} />
+                    <RadioInput
+                      title={"Post"}
+                      name={"currencySymbolPosition"}
+                      value="Post"
+                    />
                   </div>
                 </div>
 
                 <div className="w-[48%]  pr-44">
                   <InputTitle title={"Currency Symbol Space"} />
                   <div className="flex flex-wrap justify-between mt-2">
-                    <RadioInput title={"With Space"} />
-                    <RadioInput title={"Without space"} />
+                    <RadioInput
+                      title={"With Space"}
+                      name={"currencySymbolSpace"}
+                      value="With Space"
+                    />
+                    <RadioInput
+                      title={"Without space"}
+                      value={"Without space"}
+                      name={"currencySymbolSpace"}
+                    />
                   </div>
                 </div>
               </div>
@@ -160,8 +187,16 @@ const CurrencyCard = () => {
                 <div className="w-[48%]  pr-14">
                   <InputTitle title={"Currency Symbol & Name"} />
                   <div className="flex flex-wrap justify-between mt-2">
-                    <RadioInput title={"With Currency Symbol"} />
-                    <RadioInput title={" With Currency Name"} />
+                    <RadioInput
+                      title={"With Currency Symbol"}
+                      value={"With Currency Symbol"}
+                      name={"currencySymbolAndName"}
+                    />
+                    <RadioInput
+                      title={" With Currency Name"}
+                      value={" With Currency Name"}
+                      name={"currencySymbolAndName"}
+                    />
                   </div>
                 </div>
                 <div className="w-[48%]">
