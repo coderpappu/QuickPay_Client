@@ -5,7 +5,6 @@ import LoginForm from "../../components/LoginForm";
 import Logo from "../../components/Logo";
 import {
   useLoginEmployeeMutation,
-  useLoginUserMutation,
   useSetCompanyIdMutation,
 } from "../../features/api";
 
@@ -21,10 +20,10 @@ const LoginEmployee = () => {
       if (!data) {
         toast.error("Email or password is incorrect!");
       }
-      
+
       setCompanyId(data?.data?.user?.company_id);
 
-      localStorage.setItem("token", data?.data?.accessToken); 
+      localStorage.setItem("token", data?.data?.accessToken);
       navigate("/");
     } catch (error) {
       toast.error(error.message);

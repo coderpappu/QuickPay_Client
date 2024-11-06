@@ -7,6 +7,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as React from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
+
 import {
   useCreateNewEmployeeMutation,
   useGetCompanyIdQuery,
@@ -17,11 +18,11 @@ import {
   useGetShiftListQuery,
   useUpdateEmployeeMutation,
 } from "../../features/api";
-import EmployeeSchema from "./EmployeeSchema";
 
 import Box from "@mui/material/Box";
 import { useState } from "react";
 import UploadForm from "../../helpers/UploadForm";
+import EmployeeSchema from "./EmployeeSchema";
 
 const steps = [
   "Personal Information",
@@ -32,11 +33,11 @@ const steps = [
 ];
 
 const EmployeeRegistrationForm = () => {
+  
   const { id } = useParams();
   const { data: CompanyId } = useGetCompanyIdQuery();
   const navigate = useNavigate();
   const [step, setStep] = useState(1); // State to track current step
-
   const { data: departments } = useGetDepartmentsQuery(CompanyId);
   const { data: designations } = useGetDesignationsQuery(CompanyId);
   const { data: sections } = useGetSectionsQuery(CompanyId);
@@ -168,7 +169,7 @@ const EmployeeRegistrationForm = () => {
                 employeeShiftId:
                   employeeData?.data?.[0]?.EmployeeShift?.[0]?.id,
 
-                fingerprint_id: "5211a050-2537-43eb-bcc1-337cc9bd0cc8",
+                fingerprint_id: "1c37c5e4-7f40-4520-82b5-5fae3a973b74",
               }).unwrap();
               toast.success("Employee updated successfully");
             } else {
@@ -177,7 +178,7 @@ const EmployeeRegistrationForm = () => {
               await createEmployee({
                 ...values,
                 image: imageUrl,
-                fingerprint_id: "5211a050-2537-43eb-bcc1-337cc9bd0cc8",
+                fingerprint_id: "1c37c5e4-7f40-4520-82b5-5fae3a973b74",
               }).unwrap();
 
               toast.success("Employee registered successfully");

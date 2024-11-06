@@ -6,7 +6,6 @@ import Logo from "../../components/Logo";
 import { useLoginUserMutation } from "../../features/api";
 
 const LoginPage = () => {
-
   const navigate = useNavigate();
   const [login, { error, isLoading }] = useLoginUserMutation();
 
@@ -25,7 +24,7 @@ const LoginPage = () => {
       toast.error(error.message);
     }
   };
-  
+
   return (
     <div className="w-full h-screen bg-[#FCFCFC]">
       <div className="xl:wrapper-container">
