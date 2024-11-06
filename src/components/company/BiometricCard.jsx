@@ -1,9 +1,10 @@
-import { ErrorMessage, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import React from "react";
 import { toast } from "react-hot-toast";
 import * as Yup from "yup";
 import {
   useCreateBiometricSettingMutation,
+  useGetBiometricSettingQuery,
   useGetCompanyIdQuery,
 } from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
@@ -17,12 +18,22 @@ const BiometricCard = () => {
 
   const [createBiometricSettings] = useCreateBiometricSettingMutation();
 
+  const {
+    data: biometricSettings,
+    isLoading,
+    isError,
+  } = useGetBiometricSettingQuery(company_id);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
   // Initial values for the form fields
   const initialValues = {
-    url: "",
-    username: "",
-    password: "",
-    authToken: "", // optional field for auth token
+    url: biometricSettings?.data?.url || "",
+    username: biometricSettings?.data?.username || "",
+    password: biometricSettings?.data?.password || "",
+    authToken: biometricSettings?.data?.authToken || "", // optional field for auth token
   };
 
   // Validation schema
@@ -36,93 +47,92 @@ const BiometricCard = () => {
   });
 
   return (
-    <>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={async (values) => {
-          try {
-            let biometricSettings = await createBiometricSettings({
-              ...values,
-              company_id,
-            }).unwrap();
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={async (values) => {
+        try {
+          let biometricSettings = await createBiometricSettings({
+            ...values,
+            company_id,
+          }).unwrap();
 
-            toast.success(biometricSettings?.message);
-          } catch (error) {
-            toast.error(error.message);
-          }
-        }}
-      >
-        {() => (
-          <Form>
-            <BrandCardWrapper>
-              <SettingCardHeader
-                title="Biometric Settings"
-                subTitle="Edit your biometric settings"
-              />
-              <div className="px-6 py-3">
-                <div className="flex flex-wrap justify-between items-center">
-                  <div className="w-[50%] mb-4">
-                    <InputTitle title="ZKTeco Api URL" />
-                    <InputBox
-                      name="url"
-                      type="text"
-                      placeholder="ZKTeco Api URL"
-                    />
-                    <ErrorMessage
-                      name="url"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
-                  </div>
-                  <div className="w-[22%] mb-4">
-                    <InputTitle title="Username" />
-                    <InputBox
-                      name="username"
-                      type="text"
-                      placeholder="Username"
-                    />
-                    <ErrorMessage
-                      name="username"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
-                  </div>
-                  <div className="w-[22%] mb-4">
-                    <InputTitle title="Password" />
-                    <InputBox
-                      name="password"
-                      type="password"
-                      placeholder="Password"
-                    />
-                    <ErrorMessage
-                      name="password"
-                      component="div"
-                      className="text-red-500 text-sm mt-1"
-                    />
-                  </div>
-                </div>
-                <div className="w-[70%] my-3">
-                  <InputTitle title="Auth Token" />
-                  <textarea
-                    name="authToken"
-                    placeholder="Please provide the auth token"
-                    className="p-3 w-full bg-light-bg dark:bg-dark-box border-none outline-none rounded-md"
+          toast.success(biometricSettings?.message);
+        } catch (error) {
+          toast.error(error.message);
+        }
+      }}
+    >
+      {() => (
+        <Form>
+          <BrandCardWrapper>
+            <SettingCardHeader
+              title="Biometric Settings"
+              subTitle="Edit your biometric settings"
+            />
+            <div className="px-6 py-3">
+              <div className="flex flex-wrap justify-between items-center">
+                <div className="w-[50%] mb-4">
+                  <InputTitle title="ZKTeco Api URL" />
+                  <InputBox
+                    name="url"
+                    type="text"
+                    placeholder="ZKTeco Api URL"
                   />
                   <ErrorMessage
-                    name="authToken"
+                    name="url"
                     component="div"
                     className="text-red-500 text-sm mt-1"
                   />
                 </div>
-
-                <SettingCardFooter title="Save" />
+                <div className="w-[22%] mb-4">
+                  <InputTitle title="Username" />
+                  <InputBox
+                    name="username"
+                    type="text"
+                    placeholder="Username"
+                  />
+                  <ErrorMessage
+                    name="username"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+                <div className="w-[22%] mb-4">
+                  <InputTitle title="Password" />
+                  <InputBox
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
               </div>
-            </BrandCardWrapper>
-          </Form>
-        )}
-      </Formik>
-    </>
+              <div className="w-[70%] my-3">
+                <InputTitle title="Auth Token" />
+                <Field
+                  name="authToken"
+                  as="textarea"
+                  placeholder="Please provide the auth token"
+                  className="p-3 w-full dark:text-dark-text-color bg-light-bg dark:bg-dark-box border-none outline-none rounded-md"
+                />
+                <ErrorMessage
+                  name="authToken"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
+
+              <SettingCardFooter title="Save" />
+            </div>
+          </BrandCardWrapper>
+        </Form>
+      )}
+    </Formik>
   );
 };
 

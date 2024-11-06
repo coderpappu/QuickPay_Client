@@ -1105,6 +1105,14 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["biometricSetting"],
     }),
+
+    getBiometricSetting: builder.query({
+      query: (companyId) => ({
+        url: `/systemSettings/getbiometricsettings`,
+        params: { companyId },
+      }),
+      providesTags: ["biometricSetting"],
+    }),
   }),
 });
 
@@ -1300,4 +1308,5 @@ export const {
 
   // biometric settings route
   useCreateBiometricSettingMutation,
+  useGetBiometricSettingQuery,
 } = apiSlice;
