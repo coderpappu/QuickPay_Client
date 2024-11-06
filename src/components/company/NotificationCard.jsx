@@ -1,29 +1,58 @@
 import { Field, Form, Formik } from "formik";
 import React from "react";
+import { toast } from "react-hot-toast";
+import {
+  useCreateNotificationSettingMutation,
+  useGetCompanyIdQuery,
+  useGetNotificationSettingQuery,
+} from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
 import SettingCardFooter from "./SettingCardFooter";
 import SettingCardHeader from "./SettingCardHeader";
 import SwitchCard from "./SwitchCard";
 
 const NotificationCard = () => {
+  const { data: company_id } = useGetCompanyIdQuery();
+  const [createNotification] = useCreateNotificationSettingMutation();
+  const {
+    data: notificationSettings,
+    isLoading,
+    isError,
+  } = useGetNotificationSettingQuery(company_id);
+
+  if (isLoading && !isError) return "Loading.....";
+
   const initialValues = {
-    newUser: false,
-    newLeave: false,
-    complaintResent: false,
-    leaveActionSent: false,
-    payslipSent: false,
-    registrationSent: false,
-    terminationSent: false,
-    transferSent: false,
-    warningSent: false,
+    newUser: notificationSettings?.data?.newUser || false,
+    newLeave: notificationSettings?.data?.newLeave || false,
+    complaintResent: notificationSettings?.data?.complaintResent || false,
+    leaveActionSent: notificationSettings?.data?.leaveActionSent || false,
+    payslipSent: notificationSettings?.data?.payslipSent || false,
+    registrationSent: notificationSettings?.data?.registrationSent || false,
+    terminationSent: notificationSettings?.data?.terminationSent || false,
+    transferSent: notificationSettings?.data?.transferSent || false,
+    warningSent: notificationSettings?.data?.warningSent || false,
   };
 
-  const handleSubmit = (values) => {
-    console.log("Submitted values:", values);
+  const handleSubmit = async (values) => {
+    try {
+      const notificationSetting = await createNotification({
+        ...values,
+        company_id,
+      }).unwrap();
+
+      toast.success(notificationSetting?.message);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+    <Formik
+      initialValues={initialValues}
+      onSubmit={handleSubmit}
+      enableReinitialize
+    >
       {() => (
         <Form>
           <BrandCardWrapper>

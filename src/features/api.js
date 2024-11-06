@@ -1077,6 +1077,24 @@ export const apiSlice = createApi({
       }),
       providesTags: ["zoomSetting"],
     }),
+
+    // Notification Setting
+    createNotificationSetting: builder.mutation({
+      query: (credentials) => ({
+        url: "/systemSettings/create/notificationsettings",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["notificationSetting"],
+    }),
+
+    getNotificationSetting: builder.query({
+      query: (companyId) => ({
+        url: `/systemSettings/getnotificationsettings`,
+        params: { companyId },
+      }),
+      providesTags: ["notificationSetting"],
+    }),
   }),
 });
 
@@ -1265,4 +1283,8 @@ export const {
   // zoom setting route
   useCreateZoomSettingMutation,
   useGetZoomSettingQuery,
+
+  // notification settings route
+  useCreateNotificationSettingMutation,
+  useGetNotificationSettingQuery,
 } = apiSlice;
