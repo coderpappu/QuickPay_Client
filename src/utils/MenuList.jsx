@@ -1,12 +1,7 @@
-import { AiOutlineProduct, AiOutlineSetting } from "react-icons/ai";
-import { IoIosArrowForward } from "react-icons/io";
-import { PiDotDuotone } from "react-icons/pi";
-import { LuListTodo } from "react-icons/lu";
-import { LuUsers2 } from "react-icons/lu";
-import { TbMoneybag } from "react-icons/tb";
-import { BsJournalCheck } from "react-icons/bs";
-import { TbCards } from "react-icons/tb";
+import { AiOutlineSetting } from "react-icons/ai";
+import { LuListTodo, LuUsers2 } from "react-icons/lu";
 import { RxHome } from "react-icons/rx";
+import { TbCards, TbMoneybag } from "react-icons/tb";
 
 import { LuUser2 } from "react-icons/lu";
 const adminMenuItems = [
@@ -15,7 +10,7 @@ const adminMenuItems = [
     icon: <RxHome size={20} />,
     subMenu: [
       { title: "Overview", link: "/" },
-      { title: "Reports", link: "/company/loan/type" },
+      { title: "Reports", link: "company/settings" },
       { title: "Reports", link: "company/weekend/create" },
       { title: "Holiday Type", link: "/holiday/type/add" },
       { title: "Holiday Form", link: "/holidayform/" },
