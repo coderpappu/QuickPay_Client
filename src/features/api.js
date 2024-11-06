@@ -1095,6 +1095,16 @@ export const apiSlice = createApi({
       }),
       providesTags: ["notificationSetting"],
     }),
+
+    // biometric setting
+    createBiometricSetting: builder.mutation({
+      query: (credentials) => ({
+        url: "/systemSettings/create/biometricsettings",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["biometricSetting"],
+    }),
   }),
 });
 
@@ -1287,4 +1297,7 @@ export const {
   // notification settings route
   useCreateNotificationSettingMutation,
   useGetNotificationSettingQuery,
+
+  // biometric settings route
+  useCreateBiometricSettingMutation,
 } = apiSlice;

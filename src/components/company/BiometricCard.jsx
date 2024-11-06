@@ -1,6 +1,11 @@
 import { ErrorMessage, Form, Formik } from "formik";
 import React from "react";
+import { toast } from "react-hot-toast";
 import * as Yup from "yup";
+import {
+  useCreateBiometricSettingMutation,
+  useGetCompanyIdQuery,
+} from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox } from "./BrandInput";
 import InputTitle from "./InputTitle";
@@ -8,6 +13,10 @@ import SettingCardFooter from "./SettingCardFooter";
 import SettingCardHeader from "./SettingCardHeader";
 
 const BiometricCard = () => {
+  const { data: company_id } = useGetCompanyIdQuery();
+
+  const [createBiometricSettings] = useCreateBiometricSettingMutation();
+
   // Initial values for the form fields
   const initialValues = {
     url: "",
@@ -31,8 +40,17 @@ const BiometricCard = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log("Form Values: ", values);
+        onSubmit={async (values) => {
+          try {
+            let biometricSettings = await createBiometricSettings({
+              ...values,
+              company_id,
+            }).unwrap();
+
+            toast.success(biometricSettings?.message);
+          } catch (error) {
+            toast.error(error.message);
+          }
         }}
       >
         {() => (
