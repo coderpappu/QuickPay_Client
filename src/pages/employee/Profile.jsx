@@ -10,11 +10,11 @@ import {
   useGetUserQuery,
 } from "../../features/api";
 
+import { GrDownload } from "react-icons/gr";
 import AssetCard from "../../components/employee/AssetCard";
 import JobDetails from "../../components/employee/JobDetails";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import SalarySettingsForm from "./SalarySetting/SalarySetting";
-
 const Profile = () => {
   const id = useParams()?.id;
   const { data: employeeData } = useGetUserQuery();
@@ -38,7 +38,21 @@ const Profile = () => {
 
   return (
     <div>
-      <h2> Employee / Profile</h2>
+      <h2 className="text-red-600"> Employee / Profile</h2>
+      <div className="flex flex-wrap justify-end gap-2">
+        <div className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border dark:border-blue-500 dark:text-dark-text-color hover:bg-blue-500 w-fit flex justify-between items-center gap-3">
+          Joining Letter
+          <GrDownload size={15} />
+        </div>
+        <div className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border border-dark-border-color dark:border-blue-500 dark:text-dark-text-color hover:bg-blue-500 w-fit flex justify-between items-center gap-3">
+          Experience Certificate
+          <GrDownload size={15} />
+        </div>
+        <div className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border dark:border-blue-500 dark:text-dark-text-color hover:bg-blue-500 w-fit flex justify-between items-center gap-3">
+          NOC
+          <GrDownload size={15} />
+        </div>
+      </div>
       <div className="w-full p-5 mx-5 mt-5 mb-1 rounded-md bg-white dark:bg-dark-card flex flex-wrap justify-between ">
         <div className="flex flex-wrap justify-between items-center w-[50%]">
           <div className="w-[20%] mr-4">

@@ -1335,7 +1335,7 @@ export const {
   useCreateExperienceCertificateFormatMutation,
   useGetExperienceCertificateFormatQuery,
 
-  useCreateNocLetterFormatMutationQuery,
+  useCreateNocLetterFormatMutation,
   useGetNocLetterFormatQuery,
 
   // docs type Routes

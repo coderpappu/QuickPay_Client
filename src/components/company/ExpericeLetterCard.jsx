@@ -1,11 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
+import {
+  useCreateExperienceCertificateFormatMutation,
+  useGetCompanyIdQuery,
+} from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
 import SettingCardHeader from "./SettingCardHeader";
-import SettingCardFooter from "./SettingCardFooter";
 import TextBoxLetter from "./TextBoxLetter";
 import TextEditor from "./TextEditor";
 
 const ExperienceLetterCard = () => {
+  const [editorState, setEditorState] = useState(null); // Store the editor's state
+  const [isSaving, setIsSaving] = useState(false); // Track saving status
+  const [error, setError] = useState(null); // Store potential errors
+  const { data: company_id } = useGetCompanyIdQuery();
+
+  const [editorData, setEditorData] = useState(null); // Store the editor's state data
+  const [createExperienceCertificate] =
+    useCreateExperienceCertificateFormatMutation();
+
+  // Define handleEditorData as a function that accepts editor state data
+  const handleEditorData = (data) => {
+    // Set the received data from the editor
+    createExperienceCertificate({ formatData: data, company_id });
+    setEditorData(data);
+  };
+
   return (
     <>
       <BrandCardWrapper>
@@ -32,10 +51,8 @@ const ExperienceLetterCard = () => {
               <TextBoxLetter title="End Time" varName="end_time" />
             </div>
           </div>
-
-          <TextEditor />
+          <TextEditor checkSave={handleEditorData} />
         </div>
-        <SettingCardFooter title="Update" />
       </BrandCardWrapper>
     </>
   );

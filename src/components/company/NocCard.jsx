@@ -1,11 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
+import {
+  useCreateNocLetterFormatMutation,
+  useGetCompanyIdQuery,
+} from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
 import SettingCardHeader from "./SettingCardHeader";
-import SettingCardFooter from "./SettingCardFooter";
 import TextBoxLetter from "./TextBoxLetter";
 import TextEditor from "./TextEditor";
 
 const NocCard = () => {
+  const [editorState, setEditorState] = useState(null); // Store the editor's state
+  const [isSaving, setIsSaving] = useState(false); // Track saving status
+  const [error, setError] = useState(null); // Store potential errors
+  const { data: company_id } = useGetCompanyIdQuery();
+
+  const [editorData, setEditorData] = useState(null); // Store the editor's state data
+  const [createNocLetter] = useCreateNocLetterFormatMutation();
+
+  // Define handleEditorData as a function that accepts editor state data
+  const handleEditorData = (data) => {
+    // Set the received data from the editor
+    createNocLetter({ formatData: data, company_id });
+    setEditorData(data);
+  };
   return (
     <>
       <BrandCardWrapper>
@@ -24,9 +41,8 @@ const NocCard = () => {
             <TextBoxLetter title="Designation" varName="designation" />
           </div>
 
-          <TextEditor />
+          <TextEditor checkSave={handleEditorData} />
         </div>
-        <SettingCardFooter title="Update" />
       </BrandCardWrapper>
     </>
   );
