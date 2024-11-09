@@ -1,13 +1,11 @@
-import { createPortal } from "react-dom";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  List,
-  Input,
   Button,
-  ListItem,
   IconButton,
-  Typography,
+  Input,
+  List,
+  ListItem,
   ListItemPrefix,
+  Typography,
 } from "@material-tailwind/react";
 import {
   $createParagraphNode,
@@ -15,49 +13,53 @@ import {
   $getSelection,
   $isRangeSelection,
 } from "lexical";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 // lexical
 import {
-  $getNodeByKey,
-  FORMAT_TEXT_COMMAND,
-  SELECTION_CHANGE_COMMAND,
-  $createTextNode,
-} from "lexical";
-import {
-  $isListNode,
-  REMOVE_LIST_COMMAND,
-  INSERT_ORDERED_LIST_COMMAND,
-  INSERT_UNORDERED_LIST_COMMAND,
-} from "@lexical/list";
-import {
-  QuoteNode,
-  HeadingNode,
-  $isHeadingNode,
-  $createQuoteNode,
-  $createHeadingNode,
-} from "@lexical/rich-text";
-import {
-  $isCodeNode,
   $createCodeNode,
+  $isCodeNode,
+  CodeHighlightNode,
+  CodeNode,
   getCodeLanguages,
   getDefaultCodeLanguage,
 } from "@lexical/code";
-import { ListItemNode, ListNode } from "@lexical/list";
 import {
+  $isLinkNode,
   AutoLinkNode,
   LinkNode,
-  $isLinkNode,
   TOGGLE_LINK_COMMAND,
 } from "@lexical/link";
-import { CodeHighlightNode, CodeNode } from "@lexical/code";
+import {
+  $isListNode,
+  INSERT_ORDERED_LIST_COMMAND,
+  INSERT_UNORDERED_LIST_COMMAND,
+  ListItemNode,
+  ListNode,
+  REMOVE_LIST_COMMAND,
+} from "@lexical/list";
+import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
+import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
-import { $wrapNodes, $isAtNodeEnd } from "@lexical/selection";
-import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
-import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
-import { ContentEditable } from "@lexical/react/LexicalContentEditable";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import {
+  $createHeadingNode,
+  $createQuoteNode,
+  $isHeadingNode,
+  HeadingNode,
+  QuoteNode,
+} from "@lexical/rich-text";
+import { $isAtNodeEnd, $wrapNodes } from "@lexical/selection";
+import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
+import {
+  $createTextNode,
+  $getNodeByKey,
+  FORMAT_TEXT_COMMAND,
+  SELECTION_CHANGE_COMMAND,
+} from "lexical";
 import SettingCardFooter from "./SettingCardFooter";
 
 const LowPriority = 1;

@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import BrandCardWrapper from "./BrandCardWrapper";
-import SettingCardHeader from "./SettingCardHeader";
-import SettingCardFooter from "./SettingCardFooter";
-import TextBoxLetter from "./TextBoxLetter";
-import TextEditor from "./TextEditor";
 import {
   useCreateLeaveApplicationFormatMutation,
   useGetCompanyIdQuery,
 } from "../../features/api";
+import BrandCardWrapper from "./BrandCardWrapper";
+import SettingCardHeader from "./SettingCardHeader";
+import TextBoxLetter from "./TextBoxLetter";
+import TextEditor from "./TextEditor";
 
 const LeaveApplicationCard = () => {
   const [editorState, setEditorState] = useState(null); // Store the editor's state
@@ -21,8 +20,6 @@ const LeaveApplicationCard = () => {
 
   // Define handleEditorData as a function that accepts editor state data
   const handleEditorData = (data) => {
-    // Set the received data from the editor
-    console.log(data);
     createLeaveAppliationFormat({ formatData: data, company_id });
     setEditorData(data);
   };

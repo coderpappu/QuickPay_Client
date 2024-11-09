@@ -1,11 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import BrandCardWrapper from "./BrandCardWrapper";
-import SettingCardHeader from "./SettingCardHeader";
 import SettingCardFooter from "./SettingCardFooter";
+import SettingCardHeader from "./SettingCardHeader";
 import TextBoxLetter from "./TextBoxLetter";
 import TextEditor from "./TextEditor";
 
 const OfferLetterCard = () => {
+  const [editorState, setEditorState] = useState(null); // Store the editor's state
+  const [isSaving, setIsSaving] = useState(false); // Track saving status
+  const [error, setError] = useState(null); // Store potential errors
+  const { data: company_id } = useGetCompanyIdQuery();
+
+  const [editorData, setEditorData] = useState(null); // Store the editor's state data
+  const [createLeaveAppliationFormat] =
+    useCreateLeaveApplicationFormatMutation();
+
+  // Define handleEditorData as a function that accepts editor state data
+  const handleEditorData = (data) => {
+    createLeaveAppliationFormat({ formatData: data, company_id });
+    setEditorData(data);
+  };
+
   return (
     <>
       <BrandCardWrapper>
@@ -37,7 +52,7 @@ const OfferLetterCard = () => {
 
           <TextEditor />
         </div>
-        <SettingCardFooter title="Update" />
+        <SettingCardFooter title="Update" checkSave={handleEditorData} />
       </BrandCardWrapper>
     </>
   );
