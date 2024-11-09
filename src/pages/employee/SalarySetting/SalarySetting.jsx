@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { FiEdit } from "react-icons/fi";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import {
   useCreateEmployeeAllowanceMutation,
   useGetAllowanceListQuery,
@@ -8,7 +8,6 @@ import {
   useGetGradeListQuery,
   useGetSalarySettingQuery,
 } from "../../../features/api";
-import { useParams } from "react-router-dom";
 
 const SalarySettings = () => {
   const [selectedAllowances, setSelectedAllowances] = useState([]);
@@ -96,7 +95,7 @@ const SalarySettings = () => {
   if (allowanceError || deductionError || gradeError) return "Error ";
 
   return (
-    <div className="w-full   mx-5 mt-5 mb-2 rounded-mde flex flex-wrap justify-between ">
+    <div className="w-full mt-5 mb-2 rounded-mde flex flex-wrap justify-between ">
       <div className="w-[49%] relative p-4 bg-white dark:bg-dark-card rounded-md">
         <h1 className="text-xl font-medium mb-4 dark:text-dark-heading-color">
           Salary Settings

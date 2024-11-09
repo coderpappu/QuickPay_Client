@@ -6,7 +6,7 @@ import PersonalInfo from "../../components/employee/PersonalInfo";
 
 const AboutCard = ({ employeeDetails }) => {
   return (
-    <div className="w-full   mx-5 mt-5 mb-2 rounded-mde flex flex-wrap justify-between ">
+    <div className="w-full mt-5 mb-2 rounded-mde flex flex-wrap justify-between ">
       <div className="w-[49%] relative p-4 bg-white dark:bg-dark-card rounded-md">
         <h1 className="text-xl font-medium mb-4 dark:text-dark-heading-color">
           Personal Information{" "}

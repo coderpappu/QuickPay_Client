@@ -80,7 +80,7 @@ const AssetCard = () => {
   };
 
   return (
-    <div className="w-full mx-5 mt-5 mb-2 rounded-md flex flex-wrap justify-between">
+    <div className="w-full mt-5 mb-2 rounded-md flex flex-wrap justify-between">
       <div className="h-auto relative p-4 bg-white dark:bg-dark-card rounded-md">
         <h1 className="text-xl font-medium mb-4 dark:text-dark-heading-color">
           Assets
