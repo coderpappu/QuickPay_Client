@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import {
+  useGetCompanyIdQuery,
+  useOfferLetterFormatMutation,
+} from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
-import SettingCardFooter from "./SettingCardFooter";
 import SettingCardHeader from "./SettingCardHeader";
 import TextBoxLetter from "./TextBoxLetter";
 import TextEditor from "./TextEditor";
@@ -12,12 +15,11 @@ const OfferLetterCard = () => {
   const { data: company_id } = useGetCompanyIdQuery();
 
   const [editorData, setEditorData] = useState(null); // Store the editor's state data
-  const [createLeaveAppliationFormat] =
-    useCreateLeaveApplicationFormatMutation();
+  const [createOfferLetterFormat] = useOfferLetterFormatMutation();
 
   // Define handleEditorData as a function that accepts editor state data
   const handleEditorData = (data) => {
-    createLeaveAppliationFormat({ formatData: data, company_id });
+    createOfferLetterFormat({ formatData: data, company_id });
     setEditorData(data);
   };
 
@@ -50,9 +52,8 @@ const OfferLetterCard = () => {
             <TextBoxLetter title="Number of Hours" varName="hours" />
           </div>
 
-          <TextEditor />
+          <TextEditor checkSave={handleEditorData} />
         </div>
-        <SettingCardFooter title="Update" checkSave={handleEditorData} />
       </BrandCardWrapper>
     </>
   );

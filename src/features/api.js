@@ -882,12 +882,80 @@ export const apiSlice = createApi({
       invalidatesTags: ["leaveApplicationFormat"],
     }),
 
+    // offer letter application format
+    offerLetterFormat: builder.mutation({
+      query: (credentials) => ({
+        url: "/applicationformat/create/offerletter",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["offerLetterFormat"],
+    }),
+
+    createJoiningLetterFormat: builder.mutation({
+      query: (credentials) => ({
+        url: "/applicationformat/create/joiningletterformat",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["joiningLetterFormat"],
+    }),
+
+    createExperienceCertificateFormat: builder.mutation({
+      query: (credentials) => ({
+        url: "/applicationformat/create/experiencecertificateformat",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["experienceCertificateFormat"],
+    }),
+
+    createNocLetterFormat: builder.mutation({
+      query: (credentials) => ({
+        url: "/applicationformat/create/nocletterformat",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["nocLetterFormat"],
+    }),
+
     getLeaveApplicationFormat: builder.query({
       query: (company_id) => ({
         url: `/applicationformat/leaveapplicationformat/`,
         params: { company_id: company_id },
       }),
       providesTags: ["leaveApplicationFormat"],
+    }),
+
+    getOfferLetterFormat: builder.query({
+      query: (company_id) => ({
+        url: `/applicationformat/offerletterformat/`,
+        params: { company_id: company_id },
+      }),
+      providesTags: ["offerLetterFormat"],
+    }),
+    getExperienceCertificateFormat: builder.query({
+      query: (company_id) => ({
+        url: `/applicationformat/experiencecertificateformat`,
+        params: { company_id: company_id },
+      }),
+      providesTags: ["experienceCertificateFormat"],
+    }),
+
+    getJoiningLetterFormat: builder.query({
+      query: (company_id) => ({
+        url: `/applicationformat/joiningletterformat/`,
+        params: { company_id: company_id },
+      }),
+      providesTags: ["joiningLetterFormat"],
+    }),
+
+    getNocLetterFormat: builder.query({
+      query: (company_id) => ({
+        url: `/applicationformat/nocletterformat`,
+        params: { company_id: company_id },
+      }),
+      providesTags: ["nocletterformat"],
     }),
 
     // document type endpoint
@@ -1257,6 +1325,18 @@ export const {
   useCreateLeaveApplicationFormatMutation,
   useGetLeaveApplicationFormatQuery,
   useGetLeaveApplicationDetailsQuery,
+
+  useOfferLetterFormatMutation,
+  useGetOfferLetterFormatQuery,
+
+  useGetJoiningLetterFormatQuery,
+  useCreateJoiningLetterFormatMutation,
+
+  useCreateExperienceCertificateFormatMutation,
+  useGetExperienceCertificateFormatQuery,
+
+  useCreateNocLetterFormatMutationQuery,
+  useGetNocLetterFormatQuery,
 
   // docs type Routes
   useCreateDocsTypeMutation,
