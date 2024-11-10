@@ -1,6 +1,5 @@
 import html2pdf from "html2pdf.js";
-import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import React, { useState } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { FiPhone } from "react-icons/fi";
 import { MdOutlineEmail } from "react-icons/md";
@@ -10,12 +9,12 @@ import "../../Applicaion.css";
 import CompanyLogo from "../../assets/xceed-bangladesh-logo.png";
 import {
   useGetCompanyIdQuery,
-  useGetLeaveApplicationDetailsQuery,
-  useGetLeaveApplicationFormatQuery,
+  useGetEmployeeDetailsQuery,
+  useGetExperienceCertificateFormatQuery,
 } from "../../features/api";
 import DatePicker from "../../utils/DatePicker";
 
-function Application() {
+function ExperienceCertificate() {
   const [letterData, setLetterData] = useState(null);
   const [date, setDate] = useState("10");
   const [name, setEmployeeName] = useState("John Doe");
@@ -23,6 +22,18 @@ function Application() {
   const [address, setAddress] = useState("Raozan");
   const [appName, setAppName] = useState("My Company");
   let { id } = useParams();
+
+  // Fetching company ID
+  const { data: company_id } = useGetCompanyIdQuery();
+
+  const {
+    data: employeeDetails,
+    isLoading,
+    isError,
+  } = useGetEmployeeDetailsQuery(id);
+  // Fetching leave application format
+  const { data: experienceCertificateQuery, isLoading: isFormatLoading } =
+    useGetExperienceCertificateFormatQuery(company_id);
 
   const [applicationData, setApplicationData] = useState({
     company_name: "",
@@ -36,71 +47,74 @@ function Application() {
     end_time: "",
   });
 
-  // Fetching company ID
-  const { data: company_id } = useGetCompanyIdQuery();
-  const { data: applicationDetails } = useGetLeaveApplicationDetailsQuery(id);
+  if (isLoading && isFormatLoading && !isError) return "Loading.....";
 
-  console.log(applicationDetails);
+  if (!experienceCertificateQuery?.data?.formatData) return "Unexpected Error";
 
-  // Fetching leave application format
-  const { data: leaveApplicationFormat, isLoading } =
-    useGetLeaveApplicationFormatQuery(company_id);
+  const initialApplicationData = {
+    company_name: employeeDetails?.data?.[0]?.company?.company_name || "",
+    employee_name: employeeDetails?.data?.[0]?.name || "",
+    date: "20/10/24 " || "",
+    branch: employeeDetails?.data?.[0]?.company?.company_name || "",
+    designation:
+      employeeDetails?.data?.[0]?.EmployeeDesignation?.[0]?.designation?.name ||
+      "",
+    start_date: employeeDetails?.data?.[0]?.joining_date || "",
+    total_hours: "20",
+    start_time:
+      employeeDetails?.data?.[0]?.EmployeeShift?.[0]?.shift?.start_time || "",
+    end_time:
+      employeeDetails?.data?.[0]?.EmployeeShift?.[0]?.shift?.end_time || "",
+  };
 
   // application format load
-  useEffect(() => {
-    if (!isLoading && leaveApplicationFormat?.data?.formatData) {
-      try {
-        const parsedData = JSON.parse(leaveApplicationFormat?.data?.formatData);
-        setLetterData(parsedData);
-      } catch (error) {
-        toast.alert("Error parsing the letter data: ", error);
-      }
-    } else if (!isLoading && !leaveApplicationFormat?.data?.formatData) {
-      toast.alert("Error: Unable to load leave application format data");
-    }
-  }, [isLoading, leaveApplicationFormat]);
+  //   useEffect(() => {
+  //     if (!isLoading && leaveApplicationFormat?.data?.formatData) {
+  //       try {
+  //         const parsedData = JSON.parse(leaveApplicationFormat?.data?.formatData);
+  //         setLetterData(parsedData);
+  //       } catch (error) {
+  //         toast.alert("Error parsing the letter data: ", error);
+  //       }
+  //     } else if (!isLoading && !leaveApplicationFormat?.data?.formatData) {
+  //       toast.alert("Error: Unable to load leave application format data");
+  //     }
+  //   }, [isLoading, leaveApplicationFormat]);
 
   // set the data in state
-  useEffect(() => {
-    setApplicationData((prevData) => ({
-      ...prevData,
-      name: applicationDetails?.data?.Employee?.name,
-      mail: applicationDetails?.data?.Employee?.email,
-      start_date: applicationDetails?.data?.start_date,
-      end_date: applicationDetails?.data?.end_date,
+  //   useEffect(() => {
+  //     setApplicationData((prevData) => ({
+  //       ...prevData,
+  //       name: applicationDetails?.data?.Employee?.name,
+  //       mail: applicationDetails?.data?.Employee?.email,
+  //       start_date: applicationDetails?.data?.start_date,
+  //       end_date: applicationDetails?.data?.end_date,
 
-      leave_days: applicationDetails?.data?.leave_days,
-      leave_reason: applicationDetails?.data?.reason,
-      designation:
-        applicationDetails?.data?.Employee?.EmployeeDesignation?.[0]
-          ?.designation?.name,
-      department:
-        applicationDetails?.data?.Employee?.EmployeeDepartment?.[0]?.department
-          ?.name,
-      leave_type: applicationDetails?.data?.LeaveType?.name,
-      createDate: applicationDetails?.data?.created_at,
-    }));
-  }, []);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!letterData) {
-    return <div>Error: Unable to load leave application format data</div>;
-  }
+  //       leave_days: applicationDetails?.data?.leave_days,
+  //       leave_reason: applicationDetails?.data?.reason,
+  //       designation:
+  //         applicationDetails?.data?.Employee?.EmployeeDesignation?.[0]
+  //           ?.designation?.name,
+  //       department:
+  //         applicationDetails?.data?.Employee?.EmployeeDepartment?.[0]?.department
+  //           ?.name,
+  //       leave_type: applicationDetails?.data?.LeaveType?.name,
+  //       createDate: applicationDetails?.data?.created_at,
+  //     }));
+  //   }, []);
 
   // Function to replace placeholders
   const replacePlaceholders = (text) => {
     const placeholderValues = {
-      name: applicationData?.name,
-      mail: applicationData?.mail,
-      start_date: DatePicker(applicationData?.start_date),
-      leave_type: applicationData?.leave_type,
-      leave_reason: applicationData?.leave_reason,
-      end_date: DatePicker(applicationData?.end_date),
-      designation: applicationData?.designation,
-      department: applicationData?.department,
+      company_name: initialApplicationData?.company_name,
+      employee_name: initialApplicationData?.employee_name,
+      date: initialApplicationData?.date,
+      branch: initialApplicationData?.branch,
+      designation: initialApplicationData?.designation,
+      start_date: initialApplicationData?.start_date,
+      total_hours: initialApplicationData?.total_hours,
+      start_time: initialApplicationData?.start_time,
+      end_time: initialApplicationData?.end_time,
     };
     return text.replace(
       /{(\w+)}/g,
@@ -156,7 +170,7 @@ function Application() {
     html2pdf(element, {
       margin: 10,
       filename:
-        applicationDetails?.data?.Employee?.name +
+        initialApplicationData?.employee_name +
         "-" +
         DatePicker(applicationData?.createDate) +
         ".pdf",
@@ -182,11 +196,13 @@ function Application() {
         <div className="flex justify-between items-center mb-8">
           <img src={CompanyLogo} alt="" className="w-[180px] h-auto" />
         </div>
-        {letterData.root.children.map((child, index) =>
-          renderElement(child, index)
-        )}
+        <div className="h-[850px]">
+          {JSON.parse(
+            experienceCertificateQuery?.data?.formatData
+          ).root.children.map((child, index) => renderElement(child, index))}
+        </div>
 
-        <div className="mt-[250px] flex  gap-14  ">
+        <div className=" flex  gap-14  ">
           <div className="flex justify-between items-center w-[170px]">
             <div className="p-2 rounded-full bg-blue-500">
               <FiPhone color="white" />
@@ -219,4 +235,4 @@ function Application() {
   );
 }
 
-export default Application;
+export default ExperienceCertificate;

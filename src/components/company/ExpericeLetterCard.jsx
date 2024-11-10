@@ -8,7 +8,7 @@ import SettingCardHeader from "./SettingCardHeader";
 import TextBoxLetter from "./TextBoxLetter";
 import TextEditor from "./TextEditor";
 
-const ExperienceLetterCard = () => {
+const ExperienceCertificate = () => {
   const [editorState, setEditorState] = useState(null); // Store the editor's state
   const [isSaving, setIsSaving] = useState(false); // Track saving status
   const [error, setError] = useState(null); // Store potential errors
@@ -58,4 +58,4 @@ const ExperienceLetterCard = () => {
   );
 };
 
-export default ExperienceLetterCard;
+export default ExperienceCertificate;

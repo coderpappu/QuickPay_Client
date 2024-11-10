@@ -28,6 +28,7 @@ import AttendanceList from "./pages/employee/AttendancesList";
 import EmployeeList from "./pages/employee/employeeList";
 import EmployeeProfile from "./pages/employee/EmployeeProfile";
 import EmployeeRegistration from "./pages/employee/employeeRegistrationForm";
+import ExperienceApplication from "./pages/employee/ExperienceCertificate";
 import Leave from "./pages/employee/Leave";
 import LeaveForm from "./pages/employee/LeaveForm";
 import LoginEmployee from "./pages/employee/LoginEmployee";
@@ -183,6 +184,12 @@ function App() {
 
               {/* Loan  */}
               <Route path="/account-settings" element={<Application />} />
+              {/* letter and application format  */}
+              <Route path="/leave/application/:id" element={<Application />} />
+              <Route
+                path="/experiencecertificate/:id"
+                element={<ExperienceApplication />}
+              />
               <Route path="/leave/application/:id" element={<Application />} />
 
               <Route path="/company/loan/type" element={<LoanTypeList />} />
