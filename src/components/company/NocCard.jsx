@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 import {
   useCreateNocLetterFormatMutation,
   useGetCompanyIdQuery,
@@ -18,9 +19,17 @@ const NocCard = () => {
   const [createNocLetter] = useCreateNocLetterFormatMutation();
 
   // Define handleEditorData as a function that accepts editor state data
-  const handleEditorData = (data) => {
+  const handleEditorData = async (data) => {
     // Set the received data from the editor
-    createNocLetter({ formatData: data, company_id });
+    try {
+      const nocLetter = await createNocLetter({
+        formatData: data,
+        company_id,
+      }).unwrap();
+      toast.success(nocLetter?.message);
+    } catch (error) {
+      toast.error(error.message);
+    }
     setEditorData(data);
   };
   return (

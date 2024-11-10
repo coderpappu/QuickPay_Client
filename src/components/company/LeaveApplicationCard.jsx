@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 import {
   useCreateLeaveApplicationFormatMutation,
   useGetCompanyIdQuery,
@@ -7,7 +8,6 @@ import BrandCardWrapper from "./BrandCardWrapper";
 import SettingCardHeader from "./SettingCardHeader";
 import TextBoxLetter from "./TextBoxLetter";
 import TextEditor from "./TextEditor";
-
 const LeaveApplicationCard = () => {
   const [editorState, setEditorState] = useState(null); // Store the editor's state
   const [isSaving, setIsSaving] = useState(false); // Track saving status
@@ -20,7 +20,15 @@ const LeaveApplicationCard = () => {
 
   // Define handleEditorData as a function that accepts editor state data
   const handleEditorData = (data) => {
-    createLeaveAppliationFormat({ formatData: data, company_id });
+    try {
+      const leaveApplication = createLeaveAppliationFormat({
+        formatData: data,
+        company_id,
+      });
+      toast.success(leaveApplication?.message);
+    } catch (error) {
+      toast.error(error.message);
+    }
     setEditorData(data);
   };
 

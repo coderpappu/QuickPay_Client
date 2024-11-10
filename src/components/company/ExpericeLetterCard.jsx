@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 import {
   useCreateExperienceCertificateFormatMutation,
   useGetCompanyIdQuery,
@@ -7,7 +8,6 @@ import BrandCardWrapper from "./BrandCardWrapper";
 import SettingCardHeader from "./SettingCardHeader";
 import TextBoxLetter from "./TextBoxLetter";
 import TextEditor from "./TextEditor";
-
 const ExperienceCertificate = () => {
   const [editorState, setEditorState] = useState(null); // Store the editor's state
   const [isSaving, setIsSaving] = useState(false); // Track saving status
@@ -19,9 +19,18 @@ const ExperienceCertificate = () => {
     useCreateExperienceCertificateFormatMutation();
 
   // Define handleEditorData as a function that accepts editor state data
-  const handleEditorData = (data) => {
+  const handleEditorData = async (data) => {
     // Set the received data from the editor
-    createExperienceCertificate({ formatData: data, company_id });
+    try {
+      let ExperienceCertificate = await createExperienceCertificate({
+        formatData: data,
+        company_id,
+      }).unwrap();
+
+      toast.success(ExperienceCertificate?.message);
+    } catch (error) {
+      toast.error(error.message);
+    }
     setEditorData(data);
   };
 

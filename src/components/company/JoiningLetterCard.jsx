@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import {
   useCreateJoiningLetterFormatMutation,
   useGetCompanyIdQuery,
@@ -17,9 +18,17 @@ const JoiningLetterCard = () => {
   const [createJoiningLetter] = useCreateJoiningLetterFormatMutation();
 
   // Define handleEditorData as a function that accepts editor state data
-  const handleEditorData = (data) => {
+  const handleEditorData = async (data) => {
     // Set the received data from the editor
-    createJoiningLetter({ formatData: data, company_id });
+    try {
+      const joiningLetter = await createJoiningLetter({
+        formatData: data,
+        company_id,
+      }).unwrap();
+      toast.success(joiningLetter?.message);
+    } catch (error) {
+      toast.error("Error saving data:", error);
+    }
     setEditorData(data);
   };
 

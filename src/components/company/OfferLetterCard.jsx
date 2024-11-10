@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import {
   useGetCompanyIdQuery,
   useOfferLetterFormatMutation,
@@ -18,8 +19,17 @@ const OfferLetterCard = () => {
   const [createOfferLetterFormat] = useOfferLetterFormatMutation();
 
   // Define handleEditorData as a function that accepts editor state data
-  const handleEditorData = (data) => {
-    createOfferLetterFormat({ formatData: data, company_id });
+  const handleEditorData = async (data) => {
+    try {
+      const offerLetter = await createOfferLetterFormat({
+        formatData: data,
+        company_id,
+      }).unwrap();
+
+      toast.success(offerLetter?.message);
+    } catch (error) {
+      toast.error(error.message);
+    }
     setEditorData(data);
   };
 
