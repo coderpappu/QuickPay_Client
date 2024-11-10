@@ -12,7 +12,9 @@ import {
   useGetEmployeeDetailsQuery,
   useGetExperienceCertificateFormatQuery,
 } from "../../features/api";
-import DatePicker from "../../utils/DatePicker";
+import calculateTotalHours from "../../utils/TimeCalculator";
+import formatTimeTo12Hour from "../../utils/timeConverter";
+import todayDate from "../../utils/TodayDate";
 
 function ExperienceCertificate() {
   const [letterData, setLetterData] = useState(null);
@@ -31,77 +33,35 @@ function ExperienceCertificate() {
     isLoading,
     isError,
   } = useGetEmployeeDetailsQuery(id);
+
   // Fetching leave application format
   const { data: experienceCertificateQuery, isLoading: isFormatLoading } =
     useGetExperienceCertificateFormatQuery(company_id);
-
-  const [applicationData, setApplicationData] = useState({
-    company_name: "",
-    employee_name: "",
-    date: "",
-    branch: "",
-    designation: "",
-    start_date: "",
-    total_hours: "",
-    start_time: "",
-    end_time: "",
-  });
 
   if (isLoading && isFormatLoading && !isError) return "Loading.....";
 
   if (!experienceCertificateQuery?.data?.formatData) return "Unexpected Error";
 
+  // Function to calculate time difference in hours and minutes
+
   const initialApplicationData = {
     company_name: employeeDetails?.data?.[0]?.company?.company_name || "",
     employee_name: employeeDetails?.data?.[0]?.name || "",
-    date: "20/10/24 " || "",
+    date: todayDate() || "",
     branch: employeeDetails?.data?.[0]?.company?.company_name || "",
     designation:
       employeeDetails?.data?.[0]?.EmployeeDesignation?.[0]?.designation?.name ||
       "",
     start_date: employeeDetails?.data?.[0]?.joining_date || "",
-    total_hours: "20",
+    total_hours: calculateTotalHours(
+      employeeDetails?.data?.[0]?.EmployeeShift?.[0]?.shift?.start_time,
+      employeeDetails?.data?.[0]?.EmployeeShift?.[0]?.shift?.end_time
+    ),
     start_time:
       employeeDetails?.data?.[0]?.EmployeeShift?.[0]?.shift?.start_time || "",
     end_time:
       employeeDetails?.data?.[0]?.EmployeeShift?.[0]?.shift?.end_time || "",
   };
-
-  // application format load
-  //   useEffect(() => {
-  //     if (!isLoading && leaveApplicationFormat?.data?.formatData) {
-  //       try {
-  //         const parsedData = JSON.parse(leaveApplicationFormat?.data?.formatData);
-  //         setLetterData(parsedData);
-  //       } catch (error) {
-  //         toast.alert("Error parsing the letter data: ", error);
-  //       }
-  //     } else if (!isLoading && !leaveApplicationFormat?.data?.formatData) {
-  //       toast.alert("Error: Unable to load leave application format data");
-  //     }
-  //   }, [isLoading, leaveApplicationFormat]);
-
-  // set the data in state
-  //   useEffect(() => {
-  //     setApplicationData((prevData) => ({
-  //       ...prevData,
-  //       name: applicationDetails?.data?.Employee?.name,
-  //       mail: applicationDetails?.data?.Employee?.email,
-  //       start_date: applicationDetails?.data?.start_date,
-  //       end_date: applicationDetails?.data?.end_date,
-
-  //       leave_days: applicationDetails?.data?.leave_days,
-  //       leave_reason: applicationDetails?.data?.reason,
-  //       designation:
-  //         applicationDetails?.data?.Employee?.EmployeeDesignation?.[0]
-  //           ?.designation?.name,
-  //       department:
-  //         applicationDetails?.data?.Employee?.EmployeeDepartment?.[0]?.department
-  //           ?.name,
-  //       leave_type: applicationDetails?.data?.LeaveType?.name,
-  //       createDate: applicationDetails?.data?.created_at,
-  //     }));
-  //   }, []);
 
   // Function to replace placeholders
   const replacePlaceholders = (text) => {
@@ -113,8 +73,8 @@ function ExperienceCertificate() {
       designation: initialApplicationData?.designation,
       start_date: initialApplicationData?.start_date,
       total_hours: initialApplicationData?.total_hours,
-      start_time: initialApplicationData?.start_time,
-      end_time: initialApplicationData?.end_time,
+      start_time: formatTimeTo12Hour(initialApplicationData?.start_time),
+      end_time: formatTimeTo12Hour(initialApplicationData?.end_time),
     };
     return text.replace(
       /{(\w+)}/g,
@@ -143,9 +103,11 @@ function ExperienceCertificate() {
       );
     } else if (child.type === "paragraph") {
       // Check if paragraph is empty
+
       if (!child.children || child.children.length === 0) {
         return <br key={index} />; // Render line break for empty paragraph
       }
+
       return (
         <p key={index}>
           {child.children.map((text, textIndex) => (
@@ -170,10 +132,7 @@ function ExperienceCertificate() {
     html2pdf(element, {
       margin: 10,
       filename:
-        initialApplicationData?.employee_name +
-        "-" +
-        DatePicker(applicationData?.createDate) +
-        ".pdf",
+        initialApplicationData?.employee_name + "-" + todayDate() + ".pdf",
     });
   };
 
@@ -196,7 +155,7 @@ function ExperienceCertificate() {
         <div className="flex justify-between items-center mb-8">
           <img src={CompanyLogo} alt="" className="w-[180px] h-auto" />
         </div>
-        <div className="h-[850px]">
+        <div className="h-[820px]">
           {JSON.parse(
             experienceCertificateQuery?.data?.formatData
           ).root.children.map((child, index) => renderElement(child, index))}
