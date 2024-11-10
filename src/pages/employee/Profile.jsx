@@ -40,7 +40,7 @@ const Profile = () => {
     <div>
       <h2 className="dark:text-dark-heading-color"> Employee / Profile</h2>
       <div className="flex flex-wrap justify-end gap-2">
-        <Link to={`/leave/application/${id}`}>
+        <Link to={`/joiningletter/${id}`}>
           <div className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border dark:border-blue-500 dark:text-dark-text-color dark:border-opacity-30 hover:bg-blue-500 w-fit flex justify-between items-center gap-3">
             Joining Letter
             <GrDownload size={15} />
@@ -52,7 +52,7 @@ const Profile = () => {
             <GrDownload size={15} />
           </div>
         </Link>
-        <Link to={`/leave/application/${id}`}>
+        <Link to={`/joiningletter/${id}`}>
           <div className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border dark:border-blue-500 dark:text-dark-text-color dark:border-opacity-30 hover:bg-blue-500 w-fit flex justify-between items-center gap-3">
             NOC
             <GrDownload size={15} />
