@@ -191,7 +191,7 @@ function ExperienceCertificate() {
       </div>
       <div
         id="container"
-        className="dark:bg-dark-box dark:text-white text-black p-8 rounded-sm  h-auto"
+        className="bg-white dark:bg-dark-box dark:text-white text-black p-8 rounded-sm  h-auto"
       >
         <div className="flex justify-between items-center mb-8">
           <img src={CompanyLogo} alt="" className="w-[180px] h-auto" />
