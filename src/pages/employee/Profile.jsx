@@ -52,7 +52,7 @@ const Profile = () => {
             <GrDownload size={15} />
           </div>
         </Link>
-        <Link to={`/joiningletter/${id}`}>
+        <Link to={`/nocletter/${id}`}>
           <div className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border dark:border-blue-500 dark:text-dark-text-color dark:border-opacity-30 hover:bg-blue-500 w-fit flex justify-between items-center gap-3">
             NOC
             <GrDownload size={15} />

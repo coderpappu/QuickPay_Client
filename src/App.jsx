@@ -34,6 +34,7 @@ import Leave from "./pages/employee/Leave";
 import LeaveForm from "./pages/employee/LeaveForm";
 import LoginEmployee from "./pages/employee/LoginEmployee";
 import ManualAttendance from "./pages/employee/ManualAttendance";
+import NOCLetter from "./pages/employee/NOCLetter";
 import Profile from "./pages/employee/Profile";
 import Home from "./pages/Home";
 import HrmSetup from "./pages/hrm/HrmSetup";
@@ -192,6 +193,7 @@ function App() {
                 element={<ExperienceApplication />}
               />
               <Route path="/joiningletter/:id" element={<JoiningLetter />} />
+              <Route path="/nocletter/:id" element={<NOCLetter />} />
 
               <Route path="/company/loan/type" element={<LoanTypeList />} />
               <Route path="/company/loan/type/:id" element={<LoanTypeForm />} />
