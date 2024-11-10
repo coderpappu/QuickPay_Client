@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ProfileImg from "../../assets/profile-placeholder.png";
 import Button from "../../components/company/Button";
 import AboutCard from "../../components/employee/AboutCard";
@@ -40,18 +40,24 @@ const Profile = () => {
     <div>
       <h2 className="dark:text-dark-heading-color"> Employee / Profile</h2>
       <div className="flex flex-wrap justify-end gap-2">
-        <div className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border dark:border-blue-500 dark:text-dark-text-color dark:border-opacity-30 hover:bg-blue-500 w-fit flex justify-between items-center gap-3">
-          Joining Letter
-          <GrDownload size={15} />
-        </div>
-        <div className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border border-dark-border-color dark:border-blue-500 dark:text-dark-text-color dark:border-opacity-30 hover:bg-blue-500 w-fit flex justify-between items-center gap-3">
-          Experience Certificate
-          <GrDownload size={15} />
-        </div>
-        <div className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border dark:border-blue-500 dark:text-dark-text-color dark:border-opacity-30 hover:bg-blue-500 w-fit flex justify-between items-center gap-3">
-          NOC
-          <GrDownload size={15} />
-        </div>
+        <Link to={`/leave/application/${id}`}>
+          <div className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border dark:border-blue-500 dark:text-dark-text-color dark:border-opacity-30 hover:bg-blue-500 w-fit flex justify-between items-center gap-3">
+            Joining Letter
+            <GrDownload size={15} />
+          </div>
+        </Link>
+        <Link to={`/leave/application/${id}`}>
+          <div className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border border-dark-border-color dark:border-blue-500 dark:text-dark-text-color dark:border-opacity-30 hover:bg-blue-500 w-fit flex justify-between items-center gap-3">
+            Experience Certificate
+            <GrDownload size={15} />
+          </div>
+        </Link>
+        <Link to={`/leave/application/${id}`}>
+          <div className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border dark:border-blue-500 dark:text-dark-text-color dark:border-opacity-30 hover:bg-blue-500 w-fit flex justify-between items-center gap-3">
+            NOC
+            <GrDownload size={15} />
+          </div>
+        </Link>
       </div>
       <div className="w-full p-5 mt-5 mb-1 rounded-md bg-white dark:bg-dark-card flex flex-wrap justify-between ">
         <div className="flex flex-wrap justify-between items-center w-[50%]">

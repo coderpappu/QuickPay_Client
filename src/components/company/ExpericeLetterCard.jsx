@@ -36,17 +36,17 @@ const ExperienceLetterCard = () => {
           <h2 className="text-white my-2">Palceholder</h2>
           <div className=" bg-[#F3F4F6] dark:bg-dark-box p-3 rounded-md">
             <div className="w-full h-auto flex justify-between items-center">
-              <TextBoxLetter title="Applicant Name" varName="applicant_name" />
               <TextBoxLetter title="Company Name" varName="company_name" />
               <TextBoxLetter title="Employee Name" varName="employee_name" />
+              <TextBoxLetter title="Date of issueance" varName="date" />
             </div>
             <div className="w-full h-auto  flex justify-between items-center">
-              <TextBoxLetter title="Address" varName="address" />
+              <TextBoxLetter title="Branch" varName="branch" />
               <TextBoxLetter title="Designation" varName="designation" />
               <TextBoxLetter title="Start Date" varName="start_date" />
             </div>
             <div className="w-full h-auto  flex justify-between items-center">
-              <TextBoxLetter title="Branch" varName="branch" />
+              <TextBoxLetter title="Number of Hours" varName="total_hours" />
               <TextBoxLetter title="Start Time" varName="start_time" />
               <TextBoxLetter title="End Time" varName="end_time" />
             </div>
