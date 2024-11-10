@@ -1,6 +1,6 @@
-import React from "react";
-import BrandCardWrapper from "../../company/BrandCardWrapper";
 import { Skeleton } from "@mui/material"; // Assuming you're using Material-UI for skeletons
+import React from "react";
+import BrandCardWrapper from "../components/company/BrandCardWrapper";
 
 const CardSkeleton = () => {
   return (

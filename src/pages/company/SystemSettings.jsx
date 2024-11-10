@@ -1,22 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import BoardMenuButton from "../../components/company/BoardMenuButton";
-import { useState } from "react";
 
-import BrandCard from "../../components/company/BrandCard";
-import SystemSettingsCard from "../../components/company/SystemSettings";
-import CompanySettings from "../../components/company/CompanySettings";
-import EmailCard from "../../components/company/EmailCard";
-import CurrencyCard from "../../components/company/CurrencyCard";
-import { Accordion } from "../../components/company/accordion";
-import PaymentCard from "../../components/company/PaymentCard";
-import ZoomMeetingCard from "../../components/company/ZoomMeetingCard";
-import NotificationCard from "../../components/company/NotificationCard";
-import JoiningLetterCard from "../../components/company/JoiningLetterCard";
-import OfferLetterCard from "../../components/company/OfferLetterCard";
-import ExperienceLetterCard from "../../components/company/ExpericeLetterCard";
-import NocCard from "../../components/company/NocCard";
 import BiometricCard from "../../components/company/BiometricCard";
+import BrandCard from "../../components/company/BrandCard";
+import CompanySettings from "../../components/company/CompanySettings";
+import CurrencyCard from "../../components/company/CurrencyCard";
+import EmailCard from "../../components/company/EmailCard";
+import ExperienceLetterCard from "../../components/company/ExpericeLetterCard";
+import JoiningLetterCard from "../../components/company/JoiningLetterCard";
 import LeaveApplicationCard from "../../components/company/LeaveApplicationCard";
+import NocCard from "../../components/company/NocCard";
+import NotificationCard from "../../components/company/NotificationCard";
+import OfferLetterCard from "../../components/company/OfferLetterCard";
+import PaymentCard from "../../components/company/PaymentCard";
+import SystemSettingsCard from "../../components/company/SystemSettings";
+import ZoomMeetingCard from "../../components/company/ZoomMeetingCard";
 const SystemSettings = () => {
   const [activeSetting, setActiveSetting] = useState(1);
 

@@ -6,13 +6,13 @@ import {
   useGetCompanyIdQuery,
   useGetCurrencySettingQuery,
 } from "../../features/api";
+import CardSkeleton from "../../skeletons/card";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox, SelectOptionBox } from "./BrandInput";
 import InputTitle from "./InputTitle";
 import RadioInput from "./RadioInput";
 import SettingCardFooter from "./SettingCardFooter";
 import SettingCardHeader from "./SettingCardHeader";
-
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
   currency: Yup.string().required("Currency is required"),
@@ -78,7 +78,7 @@ const CurrencyCard = () => {
     isError,
   } = useGetCurrencySettingQuery(companyId);
 
-  if (isLoading && !isError) return <div>Loading...</div>;
+  if (isLoading && !isError) return <CardSkeleton />;
 
   const initialValues = {
     currency: currencySettingData?.data?.currency || "",

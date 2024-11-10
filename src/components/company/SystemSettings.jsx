@@ -7,6 +7,7 @@ import {
   useGetCompanyIdQuery,
   useGetSystemSettingsQuery,
 } from "../../features/api";
+import CardSkeleton from "../skeletons/hrm-card-skeletons/card";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox, SelectOptionBox } from "./BrandInput";
 import InputTitle from "./InputTitle";
@@ -48,7 +49,7 @@ const CompanySettings = () => {
     isError,
   } = useGetSystemSettingsQuery(companyId);
 
-  if (isLoading && !isError) return <div>Loading...</div>;
+  if (isLoading && !isError) return <CardSkeleton />;
   if (isError) return "Something went wrong!";
   if (!isLoading && !isError && !systemSettingData?.data)
     return <div>No data found!</div>;

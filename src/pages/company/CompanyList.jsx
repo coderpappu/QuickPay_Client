@@ -4,6 +4,7 @@ import { LuEye } from "react-icons/lu";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import { Link } from "react-router-dom";
+import CardSkeleton from "../../components/skeletons/hrm-card-skeletons/card";
 import {
   useDeleteCompanyMutation,
   useGetCompaniesQuery,
@@ -62,7 +63,7 @@ const CompanyList = () => {
   };
 
   // Render loading or error states
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <CardSkeleton />;
   if (isError) return <div>Error: {error.message}</div>;
   const handleDeleteCompany = async (id) => {
     const confirm = () =>

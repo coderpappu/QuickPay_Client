@@ -8,6 +8,7 @@ import {
   useGetCompanyDetailsQuery,
   useGetCompanyIdQuery,
 } from "../../features/api";
+import CardSkeleton from "../../skeletons/card";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox, SelectOptionBox } from "./BrandInput";
 import InputTitle from "./InputTitle";
@@ -59,7 +60,7 @@ const BrandCard = () => {
     favLogoPreview: brandData?.data?.favImageUrl || "",
   };
 
-  if (isLoading && !isError) return "Loading...";
+  if (isLoading && !isError) return <CardSkeleton />;
 
   // Handle file changes
   // Handle file changes to show image preview
