@@ -9,8 +9,7 @@ import {
   useGetDepartmentDetailsQuery,
   useUpdateDepartmentMutation,
 } from "../../../features/api";
-
-import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
+import CardSkeleton from "../../../skeletons/card";
 
 const DepartmentSchema = Yup.object().shape({
   name: Yup.string().required("Department Name is required"),

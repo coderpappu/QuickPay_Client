@@ -6,6 +6,7 @@ import {
   useGetCompanyIdQuery,
   useGetZoomSettingQuery,
 } from "../../features/api";
+import CardSkeleton from "../../skeletons/card";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox } from "./BrandInput";
 import InputTitle from "./InputTitle";
@@ -22,7 +23,7 @@ const ZoomMeetingCard = () => {
     isError,
   } = useGetZoomSettingQuery(company_id);
 
-  if (isLoading && !isError) return <div>Loading...</div>;
+  if (isLoading && !isError) return <CardSkeleton />;
 
   // Initial form values
   const initialValues = {

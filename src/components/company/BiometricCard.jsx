@@ -7,6 +7,7 @@ import {
   useGetBiometricSettingQuery,
   useGetCompanyIdQuery,
 } from "../../features/api";
+import CardSkeleton from "../../skeletons/card";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox } from "./BrandInput";
 import InputTitle from "./InputTitle";
@@ -24,9 +25,7 @@ const BiometricCard = () => {
     isError,
   } = useGetBiometricSettingQuery(company_id);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
+  if (isLoading) return <CardSkeleton />;
 
   // Initial values for the form fields
   const initialValues = {

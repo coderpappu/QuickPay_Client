@@ -3,11 +3,11 @@ import BrandCardWrapper from "../../components/company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../components/company/SettingCardHeader";
 import DatePicker from "../../utils/DatePicker";
 
-import CardSkeleton from "../../components/skeletons/hrm-card-skeletons/card";
 import {
   useGetAllEmployeeLeaveListQuery,
   useGetCompanyIdQuery,
 } from "../../features/api";
+import CardSkeleton from "../../skeletons/card";
 import ErrorMessage from "../../utils/ErrorMessage";
 import LeaveForm from "../employee/LeaveForm";
 const EmployeeLeaveApplication = () => {

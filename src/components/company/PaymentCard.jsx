@@ -7,6 +7,7 @@ import {
   useGetCompanyIdQuery,
   useGetPaymentSettingsQuery,
 } from "../../features/api";
+import CardSkeleton from "../../skeletons/card";
 import {
   Accordion,
   AccordionHeader,
@@ -36,7 +37,7 @@ const PaymentCard = () => {
   const { data: paymentSettingsData, isLoading } =
     useGetPaymentSettingsQuery(companyId);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <CardSkeleton />;
 
   const initialValues = {
     bankDetails: paymentSettingsData?.data?.bankDetails || "",

@@ -1,19 +1,16 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import * as Yup from "yup";
 
 import {
   useCreateBranchMutation,
-  useCreateDepartmentMutation,
   useGetBranchDetailsQuery,
   useGetCompanyIdQuery,
-  useGetDepartmentDetailsQuery,
   useUpdateBranchMutation,
-  useUpdateDepartmentMutation,
 } from "../../../features/api";
 
-import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
+import FormSkeleton from "../../../skeletons/FormSkeleton";
 
 const branchSchema = Yup.object().shape({
   name: Yup.string().required("Department Name is required"),
@@ -36,7 +33,7 @@ const BranchForm = ({ branchId, setIsPopupOpen }) => {
     isError: branchError,
   } = useGetBranchDetailsQuery(branchId, { skip: !branchId });
 
-  if (branchLoading && !branchError) return <CardSkeleton />;
+  if (branchLoading && !branchError) return <FormSkeleton />;
   if (!branchLoading && branchError)
     return <ErrorMessage message={error?.data?.message} />;
 

@@ -1,34 +1,17 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { ErrorMessage, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import {
   useAddShiftMutation,
-  useCreateAllowanceMutation,
-  useCreateDeductionMutation,
-  useCreateGradeMutation,
-  useCreateLeaveTypeMutation,
-  useGetAllowanceDetailsQuery,
   useGetCompanyIdQuery,
-  useGetDeductionDetailsQuery,
-  useGetDeductionListQuery,
-  useGetGradeDetailsQuery,
-  useGetLeaveTypeDetailsQuery,
   useGetShiftDetailsQuery,
-  useGetTypeListQuery,
-  useUpdateAllowanceMutation,
-  useUpdateDeductionMutation,
-  useUpdateGradeMutation,
-  useUpdateLeaveTypeMutation,
   useUpdateShiftMutation,
 } from "../../../features/api";
 
-import FormSkeleton from "../../../skeletons/FormSkeleton";
+import CardSkeleton from "../../../skeletons/card";
 import { InputBox } from "../../company/BrandInput";
-
-import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
-import ConfirmDialog from "../../../helpers/ConfirmDialog";
 
 const shiftSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -38,7 +21,6 @@ const shiftSchema = Yup.object().shape({
 });
 
 const ShiftForm = ({ shiftId, onClose }) => {
-  console.log(shiftId);
   const navigate = useNavigate();
 
   const { data: companyId } = useGetCompanyIdQuery();

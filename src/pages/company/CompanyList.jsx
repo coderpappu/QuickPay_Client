@@ -4,7 +4,6 @@ import { LuEye } from "react-icons/lu";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import { Link } from "react-router-dom";
-import CardSkeleton from "../../components/skeletons/hrm-card-skeletons/card";
 import {
   useDeleteCompanyMutation,
   useGetCompaniesQuery,
@@ -12,6 +11,7 @@ import {
   useSetCompanyIdMutation,
 } from "../../features/api";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
+import CardSkeleton from "../../skeletons/card";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import ErrorMessage from "../../utils/ErrorMessage";
 

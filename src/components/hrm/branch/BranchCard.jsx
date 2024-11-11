@@ -8,10 +8,10 @@ import {
   useGetCompanyIdQuery,
 } from "../../../features/api";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
+import CardSkeleton from "../../../skeletons/card";
 import ErrorMessage from "../../../utils/ErrorMessage";
 import BrandCardWrapper from "../../company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../company/SettingCardHeader";
-import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
 import BranchForm from "./BranchForm";
 
 const BranchCard = () => {

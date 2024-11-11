@@ -2,9 +2,7 @@ import React from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import BrandCardWrapper from "../../company/BrandCardWrapper";
-import {
-  HrmSetupCardHeader,
-} from "../../company/SettingCardHeader";
+import { HrmSetupCardHeader } from "../../company/SettingCardHeader";
 
 import {
   useDeleteLeaveTypeMutation,
@@ -15,8 +13,8 @@ import {
 import { useState } from "react";
 import toast from "react-hot-toast";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
+import CardSkeleton from "../../../skeletons/card";
 import ErrorMessage from "../../../utils/ErrorMessage";
-import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
 import LeaveTypeForm from "./LeaveTypeForm";
 
 const LeaveCard = () => {

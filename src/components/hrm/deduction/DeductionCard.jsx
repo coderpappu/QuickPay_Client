@@ -1,26 +1,20 @@
-import React from "react";
-import BrandCardWrapper from "../../company/BrandCardWrapper";
-import SettingCardHeader, {
-  HrmSetupCardHeader,
-} from "../../company/SettingCardHeader";
-import SettingCardFooter from "../../company/SettingCardFooter";
-import { LiaEdit } from "react-icons/lia";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
+import DeductionForm from "../../../components/hrm/deduction/DeductionForm";
 import {
   useDeleteDeductionMutation,
   useGetCompanyIdQuery,
   useGetDeductionListQuery,
 } from "../../../features/api";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
-import toast from "react-hot-toast";
-import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
+import CardSkeleton from "../../../skeletons/card";
 import ErrorMessage from "../../../utils/ErrorMessage";
-import DeductionForm from "../../../components/hrm/deduction/DeductionForm";
-import { useState } from "react";
+import BrandCardWrapper from "../../company/BrandCardWrapper";
+import { HrmSetupCardHeader } from "../../company/SettingCardHeader";
 
 const DeductionCard = () => {
-  
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [selectDeductionId, setSelectDeductionId] = useState(null);
 

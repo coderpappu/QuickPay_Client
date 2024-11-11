@@ -1,26 +1,18 @@
-import React from "react";
-import BrandCardWrapper from "../../company/BrandCardWrapper";
-import SettingCardHeader, {
-  HrmSetupCardHeader,
-} from "../../company/SettingCardHeader";
-import SettingCardFooter from "../../company/SettingCardFooter";
-import { LiaEdit } from "react-icons/lia";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import {
-  useDeleteDeductionMutation,
   useDeleteShiftMutation,
   useGetCompanyIdQuery,
-  useGetDeductionListQuery,
   useGetShiftListQuery,
 } from "../../../features/api";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
-import toast from "react-hot-toast";
-import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
 import ErrorMessage from "../../../utils/ErrorMessage";
-import DeductionForm from "../deduction/DeductionForm";
-import { useState } from "react";
+import BrandCardWrapper from "../../company/BrandCardWrapper";
+import { HrmSetupCardHeader } from "../../company/SettingCardHeader";
 
+import CardSkeleton from "../../../skeletons/card";
 import ShiftForm from "./ShiftForm";
 
 const ShiftCard = () => {

@@ -14,9 +14,9 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
+import CardSkeleton from "../../../skeletons/card";
 import DatePicker from "../../../utils/DatePicker";
 import ErrorMessage from "../../../utils/ErrorMessage";
-import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
 import LeaveApplicationForm from "./LeaveApplicationForm";
 
 const LeaveApplicationListCard = () => {

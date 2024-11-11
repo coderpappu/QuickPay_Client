@@ -6,6 +6,7 @@ import {
   useGetCompanyIdQuery,
   useGetNotificationSettingQuery,
 } from "../../features/api";
+import CardSkeleton from "../../skeletons/card";
 import BrandCardWrapper from "./BrandCardWrapper";
 import SettingCardFooter from "./SettingCardFooter";
 import SettingCardHeader from "./SettingCardHeader";
@@ -20,7 +21,7 @@ const NotificationCard = () => {
     isError,
   } = useGetNotificationSettingQuery(company_id);
 
-  if (isLoading && !isError) return "Loading.....";
+  if (isLoading && !isError) return <CardSkeleton />;
 
   const initialValues = {
     newUser: notificationSettings?.data?.newUser || false,

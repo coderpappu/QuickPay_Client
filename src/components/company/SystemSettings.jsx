@@ -7,7 +7,7 @@ import {
   useGetCompanyIdQuery,
   useGetSystemSettingsQuery,
 } from "../../features/api";
-import CardSkeleton from "../skeletons/hrm-card-skeletons/card";
+import CardSkeleton from "../../skeletons/card";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox, SelectOptionBox } from "./BrandInput";
 import InputTitle from "./InputTitle";

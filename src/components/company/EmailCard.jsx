@@ -7,6 +7,7 @@ import {
   useGetCompanyIdQuery,
   useGetEmailSettingQuery,
 } from "../../features/api";
+import CardSkeleton from "../../skeletons/card";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox, SelectOptionBox } from "./BrandInput";
 import InputTitle from "./InputTitle";
@@ -92,7 +93,7 @@ const EmailCard = () => {
     isError,
   } = useGetEmailSettingQuery(company_id);
 
-  if (isLoading && !isError) return <div>Loading...</div>;
+  if (isLoading && !isError) return <CardSkeleton />;
 
   const initialValues = {
     driver: emailSettings?.data?.driver || "",

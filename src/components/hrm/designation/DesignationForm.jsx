@@ -1,17 +1,16 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
 import {
   useCreateNewDesignationMutation,
   useGetCompanyIdQuery,
   useGetDesignationDetailsQuery,
-  useGetDesignationsQuery,
   useUpdateDesignationMutation,
 } from "../../../features/api";
 
-import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
+import FormSkeleton from "../../../skeletons/FormSkeleton";
 
 const designationSchema = Yup.object().shape({
   name: Yup.string().required("Designation name is required"),
@@ -34,7 +33,7 @@ const DesignationForm = ({ designationId, setIsPopupOpen }) => {
     isError: designationError,
   } = useGetDesignationDetailsQuery(designationId, { skip: !designationId });
 
-  if (designationLoading && !designationError) return <CardSkeleton />;
+  if (designationLoading && !designationError) return <FormSkeleton />;
   if (!designationLoading && designationError)
     return <ErrorMessage message={error?.data?.message} />;
 

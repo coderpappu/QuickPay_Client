@@ -6,11 +6,10 @@ import * as Yup from "yup";
 import {
   useCreateNewSectionMutation,
   useGetCompanyIdQuery,
-  useUpdateSectionMutation,
   useGetSectionDetailsQuery,
+  useUpdateSectionMutation,
 } from "../../../features/api";
-
-import CardSkeleton from "../../skeletons/hrm-card-skeletons/card";
+import CardSkeleton from "../../../skeletons/card";
 
 const sectionSchema = Yup.object().shape({
   name: Yup.string().required("Section name is required"),
