@@ -1,21 +1,20 @@
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 import { MdOutlineCheckCircle } from "react-icons/md";
 import {
   useCreateAttendanceMutation,
-  useGetEmployeesQuery,
   useGetCompanyIdQuery,
   useGetEmployeeSettingQuery,
+  useGetEmployeesQuery,
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
-import { MdOutlineErrorOutline } from "react-icons/md";
 import ErrorMessage from "../../utils/ErrorMessage";
-
 const ManualAttendance = () => {
   const [checkInTimes, setCheckInTimes] = useState({});
   const [checkOutTimes, setCheckOutTimes] = useState({});
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [createCheck] = useCreateAttendanceMutation();
+  const [createCheck, { isError: addError }] = useCreateAttendanceMutation();
   const { data: employeeSetting } = useGetEmployeeSettingQuery(companyId);
 
   const {
@@ -34,27 +33,28 @@ const ManualAttendance = () => {
     let checkIn = checkInTimes[employeeId] || null;
     let checkOut = checkOutTimes[employeeId] || null;
 
-    // Define your thresholds
-    const lateThreshold = "09:30";
-    const overtimeThreshold = "17:00";
+    try {
+      let addAttendance = await createCheck({
+        check_in_time: checkIn,
+        check_out_time: checkOut,
+        date: nowDate,
+        late: false,
+        status: "Success",
+        companyId,
+        employeeId,
+        fingerprintId,
+      }).unwrap(); // Use unwrap to catch the error directly
 
-    //let checkTime = employees?.data[0]?.EmployeeShift[0]?.shift.start_time
+      toast.success("Attendance added successfully!");
+    } catch (error) {
+      // Check for a specific error message or status
 
-    // Check for late attendance
-    // const isLate = checkIn && checkIn > lateThreshold;
-    // Check for overtime
-    // const isOvertime = checkOut && checkOut > overtimeThreshold;
-
-    await createCheck({
-      check_in_time: checkIn,
-      check_out_time: checkOut,
-      date: nowDate,
-      late: false,
-      status: "Success",
-      companyId,
-      employeeId,
-      fingerprintId,
-    });
+      if (addError) {
+        // Backend specific error handling based on the message
+        const errorMessage = error?.data?.message || "Failed to add attendance";
+        toast.error(errorMessage);
+      }
+    }
   };
 
   const handleCheckInChange = (employeeId, time) => {
@@ -67,7 +67,7 @@ const ManualAttendance = () => {
 
   let content;
 
-  if (isLoading && !isError) content = <ListSkeleton />;
+  if (isLoading && !isError) return <ListSkeleton />;
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 

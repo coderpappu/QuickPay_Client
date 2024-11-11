@@ -2,7 +2,6 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { LuEye } from "react-icons/lu";
 import { MdOutlineDeleteOutline } from "react-icons/md";
-import { TbEdit } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import {
   useDeleteAttendanceMutation,
@@ -13,8 +12,7 @@ import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import DatePicker from "../../utils/DatePicker";
 import ErrorMessage from "../../utils/ErrorMessage";
-import { AiOutlineDelete } from "react-icons/ai";
-import { CiEdit } from "react-icons/ci";
+import formatTimeTo12Hour from "../../utils/timeConverter";
 
 const AttendanceList = () => {
   const { data: companyId } = useGetCompanyIdQuery();
@@ -73,7 +71,8 @@ const AttendanceList = () => {
 
   let content;
 
-  if (isLoading && !isError) content = <ListSkeleton />;
+  if (isLoading && !isError) return <ListSkeleton />;
+
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
@@ -82,7 +81,9 @@ const AttendanceList = () => {
       <>
         <tr
           key={attendance?.id}
-          className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
+          className={
+            index % 2 === 0 ? "" : "bg-gray-50 dark:bg-dark-box rounded-sm"
+          }
         >
           <td className="py-2 text-sm text-center">{index + 1}</td>
           <td className="py-2 text-sm font-semibold  text-center">
@@ -99,18 +100,18 @@ const AttendanceList = () => {
               //     className="p-2 w-[80px] bg-[#F0F3FF] rounded-sm focus:outline-[#6D28D8] text-center"
               //   />
               // ) : (
-              attendance?.check_in_time
+              formatTimeTo12Hour(attendance?.check_in_time || "")
               //)
             }
           </td>
           <td className="py-2 text-sm text-center">
-            {attendance?.check_out_time}
+            {formatTimeTo12Hour(attendance?.check_out_time || "")}
           </td>
           <td className="py-2 text-sm text-center">
             {attendance?.late == false ? "No" : "Yes"}
           </td>
           <td className="py-2 text-sm text-center">
-            {attendance?.over_time == null ? "No" : "Yes"}
+            {attendance?.over_time > 0 ? "Yes" : "No"}
           </td>
 
           <td className="py-2 text-sm text-center">{attendance?.status}</td>

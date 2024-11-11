@@ -13,6 +13,7 @@ import BrandCardWrapper from "../../company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../company/SettingCardHeader";
 
 import CardSkeleton from "../../../skeletons/card";
+import formatTimeTo12Hour from "../../../utils/timeConverter";
 import ShiftForm from "./ShiftForm";
 
 const ShiftCard = () => {
@@ -86,13 +87,13 @@ const ShiftCard = () => {
           <h3>{shift?.name}</h3>
         </div>
         <div className="dark:text-white w-[20%]">
-          <h3>{shift?.start_time}</h3>
+          <h3>{formatTimeTo12Hour(shift?.start_time)}</h3>
         </div>
         <div className="dark:text-white w-[20%]">
-          <h3>{shift?.end_time}</h3>
+          <h3>{formatTimeTo12Hour(shift?.end_time)}</h3>
         </div>
         <div className="dark:text-white w-[20%]">
-          <h3>{shift?.late_time_count}</h3>
+          <h3>{formatTimeTo12Hour(shift?.late_time_count)}</h3>
         </div>
 
         <div className="dark:text-white w-[15%]">

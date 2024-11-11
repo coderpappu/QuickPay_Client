@@ -212,7 +212,12 @@ function App() {
         <Route path="/registration" element={<RegistraionPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <Toaster />
+      <Toaster
+        toastOptions={{
+          duration: 2000,
+          className: "h-[60px]",
+        }}
+      />
     </>
   );
 }
