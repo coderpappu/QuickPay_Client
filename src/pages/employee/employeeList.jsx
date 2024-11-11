@@ -72,7 +72,7 @@ const LeaveCard = () => {
   };
 
   let content;
-  if (isLoading && !isError) content = <ListSkeleton />;
+  if (isLoading && !isError) return <ListSkeleton />;
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
   let employees;

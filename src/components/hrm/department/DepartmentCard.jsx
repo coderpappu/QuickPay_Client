@@ -57,7 +57,7 @@ const DepartmentCard = () => {
                 });
               } catch (error) {
                 toast.error(error.message || "Failed to delete department");
-              }
+              } 
             }}
             onCancel={() => toast.dismiss(t.id)}
             title="Department"
