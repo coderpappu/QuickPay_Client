@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import {
   useCreateNewCompanyMutation,
   useGetCompanyDetailsQuery,
+  useUpdateCompanyMutation,
 } from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox } from "./BrandInput"; // Ensure this imports your updated InputBox
@@ -27,8 +28,8 @@ const validationSchema = Yup.object().shape({
   phone_number: Yup.string().required("Phone number is required"),
   company_registration_no: Yup.string().notRequired(),
 
-  faxNo: Yup.string().notRequired(),
-  website_Url: Yup.string().notRequired(),
+  fax: Yup.string().notRequired(),
+  website_url: Yup.string().notRequired(),
   timezone: Yup.string().notRequired(),
 });
 
@@ -64,7 +65,7 @@ const formFields = [
   ],
   [
     {
-      name: "faxNo",
+      name: "fax",
       title: "Fax No",
       placeholder: "Enter fax number",
       required: false,
@@ -78,7 +79,7 @@ const formFields = [
   ],
   [
     {
-      name: "website_Url",
+      name: "website_url",
       title: "Website URL",
       placeholder: "https://www.codexdevware.com",
       required: false,
@@ -102,6 +103,8 @@ const CompanySettings = () => {
   const id = useParams()?.id;
 
   const [createNewCompany] = useCreateNewCompanyMutation();
+  const [updateCompany] = useUpdateCompanyMutation();
+
   const {
     data: companyDetails,
     isLoading,
@@ -124,8 +127,8 @@ const CompanySettings = () => {
     company_registration_no:
       companyDetails?.data?.company_registration_no || "",
     date_format: companyDetails?.data?.date_format || "",
-    faxNo: companyDetails?.data?.faxNo || "",
-    website_Url: companyDetails?.data?.website_url || "",
+    fax: companyDetails?.data?.fax || "",
+    website_url: companyDetails?.data?.website_url || "",
     timezone: companyDetails?.data?.timezone || "",
   };
 
@@ -136,7 +139,11 @@ const CompanySettings = () => {
       onSubmit={(values) => {
         let modifyValue = modifyPayload(values);
 
-        createNewCompany(values); // Call your mutation here if needed
+        if (!id) {
+          createNewCompany(values); // Call your mutation here if needed
+        } else {
+          updateCompany({ id, ...values });
+        }
       }}
     >
       {({ handleSubmit, setFieldValue }) => (
