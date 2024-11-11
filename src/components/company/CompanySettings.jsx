@@ -1,7 +1,10 @@
 import { ErrorMessage, Form, Formik } from "formik";
 import React from "react";
 import * as Yup from "yup";
-import { useCreateNewCompanyMutation } from "../../features/api";
+import {
+  useCreateNewCompanyMutation,
+  useGetCompanyDetailsQuery,
+} from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
 import { InputBox } from "./BrandInput"; // Ensure this imports your updated InputBox
 import InputTitle from "./InputTitle";
@@ -9,6 +12,8 @@ import SelectorInput from "./SelectorInput";
 import SettingCardFooter from "./SettingCardFooter";
 import SettingCardHeader from "./SettingCardHeader";
 
+import { useParams } from "react-router-dom";
+import FormSkeleton from "../../skeletons/FormSkeleton";
 import { modifyPayload } from "../../utils/modifyPayload";
 
 // Validation schema using Yup
@@ -94,21 +99,34 @@ const formFields = [
 ];
 
 const CompanySettings = () => {
+  const id = useParams()?.id;
+
   const [createNewCompany] = useCreateNewCompanyMutation();
+  const {
+    data: companyDetails,
+    isLoading,
+    isError,
+    error,
+  } = useGetCompanyDetailsQuery(id);
+
+  if (isLoading && !isError) return <FormSkeleton />;
+
+  if (!isLoading && isError) return <ErrorMessage message={error?.message} />;
 
   const initialValues = {
-    company_name: "",
-    address: "",
-    city: "",
-    state: "",
-    postal_code: "",
-    country: "",
-    phone_number: "",
-    company_registration_no: "",
-    date_format: "",
-    faxNo: "",
-    website_Url: "",
-    timezone: "",
+    company_name: companyDetails?.data?.company_name || "",
+    address: companyDetails?.data?.address || "",
+    city: companyDetails?.data?.city || "",
+    state: companyDetails?.data?.state || "",
+    postal_code: companyDetails?.data?.postal_code || "",
+    country: companyDetails?.data?.country || "",
+    phone_number: companyDetails?.data?.phone_number || "",
+    company_registration_no:
+      companyDetails?.data?.company_registration_no || "",
+    date_format: companyDetails?.data?.date_format || "",
+    faxNo: companyDetails?.data?.faxNo || "",
+    website_Url: companyDetails?.data?.website_url || "",
+    timezone: companyDetails?.data?.timezone || "",
   };
 
   return (

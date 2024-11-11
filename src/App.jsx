@@ -13,7 +13,6 @@ import Weekend from "./pages/calendar/weekend/Weekend";
 import WeekendSetting from "./pages/calendar/weekend/WeekendSettings";
 import CompanyList from "./pages/company/CompanyList";
 import CompanyPofile from "./pages/company/CompanyPofile";
-import CompanySettingsPage from "./pages/company/CompanySettingsPage";
 import Settings from "./pages/company/Settings";
 import AddShift from "./pages/company/shift/AddShift";
 import EditShift from "./pages/company/shift/EditShift";
@@ -88,10 +87,7 @@ function App() {
             <Route path="profile/:id" element={<ProfileUpdate />} />
 
             <Route path="company/create" element={<CompanySettings />} />
-            <Route
-              path="company/update/:id"
-              element={<CompanySettingsPage />}
-            />
+            <Route path="company/update/:id" element={<CompanySettings />} />
             <Route path="company/details/:id" element={<CompanyPofile />} />
 
             {/* Company-specific private routes */}
