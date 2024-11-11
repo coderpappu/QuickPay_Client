@@ -1,10 +1,10 @@
 import React from "react";
-import ErrorImg from "../assets/error-img-3.png";
 import { Link } from "react-router-dom";
+import ErrorImg from "../assets/error-img-3.png";
 
 const NotFound = () => {
   return (
-    <div className="flex items-center justify-center  w-full h-screen px-4 ">
+    <div className="flex items-center justify-center  w-full h-screen px-4  dark:bg-dark-card">
       <div className="text-center max-w-[90%] md:max-w-[600px] lg:max-w-[800px] ">
         <img src={ErrorImg} alt="Error Image" className="w-full h-auto mb-8" />
 

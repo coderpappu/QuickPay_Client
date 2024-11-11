@@ -13,7 +13,7 @@ import {
 import { GrDownload } from "react-icons/gr";
 import AssetCard from "../../components/employee/AssetCard";
 import JobDetails from "../../components/employee/JobDetails";
-import ListSkeleton from "../../skeletons/ListSkeleton";
+import ProfileSkeleton from "../../skeletons/ProfileSkeleton";
 import SalarySettingsForm from "./SalarySetting/SalarySetting";
 const Profile = () => {
   const id = useParams()?.id;
@@ -30,7 +30,7 @@ const Profile = () => {
 
   let content;
 
-  if (isLoading && !isError) content = <ListSkeleton />;
+  if (isLoading && !isError) return <ProfileSkeleton />;
 
   if (!isLoading && isError) content = <p>Error fetching data</p>;
 
