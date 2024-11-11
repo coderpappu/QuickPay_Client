@@ -34,6 +34,7 @@ const BranchForm = ({ branchId, setIsPopupOpen }) => {
   } = useGetBranchDetailsQuery(branchId, { skip: !branchId });
 
   if (branchLoading && !branchError) return <FormSkeleton />;
+
   if (!branchLoading && branchError)
     return <ErrorMessage message={error?.data?.message} />;
 

@@ -9,7 +9,7 @@ import {
   useGetSectionDetailsQuery,
   useUpdateSectionMutation,
 } from "../../../features/api";
-import CardSkeleton from "../../../skeletons/card";
+import FormSkeleton from "../../../skeletons/FormSkeleton";
 
 const sectionSchema = Yup.object().shape({
   name: Yup.string().required("Section name is required"),
@@ -32,7 +32,7 @@ const SectionForm = ({ sectionId, setIsPopupOpen }) => {
     isError: sectionError,
   } = useGetSectionDetailsQuery(sectionId, { skip: !sectionId });
 
-  if (sectionLoading && !sectionError) return <CardSkeleton />;
+  if (sectionLoading && !sectionError) return <FormSkeleton />;
   if (!sectionLoading && sectionError)
     return <ErrorMessage message={error?.data?.message} />;
 

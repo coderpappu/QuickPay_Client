@@ -1,26 +1,11 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useEffect, useState } from "react";
+import { ErrorMessage, Form, Formik } from "formik";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import {
-  useCreateAllowanceMutation,
-  useCreateDeductionMutation,
-  useCreateGradeMutation,
-  useCreateLeaveTypeMutation,
   useCreateLoanTypeMutation,
-  useGetAllowanceDetailsQuery,
   useGetCompanyIdQuery,
-  useGetDeductionDetailsQuery,
-  useGetDeductionListQuery,
-  useGetGradeDetailsQuery,
-  useGetLeaveTypeDetailsQuery,
   useGetLoanDetailsQuery,
-  useGetTypeListQuery,
-  useUpdateAllowanceMutation,
-  useUpdateDeductionMutation,
-  useUpdateGradeMutation,
-  useUpdateLeaveTypeMutation,
   useUpdateLoanTypeMutation,
 } from "../../../features/api";
 
@@ -47,21 +32,13 @@ const LoanTypeForm = ({ loanTypeId, onClose }) => {
     skip: !loanTypeId,
   });
 
-  const [initialValues, setInitialValues] = useState({
-    name: "",
-    interestRate: "",
-    maxAmount: "",
-  });
+  if (isLoading) return <FormSkeleton />;
 
-  useEffect(() => {
-    if (loanTypeDetails?.data) {
-      setInitialValues({
-        name: loanTypeDetails?.data?.name,
-        interestRate: loanTypeDetails?.data?.interestRate,
-        maxAmount: loanTypeDetails?.data?.maxLoanAmount,
-      });
-    }
-  }, [loanTypeDetails]);
+  const initialValues = {
+    name: loanTypeDetails?.data?.name || "",
+    interestRate: loanTypeDetails?.data?.interestRate || "",
+    maxAmount: loanTypeDetails?.data?.maxLoanAmount || "",
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

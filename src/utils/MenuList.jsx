@@ -14,6 +14,7 @@ const adminMenuItems = [
       { title: "Reports", link: "company/weekend/create" },
       { title: "Holiday Type", link: "/holiday/type/add" },
       { title: "Holiday Form", link: "/holidayform/" },
+      { title: "Loader", link: "/loader/" },
     ],
   },
   {

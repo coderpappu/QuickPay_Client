@@ -161,7 +161,7 @@ const LeaveCard = () => {
             <div className="bg-white dark:bg-dark-card  rounded-lg p-6 w-full max-w-md">
               <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-dark-border-color dark:border-opacity-5">
                 <h3 className="text-lg font-medium text-gray-800 dark:text-white">
-                  Designation
+                  Leave
                 </h3>
                 <button
                   className="text-gray-500 hover:text-gray-800"

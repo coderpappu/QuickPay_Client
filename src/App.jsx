@@ -59,6 +59,7 @@ import ProfileUpdate from "./pages/user/ProfileUpdate";
 import RegistraionPage from "./pages/user/RegistraionPage";
 import CompanyPrivateRoute from "./privateRoute/CompanyPrivateRoute";
 import PrivateRoute from "./privateRoute/PrivateRoute";
+import FormSkeleton from "./skeletons/FormSkeleton";
 
 function App() {
   return (
@@ -197,6 +198,9 @@ function App() {
 
               <Route path="/company/loan/type" element={<LoanTypeList />} />
               <Route path="/company/loan/type/:id" element={<LoanTypeForm />} />
+
+              {/* loader test route  */}
+              <Route path="/loader/" element={<FormSkeleton />} />
             </Route>
           </Route>
         </Route>

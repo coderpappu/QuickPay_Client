@@ -1,24 +1,14 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { ErrorMessage, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import {
-  useCreateAllowanceMutation,
   useCreateDeductionMutation,
-  useCreateGradeMutation,
-  useCreateLeaveTypeMutation,
-  useGetAllowanceDetailsQuery,
   useGetCompanyIdQuery,
   useGetDeductionDetailsQuery,
   useGetDeductionListQuery,
-  useGetGradeDetailsQuery,
-  useGetLeaveTypeDetailsQuery,
-  useGetTypeListQuery,
-  useUpdateAllowanceMutation,
   useUpdateDeductionMutation,
-  useUpdateGradeMutation,
-  useUpdateLeaveTypeMutation,
 } from "../../../features/api";
 
 import FormSkeleton from "../../../skeletons/FormSkeleton";
@@ -85,7 +75,7 @@ const DeductionForm = ({ deductionId, onClose }) => {
           &#x2715;
         </button>
         <h2 className="text-xl font-semibold  dark:text-dark-heading-color mb-4">
-          {deductionId ? "Edit Allowance" : "Add Allowance"}
+          {deductionId ? "Edit Deduction" : "Add Deduction"}
         </h2>
         <Formik
           enableReinitialize
@@ -106,7 +96,7 @@ const DeductionForm = ({ deductionId, onClose }) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Allowance added successfully");
+                    toast.success("Deduction added successfully");
                     navigate("/company/allowance");
                     onClose();
                   }

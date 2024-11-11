@@ -10,7 +10,7 @@ import {
   useUpdateShiftMutation,
 } from "../../../features/api";
 
-import CardSkeleton from "../../../skeletons/card";
+import FormSkeleton from "../../../skeletons/FormSkeleton";
 import { InputBox } from "../../company/BrandInput";
 
 const shiftSchema = Yup.object().shape({
@@ -56,7 +56,7 @@ const ShiftForm = ({ shiftId, onClose }) => {
   }
 
   if (isShiftLoading && !isError) {
-    return <CardSkeleton />;
+    return <FormSkeleton />;
   }
 
   return (

@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { AiOutlineProduct, AiOutlineSetting } from "react-icons/ai";
 import { IoIosArrowForward } from "react-icons/io";
+import { PiDotDuotone } from "react-icons/pi";
+import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
 import { useGetCompanyIdQuery, useGetUserQuery } from "../features/api";
-import { PiDotDuotone } from "react-icons/pi";
-import { LuListTodo } from "react-icons/lu";
-import { Link } from "react-router-dom";
 import { adminMenuItems, employeeMenuItems } from "../utils/MenuList";
 const Sidebar = () => {
   const { data: companyId } = useGetCompanyIdQuery();

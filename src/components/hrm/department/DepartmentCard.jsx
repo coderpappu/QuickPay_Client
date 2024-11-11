@@ -9,7 +9,7 @@ import {
   useGetDepartmentsQuery,
 } from "../../../features/api";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
-import CardSkeleton from "../../../skeletons/card";
+import FormSkeleton from "../../../skeletons/FormSkeleton";
 import ErrorMessage from "../../../utils/ErrorMessage";
 import BrandCardWrapper from "../../company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../company/SettingCardHeader";
@@ -72,7 +72,7 @@ const DepartmentCard = () => {
   };
   let content;
 
-  if (isLoading && !isError) return <CardSkeleton />;
+  if (isLoading && !isError) return <FormSkeleton />;
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
