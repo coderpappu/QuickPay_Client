@@ -91,7 +91,7 @@ const ManualAttendance = () => {
             placeholder="00.00"
             value={checkInTimes[employee?.id] || ""}
             onChange={(e) => handleCheckInChange(employee?.id, e.target.value)}
-            className="p-2 w-[80px] bg-[#F0F3FF] dark:bg-dark-box rounded-sm focus:outline-[#6D28D8] text-center"
+            className="p-2 w-[115px] bg-[#F0F3FF] dark:bg-dark-box rounded-sm focus:outline-[#6D28D8] text-center"
           />
         </td>
 
@@ -101,7 +101,7 @@ const ManualAttendance = () => {
             placeholder="03.00"
             value={checkOutTimes[employee?.id] || ""}
             onChange={(e) => handleCheckOutChange(employee?.id, e.target.value)}
-            className="p-2 w-[80px] bg-[#F0F3FF] dark:bg-dark-box rounded-sm focus:outline-[#6D28D8] text-center"
+            className="p-2 w-[115px] bg-[#F0F3FF] dark:bg-dark-box rounded-sm focus:outline-[#6D28D8] text-center"
           />
         </td>
 

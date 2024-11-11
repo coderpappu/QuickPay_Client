@@ -38,7 +38,7 @@ const LeaveApplicationListCard = () => {
 
   let content;
 
-  if (isLoading && !isError) content = <CardSkeleton />;
+  if (isLoading && !isError) return <CardSkeleton />;
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
