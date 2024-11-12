@@ -13,10 +13,10 @@ import SelectorInput from "./SelectorInput";
 import SettingCardFooter from "./SettingCardFooter";
 import SettingCardHeader from "./SettingCardHeader";
 
-import { useParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { useNavigate, useParams } from "react-router-dom";
 import FormSkeleton from "../../skeletons/FormSkeleton";
 import { modifyPayload } from "../../utils/modifyPayload";
-
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
   company_name: Yup.string().required("Company name is required"),
@@ -101,6 +101,7 @@ const formFields = [
 
 const CompanySettings = () => {
   const id = useParams()?.id;
+  const navigate = useNavigate();
 
   const [createNewCompany] = useCreateNewCompanyMutation();
   const [updateCompany] = useUpdateCompanyMutation();
@@ -114,7 +115,7 @@ const CompanySettings = () => {
 
   if (isLoading && !isError) return <FormSkeleton />;
 
-  if (!isLoading && isError) return <ErrorMessage message={error?.message} />;
+  // if (!isLoading && isError) return <ErrorMessage message={error?.message} />;
 
   const initialValues = {
     company_name: companyDetails?.data?.company_name || "",
@@ -138,11 +139,19 @@ const CompanySettings = () => {
       validationSchema={validationSchema}
       onSubmit={(values) => {
         let modifyValue = modifyPayload(values);
-
+        let response;
         if (!id) {
-          createNewCompany(values); // Call your mutation here if needed
+          response = createNewCompany(values); // Call your mutation here if needed
         } else {
-          updateCompany({ id, ...values });
+          response = updateCompany({ id, ...values });
+        }
+
+        if (response.error) {
+          toast.error(response.error.data.message);
+        } else {
+          toast.success(`Company ${id ? "updated" : "created"} successfully`);
+
+          navigate("/company/list");
         }
       }}
     >
@@ -190,7 +199,7 @@ const CompanySettings = () => {
           </BrandCardWrapper>
         </Form>
       )}
-    </Formik>
+    </Formik> 
   );
 };
 

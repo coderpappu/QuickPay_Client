@@ -3,6 +3,7 @@ import BoardMenuButton from "../../components/company/BoardMenuButton";
 
 import BiometricCard from "../../components/company/BiometricCard";
 import BrandCard from "../../components/company/BrandCard";
+import CompanySettingCard from "../../components/company/CompanySetting";
 import CompanySettings from "../../components/company/CompanySettings";
 import CurrencyCard from "../../components/company/CurrencyCard";
 import EmailCard from "../../components/company/EmailCard";
@@ -80,6 +81,10 @@ const SystemSettings = () => {
       title: "Biometric Attendance Settings",
       id: 14,
     },
+    {
+      title: "Company Settings",
+      id: 15,
+    },
   ];
 
   return (
@@ -122,6 +127,7 @@ const SystemSettings = () => {
           {activeSetting == 12 && <LeaveApplicationCard />}
           {activeSetting == 13 && <NocCard />}
           {activeSetting == 14 && <BiometricCard />}
+          {activeSetting == 15 && <CompanySettingCard />}
         </div>
       </div>
     </div>

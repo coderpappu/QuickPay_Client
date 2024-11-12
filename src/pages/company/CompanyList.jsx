@@ -13,6 +13,7 @@ import {
   useGetCompanyIdQuery,
   useSetCompanyIdMutation,
 } from "../../features/api";
+
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import CardSkeleton from "../../skeletons/card";
 import ListSkeleton from "../../skeletons/ListSkeleton";
@@ -36,6 +37,7 @@ const CompanyList = () => {
     isError,
     error,
   } = useGetCompaniesQuery();
+
   const [setCompanyId] = useSetCompanyIdMutation();
 
   // Effect to set company ID from local storage on component mount
@@ -110,7 +112,7 @@ const CompanyList = () => {
   let content;
   let companies;
 
-  if (isLoading && !isError) content = <ListSkeleton />;
+  if (isLoading && !isError) return <ListSkeleton />;
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
