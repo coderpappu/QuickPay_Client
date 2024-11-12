@@ -1,11 +1,21 @@
 import { Form, Formik } from "formik";
 import React from "react";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
+import { useParams } from "react-router-dom";
 import * as Yup from "yup";
+import {
+  useCreateJobTimeLineMutation,
+  useGetCompanyIdQuery,
+} from "../../features/api";
 import { InputBox } from "../company/BrandInput";
 import InputTitle from "../company/InputTitle";
 
 const JobTimeLineForm = ({ onClose }) => {
+  const id = useParams().id;
+
+  const { data: company_id } = useGetCompanyIdQuery();
+  const [createJobTimeLine] = useCreateJobTimeLineMutation();
+
   const initialValues = {
     jobTitle: "",
     jobDescription: "",
@@ -37,9 +47,18 @@ const JobTimeLineForm = ({ onClose }) => {
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
-            console.log(values);
-            toast.success("Job added successfully");
-            onClose();
+            try {
+              const addTimeLine = await createJobTimeLine({
+                ...values,
+                employee_id: id,
+                company_id,
+              }).unwrap();
+
+              toast.success(addTimeLine?.message);
+            } catch (error) {
+              toast.error(error.message);
+            }
+            // onClose();
           }}
         >
           {({ isSubmitting }) => (

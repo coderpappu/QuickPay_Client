@@ -1181,6 +1181,24 @@ export const apiSlice = createApi({
       }),
       providesTags: ["biometricSetting"],
     }),
+
+    // job time line
+    createJobTimeLine: builder.mutation({
+      query: (credentials) => ({
+        url: "/jobtimeline/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["jobTimeline"],
+    }),
+
+    getJobTimeLine: builder.query({
+      query: (employee_id) => ({
+        url: `/jobtimeline/joblist`,
+        params: { employee_id },
+      }),
+      providesTags: ["jobTimeline"],
+    }),
   }),
 });
 
@@ -1389,4 +1407,8 @@ export const {
   // biometric settings route
   useCreateBiometricSettingMutation,
   useGetBiometricSettingQuery,
+
+  // job time line
+  useCreateJobTimeLineMutation,
+  useGetJobTimeLineQuery,
 } = apiSlice;

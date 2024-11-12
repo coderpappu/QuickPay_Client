@@ -3,12 +3,17 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { FiEdit } from "react-icons/fi";
 import { IoAdd } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useGetJobTimeLineQuery } from "../../features/api";
 import JobTimeLineForm from "./JobTimeLineForm";
 
 const JobTimeLine = () => {
   const [viewStatus, setViewStatus] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const { id } = useParams();
+  const { data: jobTimeLineDetails } = useGetJobTimeLineQuery(id);
+  console.log(jobTimeLineDetails);
 
   const onClose = () => {
     setIsPopupOpen(!isPopupOpen);
