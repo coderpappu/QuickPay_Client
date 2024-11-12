@@ -44,7 +44,9 @@ const config = {
 
       addUtilities(newUtilities, ["responsive", "hover"]);
     },
+    require("daisyui"),
   ],
+
   darkMode: "selector",
 };
 

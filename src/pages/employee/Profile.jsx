@@ -13,6 +13,7 @@ import {
 import { GrDownload } from "react-icons/gr";
 import AssetCard from "../../components/employee/AssetCard";
 import JobDetails from "../../components/employee/JobDetails";
+import JobTimeLine from "../../components/employee/JobTimeLine";
 import ProfileSkeleton from "../../skeletons/ProfileSkeleton";
 import SalarySettingsForm from "./SalarySetting/SalarySetting";
 const Profile = () => {
@@ -125,12 +126,19 @@ const Profile = () => {
           handleSelect={handleSelect}
           title={"Assets"}
         />
+        <Button
+          button_id="5"
+          isActive={selected == "5"}
+          handleSelect={handleSelect}
+          title={"Career Timeline"}
+        />
       </div>
 
       {selected == "1" && <AboutCard employeeDetails={employeeDetails} />}
       {selected == "2" && <JobDetails employeeDetails={employeeDetails} />}
       {selected == "3" && <SalarySettingsForm />}
       {selected == "4" && <AssetCard />}
+      {selected == "5" && <JobTimeLine />}
     </div>
   );
 };
