@@ -1,9 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
+import { AiOutlineDelete } from "react-icons/ai";
+import { CiEdit } from "react-icons/ci";
+import { FiEdit } from "react-icons/fi";
+import { IoAdd } from "react-icons/io5";
+import { Link } from "react-router-dom";
+import JobTimeLineForm from "./JobTimeLineForm";
 
 const JobTimeLine = () => {
+  const [viewStatus, setViewStatus] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const onClose = () => {
+    setIsPopupOpen(!isPopupOpen);
+    console.log(isPopupOpen);
+  };
+
+  const handleEdit = () => {
+    // setMode(!mode);
+    setViewStatus(!viewStatus);
+  };
+
   return (
-    <div className="w-[39%] mt-3 relative p-4 bg-white dark:bg-dark-card rounded-md">
-      <ul className="timeline timeline-vertical align left-[-130px]">
+    <div className="w-[39%] mt-3 relative p-6 bg-white dark:bg-dark-card rounded-md">
+      {/* Timeline View  */}
+      <ul
+        className={`timeline timeline-vertical align left-[-150px] ${viewStatus ? "hidden" : "block"}`}
+      >
         <li>
           <div className="timeline-start text-dark-heading-color py-[2px] px-3 border  border-slate-500 border-opacity-35 rounded-full text-sm">
             2023-2024
@@ -22,7 +44,7 @@ const JobTimeLine = () => {
               />
             </svg>
           </div>
-          <div className="timeline-end bg-slate-50 dark:bg-dark-box border-dark-text-color border-opacity-10 rounded-md w-[300px] text-justify timeline-box">
+          <div className="timeline-end bg-slate-50 dark:bg-dark-box border-dark-text-color border-opacity-10 rounded-md w-[350px] text-justify timeline-box">
             <h2 className="text-sm text-dark-heading-color  font-bold">
               {" "}
               Web Developer
@@ -62,7 +84,7 @@ const JobTimeLine = () => {
               />
             </svg>
           </div>
-          <div className="timeline-end bg-slate-50 dark:bg-dark-box border-dark-text-color border-opacity-10 rounded-md w-[300px] text-justify timeline-box">
+          <div className="timeline-end bg-slate-50 dark:bg-dark-box border-dark-text-color border-opacity-10 rounded-md w-[350px] text-justify timeline-box">
             <h2 className="text-sm text-dark-heading-color font-bold">
               {" "}
               Web Developer
@@ -103,7 +125,7 @@ const JobTimeLine = () => {
               />
             </svg>
           </div>
-          <div className="timeline-end bg-slate-50 dark:bg-dark-box border-dark-text-color border-opacity-10 rounded-md w-[300px] text-justify timeline-box">
+          <div className="timeline-end bg-slate-50 dark:bg-dark-box border-dark-text-color border-opacity-10 rounded-md w-[350px] text-justify timeline-box">
             <h2 className="text-sm text-dark-heading-color font-bold">
               {" "}
               Software Engineer
@@ -125,6 +147,112 @@ const JobTimeLine = () => {
           <hr className="bg-slate-300 dark:bg-slate-600" />
         </li>
       </ul>
+
+      {/* edit board  */}
+      <div className={`w-full  ${!viewStatus ? "hidden" : "block"}`}>
+        <div className="w-[60%] mb-2 ml-6 dark:bg-dark-box p-3 rounded-md flex flex-wrap justify-between items-center">
+          <div className="border-r  py-2 px-3 border-slate-500 border-dashed border-opacity-35">
+            01
+          </div>
+          <div>
+            <h2>Web Developer</h2>
+            <p className="text-sm mt-1">Codex Debware</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-green-400 text-white rounded-sm p-2 flex justify-center items-center cursor-pointer">
+              <Link to={`/company/update/:id`}>
+                <CiEdit size={20} />
+              </Link>
+            </div>
+
+            {/* delete button  */}
+            <div
+              // onClick={() => handleDeleteCompany(company?.id)}
+              className="w-8 h-8 bg-red-500 text-white text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
+            >
+              <AiOutlineDelete size={20} />
+            </div>
+          </div>
+        </div>
+        <div className="w-[60%] mb-2 ml-6 dark:bg-dark-box p-3 rounded-md flex flex-wrap justify-between items-center">
+          <div className="border-r  py-2 px-3 border-slate-500 border-dashed border-opacity-35">
+            01
+          </div>
+          <div>
+            <h2>Web Developer</h2>
+            <p className="text-sm mt-1">Codex Debware</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-green-400 text-white rounded-sm p-2 flex justify-center items-center cursor-pointer">
+              <Link to={`/company/update/:id`}>
+                <CiEdit size={20} />
+              </Link>
+            </div>
+
+            {/* delete button  */}
+            <div
+              // onClick={() => handleDeleteCompany(company?.id)}
+              className="w-8 h-8 bg-red-500 text-white text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
+            >
+              <AiOutlineDelete size={20} />
+            </div>
+          </div>
+        </div>
+
+        <div className="w-[60%] mb-2 ml-6 dark:bg-dark-box p-3 rounded-md flex flex-wrap justify-between items-center">
+          <div className="border-r  py-2 px-3 border-slate-500 border-dashed border-opacity-35">
+            01
+          </div>
+          <div>
+            <h2>Web Developer</h2>
+            <p className="text-sm mt-1">Codex Debware</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-green-400 text-white rounded-sm p-2 flex justify-center items-center cursor-pointer">
+              <Link to={`/company/update/:id`}>
+                <CiEdit size={20} />
+              </Link>
+            </div>
+
+            {/* delete button  */}
+            <div
+              // onClick={() => handleDeleteCompany(company?.id)}
+              className="w-8 h-8 bg-red-500 text-white text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
+            >
+              <AiOutlineDelete size={20} />
+            </div>
+          </div>
+        </div>
+
+        <div
+          className="w-8 h-8 absolute right-5 top-3 rounded-full bg-green-500 text-center flex justify-center items-center  p-2 cursor-pointer"
+          onClick={() => setIsPopupOpen(!isPopupOpen)}
+          // onClick={() => handleOpen()}
+        >
+          <Link>
+            <IoAdd color="#fff" />
+          </Link>
+        </div>
+        <div className="flex justify-end mt-7">
+          <button
+            className="border border-red-500 transition-all   text-sm text-red-500 hover:bg-red-500 hover:text-white px-3 py-[6px] rounded-[5px]"
+            onClick={() => handleEdit()}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+
+      {isPopupOpen && <JobTimeLineForm onClose={onClose} />}
+
+      {!viewStatus && (
+        <div
+          className="absolute right-1 top-2 w-[40px] cursor-pointer h-[40px] flex flex-col justify-center align-middle items-center rounded-full bg-[#85858512] mr-2"
+          onClick={() => handleEdit()}
+        >
+          <FiEdit className="text-blue-600" />
+        </div>
+      )}
     </div>
   );
 };
