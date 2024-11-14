@@ -1,10 +1,15 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { FiEdit } from "react-icons/fi";
 import { IoAdd } from "react-icons/io5";
 import { Link, useParams } from "react-router-dom";
-import { useGetJobTimeLineQuery } from "../../features/api";
+import {
+  useDeleteJobTimeLineMutation,
+  useGetJobTimeLineQuery,
+} from "../../features/api";
+import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import ErrorMessage from "../../utils/ErrorMessage";
 import JobTimeLineForm from "./JobTimeLineForm";
@@ -12,8 +17,10 @@ import JobTimeLineForm from "./JobTimeLineForm";
 const JobTimeLine = () => {
   const [viewStatus, setViewStatus] = useState(false);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [editId, setEditId] = useState(null);
 
   const { id } = useParams();
+
   const {
     data: jobTimeLineDetails,
     isLoading,
@@ -21,10 +28,23 @@ const JobTimeLine = () => {
     error,
   } = useGetJobTimeLineQuery(id);
 
+  const [deleteJobTimeLine] = useDeleteJobTimeLineMutation();
+
   let content;
+  let editContent;
 
   const yearPicker = (date) => {
     return new Date(date)?.getFullYear();
+  };
+
+  const handleEdit = () => {
+    // setMode(!mode);
+    setViewStatus(!viewStatus);
+  };
+
+  const handleEditId = (id) => {
+    setEditId(id);
+    setIsPopupOpen(true);
   };
 
   if (isLoading && !isError) return <ListSkeleton />;
@@ -113,13 +133,74 @@ const JobTimeLine = () => {
         </li>
       )
     );
+
+  if (jobTimeLineDetails)
+    editContent = jobTimeLineDetails?.data?.map((data, index) => (
+      <div
+        className="w-[60%] mb-2 ml-6 dark:bg-dark-box p-3 rounded-md flex flex-wrap justify-between items-center"
+        key={data?.id}
+      >
+        <div className="border-r  py-2 px-3 border-slate-500 border-dashed border-opacity-35">
+          {++index}
+        </div>
+        <div>
+          <h2>{data?.jobTitle}</h2>
+          <p className="text-sm mt-1">{data?.company_name}</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <div
+            className="w-8 h-8 bg-green-400 text-white rounded-sm p-2 flex justify-center items-center cursor-pointer"
+            onClick={() => handleEditId(data?.id)}
+          >
+            <Link>
+              <CiEdit size={20} />
+            </Link>
+          </div>
+
+          {/* delete button  */}
+          <div
+            onClick={() => handleJobTimeLine(data?.id)}
+            className="w-8 h-8 bg-red-500 text-white text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
+          >
+            <AiOutlineDelete size={20} />
+          </div>
+        </div>
+      </div>
+    ));
+
   const onClose = () => {
     setIsPopupOpen(!isPopupOpen);
   };
 
-  const handleEdit = () => {
-    // setMode(!mode);
-    setViewStatus(!viewStatus);
+  const handleJobTimeLine = async (id) => {
+    const confirm = () =>
+      toast(
+        (t) => (
+          <ConfirmDialog
+            onConfirm={async () => {
+              toast.dismiss(t.id);
+              try {
+                await deleteJobTimeLine(id).then((res) => {
+                  if (res.error != null) {
+                    toast.error(res.error.data.msg);
+                  } else {
+                    toast.success("Job deleted successfully");
+                  }
+                });
+              } catch (error) {
+                toast.error(error.message || "Failed to delete job");
+              }
+            }}
+            onCancel={() => toast.dismiss(t.id)}
+            title="Job"
+          />
+        ),
+        {
+          duration: Infinity,
+        }
+      );
+
+    confirm();
   };
 
   return (
@@ -133,79 +214,7 @@ const JobTimeLine = () => {
 
       {/* edit board  */}
       <div className={`w-full  ${!viewStatus ? "hidden" : "block"}`}>
-        <div className="w-[60%] mb-2 ml-6 dark:bg-dark-box p-3 rounded-md flex flex-wrap justify-between items-center">
-          <div className="border-r  py-2 px-3 border-slate-500 border-dashed border-opacity-35">
-            01
-          </div>
-          <div>
-            <h2>Web Developer</h2>
-            <p className="text-sm mt-1">Codex Debware</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-green-400 text-white rounded-sm p-2 flex justify-center items-center cursor-pointer">
-              <Link to={`/company/update/:id`}>
-                <CiEdit size={20} />
-              </Link>
-            </div>
-
-            {/* delete button  */}
-            <div
-              // onClick={() => handleDeleteCompany(company?.id)}
-              className="w-8 h-8 bg-red-500 text-white text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
-            >
-              <AiOutlineDelete size={20} />
-            </div>
-          </div>
-        </div>
-        <div className="w-[60%] mb-2 ml-6 dark:bg-dark-box p-3 rounded-md flex flex-wrap justify-between items-center">
-          <div className="border-r  py-2 px-3 border-slate-500 border-dashed border-opacity-35">
-            01
-          </div>
-          <div>
-            <h2>Web Developer</h2>
-            <p className="text-sm mt-1">Codex Debware</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-green-400 text-white rounded-sm p-2 flex justify-center items-center cursor-pointer">
-              <Link to={`/company/update/:id`}>
-                <CiEdit size={20} />
-              </Link>
-            </div>
-
-            {/* delete button  */}
-            <div
-              // onClick={() => handleDeleteCompany(company?.id)}
-              className="w-8 h-8 bg-red-500 text-white text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
-            >
-              <AiOutlineDelete size={20} />
-            </div>
-          </div>
-        </div>
-
-        <div className="w-[60%] mb-2 ml-6 dark:bg-dark-box p-3 rounded-md flex flex-wrap justify-between items-center">
-          <div className="border-r  py-2 px-3 border-slate-500 border-dashed border-opacity-35">
-            01
-          </div>
-          <div>
-            <h2>Web Developer</h2>
-            <p className="text-sm mt-1">Codex Debware</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-green-400 text-white rounded-sm p-2 flex justify-center items-center cursor-pointer">
-              <Link to={`/company/update/:id`}>
-                <CiEdit size={20} />
-              </Link>
-            </div>
-
-            {/* delete button  */}
-            <div
-              // onClick={() => handleDeleteCompany(company?.id)}
-              className="w-8 h-8 bg-red-500 text-white text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
-            >
-              <AiOutlineDelete size={20} />
-            </div>
-          </div>
-        </div>
+        {editContent}
 
         <div
           className="w-8 h-8 absolute right-5 top-3 rounded-full bg-green-500 text-center flex justify-center items-center  p-2 cursor-pointer"
@@ -226,7 +235,7 @@ const JobTimeLine = () => {
         </div>
       </div>
 
-      {isPopupOpen && <JobTimeLineForm onClose={onClose} />}
+      {isPopupOpen && <JobTimeLineForm onClose={onClose} jobId={editId} />}
 
       {!viewStatus && (
         <div

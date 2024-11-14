@@ -211,7 +211,6 @@ function App() {
       <Toaster
         toastOptions={{
           duration: 2000,
-          className: "h-[60px]",
         }}
       />
     </>

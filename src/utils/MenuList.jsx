@@ -9,9 +9,9 @@ const adminMenuItems = [
     title: "Dashboard",
     icon: <RxHome size={20} />,
     subMenu: [
-      { title: "Overview", link: "/" },
+      { title: "Overview", link: "/company/calendar" },
       { title: "Reports", link: "company/settings" },
-      { title: "Reports", link: "company/weekend/create" },
+      { title: "Reports", link: "/holiday" },
       { title: "Holiday Type", link: "/holiday/type/add" },
       { title: "Holiday Form", link: "/holidayform/" },
       { title: "Loader", link: "/loader/" },
@@ -48,6 +48,14 @@ const adminMenuItems = [
           { title: "Biometric", link: "/employee/attendence-biometric" },
         ],
       },
+      {
+        title: "Holiday Management",
+        subMenu: [
+          { title: "Holiday Add", link: "holiday" },
+          { title: "Calendar", link: "/company/calendar" },
+        ],
+      },
+
       {
         title: "Loan Management",
         subMenu: [

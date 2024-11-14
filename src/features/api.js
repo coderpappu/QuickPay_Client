@@ -1199,6 +1199,29 @@ export const apiSlice = createApi({
       }),
       providesTags: ["jobTimeline"],
     }),
+
+    deleteJobTimeLine: builder.mutation({
+      query: (id) => ({
+        url: `/jobtimeline/delete`,
+        method: "DELETE",
+        params: { id },
+      }),
+      invalidatesTags: ["jobTimeline"],
+    }),
+
+    updateJobTimeline: builder.mutation({
+      query: ({ id, ...credentials }) => ({
+        url: `/jobtimeline/update/${id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["jobTimeline"],
+    }),
+
+    getJobTimeLineDetails: builder.query({
+      query: (id) => `/jobtimeline/details/${id}`,
+      providesTags: ["jobTimeline"],
+    }),
   }),
 });
 
@@ -1411,4 +1434,7 @@ export const {
   // job time line
   useCreateJobTimeLineMutation,
   useGetJobTimeLineQuery,
+  useDeleteJobTimeLineMutation,
+  useUpdateJobTimelineMutation,
+  useGetJobTimeLineDetailsQuery,
 } = apiSlice;

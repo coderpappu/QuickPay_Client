@@ -1,4 +1,4 @@
-import { Form, Formik } from "formik";
+import { ErrorMessage, Form, Formik } from "formik";
 import React from "react";
 import { toast } from "react-hot-toast";
 import { useParams } from "react-router-dom";
@@ -6,23 +6,37 @@ import * as Yup from "yup";
 import {
   useCreateJobTimeLineMutation,
   useGetCompanyIdQuery,
+  useGetJobTimeLineDetailsQuery,
+  useUpdateJobTimelineMutation,
 } from "../../features/api";
+import FormSkeleton from "../../skeletons/FormSkeleton";
 import { InputBox } from "../company/BrandInput";
 import InputTitle from "../company/InputTitle";
 
-const JobTimeLineForm = ({ onClose }) => {
+const JobTimeLineForm = ({ onClose, jobId }) => {
   const id = useParams().id;
 
   const { data: company_id } = useGetCompanyIdQuery();
   const [createJobTimeLine] = useCreateJobTimeLineMutation();
+  const [updateJobTimeLine] = useUpdateJobTimelineMutation();
+
+  const {
+    data: jobDetails,
+    isLoading,
+    isError,
+    error,
+  } = useGetJobTimeLineDetailsQuery(jobId);
+
+  if (isLoading && !isError) return <FormSkeleton />;
+  if (!isLoading && isError) return <ErrorMessage message={error?.message} />;
 
   const initialValues = {
-    jobTitle: "",
-    jobDescription: "",
-    company_name: "",
-    jobType: "",
-    jobStart: "",
-    jobEnd: "",
+    jobTitle: jobDetails?.data?.jobTitle || "",
+    jobDescription: jobDetails?.data?.jobDescription || "",
+    company_name: jobDetails?.data?.company_name || "",
+    jobType: jobDetails?.data?.jobType || "",
+    jobStart: jobDetails?.data?.jobStart || "",
+    jobEnd: jobDetails?.data?.jobEnd || "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -51,16 +65,31 @@ const JobTimeLineForm = ({ onClose }) => {
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={async (values) => {
-            try {
-              const addTimeLine = await createJobTimeLine({
-                ...values,
-                employee_id: id,
-                company_id,
-              }).unwrap();
-
-              toast.success(addTimeLine?.message);
-            } catch (error) {
-              toast.error(error.message);
+            if (!jobId) {
+              try {
+                const addTimeLine = await createJobTimeLine({
+                  ...values,
+                  employee_id: id,
+                  company_id,
+                }).unwrap();
+                onClose();
+                toast.success(addTimeLine?.message);
+              } catch (error) {
+                toast.error(error.message);
+              }
+            } else {
+              try {
+                const addTimeLine = await updateJobTimeLine({
+                  ...values,
+                  id: jobId,
+                  employee_id: id,
+                  company_id,
+                }).unwrap();
+                onClose();
+                toast.success(addTimeLine?.message);
+              } catch (error) {
+                toast.error(error.message);
+              }
             }
             // onClose();
           }}
