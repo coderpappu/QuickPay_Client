@@ -21,6 +21,8 @@ const JobTimeLineForm = ({ onClose }) => {
     jobDescription: "",
     company_name: "",
     jobType: "",
+    jobStart: "",
+    jobEnd: "",
   };
 
   const validationSchema = Yup.object().shape({
@@ -28,6 +30,8 @@ const JobTimeLineForm = ({ onClose }) => {
     jobDescription: Yup.string().optional(),
     company_name: Yup.string().required("Company name is required"),
     jobType: Yup.string().required("Job type is required"),
+    jobStart: Yup.date().required("Job start date is required"),
+    jobEnd: Yup.date().required("Job end date is required"),
   });
 
   return (
@@ -84,6 +88,15 @@ const JobTimeLineForm = ({ onClose }) => {
                   name="jobType"
                   placeholder="Full Time | Part Time | Intern"
                 />
+              </div>
+              <div className="mb-4">
+                <InputTitle title="Start Date" />
+                <InputBox name="jobStart" type="date" />
+              </div>
+
+              <div className="mb-4">
+                <InputTitle title="End Date" />
+                <InputBox name="jobEnd" type="date" />
               </div>
 
               <div className="flex justify-end">

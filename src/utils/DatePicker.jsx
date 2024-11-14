@@ -1,4 +1,3 @@
-
 const DatePicker = () => {
   let dateCheck = new Date();
   const todayDate = `${dateCheck.getFullYear()}-${String(
