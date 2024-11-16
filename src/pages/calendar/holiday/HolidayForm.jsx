@@ -1,16 +1,14 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
-    useCreateHolidayMutation,
-    useGetCompanyIdQuery,
-    useGetTypeListQuery,
-    useGetWeekendDetailsQuery,
-    useUpdateWeekendMutation,
+  useCreateHolidayMutation,
+  useGetCompanyIdQuery,
+  useGetTypeListQuery,
+  useUpdateWeekendMutation,
 } from "../../../features/api";
-import FormSkeleton from "../../../skeletons/FormSkeleton";
 
 const HolidaySchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -42,27 +40,8 @@ const HolidayFormPopup = ({ onClose }) => {
     description: "",
   });
 
-  const { data: weekend, isLoading: isWeekendLoading } =
-    useGetWeekendDetailsQuery(id, { skip: !id });
-
-  useEffect(() => {
-    if (weekend?.data) {
-      setInitialValues({
-        name: weekend?.data?.name,
-        type: weekend?.data?.holiday_type_id,
-        start_date: weekend?.data?.start_date || "",
-        end_date: weekend?.data?.end_date || "",
-        description: weekend?.data?.description || "",
-      });
-    }
-  }, [weekend]);
-
   if (companyId == null) {
     navigate("/");
-  }
-
-  if (isWeekendLoading || isLoading) {
-    return <FormSkeleton />;
   }
 
   return (

@@ -1,26 +1,39 @@
-import { useState } from "react";
-import { MdOutlineDeleteOutline } from "react-icons/md";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
+import { AiOutlineDelete } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 import {
-    useDeleteTypeMutation,
-    useGetCompanyIdQuery,
-    useGetTypeListQuery,
+  useDeleteTypeMutation,
+  useGetCompanyIdQuery,
+  useGetTypeListQuery,
 } from "../../../../features/api";
 
-import toast from "react-hot-toast";
+import BrandCardWrapper from "../../../../components/company/BrandCardWrapper";
+import { HrmSetupCardHeader } from "../../../../components/company/SettingCardHeader";
 import ConfirmDialog from "../../../../helpers/ConfirmDialog";
 import ListSkeleton from "../../../../skeletons/ListSkeleton";
 import ErrorMessage from "../../../../utils/ErrorMessage";
 import TypeForm from "./TypeForm";
 
 const TypeList = () => {
+  const navigate = useNavigate();
   const { data: companyId } = useGetCompanyIdQuery();
   const [deleteType] = useDeleteTypeMutation();
+
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
+  const [selectedTypeId, setSelectedTypeId] = useState(null);
 
   const onClose = () => {
     setIsPopupOpen(false);
   };
-  const handleDeleteWeekend = async (id) => {
+
+  const handleOpen = (id = null) => {
+    setIsPopupOpen(true);
+    setSelectedTypeId(id);
+  };
+
+  console.log(selectedTypeId);
+  const handleDeleteType = async (id) => {
     const confirm = () =>
       toast(
         (t) => (
@@ -51,7 +64,7 @@ const TypeList = () => {
   };
 
   const {
-    data: weekends,
+    data: types,
     isLoading,
     isError,
     error,
@@ -65,98 +78,70 @@ const TypeList = () => {
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  if (!isLoading && !isError)
-    content = weekends?.data ? (
-      weekends?.data?.map((weekend, index) => (
-        <tr
-          key={weekend?.id}
-          className={`${
-            index % 2 === 0 ? "" : "bg-gray-50"
-          } rounded-sm md:rounded-none`}
-        >
-          <td className="py-2 text-sm text-center">{++index}</td>
-          <td className="py-2 text-sm text-center pl-4 md:pl-10">
-            {weekend?.name}
-          </td>
-
-          <td
-            className="py-2 text-sm"
-            onClick={() => handleDeleteWeekend(weekend?.id)}
-          >
-            <div className="grid place-items-center">
-              <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
-            </div>
-          </td>
-        </tr>
-      ))
-    ) : (
-      <h3 className="center py-6">No data to show</h3>
-    );
-
-  return (
-    // <div className="px-4 md:px-0">
-    //   <div className="flex flex-wrap justify-between items-center pb-2">
-    //     <div>
-    //       <h2 className="font-semibold text-lg pb-2">Holiday Type</h2>
-    //     </div>
-    //   </div>
-
-    <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-[35%] h-auto overflow-x-auto">
-      {/* Heading And Btn */}
-      <div className="flex flex-wrap justify-between mb-4">
-        <div className="font-medium text-base">
-          {weekends?.data?.length | 0} Type
+  if (!isLoading && !isError && types?.data)
+    content = types?.data?.map((type, index) => (
+      <div
+        key={type?.id}
+        className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
+      >
+        <div className="dark:text-white w-[35%]">
+          <h3>{type?.name}</h3>
         </div>
-        <div>
-          <button
-            onClick={() => setIsPopupOpen(true)} // Open the popup on click
-            className="px-3 py-2 text-sm rounded-[3px] text-white bg-[#3686FF] transition hover:bg-[#7f39f0]"
-          >
-            Add Type
-          </button>
-        </div>
-      </div>
-      <div>
-        <table className="w-full h-auto table-fixed">
-          {!isError && (
-            <thead className="border-b border-slate-200 text-left">
-              <tr>
-                <th className="pb-2 text-sm text-center  w-10">SL</th>
-                <th className="pb-2 text-sm text-center pl-4  md:pl-10">
-                  Name
-                </th>
 
-                <th className="pb-2 text-sm text-center">Action</th>
-              </tr>
-            </thead>
-          )}
-
-          <tbody>{content}</tbody>
-        </table>
-      </div>
-      {/* </div> */}
-
-      {/* Popup Component */}
-      {isPopupOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <div className="flex justify-between items-center pb-3 border-b border-gray-200">
-              <h3 className="text-lg font-medium text-gray-800">
-                Add Holiday Type
-              </h3>
-              <button
-                className="text-gray-500 hover:text-gray-800"
-                onClick={() => setIsPopupOpen(false)} // Close popup
-              >
-                &times;
-              </button>
-            </div>
-            <div className="mt-4">
-              <TypeForm onClose={onClose} />
+        <div className="dark:text-white w-[15%]">
+          <div className="flex flex-wrap justify-start gap-2">
+            {/* delete button  */}
+            <div
+              className="w-8 h-8 bg-red-500 m-auto text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
+              onClick={() => handleDeleteType(type?.id)}
+            >
+              <AiOutlineDelete size={20} />
             </div>
           </div>
         </div>
-      )}
+      </div>
+    ));
+
+  return (
+    <div className="w-[49%] ">
+      <BrandCardWrapper>
+        <HrmSetupCardHeader title="Department" handleOpen={handleOpen} />
+        <div className="px-6 py-3">
+          {/* header  */}
+          <div className="w-full bg-light-bg dark:bg-dark-box rounded-sm py-3 px-3 flex flex-wrap justify-between text-sm">
+            <div className="dark:text-white w-[35%]">
+              <h3>Title</h3>
+            </div>
+
+            <div className="dark:text-white w-[15%] text-center">
+              <h3>Actions</h3>
+            </div>
+          </div>
+
+          {/* body  */}
+          {content}
+        </div>
+        {isPopupOpen && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+            <div className="bg-white dark:bg-dark-card rounded-lg p-6 w-full max-w-md">
+              <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-dark-border-color dark:border-opacity-5">
+                <h3 className="text-lg font-medium text-gray-800 dark:text-white">
+                  Holiday Type
+                </h3>
+                <button
+                  className="text-gray-500 hover:text-gray-800"
+                  onClick={() => setIsPopupOpen(false)} // Close popup
+                >
+                  &times;
+                </button>
+              </div>
+              <div className="mt-4">
+                <TypeForm typeId={selectedTypeId} onClose={onClose} />
+              </div>
+            </div>
+          </div>
+        )}
+      </BrandCardWrapper>
     </div>
   );
 };

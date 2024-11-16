@@ -4,10 +4,10 @@ import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
-    useCreateHolidayTypeMutation,
-    useDeleteTypeMutation,
-    useGetCompanyIdQuery,
-    useGetWeekendDetailsQuery,
+  useCreateHolidayTypeMutation,
+  useDeleteTypeMutation,
+  useGetCompanyIdQuery,
+  useGetWeekendDetailsQuery,
 } from "../../../../features/api";
 import FormSkeleton from "../../../../skeletons/FormSkeleton";
 
