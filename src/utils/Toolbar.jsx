@@ -1,6 +1,5 @@
 import React from "react";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
-import { BsCalendarFill } from "react-icons/bs";
 import { GoCalendar } from "react-icons/go";
 const CustomToolbar = (toolbar) => {
   const goToBack = () => {
@@ -17,7 +16,7 @@ const CustomToolbar = (toolbar) => {
 
   const label = () => {
     return (
-      <span className="text-lg font-semibold text-gray-800">
+      <span className="text-lg font-semibold text-gray-800 dark:text-dark-text-color">
         {toolbar.label}
       </span>
     );
@@ -36,7 +35,7 @@ const CustomToolbar = (toolbar) => {
       <div className="flex items-center space-x-4 mb-4 md:mb-0">
         <button
           onClick={goToToday}
-          className="text-gray-600 hover:text-blue-600 focus:outline-none flex items-center"
+          className="text-gray-600 dark:text-dark-text-color hover:text-blue-600 focus:outline-none flex items-center"
         >
           <GoCalendar size={16} className="mr-2" />
           Today
@@ -62,7 +61,7 @@ const CustomToolbar = (toolbar) => {
         <select
           onChange={handleViewChange}
           value={toolbar.view}
-          className="px-3 py-1 text-sm font-medium rounded bg-white border border-gray-300 hover:border-blue-400 focus:outline-none"
+          className="px-3 py-1 text-sm font-medium rounded bg-white dark:bg-dark-card dark:border dark:border-opacity-10 border border-gray-300 hover:border-blue-400 focus:outline-none"
         >
           <option value="month">Month</option>
           <option value="week">Week</option>

@@ -1,10 +1,9 @@
-import React from "react";
-import { Calendar as BigCalendar, dateFnsLocalizer } from "react-big-calendar";
-import { format, parse, startOfWeek, getDay } from "date-fns";
+import { format, getDay, parse, startOfWeek } from "date-fns";
 import enUS from "date-fns/locale/en-US";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Calendar as BigCalendar, dateFnsLocalizer } from "react-big-calendar";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 import {
   useGetCompanyIdQuery,
   useGetEmployeeQuery,
@@ -13,7 +12,6 @@ import {
 } from "../../features/api";
 import EventPopup from "../../utils/EventPopup";
 import CustomToolbar from "../../utils/Toolbar";
-import CustomWeekdayHeader from "../../utils/CustomWeekdayHeader";
 
 const locales = {
   "en-US": enUS,
@@ -39,6 +37,13 @@ const MyCalendar = () => {
   const { data: weekends } = useGetWeekendListQuery(companyId, {
     skip: companyId == null,
   });
+
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const darkModeEnabled = document.documentElement.classList.contains("dark");
+    setIsDarkMode(darkModeEnabled);
+  }, []);
 
   const weekendDays =
     weekends?.data?.map((day) => day.name.toLowerCase()) || [];
@@ -74,7 +79,7 @@ const MyCalendar = () => {
     const isWeekend = weekendDays.includes(dayOfWeek);
 
     const style = {
-      backgroundColor: isWeekend ? "lightcoral" : "#3174ad", // Apply color for weekends
+      backgroundColor: isWeekend ? `lightcoral ` : ` #3174ad`,
       borderRadius: "0px",
       opacity: 0.8,
       color: "white",
@@ -87,17 +92,19 @@ const MyCalendar = () => {
     };
   }
 
+  // <div className="block opacity-[0.8] color-[#fff] border-0 dark:bg-dark-heading-color "></div>;
+
   // Custom dayPropGetter to style entire days
   function dayPropGetter(date) {
     const dayOfWeek = moment(date).format("dddd").toLowerCase();
     const isWeekend = weekendDays.includes(dayOfWeek);
 
     const style = {
-      backgroundColor: isWeekend ? "#FFCCCC" : null, // Light red for weekends
+      backgroundColor: isWeekend ? "#FFCCCC" : "#fff", // Light red for weekends
     };
 
     return {
-      style: style,
+      className: "dark:bg-dark-box",
     };
   }
 
@@ -109,6 +116,7 @@ const MyCalendar = () => {
         startAccessor="start"
         endAccessor="end"
         style={{ height: 700 }}
+        className="dark:bg-dark-card p-4 rounded-sm text-dark-text-color"
         defaultView="month"
         views={["month", "week", "day", "agenda"]}
         step={30}
@@ -116,12 +124,10 @@ const MyCalendar = () => {
         popup
         components={{
           toolbar: CustomToolbar,
-
-          // Use the custom toolbar
         }}
         onSelectEvent={handleSelectEvent}
         eventPropGetter={eventStyleGetter}
-        dayPropGetter={dayPropGetter} // Apply custom styles to entire days
+        dayPropGetter={dayPropGetter}
       />
       {selectedEvent && (
         <EventPopup event={selectedEvent} onClose={handleClosePopup} />
