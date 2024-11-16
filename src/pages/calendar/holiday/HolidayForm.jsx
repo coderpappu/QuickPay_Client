@@ -46,7 +46,7 @@ const HolidayFormPopup = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+      <div className="bg-white dark:bg-dark-card rounded-lg shadow-lg w-full max-w-md p-6 relative">
         <button
           className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none"
           onClick={onClose}
@@ -111,7 +111,7 @@ const HolidayFormPopup = ({ onClose }) => {
               <div className="mb-4">
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-dark-text-color"
                 >
                   Name
                 </label>
@@ -119,7 +119,7 @@ const HolidayFormPopup = ({ onClose }) => {
                   type="text"
                   name="name"
                   id="name"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
+                  className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-colo"
                 />
                 <ErrorMessage
                   name="name"
@@ -131,7 +131,7 @@ const HolidayFormPopup = ({ onClose }) => {
               <div className="mb-4">
                 <label
                   htmlFor="type"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-dark-text-color"
                 >
                   Holiday Type
                 </label>
@@ -139,7 +139,7 @@ const HolidayFormPopup = ({ onClose }) => {
                   as="select"
                   name="type"
                   id="type"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
+                  className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-colo"
                 >
                   <option value="">Select Type</option>
                   {types?.data?.map((item) => (
@@ -158,7 +158,7 @@ const HolidayFormPopup = ({ onClose }) => {
               <div className="mb-4">
                 <label
                   htmlFor="start_date"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-dark-text-color"
                 >
                   Start Date
                 </label>
@@ -166,7 +166,7 @@ const HolidayFormPopup = ({ onClose }) => {
                   type="date"
                   name="start_date"
                   id="start_date"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
+                  className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-colo"
                 />
                 <ErrorMessage
                   name="start_date"
@@ -178,7 +178,7 @@ const HolidayFormPopup = ({ onClose }) => {
               <div className="mb-4">
                 <label
                   htmlFor="end_date"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-dark-text-color"
                 >
                   End Date
                 </label>
@@ -186,7 +186,7 @@ const HolidayFormPopup = ({ onClose }) => {
                   type="date"
                   name="end_date"
                   id="end_date"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
+                  className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-colo"
                 />
                 <ErrorMessage
                   name="end_date"
@@ -198,7 +198,7 @@ const HolidayFormPopup = ({ onClose }) => {
               <div className="mb-4">
                 <label
                   htmlFor="description"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-dark-text-color"
                 >
                   Description
                 </label>
@@ -206,7 +206,7 @@ const HolidayFormPopup = ({ onClose }) => {
                   type="text"
                   name="description"
                   id="description"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
+                  className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-colo"
                 />
                 <ErrorMessage
                   name="description"
