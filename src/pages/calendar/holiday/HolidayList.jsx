@@ -74,7 +74,7 @@ const HolidayList = () => {
     content = <ErrorMessage message={error?.data?.message} />;
 
   if (!isLoading && !isError && holidays?.data)
-    content = holidays?.data?.map((holiday, index) => (
+    content = holidays?.data?.data?.holidays?.map((holiday, index) => (
       <div
         key={holiday?.id}
         className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"

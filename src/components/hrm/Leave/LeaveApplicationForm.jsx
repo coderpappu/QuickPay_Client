@@ -122,8 +122,8 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
                   id="paid_status"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm dark:bg-dark-box dark:border-none dark:text-dark-text-color"
                 >
-                  <option value="Paid">Paid</option>
-                  <option value="UnPaid">Unpaid</option>
+                  <option value="PAID">Paid</option>
+                  <option value="UNPAID">Unpaid</option>
                 </Field>
                 <ErrorMessage
                   name="paid_status"
