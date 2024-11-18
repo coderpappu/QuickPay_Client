@@ -30,7 +30,7 @@ const adminMenuItems = [
       {
         title: "Payroll Setup",
         subMenu: [
-          { title: "Set Salary", link: "/company/grade/" },
+          { title: "Set Salary", link: "/employee/setsalary" },
           { title: "Payslip", link: "/account-settings" },
         ],
       },

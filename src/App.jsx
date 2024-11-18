@@ -4,6 +4,8 @@ import DepartmentForm from "./../src/components/hrm/department/DepartmentForm";
 import "./App.css";
 import CompanySettings from "./components/company/CompanySettings";
 import LeaveApplicationListCard from "./components/hrm/Leave/LeaveApplicationListCard";
+import SalaryUpdate from "./components/payroll/SalaryUpdate";
+import SetSalaryCard from "./components/payroll/SetSalary";
 import Layout from "./Layout";
 import Calendar from "./pages/calendar/Calendar";
 import Holiday from "./pages/calendar/holiday/Holiday";
@@ -194,6 +196,13 @@ function App() {
 
               <Route path="/company/loan/type" element={<LoanTypeList />} />
               <Route path="/company/loan/type/:id" element={<LoanTypeForm />} />
+
+              {/* salary route  */}
+              <Route path="/employee/setsalary" element={<SetSalaryCard />} />
+              <Route
+                path="/employee/setsalary/update/:id"
+                element={<SalaryUpdate />}
+              />
 
               {/* loader test route  */}
               <Route path="/loader/" element={<ProfileSkeleton />} />
