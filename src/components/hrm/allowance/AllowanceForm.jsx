@@ -1,36 +1,27 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { ErrorMessage, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import {
-  useCreateAllowanceMutation,
-  useCreateGradeMutation,
-  useCreateLeaveTypeMutation,
+  useCreateAllowanceTypeMutation,
   useGetAllowanceDetailsQuery,
   useGetCompanyIdQuery,
-  useGetGradeDetailsQuery,
-  useGetLeaveTypeDetailsQuery,
   useGetTypeListQuery,
   useUpdateAllowanceMutation,
-  useUpdateGradeMutation,
-  useUpdateLeaveTypeMutation,
 } from "../../../features/api";
 
 import FormSkeleton from "../../../skeletons/FormSkeleton";
 import { InputBox } from "../../company/BrandInput";
-const allowanceSchema = Yup.object().shape({
+const allowanceTypeSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
-  type: Yup.string().required("Type is required"),
-  basic_percentage: Yup.number().required("Basic percentage is required"),
-  limit_per_month: Yup.number().required("Limit per month is required"),
 });
 
-const AllowanceForm = ({ allowanceId, onClose }) => {
+const AllowanceTypeForm = ({ allowanceId, onClose }) => {
   const navigate = useNavigate();
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [createAllowance] = useCreateAllowanceMutation();
+  const [createAllowanceType] = useCreateAllowanceTypeMutation();
   const [updateAllowance] = useUpdateAllowanceMutation();
 
   const {
@@ -43,9 +34,6 @@ const AllowanceForm = ({ allowanceId, onClose }) => {
 
   const [initialValues, setInitialValues] = useState({
     name: "",
-    type: "",
-    basic_percentage: "",
-    limit_per_month: "",
   });
 
   const { data: allowanceDetails, isLoading: isWeekendLoading } =
@@ -55,9 +43,6 @@ const AllowanceForm = ({ allowanceId, onClose }) => {
     if (allowanceDetails?.data) {
       setInitialValues({
         name: allowanceDetails?.data?.name,
-        type: allowanceDetails?.data?.type,
-        basic_percentage: allowanceDetails?.data?.basic_percentage,
-        limit_per_month: allowanceDetails?.data?.limit_per_month,
       });
     }
   }, [allowanceDetails]);
@@ -85,17 +70,14 @@ const AllowanceForm = ({ allowanceId, onClose }) => {
         <Formik
           enableReinitialize
           initialValues={initialValues}
-          validationSchema={allowanceSchema}
+          validationSchema={allowanceTypeSchema}
           onSubmit={async (values, { setSubmitting }) => {
-            const { name, type, basic_percentage, limit_per_month } = values;
+            const { name } = values;
 
             try {
               if (!allowanceId) {
-                await createAllowance({
+                await createAllowanceType({
                   name,
-                  type,
-                  basic_percentage,
-                  limit_per_month,
                   company_id: companyId,
                 }).then((res) => {
                   if (res.error) {
@@ -110,9 +92,7 @@ const AllowanceForm = ({ allowanceId, onClose }) => {
                 await updateAllowance({
                   id: allowanceId,
                   name,
-                  type,
-                  basic_percentage,
-                  limit_per_month,
+
                   company_id: companyId,
                 }).then((res) => {
                   if (res.error) {
@@ -149,62 +129,6 @@ const AllowanceForm = ({ allowanceId, onClose }) => {
                 />
               </div>
 
-              <div className="mb-4">
-                <label
-                  htmlFor="type"
-                  className="block text-sm font-medium dark:text-dark-text-color"
-                >
-                  Allowance Type
-                </label>
-
-                <InputBox name="type" type="text" placeholder="Type" />
-                <ErrorMessage
-                  name="type"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-
-              <div className="mb-4">
-                <label
-                  htmlFor="basic_percentage"
-                  className="block text-sm font-medium dark:text-dark-text-color"
-                >
-                  Basic Percentage
-                </label>
-
-                <InputBox
-                  name="basic_percentage"
-                  type="number"
-                  placeholder="Basic Percentage"
-                />
-                <ErrorMessage
-                  name="basic_percentage"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-
-              <div className="mb-4">
-                <label
-                  htmlFor="limit_per_month"
-                  className="block text-sm font-medium dark:text-dark-text-color"
-                >
-                  Limit Per Month
-                </label>
-
-                <InputBox
-                  name="limit_per_month"
-                  type="number"
-                  placeholder="Limit per month"
-                />
-                <ErrorMessage
-                  name="limit_per_month"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-
               <div className="flex justify-end">
                 <button
                   type="button"
@@ -229,4 +153,4 @@ const AllowanceForm = ({ allowanceId, onClose }) => {
   );
 };
 
-export default AllowanceForm;
+export default AllowanceTypeForm;

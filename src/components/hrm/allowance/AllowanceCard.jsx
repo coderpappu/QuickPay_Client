@@ -4,9 +4,10 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import {
   useDeleteAllowanceMutation,
-  useGetAllowanceListQuery,
+  useGetAllowanceTypeListQuery,
   useGetCompanyIdQuery,
 } from "../../../features/api";
+
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import CardSkeleton from "../../../skeletons/card";
 import ErrorMessage from "../../../utils/ErrorMessage";
@@ -31,11 +32,11 @@ const AllowanceCard = () => {
   const [deleteAllowance] = useDeleteAllowanceMutation();
 
   const {
-    data: allowanceList,
+    data: allowanceTypeList,
     isLoading,
     isError,
     error,
-  } = useGetAllowanceListQuery(companyId);
+  } = useGetAllowanceTypeListQuery(companyId);
 
   const handleDeleteAllowance = async (id) => {
     const confirm = () =>
@@ -73,37 +74,28 @@ const AllowanceCard = () => {
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  if (!isLoading && !isError && allowanceList?.data)
-    content = allowanceList?.data?.map((allowance) => (
+  if (!isLoading && !isError && allowanceTypeList?.data)
+    content = allowanceTypeList?.data?.map((type) => (
       <div
-        key={allowance?.id}
+        key={type?.id}
         className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
       >
         <div className="dark:text-white w-[20%]">
-          <h3>{allowance?.name} </h3>
-        </div>
-        <div className="dark:text-white w-[20%]">
-          <h3>{allowance?.type}</h3>
-        </div>
-        <div className="dark:text-white w-[20%]">
-          <h3>{allowance?.basic_percentage}</h3>
-        </div>
-        <div className="dark:text-white w-[20%]">
-          <h3>{allowance?.limit_per_month}</h3>
+          <h3>{type?.name} </h3>
         </div>
 
         <div className="dark:text-white w-[15%]">
           <div className="flex flex-wrap justify-start gap-2">
             {/* edit button  */}
             <div className="w-8 h-8 bg-indigo-600 rounded-sm p-2 flex justify-center items-center cursor-pointer">
-              <CiEdit size={20} onClick={() => handleOpen(allowance?.id)} />
+              <CiEdit size={20} onClick={() => handleOpen(type?.id)} />
             </div>
 
             {/* delete button  */}
             <div className="w-8 h-8 bg-red-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer">
               <AiOutlineDelete
                 size={20}
-                onClick={() => handleDeleteAllowance(allowance?.id)}
+                onClick={() => handleDeleteAllowance(type?.id)}
               />
             </div>
           </div>
@@ -124,18 +116,6 @@ const AllowanceCard = () => {
           <div className="w-full bg-light-bg dark:bg-dark-box rounded-sm py-3 px-3 flex flex-wrap justify-between text-sm">
             <div className="dark:text-white w-[20%]">
               <h3>Name</h3>
-            </div>
-
-            <div className="dark:text-white w-[20%]">
-              <h3>Type</h3>
-            </div>
-
-            <div className="dark:text-white w-[20%]">
-              <h3>Basic Percentage</h3>
-            </div>
-
-            <div className="dark:text-white w-[20%]">
-              <h3>Limit Per Month</h3>
             </div>
 
             <div className="dark:text-white w-[15%]">
