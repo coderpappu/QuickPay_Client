@@ -13,9 +13,9 @@ import PaySlipCard from "../../components/hrm/PayslipCard";
 import SectionCard from "../../components/hrm/section/SectionCard";
 import TerminationCard from "../../components/hrm/TerminationCard";
 
-import ShiftCard from "../../components/hrm/shift/ShiftCard";
-import GradeCard from "../../components/hrm/grade/GradeCard";
 import DocsTypeCard from "../../components/hrm/docsType/DocsType";
+import GradeCard from "../../components/hrm/grade/GradeCard";
+import ShiftCard from "../../components/hrm/shift/ShiftCard";
 
 const HrmSetup = () => {
   const [activeSetting, setActiveSetting] = useState(1);

@@ -690,22 +690,58 @@ export const apiSlice = createApi({
     }),
 
     // Allowance
-    createAllowance: builder.mutation({
+    createAllowanceType: builder.mutation({
       query: (credentials) => ({
-        url: "/allowance_deduction/allowance/create",
+        url: "/allowance_deduction/allowance/type/create",
         method: "POST",
         body: credentials,
       }),
 
-      invalidatesTags: ["allowance"],
+      invalidatesTags: ["allowance_type"],
     }),
 
-    getAllowanceList: builder.query({
+    createEmployeeeAllowance: builder.mutation({
+      query: (credentials) => ({
+        url: "/allowance_deduction/allowance/employee/create",
+        method: "POST",
+        body: credentials,
+      }),
+
+      invalidatesTags: ["employee_allowance"],
+    }),
+
+    createPayslipAllowance: builder.mutation({
+      query: (credentials) => ({
+        url: "/allowance_deduction/allowance/employeepayslip/create",
+        method: "POST",
+        body: credentials,
+      }),
+
+      invalidatesTags: ["payslip_allowance"],
+    }),
+
+    getAllowanceTypeList: builder.query({
       query: (companyId) => ({
-        url: `/allowance_deduction/allowance/list`,
+        url: `/allowance_deduction/allowance/types`,
         params: { companyId },
       }),
-      providesTags: ["allowance"],
+      providesTags: ["allowance_types"],
+    }),
+
+    getEmployeeAllowance: builder.query({
+      query: (companyId) => ({
+        url: `/allowance_deduction/allowance/employee`,
+        params: { companyId },
+      }),
+      providesTags: ["employee_allowance"],
+    }),
+
+    getPayslipEmployeeAllowance: builder.query({
+      query: (companyId) => ({
+        url: `/allowance_deduction/allowance/employee`,
+        params: { companyId },
+      }),
+      providesTags: ["payslip_allowance"],
     }),
 
     getAllowanceDetails: builder.query({
@@ -1338,6 +1374,14 @@ export const {
   useGetAllowanceDetailsQuery,
   useUpdateAllowanceMutation,
   useDeleteAllowanceMutation,
+
+  useCreateAllowanceTypeMutation,
+  useCreateEmployeeeAllowanceMutation,
+  useCreatePayslipAllowanceMutation,
+
+  useGetAllowanceTypeListQuery,
+  useGetEmployeeAllowanceQuery,
+  useGetPayslipEmployeeAllowanceQuery,
 
   //Deduction
   useCreateDeductionMutation,
