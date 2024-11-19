@@ -16,8 +16,8 @@ import { InputBox, SelectOptionBox } from "../company/BrandInput";
 const allowanceSchema = Yup.object().shape({
   nameId: Yup.string().required("Name is required"),
   type: Yup.string().required("Type is required"),
-  basic_percentage: Yup.number().required("Basic percentage is required"),
-  amount: Yup.number().required("Limit per month is required"),
+  basic_percentage: Yup.number().optional("Basic percentage is required"),
+  amount: Yup.number().optional("Limit per month is required"),
 });
 
 const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
@@ -25,6 +25,7 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
   const { id: employee_id } = useParams();
 
   const { data: companyId } = useGetCompanyIdQuery();
+
   const [createEmployeeAllowance] = useCreateEmployeeeAllowanceMutation();
   const { data: allowanceType } = useGetAllowanceTypeListQuery(companyId);
   const [updateAllowance] = useUpdateAllowanceMutation();
@@ -129,7 +130,7 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
             }
           }}
         >
-          {({ isSubmitting }) => (
+          {({ values, isSubmitting }) => (
             <Form>
               <div className="mb-4">
                 <label
@@ -150,6 +151,7 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
                     </option>
                   ))}
                 </Field>
+
                 <ErrorMessage
                   name="nameId"
                   component="div"
@@ -174,45 +176,47 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
                 />
               </div>
 
-              <div className="mb-4">
-                <label
-                  htmlFor="basic_percentage"
-                  className="block text-sm font-medium dark:text-dark-text-color"
-                >
-                  Basic Percentage
-                </label>
+              {values?.type == "PERCENTAGE" ? (
+                <div className="mb-4">
+                  <label
+                    htmlFor="basic_percentage"
+                    className="block text-sm font-medium dark:text-dark-text-color"
+                  >
+                    Basic Percentage
+                  </label>
 
-                <InputBox
-                  name="basic_percentage"
-                  type="number"
-                  placeholder="Basic Percentage"
-                />
-                <ErrorMessage
-                  name="basic_percentage"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
+                  <InputBox
+                    name="basic_percentage"
+                    type="number"
+                    placeholder="Basic Percentage"
+                  />
+                  <ErrorMessage
+                    name="basic_percentage"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+              ) : (
+                <div className="mb-4">
+                  <label
+                    htmlFor="amount"
+                    className="block text-sm font-medium dark:text-dark-text-color"
+                  >
+                    Amount
+                  </label>
 
-              <div className="mb-4">
-                <label
-                  htmlFor="amount"
-                  className="block text-sm font-medium dark:text-dark-text-color"
-                >
-                  Amount
-                </label>
-
-                <InputBox
-                  name="amount"
-                  type="number"
-                  placeholder="Limit per month"
-                />
-                <ErrorMessage
-                  name="amount"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
+                  <InputBox
+                    name="amount"
+                    type="number"
+                    placeholder="Limit per month"
+                  />
+                  <ErrorMessage
+                    name="amount"
+                    component="div"
+                    className="text-red-500 text-sm mt-1"
+                  />
+                </div>
+              )}
 
               <div className="flex justify-end">
                 <button
