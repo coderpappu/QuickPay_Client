@@ -2,19 +2,22 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
+import { useParams } from "react-router-dom";
 import {
   useDeleteAllowanceMutation,
-  useGetAllowanceListQuery,
   useGetCompanyIdQuery,
+  useGetEmployeeAllowanceQuery,
 } from "../../features/api";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import CardSkeleton from "../../skeletons/card";
 import ErrorMessage from "../../utils/ErrorMessage";
 import BrandCardWrapper from "../company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../company/SettingCardHeader";
-import AllowanceForm from "../hrm/allowance/AllowanceForm";
+import EmployeeAllowanceForm from "./EmployeeAllowanceForm";
 
 const EmployeeAllowanceCard = () => {
+  const { id: employeeId } = useParams();
+
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [selectAllowanceId, setSelectAllowanceId] = useState(null);
 
@@ -35,7 +38,7 @@ const EmployeeAllowanceCard = () => {
     isLoading,
     isError,
     error,
-  } = useGetAllowanceListQuery(companyId);
+  } = useGetEmployeeAllowanceQuery({ employeeId, companyId });
 
   const handleDeleteAllowance = async (id) => {
     const confirm = () =>
@@ -80,7 +83,7 @@ const EmployeeAllowanceCard = () => {
         className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
       >
         <div className="dark:text-white w-[20%]">
-          <h3>{allowance?.name} </h3>
+          <h3>{allowance?.AllowanceType?.name} </h3>
         </div>
         <div className="dark:text-white w-[20%]">
           <h3>{allowance?.type}</h3>
@@ -89,7 +92,7 @@ const EmployeeAllowanceCard = () => {
           <h3>{allowance?.basic_percentage}</h3>
         </div>
         <div className="dark:text-white w-[20%]">
-          <h3>{allowance?.limit_per_month}</h3>
+          <h3>{allowance?.amount}</h3>
         </div>
 
         <div className="dark:text-white w-[15%]">
@@ -135,7 +138,7 @@ const EmployeeAllowanceCard = () => {
             </div>
 
             <div className="dark:text-white w-[20%]">
-              <h3>Limit Per Month</h3>
+              <h3>Amount</h3>
             </div>
 
             <div className="dark:text-white w-[15%]">
@@ -161,7 +164,7 @@ const EmployeeAllowanceCard = () => {
                 </button>
               </div>
               <div className="mt-4">
-                <AllowanceForm
+                <EmployeeAllowanceForm
                   allowanceId={selectAllowanceId}
                   onClose={onClose}
                 />

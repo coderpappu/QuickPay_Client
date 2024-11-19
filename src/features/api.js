@@ -729,9 +729,9 @@ export const apiSlice = createApi({
     }),
 
     getEmployeeAllowance: builder.query({
-      query: (companyId) => ({
+      query: ({ employeeId, companyId }) => ({
         url: `/allowance_deduction/allowance/employee`,
-        params: { companyId },
+        params: { employeeId, companyId },
       }),
       providesTags: ["employee_allowance"],
     }),
