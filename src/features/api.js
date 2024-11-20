@@ -753,14 +753,24 @@ export const apiSlice = createApi({
       providesTags: ["allowance"],
     }),
 
-    updateAllowance: builder.mutation({
+    getEmployeeAllowanceDetails: builder.query({
+      query: (id) => ({
+        url: `/allowance_deduction/allowance/employee/details`,
+        params: { id },
+      }),
+
+      providesTags: ["employee_allowance"],
+    }),
+
+    updateEmployeeAllowance: builder.mutation({
       query: ({ id, ...credentials }) => ({
-        url: `/allowance_deduction/allowance/update/${id}`,
+        url: `/allowance_deduction/allowance/employee/update/${id}`,
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["allowance"],
+      invalidatesTags: ["employee_allowance"],
     }),
+
     updateAllowanceType: builder.mutation({
       query: ({ id, ...credentials }) => ({
         url: `/allowance_deduction/allowance/type/update/${id}`,
@@ -778,6 +788,7 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["allowance_type"],
     }),
+
     deleteEmployeeAllowance: builder.mutation({
       query: (allowanceId) => ({
         url: `/allowance_deduction/allowance/employee/delete`,
@@ -1387,7 +1398,8 @@ export const {
   useCreateAllowanceMutation,
   useGetAllowanceListQuery,
   useGetAllowanceDetailsQuery,
-  useUpdateAllowanceMutation,
+  useGetEmployeeAllowanceDetailsQuery,
+  useUpdateEmployeeAllowanceMutation,
   useUpdateAllowanceTypeMutation,
   useDeleteAllowanceTypeMutation,
   useDeleteEmployeeAllowanceMutation,

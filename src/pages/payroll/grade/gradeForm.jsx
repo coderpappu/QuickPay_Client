@@ -5,13 +5,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
   useCreateGradeMutation,
-  useCreateLeaveTypeMutation,
   useGetCompanyIdQuery,
   useGetGradeDetailsQuery,
-  useGetLeaveTypeDetailsQuery,
   useGetTypeListQuery,
   useUpdateGradeMutation,
-  useUpdateLeaveTypeMutation,
 } from "../../../features/api";
 
 import FormSkeleton from "../../../skeletons/FormSkeleton";

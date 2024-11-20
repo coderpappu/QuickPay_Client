@@ -1,23 +1,14 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import {
-  useCreateAllowanceMutation,
   useCreateDeductionMutation,
-  useCreateGradeMutation,
-  useCreateLeaveTypeMutation,
-  useGetAllowanceDetailsQuery,
   useGetCompanyIdQuery,
   useGetDeductionDetailsQuery,
-  useGetGradeDetailsQuery,
-  useGetLeaveTypeDetailsQuery,
   useGetTypeListQuery,
-  useUpdateAllowanceMutation,
   useUpdateDeductionMutation,
-  useUpdateGradeMutation,
-  useUpdateLeaveTypeMutation,
 } from "../../../features/api";
 
 import FormSkeleton from "../../../skeletons/FormSkeleton";

@@ -5,14 +5,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
   useCreateEmployeeeAllowanceMutation,
-  useGetAllowanceDetailsQuery,
   useGetAllowanceTypeListQuery,
   useGetCompanyIdQuery,
-  useUpdateAllowanceMutation,
+  useGetEmployeeAllowanceDetailsQuery,
+  useUpdateEmployeeAllowanceMutation,
 } from "../../features/api";
 
 import FormSkeleton from "../../skeletons/FormSkeleton";
 import { InputBox, SelectOptionBox } from "../company/BrandInput";
+
 const allowanceSchema = Yup.object().shape({
   nameId: Yup.string().required("Name is required"),
   type: Yup.string().required("Type is required"),
@@ -23,12 +24,11 @@ const allowanceSchema = Yup.object().shape({
 const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
   const navigate = useNavigate();
   const { id: employee_id } = useParams();
-
   const { data: companyId } = useGetCompanyIdQuery();
 
   const [createEmployeeAllowance] = useCreateEmployeeeAllowanceMutation();
   const { data: allowanceType } = useGetAllowanceTypeListQuery(companyId);
-  const [updateAllowance] = useUpdateAllowanceMutation();
+  const [updateEmployeeAllowance] = useUpdateEmployeeAllowanceMutation();
 
   const {
     data: types,
@@ -38,15 +38,15 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
     skip: !companyId,
   });
 
+  const { data: allowanceDetails, isLoading: isAllowanceLoading } =
+    useGetEmployeeAllowanceDetailsQuery(allowanceId);
+
   const [initialValues, setInitialValues] = useState({
     nameId: "",
     type: "",
     basic_percentage: "",
     amount: "",
   });
-
-  const { data: allowanceDetails, isLoading: isWeekendLoading } =
-    useGetAllowanceDetailsQuery(allowanceId, { skip: !allowanceId });
 
   useEffect(() => {
     if (allowanceDetails?.data) {
@@ -63,7 +63,7 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
     navigate("/");
   }
 
-  if (isWeekendLoading || isLoading) {
+  if (isAllowanceLoading || isLoading) {
     return <FormSkeleton />;
   }
 
@@ -105,7 +105,7 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
                   }
                 });
               } else {
-                await updateAllowance({
+                await updateEmployeeAllowance({
                   id: allowanceId,
                   nameId,
                   type,

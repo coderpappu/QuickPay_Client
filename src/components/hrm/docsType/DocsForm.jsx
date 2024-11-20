@@ -1,31 +1,16 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import {
-  useCreateAllowanceMutation,
-  useCreateDeductionMutation,
   useCreateDocsTypeMutation,
-  useCreateGradeMutation,
-  useCreateLeaveTypeMutation,
-  useGetAllowanceDetailsQuery,
   useGetCompanyIdQuery,
-  useGetDeductionDetailsQuery,
-  useGetDeductionListQuery,
   useGetDocsTypeDetailsQuery,
-  useGetGradeDetailsQuery,
-  useGetLeaveTypeDetailsQuery,
-  useGetTypeListQuery,
-  useUpdateAllowanceMutation,
-  useUpdateDeductionMutation,
   useUpdateDocsTypeMutation,
-  useUpdateGradeMutation,
-  useUpdateLeaveTypeMutation,
 } from "../../../features/api";
 
 import FormSkeleton from "../../../skeletons/FormSkeleton";
-import { InputBox, SelectOptionBox } from "../../company/BrandInput";
+import { InputBox } from "../../company/BrandInput";
 
 const docsTypeSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
