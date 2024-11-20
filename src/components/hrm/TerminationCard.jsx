@@ -1,13 +1,8 @@
-import React from "react";
-import BrandCardWrapper from "../company/BrandCardWrapper";
-import SettingCardHeader, {
-  HrmSetupCardHeader,
-} from "../company/SettingCardHeader";
-import SettingCardFooter from "../company/SettingCardFooter";
-import { LiaEdit } from "react-icons/lia";
+import React, { useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
-import { useState } from "react";
+import BrandCardWrapper from "../company/BrandCardWrapper";
+import { HrmSetupCardHeader } from "../company/SettingCardHeader";
 
 const TerminationCard = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility

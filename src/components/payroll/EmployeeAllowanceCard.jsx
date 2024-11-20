@@ -4,7 +4,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { useParams } from "react-router-dom";
 import {
-  useDeleteAllowanceMutation,
+  useDeleteEmployeeAllowanceMutation,
   useGetCompanyIdQuery,
   useGetEmployeeAllowanceQuery,
 } from "../../features/api";
@@ -32,7 +32,7 @@ const EmployeeAllowanceCard = () => {
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteAllowance] = useDeleteAllowanceMutation();
+  const [deleteAllowance] = useDeleteEmployeeAllowanceMutation();
 
   const {
     data: allowanceList,

@@ -4,15 +4,9 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  useDeleteAllowanceMutation,
   useDeleteDeductionMutation,
-  useDeleteGradeMutation,
-  useDeleteLeaveTypeMutation,
-  useGetAllowanceListQuery,
   useGetCompanyIdQuery,
   useGetDeductionListQuery,
-  useGetGradeListQuery,
-  useGetLeaveTypeListQuery,
   useSetCompanyIdMutation,
 } from "../../../features/api";
 

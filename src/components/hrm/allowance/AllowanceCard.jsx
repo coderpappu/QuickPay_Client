@@ -3,11 +3,10 @@ import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import {
-  useDeleteAllowanceMutation,
+  useDeleteAllowanceTypeMutation,
   useGetAllowanceTypeListQuery,
   useGetCompanyIdQuery,
 } from "../../../features/api";
-
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import CardSkeleton from "../../../skeletons/card";
 import ErrorMessage from "../../../utils/ErrorMessage";
@@ -29,7 +28,7 @@ const AllowanceCard = () => {
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteAllowance] = useDeleteAllowanceMutation();
+  const [deleteAllowanceType] = useDeleteAllowanceTypeMutation();
 
   const {
     data: allowanceTypeList,
@@ -46,7 +45,7 @@ const AllowanceCard = () => {
             onConfirm={async () => {
               toast.dismiss(t.id);
               try {
-                deleteAllowance(id).then((res) => {
+                deleteAllowanceType(id).then((res) => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
