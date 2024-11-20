@@ -761,6 +761,14 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["allowance"],
     }),
+    updateAllowanceType: builder.mutation({
+      query: ({ id, ...credentials }) => ({
+        url: `/allowance_deduction/allowance/type/update/${id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["allowance_type"],
+    }),
 
     deleteAllowanceType: builder.mutation({
       query: (typeId) => ({
@@ -1380,6 +1388,7 @@ export const {
   useGetAllowanceListQuery,
   useGetAllowanceDetailsQuery,
   useUpdateAllowanceMutation,
+  useUpdateAllowanceTypeMutation,
   useDeleteAllowanceTypeMutation,
   useDeleteEmployeeAllowanceMutation,
 

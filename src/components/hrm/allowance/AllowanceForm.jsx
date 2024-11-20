@@ -8,7 +8,7 @@ import {
   useGetAllowanceDetailsQuery,
   useGetCompanyIdQuery,
   useGetTypeListQuery,
-  useUpdateAllowanceMutation,
+  useUpdateAllowanceTypeMutation,
 } from "../../../features/api";
 
 import FormSkeleton from "../../../skeletons/FormSkeleton";
@@ -17,12 +17,12 @@ const allowanceTypeSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
 });
 
-const AllowanceTypeForm = ({ allowanceId, onClose }) => {
+const AllowanceTypeForm = ({ typeId, onClose }) => {
   const navigate = useNavigate();
 
   const { data: companyId } = useGetCompanyIdQuery();
   const [createAllowanceType] = useCreateAllowanceTypeMutation();
-  const [updateAllowance] = useUpdateAllowanceMutation();
+  const [updateAllowanceType] = useUpdateAllowanceTypeMutation();
 
   const {
     data: types,
@@ -37,7 +37,7 @@ const AllowanceTypeForm = ({ allowanceId, onClose }) => {
   });
 
   const { data: allowanceDetails, isLoading: isWeekendLoading } =
-    useGetAllowanceDetailsQuery(allowanceId, { skip: !allowanceId });
+    useGetAllowanceDetailsQuery(typeId, { skip: !typeId });
 
   useEffect(() => {
     if (allowanceDetails?.data) {
@@ -65,7 +65,7 @@ const AllowanceTypeForm = ({ allowanceId, onClose }) => {
           &#x2715;
         </button>
         <h2 className="text-xl font-semibold  dark:text-dark-heading-color mb-4">
-          {allowanceId ? "Edit Allowance" : "Add Allowance"}
+          {typeId ? "Edit Allowance" : "Add Allowance"}
         </h2>
         <Formik
           enableReinitialize
@@ -73,9 +73,8 @@ const AllowanceTypeForm = ({ allowanceId, onClose }) => {
           validationSchema={allowanceTypeSchema}
           onSubmit={async (values, { setSubmitting }) => {
             const { name } = values;
-
             try {
-              if (!allowanceId) {
+              if (!typeId) {
                 await createAllowanceType({
                   name,
                   company_id: companyId,
@@ -89,8 +88,8 @@ const AllowanceTypeForm = ({ allowanceId, onClose }) => {
                   }
                 });
               } else {
-                await updateAllowance({
-                  id: allowanceId,
+                await updateAllowanceType({
+                  id: typeId,
                   name,
 
                   company_id: companyId,
@@ -142,7 +141,7 @@ const AllowanceTypeForm = ({ allowanceId, onClose }) => {
                   disabled={isSubmitting}
                   className="px-4 py-2 bg-[#3686FF] rounded-md text-sm font-medium text-white "
                 >
-                  {allowanceId ? "Update" : "Add"}
+                  {typeId ? "Update" : "Add"}
                 </button>
               </div>
             </Form>

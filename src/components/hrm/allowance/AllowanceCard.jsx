@@ -18,6 +18,7 @@ const AllowanceCard = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [selectAllowanceId, setSelectAllowanceId] = useState(null);
 
+  console.log(selectAllowanceId);
   const onClose = () => {
     setIsPopupOpen(false);
   };
@@ -140,10 +141,7 @@ const AllowanceCard = () => {
                 </button>
               </div>
               <div className="mt-4">
-                <AllowanceForm
-                  allowanceId={selectAllowanceId}
-                  onClose={onClose}
-                />
+                <AllowanceForm typeId={selectAllowanceId} onClose={onClose} />
               </div>
             </div>
           </div>
