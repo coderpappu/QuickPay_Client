@@ -16,7 +16,7 @@ import { InputBox, SelectOptionBox } from "../company/BrandInput";
 const allowanceSchema = Yup.object().shape({
   nameId: Yup.string().required("Name is required"),
   type: Yup.string().required("Type is required"),
-  basic_percentage: Yup.number().required("Basic value is required"),
+  value: Yup.number().required("Basic value is required"),
 });
 
 const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
@@ -42,7 +42,7 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
   const initialValues = {
     nameId: allowanceDetails?.data?.AllowanceType?.id || "", // Use ID instead of name
     type: allowanceDetails?.data?.type || "",
-    basic_percentage: allowanceDetails?.data?.basic_percentage || "",
+    value: allowanceDetails?.data?.value || "",
   };
 
   if (companyId == null) {
@@ -70,14 +70,14 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
           initialValues={initialValues}
           validationSchema={allowanceSchema}
           onSubmit={async (values, { setSubmitting }) => {
-            const { nameId, type, basic_percentage } = values;
+            const { nameId, type, value } = values;
 
             try {
               if (!allowanceId) {
                 await createEmployeeAllowance({
                   nameId,
                   type,
-                  basic_percentage,
+                  value,
 
                   employee_id,
                   company_id: companyId,
@@ -95,7 +95,7 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
                   id: allowanceId,
                   nameId,
                   type,
-                  basic_percentage,
+                  value,
 
                   employee_id,
                   company_id: companyId,
@@ -164,7 +164,7 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
               <div className="mb-4">
                 {values?.type == "PERCENTAGE" ? (
                   <label
-                    htmlFor="basic_percentage"
+                    htmlFor="value"
                     className="block text-sm font-medium dark:text-dark-text-color"
                   >
                     Basic Percentage
@@ -177,13 +177,9 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
                     Amount
                   </label>
                 )}
-                <InputBox
-                  name="basic_percentage"
-                  type="number"
-                  placeholder="10"
-                />
+                <InputBox name="value" type="number" placeholder="10" />
                 <ErrorMessage
-                  name="basic_percentage"
+                  name="value"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />

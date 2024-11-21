@@ -92,7 +92,7 @@ const EmployeeAllowanceCard = () => {
 
         {allowance?.type == "PERCENTAGE" ? (
           <div className="dark:text-white w-[20%]">
-            <h3>{allowance?.basic_percentage}</h3>
+            <h3>{allowance?.value}%</h3>
           </div>
         ) : (
           <div className="dark:text-white w-[20%]">0</div>
@@ -100,7 +100,7 @@ const EmployeeAllowanceCard = () => {
 
         {allowance?.type == "FIXED" ? (
           <div className="dark:text-white w-[20%]">
-            <h3>{allowance?.basic_percentage}</h3>
+            <h3>{allowance?.value}</h3>
           </div>
         ) : (
           <div className="dark:text-white w-[20%]">0</div>
