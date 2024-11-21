@@ -1,5 +1,4 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
@@ -17,8 +16,7 @@ import { InputBox, SelectOptionBox } from "../company/BrandInput";
 const allowanceSchema = Yup.object().shape({
   nameId: Yup.string().required("Name is required"),
   type: Yup.string().required("Type is required"),
-  basic_percentage: Yup.number().optional("Basic percentage is required"),
-  amount: Yup.number().optional("Limit per month is required"),
+  basic_percentage: Yup.number().required("Basic value is required"),
 });
 
 const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
@@ -41,23 +39,11 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
   const { data: allowanceDetails, isLoading: isAllowanceLoading } =
     useGetEmployeeAllowanceDetailsQuery(allowanceId);
 
-  const [initialValues, setInitialValues] = useState({
-    nameId: "",
-    type: "",
-    basic_percentage: "",
-    amount: "",
-  });
-
-  useEffect(() => {
-    if (allowanceDetails?.data) {
-      setInitialValues({
-        nameId: allowanceDetails?.data?.nameId,
-        type: allowanceDetails?.data?.type,
-        basic_percentage: allowanceDetails?.data?.basic_percentage,
-        amount: allowanceDetails?.data?.amount,
-      });
-    }
-  }, [allowanceDetails]);
+  const initialValues = {
+    nameId: allowanceDetails?.data?.AllowanceType?.id || "", // Use ID instead of name
+    type: allowanceDetails?.data?.type || "",
+    basic_percentage: allowanceDetails?.data?.basic_percentage || "",
+  };
 
   if (companyId == null) {
     navigate("/");
@@ -84,7 +70,7 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
           initialValues={initialValues}
           validationSchema={allowanceSchema}
           onSubmit={async (values, { setSubmitting }) => {
-            const { nameId, type, basic_percentage, amount } = values;
+            const { nameId, type, basic_percentage } = values;
 
             try {
               if (!allowanceId) {
@@ -92,7 +78,7 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
                   nameId,
                   type,
                   basic_percentage,
-                  amount,
+
                   employee_id,
                   company_id: companyId,
                 }).then((res) => {
@@ -110,7 +96,7 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
                   nameId,
                   type,
                   basic_percentage,
-                  amount,
+
                   employee_id,
                   company_id: companyId,
                 }).then((res) => {
@@ -175,49 +161,33 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
                   className="text-red-500 text-sm mt-1"
                 />
               </div>
-
-              {values?.type == "PERCENTAGE" ? (
-                <div className="mb-4">
+              <div className="mb-4">
+                {values?.type == "PERCENTAGE" ? (
                   <label
                     htmlFor="basic_percentage"
                     className="block text-sm font-medium dark:text-dark-text-color"
                   >
                     Basic Percentage
                   </label>
-
-                  <InputBox
-                    name="basic_percentage"
-                    type="number"
-                    placeholder="Basic Percentage"
-                  />
-                  <ErrorMessage
-                    name="basic_percentage"
-                    component="div"
-                    className="text-red-500 text-sm mt-1"
-                  />
-                </div>
-              ) : (
-                <div className="mb-4">
+                ) : (
                   <label
                     htmlFor="amount"
                     className="block text-sm font-medium dark:text-dark-text-color"
                   >
                     Amount
                   </label>
-
-                  <InputBox
-                    name="amount"
-                    type="number"
-                    placeholder="Limit per month"
-                  />
-                  <ErrorMessage
-                    name="amount"
-                    component="div"
-                    className="text-red-500 text-sm mt-1"
-                  />
-                </div>
-              )}
-
+                )}
+                <InputBox
+                  name="basic_percentage"
+                  type="number"
+                  placeholder="10"
+                />
+                <ErrorMessage
+                  name="basic_percentage"
+                  component="div"
+                  className="text-red-500 text-sm mt-1"
+                />
+              </div>
               <div className="flex justify-end">
                 <button
                   type="button"

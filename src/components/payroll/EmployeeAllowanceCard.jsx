@@ -89,12 +89,22 @@ const EmployeeAllowanceCard = () => {
         <div className="dark:text-white w-[20%]">
           <h3>{allowance?.type}</h3>
         </div>
-        <div className="dark:text-white w-[20%]">
-          <h3>{allowance?.basic_percentage}</h3>
-        </div>
-        <div className="dark:text-white w-[20%]">
-          <h3>{allowance?.amount}</h3>
-        </div>
+
+        {allowance?.type == "PERCENTAGE" ? (
+          <div className="dark:text-white w-[20%]">
+            <h3>{allowance?.basic_percentage}</h3>
+          </div>
+        ) : (
+          <div className="dark:text-white w-[20%]">0</div>
+        )}
+
+        {allowance?.type == "FIXED" ? (
+          <div className="dark:text-white w-[20%]">
+            <h3>{allowance?.basic_percentage}</h3>
+          </div>
+        ) : (
+          <div className="dark:text-white w-[20%]">0</div>
+        )}
 
         <div className="dark:text-white w-[15%]">
           <div className="flex flex-wrap justify-start gap-2">
