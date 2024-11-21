@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import {
   useCreateAllowanceTypeMutation,
-  useGetAllowanceDetailsQuery,
+  useGetAllowanceTypeDetailsQuery,
   useGetCompanyIdQuery,
   useGetTypeListQuery,
   useUpdateAllowanceTypeMutation,
@@ -37,7 +37,7 @@ const AllowanceTypeForm = ({ typeId, onClose }) => {
   });
 
   const { data: allowanceDetails, isLoading: isWeekendLoading } =
-    useGetAllowanceDetailsQuery(typeId, { skip: !typeId });
+    useGetAllowanceTypeDetailsQuery(typeId, { skip: !typeId });
 
   useEffect(() => {
     if (allowanceDetails?.data) {

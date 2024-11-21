@@ -716,7 +716,6 @@ export const apiSlice = createApi({
         method: "POST",
         body: credentials,
       }),
-
       invalidatesTags: ["payslip_allowance"],
     }),
 
@@ -725,6 +724,14 @@ export const apiSlice = createApi({
         url: `/allowance_deduction/allowance/types`,
         params: { companyId },
       }),
+      providesTags: ["allowance_types"],
+    }),
+    getAllowanceTypeDetails: builder.query({
+      query: (id) => ({
+        url: `/allowance_deduction/allowance/type/details`,
+        params: { id },
+      }),
+
       providesTags: ["allowance_types"],
     }),
 
@@ -742,15 +749,6 @@ export const apiSlice = createApi({
         params: { companyId },
       }),
       providesTags: ["payslip_allowance"],
-    }),
-
-    getAllowanceDetails: builder.query({
-      query: (id) => ({
-        url: `/allowance_deduction/allowance/details`,
-        params: { id },
-      }),
-
-      providesTags: ["allowance"],
     }),
 
     getEmployeeAllowanceDetails: builder.query({
@@ -797,41 +795,52 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["employee_allowance"],
     }),
+
     // Deduction
-    createDeduction: builder.mutation({
+
+    createDeductionType: builder.mutation({
       query: (credentials) => ({
-        url: "/allowance_deduction/deduction/create",
+        url: "/allowance_deduction/deduction/type/create",
         method: "POST",
         body: credentials,
       }),
 
-      invalidatesTags: ["deduction"],
+      invalidatesTags: ["deduction_type"],
     }),
 
-    getDeductionList: builder.query({
+    createEmployeeeDeduction: builder.mutation({
+      query: (credentials) => ({
+        url: "/allowance_deduction/deduction/employee/create",
+        method: "POST",
+        body: credentials,
+      }),
+
+      invalidatesTags: ["employee_deduction"],
+    }),
+
+    getDeductionTypeList: builder.query({
       query: (companyId) => ({
-        url: `/allowance_deduction/deduction/list`,
+        url: `/allowance_deduction/deduction/types`,
         params: { companyId },
       }),
-      providesTags: ["deduction"],
+      providesTags: ["deduction_type"],
     }),
 
-    getDeductionDetails: builder.query({
+    getDeductionTypeDetails: builder.query({
       query: (id) => ({
-        url: `/allowance_deduction/deduction/details`,
+        url: `/allowance_deduction/deduction/type/details`,
         params: { id },
       }),
 
-      providesTags: ["deduction"],
+      providesTags: ["deduction_type"],
     }),
 
-    updateDeduction: builder.mutation({
-      query: ({ id, ...credentials }) => ({
-        url: `/allowance_deduction/deduction/update/${id}`,
-        method: "PUT",
-        body: credentials,
+    getEmployeeDeduction: builder.query({
+      query: ({ employeeId, companyId }) => ({
+        url: `/allowance_deduction/deduction/employee`,
+        params: { employeeId, companyId },
       }),
-      invalidatesTags: ["deduction"],
+      providesTags: ["employee_deduction"],
     }),
 
     deleteDeduction: builder.mutation({
@@ -1403,6 +1412,7 @@ export const {
   useUpdateAllowanceTypeMutation,
   useDeleteAllowanceTypeMutation,
   useDeleteEmployeeAllowanceMutation,
+  useGetAllowanceTypeDetailsQuery,
 
   useCreateAllowanceTypeMutation,
   useCreateEmployeeeAllowanceMutation,
@@ -1413,11 +1423,13 @@ export const {
   useGetPayslipEmployeeAllowanceQuery,
 
   //Deduction
-  useCreateDeductionMutation,
-  useGetDeductionListQuery,
-  useGetDeductionDetailsQuery,
+  useCreateDeductionTypeMutation,
+  useCreateEmployeeeDeductionMutation,
+  useGetDeductionTypeListQuery,
+  useGetEmployeeDeductionQuery,
   useUpdateDeductionMutation,
   useDeleteDeductionMutation,
+  useGetDeductionTypeDetailsQuery,
 
   // Employee Salaray Setting
   useCreateEmployeeAllowanceMutation,

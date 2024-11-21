@@ -6,7 +6,6 @@ import * as Yup from "yup";
 import {
   useCreateGradeMutation,
   useGetCompanyIdQuery,
-  useGetDeductionListQuery,
   useGetGradeDetailsQuery,
   useUpdateGradeMutation,
 } from "../../../features/api";
@@ -26,14 +25,6 @@ const GradeForm = ({ gradeId, onClose }) => {
   const { data: companyId } = useGetCompanyIdQuery();
   const [createGrade] = useCreateGradeMutation();
   const [updateGrade] = useUpdateGradeMutation();
-
-  const {
-    data: deductionTypes,
-    isLoading,
-    isError,
-  } = useGetDeductionListQuery(companyId, {
-    skip: !companyId,
-  });
 
   const [initialValues, setInitialValues] = useState({
     name: "",

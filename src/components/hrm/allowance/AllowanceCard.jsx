@@ -18,7 +18,6 @@ const AllowanceCard = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [selectAllowanceId, setSelectAllowanceId] = useState(null);
 
-  console.log(selectAllowanceId);
   const onClose = () => {
     setIsPopupOpen(false);
   };

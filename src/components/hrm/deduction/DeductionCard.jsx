@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
-import DeductionForm from "../../../components/hrm/deduction/DeductionForm";
 import {
-  useDeleteDeductionMutation,
+  useDeleteAllowanceTypeMutation,
   useGetCompanyIdQuery,
-  useGetDeductionListQuery,
+  useGetDeductionTypeListQuery,
 } from "../../../features/api";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import CardSkeleton from "../../../skeletons/card";
 import ErrorMessage from "../../../utils/ErrorMessage";
 import BrandCardWrapper from "../../company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../company/SettingCardHeader";
+import DeductionForm from "./DeductionForm";
 
 const DeductionCard = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
@@ -28,14 +28,14 @@ const DeductionCard = () => {
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteDeduction] = useDeleteDeductionMutation();
+  const [deleteAllowanceType] = useDeleteAllowanceTypeMutation();
 
   const {
-    data: deductionList,
+    data: allowanceTypeList,
     isLoading,
     isError,
     error,
-  } = useGetDeductionListQuery(companyId);
+  } = useGetDeductionTypeListQuery(companyId);
 
   const handleDeleteDeduction = async (id) => {
     const confirm = () =>
@@ -45,22 +45,21 @@ const DeductionCard = () => {
             onConfirm={async () => {
               toast.dismiss(t.id);
               try {
-                deleteDeduction(id).then((res) => {
+                deleteAllowanceType(id).then((res) => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
-                    toast.success("Deduction deleted successfully");
+                    toast.success("Allowance deleted successfully");
                   }
                 });
               } catch (error) {
-                toast.error(error.message || "Failed to delete deduction");
+                toast.error(error.message || "Failed to delete allowance");
               }
             }}
             onCancel={() => toast.dismiss(t.id)}
-            title="Deduction"
+            title="Allowance"
           />
         ),
-
         {
           duration: Infinity,
         }
@@ -74,37 +73,28 @@ const DeductionCard = () => {
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  if (!isLoading && !isError && deductionList?.data)
-    content = deductionList?.data?.map((deduction) => (
+  if (!isLoading && !isError && allowanceTypeList?.data)
+    content = allowanceTypeList?.data?.map((type) => (
       <div
-        key={deduction?.id}
+        key={type?.id}
         className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
       >
         <div className="dark:text-white w-[20%]">
-          <h3>{deduction?.name}</h3>
-        </div>
-        <div className="dark:text-white w-[20%]">
-          <h3>{deduction?.type}</h3>
-        </div>
-        <div className="dark:text-white w-[20%]">
-          <h3>{deduction?.basic_percentage}</h3>
-        </div>
-        <div className="dark:text-white w-[20%]">
-          <h3>{deduction?.limit_per_month}</h3>
+          <h3>{type?.name} </h3>
         </div>
 
         <div className="dark:text-white w-[15%]">
           <div className="flex flex-wrap justify-start gap-2">
             {/* edit button  */}
             <div className="w-8 h-8 bg-indigo-600 rounded-sm p-2 flex justify-center items-center cursor-pointer">
-              <CiEdit size={20} onClick={() => handleOpen(deduction?.id)} />
+              <CiEdit size={20} onClick={() => handleOpen(type?.id)} />
             </div>
 
             {/* delete button  */}
             <div className="w-8 h-8 bg-red-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer">
               <AiOutlineDelete
                 size={20}
-                onClick={() => handleDeleteDeduction(deduction?.id)}
+                onClick={() => handleDeleteDeduction(type?.id)}
               />
             </div>
           </div>
@@ -125,18 +115,6 @@ const DeductionCard = () => {
           <div className="w-full bg-light-bg dark:bg-dark-box rounded-sm py-3 px-3 flex flex-wrap justify-between text-sm">
             <div className="dark:text-white w-[20%]">
               <h3>Name</h3>
-            </div>
-
-            <div className="dark:text-white w-[20%]">
-              <h3>Type</h3>
-            </div>
-
-            <div className="dark:text-white w-[20%]">
-              <h3>Basic Percentage</h3>
-            </div>
-
-            <div className="dark:text-white w-[20%]">
-              <h3>Limit Per Month</h3>
             </div>
 
             <div className="dark:text-white w-[15%]">
@@ -162,10 +140,7 @@ const DeductionCard = () => {
                 </button>
               </div>
               <div className="mt-4">
-                <DeductionForm
-                  deductionId={selectDeductionId}
-                  onClose={onClose}
-                />
+                <DeductionForm typeId={selectDeductionId} onClose={onClose} />
               </div>
             </div>
           </div>

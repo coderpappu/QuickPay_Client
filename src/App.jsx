@@ -45,9 +45,7 @@ import LeaveSettings from "./pages/leave/LeaveSettings";
 import LeaveTypeForm from "./pages/leave/LeaveTypeForm";
 import LeaveTypeList from "./pages/leave/LeaveTypeList";
 import NotFound from "./pages/NotFound";
-import AllowanceForm from "./pages/payroll/allowance/AllowanceForm";
-import DeductionForm from "./pages/payroll/deduction/DeductionForm";
-import DeductionList from "./pages/payroll/deduction/DeductionList";
+
 import GradeForm from "./pages/payroll/grade/gradeForm";
 import GradeList from "./pages/payroll/grade/gradeList";
 import LoanTypeForm from "./pages/payroll/Loan/LoanType/LoanTypeForm";
@@ -171,16 +169,6 @@ function App() {
               <Route path="/company/grade/form/:id" element={<GradeForm />} />
 
               {/* <Route path="/company/allowance/" element={<AllowanceList />} /> */}
-              <Route
-                path="/company/allowance/form/:id"
-                element={<AllowanceForm />}
-              />
-
-              <Route path="/company/deduction/" element={<DeductionList />} />
-              <Route
-                path="/company/deduction/form/:id"
-                element={<DeductionForm />}
-              />
 
               {/* Loan  */}
               <Route path="/account-settings" element={<Application />} />

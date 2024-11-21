@@ -4,55 +4,45 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import {
-  useCreateDeductionMutation,
+  useCreateDeductionTypeMutation,
   useGetCompanyIdQuery,
-  useGetDeductionDetailsQuery,
-  useGetDeductionListQuery,
-  useUpdateDeductionMutation,
+  useGetDeductionTypeDetailsQuery,
+  useGetTypeListQuery,
+  useUpdateAllowanceTypeMutation,
 } from "../../../features/api";
 
 import FormSkeleton from "../../../skeletons/FormSkeleton";
 import { InputBox } from "../../company/BrandInput";
-
-const deductionSchema = Yup.object().shape({
+const deductionTypeSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
-  type: Yup.string().required("Type is required"),
-  basic_percentage: Yup.number().required("Basic percentage is required"),
-  limit_per_month: Yup.number().required("Limit per month is required"),
 });
 
-const DeductionForm = ({ deductionId, onClose }) => {
+const DeductionTypeForm = ({ typeId, onClose }) => {
   const navigate = useNavigate();
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [createDeduction] = useCreateDeductionMutation();
-  const [updateDeduction] = useUpdateDeductionMutation();
+  const [createDeductionType] = useCreateDeductionTypeMutation();
+  const [updateAllowanceType] = useUpdateAllowanceTypeMutation();
 
   const {
-    data: deductionTypes,
+    data: types,
     isLoading,
     isError,
-  } = useGetDeductionListQuery(companyId, {
+  } = useGetTypeListQuery(companyId, {
     skip: !companyId,
   });
 
   const [initialValues, setInitialValues] = useState({
     name: "",
-    type: "",
-    basic_percentage: "",
-    limit_per_month: "",
   });
 
   const { data: deductionDetails, isLoading: isWeekendLoading } =
-    useGetDeductionDetailsQuery(deductionId, { skip: !deductionId });
+    useGetDeductionTypeDetailsQuery(typeId, { skip: !typeId });
 
   useEffect(() => {
     if (deductionDetails?.data) {
       setInitialValues({
         name: deductionDetails?.data?.name,
-        type: deductionDetails?.data?.type,
-        basic_percentage: deductionDetails?.data?.basic_percentage,
-        limit_per_month: deductionDetails?.data?.limit_per_month,
       });
     }
   }, [deductionDetails]);
@@ -75,22 +65,18 @@ const DeductionForm = ({ deductionId, onClose }) => {
           &#x2715;
         </button>
         <h2 className="text-xl font-semibold  dark:text-dark-heading-color mb-4">
-          {deductionId ? "Edit Deduction" : "Add Deduction"}
+          {typeId ? "Edit Deduction" : "Add Deduction"}
         </h2>
         <Formik
           enableReinitialize
           initialValues={initialValues}
-          validationSchema={deductionSchema}
+          validationSchema={deductionTypeSchema}
           onSubmit={async (values, { setSubmitting }) => {
-            const { name, type, basic_percentage, limit_per_month } = values;
-
+            const { name } = values;
             try {
-              if (!deductionId) {
-                await createDeduction({
+              if (!typeId) {
+                await createDeductionType({
                   name,
-                  type,
-                  basic_percentage,
-                  limit_per_month,
                   company_id: companyId,
                 }).then((res) => {
                   if (res.error) {
@@ -102,18 +88,17 @@ const DeductionForm = ({ deductionId, onClose }) => {
                   }
                 });
               } else {
-                await updateDeduction({
-                  id: deductionId,
+                await updateAllowanceType({
+                  id: typeId,
                   name,
-                  type,
-                  basic_percentage,
-                  limit_per_month,
+
                   company_id: companyId,
                 }).then((res) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Deduction updated successfully");
+                    toast.success("Allowance updated successfully");
+                    navigate("/company/allowance");
                     onClose();
                   }
                 });
@@ -143,62 +128,6 @@ const DeductionForm = ({ deductionId, onClose }) => {
                 />
               </div>
 
-              <div className="mb-4">
-                <label
-                  htmlFor="type"
-                  className="block text-sm font-medium dark:text-dark-text-color"
-                >
-                  Deduction Type
-                </label>
-
-                <InputBox name="type" type="text" placeholder="Type" />
-                <ErrorMessage
-                  name="type"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-
-              <div className="mb-4">
-                <label
-                  htmlFor="basic_percentage"
-                  className="block text-sm font-medium dark:text-dark-text-color"
-                >
-                  Basic Percentage
-                </label>
-
-                <InputBox
-                  name="basic_percentage"
-                  type="number"
-                  placeholder="Basic Percentage"
-                />
-                <ErrorMessage
-                  name="basic_percentage"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-
-              <div className="mb-4">
-                <label
-                  htmlFor="limit_per_month"
-                  className="block text-sm font-medium dark:text-dark-text-color"
-                >
-                  Limit Per Month
-                </label>
-
-                <InputBox
-                  name="limit_per_month"
-                  type="number"
-                  placeholder="Limit per month"
-                />
-                <ErrorMessage
-                  name="limit_per_month"
-                  component="div"
-                  className="text-red-500 text-sm mt-1"
-                />
-              </div>
-
               <div className="flex justify-end">
                 <button
                   type="button"
@@ -212,7 +141,7 @@ const DeductionForm = ({ deductionId, onClose }) => {
                   disabled={isSubmitting}
                   className="px-4 py-2 bg-[#3686FF] rounded-md text-sm font-medium text-white "
                 >
-                  {deductionId ? "Update" : "Add"}
+                  {typeId ? "Update" : "Add"}
                 </button>
               </div>
             </Form>
@@ -223,4 +152,4 @@ const DeductionForm = ({ deductionId, onClose }) => {
   );
 };
 
-export default DeductionForm;
+export default DeductionTypeForm;
