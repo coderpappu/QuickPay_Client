@@ -842,6 +842,23 @@ export const apiSlice = createApi({
       }),
       providesTags: ["employee_deduction"],
     }),
+    // updateEmployeeAllowance: builder.mutation({
+    //   query: ({ id, ...credentials }) => ({
+    //     url: `/allowance_deduction/allowance/employee/update/${id}`,
+    //     method: "PUT",
+    //     body: credentials,
+    //   }),
+    //   invalidatesTags: ["employee_allowance"],
+    // }),
+
+    updateDeductionType: builder.mutation({
+      query: ({ id, ...credentials }) => ({
+        url: `/allowance_deduction/deduction/type/update/${id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["deduction_type"],
+    }),
 
     deleteDeduction: builder.mutation({
       query: (deductionId) => ({
@@ -1430,6 +1447,7 @@ export const {
   useUpdateDeductionMutation,
   useDeleteDeductionMutation,
   useGetDeductionTypeDetailsQuery,
+  useUpdateDeductionTypeMutation,
 
   // Employee Salaray Setting
   useCreateEmployeeAllowanceMutation,

@@ -8,7 +8,7 @@ import {
   useGetCompanyIdQuery,
   useGetDeductionTypeDetailsQuery,
   useGetTypeListQuery,
-  useUpdateAllowanceTypeMutation,
+  useUpdateDeductionTypeMutation,
 } from "../../../features/api";
 
 import FormSkeleton from "../../../skeletons/FormSkeleton";
@@ -22,7 +22,7 @@ const DeductionTypeForm = ({ typeId, onClose }) => {
 
   const { data: companyId } = useGetCompanyIdQuery();
   const [createDeductionType] = useCreateDeductionTypeMutation();
-  const [updateAllowanceType] = useUpdateAllowanceTypeMutation();
+  const [updateDeductionType] = useUpdateDeductionTypeMutation();
 
   const {
     data: types,
@@ -88,7 +88,7 @@ const DeductionTypeForm = ({ typeId, onClose }) => {
                   }
                 });
               } else {
-                await updateAllowanceType({
+                await updateDeductionType({
                   id: typeId,
                   name,
 
@@ -97,7 +97,7 @@ const DeductionTypeForm = ({ typeId, onClose }) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Allowance updated successfully");
+                    toast.success("Deduction updated successfully");
                     navigate("/company/allowance");
                     onClose();
                   }
