@@ -1,5 +1,6 @@
 import React from "react";
 import EmployeeAllowanceCard from "./EmployeeAllowanceCard";
+import EmployeeDeductionCard from "./EmployeeDeductionCard";
 
 const SalaryUpdate = () => {
   return (
@@ -9,7 +10,7 @@ const SalaryUpdate = () => {
           <EmployeeAllowanceCard />
         </div>
         <div className="w-[49%]">
-          <EmployeeAllowanceCard />
+          <EmployeeDeductionCard />
         </div>
       </div>
     </div>

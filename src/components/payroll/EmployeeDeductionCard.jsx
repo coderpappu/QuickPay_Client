@@ -2,19 +2,23 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
+import { useParams } from "react-router-dom";
 import {
-  useDeleteDeductionTypeMutation,
+  useDeleteEmployeeAllowanceMutation,
   useGetCompanyIdQuery,
-  useGetDeductionTypeListQuery,
-} from "../../../features/api";
-import ConfirmDialog from "../../../helpers/ConfirmDialog";
-import CardSkeleton from "../../../skeletons/card";
-import ErrorMessage from "../../../utils/ErrorMessage";
-import BrandCardWrapper from "../../company/BrandCardWrapper";
-import { HrmSetupCardHeader } from "../../company/SettingCardHeader";
-import DeductionForm from "./DeductionForm";
+  useGetEmployeeAllowanceQuery,
+} from "../../features/api";
 
-const DeductionCard = () => {
+import ConfirmDialog from "../../helpers/ConfirmDialog";
+import CardSkeleton from "../../skeletons/card";
+import ErrorMessage from "../../utils/ErrorMessage";
+import BrandCardWrapper from "../company/BrandCardWrapper";
+import { HrmSetupCardHeader } from "../company/SettingCardHeader";
+import EmployeeDeductionForm from "./EmployeeDeductionForm";
+
+const EmployeeDeductionCard = () => {
+  const { id: employeeId } = useParams();
+
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [selectDeductionId, setSelectDeductionId] = useState(null);
 
@@ -28,16 +32,16 @@ const DeductionCard = () => {
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteDeductiontype] = useDeleteDeductionTypeMutation();
+  const [deleteAllowance] = useDeleteEmployeeAllowanceMutation();
 
   const {
-    data: allowanceTypeList,
+    data: allowanceList,
     isLoading,
     isError,
     error,
-  } = useGetDeductionTypeListQuery(companyId);
+  } = useGetDeduction({ employeeId, companyId });
 
-  const handleDeleteDeduction = async (id) => {
+  const handleDeleteAllowance = async (id) => {
     const confirm = () =>
       toast(
         (t) => (
@@ -45,19 +49,19 @@ const DeductionCard = () => {
             onConfirm={async () => {
               toast.dismiss(t.id);
               try {
-                deleteDeductiontype(id).then((res) => {
+                deleteAllowance(id).then((res) => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
-                    toast.success("Deduction deleted successfully");
+                    toast.success("Allowance deleted successfully");
                   }
                 });
               } catch (error) {
-                toast.error(error.message || "Failed to delete deduction");
+                toast.error(error.message || "Failed to delete allowance");
               }
             }}
             onCancel={() => toast.dismiss(t.id)}
-            title="Deduction"
+            title="Allowance"
           />
         ),
         {
@@ -67,36 +71,53 @@ const DeductionCard = () => {
 
     confirm();
   };
-
-  
   let content;
 
   if (isLoading && !isError) return <CardSkeleton />;
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  if (!isLoading && !isError && allowanceTypeList?.data)
-    content = allowanceTypeList?.data?.map((type) => (
+  if (!isLoading && !isError && allowanceList?.data)
+    content = allowanceList?.data?.map((allowance) => (
       <div
-        key={type?.id}
+        key={allowance?.id}
         className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
       >
         <div className="dark:text-white w-[20%]">
-          <h3>{type?.name} </h3>
+          <h3>{allowance?.AllowanceType?.name} </h3>
         </div>
+        <div className="dark:text-white w-[20%]">
+          <h3>{allowance?.type}</h3>
+        </div>
+
+        {allowance?.type == "PERCENTAGE" ? (
+          <div className="dark:text-white w-[20%]">
+            <h3>{allowance?.value}%</h3>
+          </div>
+        ) : (
+          <div className="dark:text-white w-[20%]">0</div>
+        )}
+
+        {allowance?.type == "FIXED" ? (
+          <div className="dark:text-white w-[20%]">
+            <h3>{allowance?.value}</h3>
+          </div>
+        ) : (
+          <div className="dark:text-white w-[20%]">0</div>
+        )}
 
         <div className="dark:text-white w-[15%]">
           <div className="flex flex-wrap justify-start gap-2">
             {/* edit button  */}
             <div className="w-8 h-8 bg-indigo-600 rounded-sm p-2 flex justify-center items-center cursor-pointer">
-              <CiEdit size={20} onClick={() => handleOpen(type?.id)} />
+              <CiEdit size={20} onClick={() => handleOpen(allowance?.id)} />
             </div>
 
             {/* delete button  */}
             <div className="w-8 h-8 bg-red-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer">
               <AiOutlineDelete
                 size={20}
-                onClick={() => handleDeleteDeduction(type?.id)}
+                onClick={() => handleDeleteAllowance(allowance?.id)}
               />
             </div>
           </div>
@@ -117,6 +138,18 @@ const DeductionCard = () => {
           <div className="w-full bg-light-bg dark:bg-dark-box rounded-sm py-3 px-3 flex flex-wrap justify-between text-sm">
             <div className="dark:text-white w-[20%]">
               <h3>Name</h3>
+            </div>
+
+            <div className="dark:text-white w-[20%]">
+              <h3>Type</h3>
+            </div>
+
+            <div className="dark:text-white w-[20%]">
+              <h3>Basic Percentage</h3>
+            </div>
+
+            <div className="dark:text-white w-[20%]">
+              <h3>Amount</h3>
             </div>
 
             <div className="dark:text-white w-[15%]">
@@ -142,7 +175,10 @@ const DeductionCard = () => {
                 </button>
               </div>
               <div className="mt-4">
-                <DeductionForm typeId={selectDeductionId} onClose={onClose} />
+                <EmployeeDeductionForm
+                  allowanceId={selectDeductionId}
+                  onClose={onClose}
+                />
               </div>
             </div>
           </div>
@@ -152,4 +188,4 @@ const DeductionCard = () => {
   );
 };
 
-export default DeductionCard;
+export default EmployeeDeductionCard;
