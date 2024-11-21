@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import {
-  useDeleteAllowanceTypeMutation,
+  useDeleteDeductionTypeMutation,
   useGetCompanyIdQuery,
   useGetDeductionTypeListQuery,
 } from "../../../features/api";
@@ -28,7 +28,7 @@ const DeductionCard = () => {
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteAllowanceType] = useDeleteAllowanceTypeMutation();
+  const [deleteDeductiontype] = useDeleteDeductionTypeMutation();
 
   const {
     data: allowanceTypeList,
@@ -45,19 +45,19 @@ const DeductionCard = () => {
             onConfirm={async () => {
               toast.dismiss(t.id);
               try {
-                deleteAllowanceType(id).then((res) => {
+                deleteDeductiontype(id).then((res) => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
-                    toast.success("Allowance deleted successfully");
+                    toast.success("Deduction deleted successfully");
                   }
                 });
               } catch (error) {
-                toast.error(error.message || "Failed to delete allowance");
+                toast.error(error.message || "Failed to delete deduction");
               }
             }}
             onCancel={() => toast.dismiss(t.id)}
-            title="Allowance"
+            title="Deduction"
           />
         ),
         {

@@ -851,6 +851,24 @@ export const apiSlice = createApi({
     //   invalidatesTags: ["employee_allowance"],
     // }),
 
+    deleteDeductionType: builder.mutation({
+      query: (typeId) => ({
+        url: `/allowance_deduction/deduction/type/delete`,
+        method: "DELETE",
+        params: { typeId },
+      }),
+      invalidatesTags: ["deduction_type"],
+    }),
+
+    deleteEmployeeDeduction: builder.mutation({
+      query: (deductionId) => ({
+        url: `/allowance_deduction/deduction/employee/delete`,
+        method: "DELETE",
+        params: { deductionId },
+      }),
+      invalidatesTags: ["employee_deduction"],
+    }),
+
     updateDeductionType: builder.mutation({
       query: ({ id, ...credentials }) => ({
         url: `/allowance_deduction/deduction/type/update/${id}`,
@@ -858,15 +876,6 @@ export const apiSlice = createApi({
         body: credentials,
       }),
       invalidatesTags: ["deduction_type"],
-    }),
-
-    deleteDeduction: builder.mutation({
-      query: (deductionId) => ({
-        url: `/allowance_deduction/deduction/delete/`,
-        method: "DELETE",
-        params: { deductionId },
-      }),
-      invalidatesTags: ["deduction"],
     }),
 
     // employee Create
@@ -1448,6 +1457,8 @@ export const {
   useDeleteDeductionMutation,
   useGetDeductionTypeDetailsQuery,
   useUpdateDeductionTypeMutation,
+  useDeleteEmployeeDeductionMutation,
+  useDeleteDeductionTypeMutation,
 
   // Employee Salaray Setting
   useCreateEmployeeAllowanceMutation,
