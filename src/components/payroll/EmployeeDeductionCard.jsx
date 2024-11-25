@@ -4,9 +4,9 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { useParams } from "react-router-dom";
 import {
-  useDeleteEmployeeAllowanceMutation,
   useGetCompanyIdQuery,
-  useGetEmployeeAllowanceQuery,
+  useDeleteEmployeeDeductionMutation,
+  useGetEmployeeDeductionQuery,
 } from "../../features/api";
 
 import ConfirmDialog from "../../helpers/ConfirmDialog";
@@ -32,14 +32,14 @@ const EmployeeDeductionCard = () => {
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteAllowance] = useDeleteEmployeeAllowanceMutation();
+  const [deleteAllowance] = useDeleteEmployeeDeductionMutation();
 
   const {
-    data: allowanceList,
+    data: deductionList,
     isLoading,
     isError,
     error,
-  } = useGetDeduction({ employeeId, companyId });
+  } = useGetEmployeeDeductionQuery({ employeeId, companyId });
 
   const handleDeleteAllowance = async (id) => {
     const confirm = () =>
@@ -53,7 +53,7 @@ const EmployeeDeductionCard = () => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
-                    toast.success("Allowance deleted successfully");
+                    toast.success("Deduction deleted successfully");
                   }
                 });
               } catch (error) {
@@ -61,7 +61,7 @@ const EmployeeDeductionCard = () => {
               }
             }}
             onCancel={() => toast.dismiss(t.id)}
-            title="Allowance"
+            title="Deduction"
           />
         ),
         {
@@ -77,30 +77,31 @@ const EmployeeDeductionCard = () => {
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  if (!isLoading && !isError && allowanceList?.data)
-    content = allowanceList?.data?.map((allowance) => (
+  if (!isLoading && !isError && deductionList?.data)
+    content = deductionList?.data?.map((deduction) => (
       <div
-        key={allowance?.id}
+        key={deduction?.id}
         className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
       >
         <div className="dark:text-white w-[20%]">
-          <h3>{allowance?.AllowanceType?.name} </h3>
-        </div>
-        <div className="dark:text-white w-[20%]">
-          <h3>{allowance?.type}</h3>
+          <h3>{deduction?.DeductionType?.name} </h3>
         </div>
 
-        {allowance?.type == "PERCENTAGE" ? (
+        <div className="dark:text-white w-[20%]">
+          <h3>{deduction?.type}</h3>
+        </div>
+
+        {deduction?.type == "PERCENTAGE" ? (
           <div className="dark:text-white w-[20%]">
-            <h3>{allowance?.value}%</h3>
+            <h3>{deduction?.value}%</h3>
           </div>
         ) : (
           <div className="dark:text-white w-[20%]">0</div>
         )}
 
-        {allowance?.type == "FIXED" ? (
+        {deduction?.type == "FIXED" ? (
           <div className="dark:text-white w-[20%]">
-            <h3>{allowance?.value}</h3>
+            <h3>{deduction?.value}</h3>
           </div>
         ) : (
           <div className="dark:text-white w-[20%]">0</div>
@@ -110,14 +111,14 @@ const EmployeeDeductionCard = () => {
           <div className="flex flex-wrap justify-start gap-2">
             {/* edit button  */}
             <div className="w-8 h-8 bg-indigo-600 rounded-sm p-2 flex justify-center items-center cursor-pointer">
-              <CiEdit size={20} onClick={() => handleOpen(allowance?.id)} />
+              <CiEdit size={20} onClick={() => handleOpen(deduction?.id)} />
             </div>
 
             {/* delete button  */}
             <div className="w-8 h-8 bg-red-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer">
               <AiOutlineDelete
                 size={20}
-                onClick={() => handleDeleteAllowance(allowance?.id)}
+                onClick={() => handleDeleteAllowance(deduction?.id)}
               />
             </div>
           </div>
@@ -176,7 +177,7 @@ const EmployeeDeductionCard = () => {
               </div>
               <div className="mt-4">
                 <EmployeeDeductionForm
-                  allowanceId={selectDeductionId}
+                  deductionId={selectDeductionId}
                   onClose={onClose}
                 />
               </div>

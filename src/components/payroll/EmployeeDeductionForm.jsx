@@ -7,7 +7,7 @@ import {
   useGetAllowanceTypeListQuery,
   useGetCompanyIdQuery,
   useGetDeductionTypeListQuery,
-  useGetEmployeeAllowanceDetailsQuery,
+  useGetEmployeeDeductionDetailsQuery,
   useUpdateEmployeeAllowanceMutation,
 } from "../../features/api";
 
@@ -20,7 +20,7 @@ const deductionSchema = Yup.object().shape({
   value: Yup.number().required("Basic value is required"),
 });
 
-const EmployeeDeductionForm = ({ allowanceId, onClose }) => {
+const EmployeeDeductionForm = ({ deductionId, onClose }) => {
   const navigate = useNavigate();
   const { id: employee_id } = useParams();
   const { data: companyId } = useGetCompanyIdQuery();
@@ -38,10 +38,10 @@ const EmployeeDeductionForm = ({ allowanceId, onClose }) => {
   });
 
   const { data: allowanceDetails, isLoading: isAllowanceLoading } =
-    useGetEmployeeAllowanceDetailsQuery(allowanceId);
+    useGetEmployeeDeductionDetailsQuery(deductionId);
 
   const initialValues = {
-    nameId: allowanceDetails?.data?.AllowanceType?.id || "", // Use ID instead of name
+    nameId: allowanceDetails?.data?.DeductionType?.id || "", // Use ID instead of name
     type: allowanceDetails?.data?.type || "",
     value: allowanceDetails?.data?.value || "",
   };
@@ -64,7 +64,7 @@ const EmployeeDeductionForm = ({ allowanceId, onClose }) => {
           &#x2715;
         </button>
         <h2 className="text-xl font-semibold  dark:text-dark-heading-color mb-4">
-          {allowanceId ? "Edit Deduction" : "Add Deduction"}
+          {deductionId ? "Edit Deduction" : "Add Deduction"}
         </h2>
         <Formik
           enableReinitialize
@@ -74,7 +74,7 @@ const EmployeeDeductionForm = ({ allowanceId, onClose }) => {
             const { nameId, type, value } = values;
 
             try {
-              if (!allowanceId) {
+              if (!deductionId) {
                 await createEmployeeDeduction({
                   nameId,
                   type,
@@ -93,7 +93,7 @@ const EmployeeDeductionForm = ({ allowanceId, onClose }) => {
                 });
               } else {
                 await updateEmployeeAllowance({
-                  id: allowanceId,
+                  id: deductionId,
                   nameId,
                   type,
                   value,
@@ -198,7 +198,7 @@ const EmployeeDeductionForm = ({ allowanceId, onClose }) => {
                   disabled={isSubmitting}
                   className="px-4 py-2 bg-[#3686FF] rounded-md text-sm font-medium text-white "
                 >
-                  {allowanceId ? "Update" : "Add"}
+                  {deductionId ? "Update" : "Add"}
                 </button>
               </div>
             </Form>
