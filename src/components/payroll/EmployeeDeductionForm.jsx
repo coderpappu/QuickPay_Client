@@ -97,7 +97,6 @@ const EmployeeDeductionForm = ({ deductionId, onClose }) => {
                   nameId,
                   type,
                   value,
-
                   employee_id,
                   company_id: companyId,
                 }).then((res) => {
