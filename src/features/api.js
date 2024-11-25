@@ -699,6 +699,15 @@ export const apiSlice = createApi({
       invalidatesTags: ["basic_salary"],
     }),
 
+    getEmployeeBasicSalaryDetails: builder.query({
+      query: ({ employeeId, companyId }) => ({
+        url: `/grade/basicsalary/details`,
+        params: { employeeId, companyId },
+      }),
+
+      providesTags: ["basic_salary"],
+    }),
+
     // Allowance
     createAllowanceType: builder.mutation({
       query: (credentials) => ({
@@ -1482,6 +1491,7 @@ export const {
   useDeleteDeductionTypeMutation,
   useGetEmployeeDeductionDetailsQuery,
   useCreateBasicSalaryMutation,
+  useGetEmployeeBasicSalaryDetailsQuery,
 
   // Employee Salaray Setting
   useCreateEmployeeAllowanceMutation,

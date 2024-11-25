@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { AiOutlineDelete } from "react-icons/ai";
-import { CiEdit } from "react-icons/ci";
 import { useParams } from "react-router-dom";
 import {
   useDeleteEmployeeAllowanceMutation,
   useGetCompanyIdQuery,
-  useGetEmployeeAllowanceQuery,
+  useGetEmployeeBasicSalaryDetailsQuery,
 } from "../../features/api";
 
 import ConfirmDialog from "../../helpers/ConfirmDialog";
@@ -35,11 +33,11 @@ const BasicSalaryCard = () => {
   const [deleteAllowance] = useDeleteEmployeeAllowanceMutation();
 
   const {
-    data: allowanceList,
+    data: basicSalaryDetails,
     isLoading,
     isError,
     error,
-  } = useGetEmployeeAllowanceQuery({ employeeId, companyId });
+  } = useGetEmployeeBasicSalaryDetailsQuery({ employeeId, companyId });
 
   const handleDeleteAllowance = async (id) => {
     const confirm = () =>
@@ -78,35 +76,18 @@ const BasicSalaryCard = () => {
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  if (!isLoading && !isError && allowanceList?.data)
-    content = allowanceList?.data?.map((allowance) => (
+  if (!isLoading && !isError && basicSalaryDetails?.data)
+    content = basicSalaryDetails?.data?.map((basicDetails) => (
       <div
-        key={allowance?.id}
+        key={basicDetails?.id}
         className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
       >
         <div className="dark:text-white w-[20%]">
-          <h3>{allowance?.AllowanceType?.name} </h3>
+          <h3>{basicDetails?.Grade?.name} </h3>
         </div>
 
         <div className="dark:text-white w-[20%]">
-          <h3>{allowance?.type}</h3>
-        </div>
-
-        <div className="dark:text-white w-[15%]">
-          <div className="flex flex-wrap justify-start gap-2">
-            {/* edit button  */}
-            <div className="w-8 h-8 bg-indigo-600 rounded-sm p-2 flex justify-center items-center cursor-pointer">
-              <CiEdit size={20} onClick={() => handleOpen(allowance?.id)} />
-            </div>
-
-            {/* delete button  */}
-            <div className="w-8 h-8 bg-red-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer">
-              <AiOutlineDelete
-                size={20}
-                onClick={() => handleDeleteAllowance(allowance?.id)}
-              />
-            </div>
-          </div>
+          <h3>{basicDetails?.amount}</h3>
         </div>
       </div>
     ));
@@ -128,10 +109,6 @@ const BasicSalaryCard = () => {
 
             <div className="dark:text-white w-[20%]">
               <h3>Amount</h3>
-            </div>
-
-            <div className="dark:text-white w-[15%]">
-              <h3>Action</h3>
             </div>
           </div>
 

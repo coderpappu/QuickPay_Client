@@ -3,28 +3,35 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
-  useCreateEmployeeeAllowanceMutation,
+  useCreateBasicSalaryMutation,
   useGetAllowanceTypeListQuery,
   useGetCompanyIdQuery,
-  useGetEmployeeAllowanceDetailsQuery,
+  useGetEmployeeBasicSalaryDetailsQuery,
   useGetGradeListQuery,
   useUpdateEmployeeAllowanceMutation,
 } from "../../features/api";
 
+import toast from "react-hot-toast";
 import FormSkeleton from "../../skeletons/FormSkeleton";
 
 const allowanceSchema = Yup.object().shape({
-  grade: Yup.string().required("Grade is required"),
+  grade_id: Yup.string().required("Grade is required"),
   amount: Yup.number().required("Amount is required"),
 });
 
 const BasicSalaryForm = ({ allowanceId, onClose }) => {
   const navigate = useNavigate();
+
   const { id: employee_id } = useParams();
+
   const { data: companyId } = useGetCompanyIdQuery();
-  const [createEmployeeAllowance] = useCreateEmployeeeAllowanceMutation();
+
+  const [createBasicSalary] = useCreateBasicSalaryMutation();
+
   const { data: gradeList } = useGetGradeListQuery(companyId);
+
   const [updateEmployeeAllowance] = useUpdateEmployeeAllowanceMutation();
+
   const {
     data: types,
     isLoading,
@@ -34,15 +41,15 @@ const BasicSalaryForm = ({ allowanceId, onClose }) => {
   });
 
   const { data: allowanceDetails, isLoading: isAllowanceLoading } =
-    useGetEmployeeAllowanceDetailsQuery(allowanceId);
+    useGetEmployeeBasicSalaryDetailsQuery({ employee_id, companyId });
 
   const [basicSalary, setBasicSalary] = useState(
     allowanceDetails?.data?.value || ""
   ); // State for basic salary
 
   const initialValues = {
-    grade: allowanceDetails?.data?.grade || "",
-    amount: basicSalary,
+    grade_id: allowanceDetails?.data?.grade_id || "",
+    amount: allowanceDetails?.data?.amount || "",
   };
 
   if (companyId == null) {
@@ -58,12 +65,14 @@ const BasicSalaryForm = ({ allowanceId, onClose }) => {
 
     // Find the selected grade in the list
     const selectedGrade = gradeList?.data?.find(
-      (grade) => grade.id === selectedGradeId
+      (grade_id) => grade_id.id === selectedGradeId
     );
 
-    // Update the Formik field value and other dependent state
-    setFieldValue("grade", selectedGradeId); // Update the grade in Formik
-    setFieldValue("amount", selectedGrade?.basic_salary || ""); // Dynamically set the amount field
+    setFieldValue("grade_id", selectedGradeId); // Update the grade in Formik
+    // setFieldValue("amount", selectedGrade?.basic_salary || ""); // Dynamically set the amount field
+    if (selectedGrade?.basic_salary) {
+      setFieldValue("amount", selectedGrade.basic_salary);
+    } // Set initial value, but allow editing
   };
 
   return (
@@ -76,24 +85,61 @@ const BasicSalaryForm = ({ allowanceId, onClose }) => {
           &#x2715;
         </button>
         <h2 className="text-xl font-semibold  dark:text-dark-heading-color mb-4">
-          {allowanceId ? "Edit Allowance" : "Add Allowance"}
+          {allowanceId ? "Edit Basic Salary" : "Add Basic Salary"}
         </h2>
         <Formik
           enableReinitialize
-          initialValues={{
-            grade: allowanceDetails?.data?.AllowanceType?.id || "",
-            amount: allowanceDetails?.data?.value || "",
-          }}
+          initialValues={initialValues}
           validationSchema={allowanceSchema}
           onSubmit={async (values, { setSubmitting }) => {
             // Form submission logic
+            const { grade_id, amount } = values;
+
+            try {
+              if (!allowanceId) {
+                await createBasicSalary({
+                  grade_id,
+                  amount,
+                  employee_id,
+                  company_id: companyId,
+                }).then((res) => {
+                  if (res.error) {
+                    toast.error(res?.error?.data?.message);
+                  } else {
+                    toast.success("Allowance added successfully");
+                    navigate(`/employee/setsalary/update/${employee_id}`);
+                    onClose();
+                  }
+                });
+              } else {
+                await updateEmployeeAllowance({
+                  id: allowanceId,
+                  grade_id,
+                  amount,
+                  employee_id,
+                  company_id: companyId,
+                }).then((res) => {
+                  if (res.error) {
+                    toast.error(res?.error?.data?.message);
+                  } else {
+                    toast.success("Allowance updated successfully");
+                    navigate(`/employee/setsalary/update/${employee_id}`);
+                    onClose();
+                  }
+                });
+              }
+            } catch (error) {
+              toast.error("An error occurred while submitting the form.");
+            } finally {
+              setSubmitting(false);
+            }
           }}
         >
           {({ values, setFieldValue, isSubmitting }) => (
             <Form>
               <div className="mb-4">
                 <label
-                  htmlFor="grade"
+                  htmlFor="grade_id"
                   className="block text-sm font-medium dark:text-dark-text-color"
                 >
                   Grade
@@ -101,7 +147,7 @@ const BasicSalaryForm = ({ allowanceId, onClose }) => {
 
                 <Field
                   as="select"
-                  name="grade"
+                  name="grade_id"
                   className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
                   onChange={(e) => handleGradeChange(e, setFieldValue)} // Handle changes dynamically
                 >
@@ -116,7 +162,7 @@ const BasicSalaryForm = ({ allowanceId, onClose }) => {
                 </Field>
 
                 <ErrorMessage
-                  name="grade"
+                  name="grade_id"
                   component="div"
                   className="text-red-500 text-sm mt-1"
                 />
@@ -135,7 +181,6 @@ const BasicSalaryForm = ({ allowanceId, onClose }) => {
                   type="number"
                   placeholder="10,000"
                   className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
-                  readOnly // Keep it read-only to prevent manual editing
                 />
                 <ErrorMessage
                   name="amount"
