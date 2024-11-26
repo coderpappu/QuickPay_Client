@@ -1,13 +1,10 @@
 import React, { useState } from "react";
-import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import {
-  useDeleteEmployeeAllowanceMutation,
   useGetCompanyIdQuery,
   useGetEmployeeBasicSalaryDetailsQuery,
 } from "../../features/api";
 
-import ConfirmDialog from "../../helpers/ConfirmDialog";
 import CardSkeleton from "../../skeletons/card";
 import ErrorMessage from "../../utils/ErrorMessage";
 import BrandCardWrapper from "../company/BrandCardWrapper";
@@ -18,7 +15,6 @@ const BasicSalaryCard = () => {
   const { id: employeeId } = useParams();
 
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
-  const [selectAllowanceId, setSelectAllowanceId] = useState(null);
 
   const onClose = () => {
     setIsPopupOpen(false);
@@ -26,11 +22,9 @@ const BasicSalaryCard = () => {
 
   const handleOpen = (id = null) => {
     setIsPopupOpen(true);
-    setSelectAllowanceId(id);
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteAllowance] = useDeleteEmployeeAllowanceMutation();
 
   const {
     data: basicSalaryDetails,
@@ -38,37 +32,6 @@ const BasicSalaryCard = () => {
     isError,
     error,
   } = useGetEmployeeBasicSalaryDetailsQuery({ employeeId, companyId });
-
-  const handleDeleteAllowance = async (id) => {
-    const confirm = () =>
-      toast(
-        (t) => (
-          <ConfirmDialog
-            onConfirm={async () => {
-              toast.dismiss(t.id);
-              try {
-                deleteAllowance(id).then((res) => {
-                  if (res.error != null) {
-                    toast.error(res.error.data.message);
-                  } else {
-                    toast.success("Allowance deleted successfully");
-                  }
-                });
-              } catch (error) {
-                toast.error(error.message || "Failed to delete allowance");
-              }
-            }}
-            onCancel={() => toast.dismiss(t.id)}
-            title="Allowance"
-          />
-        ),
-        {
-          duration: Infinity,
-        }
-      );
-
-    confirm();
-  };
 
   let content;
 
@@ -130,10 +93,7 @@ const BasicSalaryCard = () => {
                 </button>
               </div>
               <div className="mt-4">
-                <BasicSalaryForm
-                  allowanceId={selectAllowanceId}
-                  onClose={onClose}
-                />
+                <BasicSalaryForm onClose={onClose} />
               </div>
             </div>
           </div>
