@@ -934,7 +934,7 @@ export const apiSlice = createApi({
         params: { commission_id },
       }),
 
-      providesTags: ["employee_commission"],
+      providesTags: ["employee_Commission"],
     }),
 
     updateEmployeeCommission: builder.mutation({
@@ -943,7 +943,27 @@ export const apiSlice = createApi({
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["employee_commission"],
+      invalidatesTags: ["employee_Commission"],
+    }),
+
+    deleteEmployeeCommission: builder.mutation({
+      query: (commissionId) => ({
+        url: `/setsalary/commission/employee/delete`,
+        method: "DELETE",
+        params: { commissionId },
+      }),
+      invalidatesTags: ["employee_Commission"],
+    }),
+
+    // employee over time
+    createEmployeeOverTime: builder.mutation({
+      query: (credentials) => ({
+        url: "/setsalary/overtime/create",
+        method: "POST",
+        body: credentials,
+      }),
+
+      invalidatesTags: ["employee_overtime"],
     }),
 
     // employee Create
@@ -1628,5 +1648,8 @@ export const {
   useGetEmployeeCommissionListQuery,
   useGetEmployeeCommissionDetailsQuery,
   useUpdateEmployeeCommissionMutation,
-  // useDeleteEmployeeCommissionMutation,
+  useDeleteEmployeeCommissionMutation,
+
+  // employee over time
+  useCreateEmployeeOverTimeMutation,
 } = apiSlice;

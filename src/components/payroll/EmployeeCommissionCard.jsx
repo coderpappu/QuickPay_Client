@@ -4,7 +4,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { useParams } from "react-router-dom";
 import {
-  useDeleteEmployeeAllowanceMutation,
+  useDeleteEmployeeCommissionMutation,
   useGetCompanyIdQuery,
   useGetEmployeeCommissionListQuery,
 } from "../../features/api";
@@ -32,7 +32,7 @@ const EmployeeCommissionCard = () => {
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteAllowance] = useDeleteEmployeeAllowanceMutation();
+  const [deleteCommission] = useDeleteEmployeeCommissionMutation();
 
   const {
     data: employeeCommissionList,
@@ -49,7 +49,7 @@ const EmployeeCommissionCard = () => {
             onConfirm={async () => {
               toast.dismiss(t.id);
               try {
-                deleteAllowance(id).then((res) => {
+                deleteCommission(id).then((res) => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
@@ -90,21 +90,9 @@ const EmployeeCommissionCard = () => {
           <h3>{commission?.type}</h3>
         </div>
 
-        {commission?.type == "PERCENTAGE" ? (
-          <div className="dark:text-white w-[20%]">
-            <h3>{commission?.value}%</h3>
-          </div>
-        ) : (
-          <div className="dark:text-white w-[20%]">0</div>
-        )}
-
-        {commission?.type == "FIXED" ? (
-          <div className="dark:text-white w-[20%]">
-            <h3>{commission?.value}</h3>
-          </div>
-        ) : (
-          <div className="dark:text-white w-[20%]">0</div>
-        )}
+        <div className="dark:text-white w-[20%]">
+          <h3>{commission?.value}</h3>
+        </div>
 
         <div className="dark:text-white w-[15%]">
           <div className="flex flex-wrap justify-start gap-2">
@@ -145,11 +133,7 @@ const EmployeeCommissionCard = () => {
             </div>
 
             <div className="dark:text-white w-[20%]">
-              <h3>Basic Percentage</h3>
-            </div>
-
-            <div className="dark:text-white w-[20%]">
-              <h3>Amount</h3>
+              <h3>Value</h3>
             </div>
 
             <div className="dark:text-white w-[15%]">

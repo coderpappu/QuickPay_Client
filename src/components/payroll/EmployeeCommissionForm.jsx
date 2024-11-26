@@ -128,6 +128,7 @@ const EmployeeCommissionForm = ({ commissionId, onClose }) => {
                   as="input"
                   name="title"
                   className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+                  placeholder="Sale"
                 ></Field>
 
                 <ErrorMessage
