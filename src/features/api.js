@@ -966,6 +966,15 @@ export const apiSlice = createApi({
       invalidatesTags: ["employee_overtime"],
     }),
 
+    getEmployeeOverTimeDetails: builder.query({
+      query: ({ employeeId, companyId }) => ({
+        url: `/setsalary/overtime/employee/details`,
+        params: { employeeId, companyId },
+      }),
+
+      providesTags: ["employee_overtime"],
+    }),
+
     // employee Create
     createEmployeeAllowance: builder.mutation({
       query: (credentials) => ({
@@ -1652,4 +1661,5 @@ export const {
 
   // employee over time
   useCreateEmployeeOverTimeMutation,
+  useGetEmployeeOverTimeDetailsQuery,
 } = apiSlice;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   useGetCompanyIdQuery,
-  useGetEmployeeBasicSalaryDetailsQuery,
+  useGetEmployeeOverTimeDetailsQuery,
 } from "../../features/api";
 
 import CardSkeleton from "../../skeletons/card";
@@ -27,11 +27,11 @@ const EmployeeOverTimeCard = () => {
   const { data: companyId } = useGetCompanyIdQuery();
 
   const {
-    data: basicSalaryDetails,
+    data: employeeOverTimeDetails,
     isLoading,
     isError,
     error,
-  } = useGetEmployeeBasicSalaryDetailsQuery({ employeeId, companyId });
+  } = useGetEmployeeOverTimeDetailsQuery({ employeeId, companyId });
 
   let content;
 
@@ -39,18 +39,18 @@ const EmployeeOverTimeCard = () => {
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  if (!isLoading && !isError && basicSalaryDetails?.data)
-    content = basicSalaryDetails?.data?.map((basicDetails) => (
+  if (!isLoading && !isError && employeeOverTimeDetails?.data)
+    content = employeeOverTimeDetails?.data?.map((overTime) => (
       <div
-        key={basicDetails?.id}
+        key={overTime?.id}
         className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
       >
         <div className="dark:text-white w-[20%]">
-          <h3>{basicDetails?.Grade?.name} </h3>
+          <h3>{overTime?.hour} </h3>
         </div>
 
         <div className="dark:text-white w-[20%]">
-          <h3>{basicDetails?.amount}</h3>
+          <h3>{overTime?.rate}</h3>
         </div>
       </div>
     ));
@@ -67,11 +67,11 @@ const EmployeeOverTimeCard = () => {
           {/* header  */}
           <div className="w-full bg-light-bg dark:bg-dark-box rounded-sm py-3 px-3 flex flex-wrap justify-between text-sm">
             <div className="dark:text-white w-[20%]">
-              <h3>Grade</h3>
+              <h3>Hour</h3>
             </div>
 
             <div className="dark:text-white w-[20%]">
-              <h3>Amount</h3>
+              <h3>Rate</h3>
             </div>
           </div>
 

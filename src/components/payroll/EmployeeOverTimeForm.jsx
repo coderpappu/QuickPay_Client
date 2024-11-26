@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import {
   useCreateEmployeeOverTimeMutation,
   useGetCompanyIdQuery,
-  useGetEmployeeBasicSalaryDetailsQuery,
+  useGetEmployeeOverTimeDetailsQuery,
   useGetGradeListQuery,
 } from "../../features/api";
 
@@ -20,7 +20,7 @@ const employeeOverTimeSchema = Yup.object().shape({
 const EmployeeOverTimeForm = ({ onClose }) => {
   const navigate = useNavigate();
 
-  const { id: employee_id } = useParams();
+  const { id: employeeId } = useParams();
 
   const { data: companyId } = useGetCompanyIdQuery();
 
@@ -32,7 +32,7 @@ const EmployeeOverTimeForm = ({ onClose }) => {
     data: basicSalaryDetails,
     isLoading,
     isError,
-  } = useGetEmployeeBasicSalaryDetailsQuery({ employee_id, companyId });
+  } = useGetEmployeeOverTimeDetailsQuery({ employeeId, companyId });
 
   const [basicSalary, setBasicSalary] = useState(
     basicSalaryDetails?.data?.value || ""
@@ -74,14 +74,14 @@ const EmployeeOverTimeForm = ({ onClose }) => {
               await createEmployeeOverTime({
                 hour,
                 rate,
-                employee_id,
+                employee_id: employeeId,
                 company_id: companyId,
               }).then((res) => {
                 if (res.error) {
                   toast.error(res?.error?.data?.message);
                 } else {
                   toast.success("Over time added successfully");
-                  navigate(`/employee/setsalary/update/${employee_id}`);
+                  navigate(`/employee/setsalary/update/${employeeId}`);
                   onClose();
                 }
               });
