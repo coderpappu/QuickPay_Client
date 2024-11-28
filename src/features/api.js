@@ -1416,6 +1416,50 @@ export const apiSlice = createApi({
       query: (id) => `/jobtimeline/details/${id}`,
       providesTags: ["jobTimeline"],
     }),
+
+    // bonus end point
+    createBonusType: builder.mutation({
+      query: (credentials) => ({
+        url: "/bonus/type/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["bonus_type"],
+    }),
+
+    getBonusTypeList: builder.query({
+      query: (companyId) => ({
+        url: `/bonus/type/list`,
+        params: { companyId },
+      }),
+      providesTags: ["bonus_type"],
+    }),
+
+    deleteBonusType: builder.mutation({
+      query: (bonusTypeId) => ({
+        url: `/bonus/type/delete`,
+        method: "DELETE",
+        params: { bonusTypeId },
+      }),
+      invalidatesTags: ["bonus_type"],
+    }),
+
+    updateBonusType: builder.mutation({
+      query: ({ bonusTypeId, ...credentials }) => ({
+        url: `/bonus/type/update/${bonusTypeId}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["bonus_type"],
+    }),
+
+    getBonusTypeDetails: builder.query({
+      query: (bonusTypeId) => ({
+        url: `/bonus/type/details`,
+        params: { bonusTypeId },
+      }),
+      providesTags: ["bonus_type"],
+    }),
   }),
 });
 
@@ -1662,4 +1706,11 @@ export const {
   // employee over time
   useCreateEmployeeOverTimeMutation,
   useGetEmployeeOverTimeDetailsQuery,
+
+  // bonus end point
+  useCreateBonusTypeMutation,
+  useGetBonusTypeListQuery,
+  useDeleteBonusTypeMutation,
+  useUpdateBonusTypeMutation,
+  useGetBonusTypeDetailsQuery,
 } = apiSlice;

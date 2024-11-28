@@ -13,6 +13,7 @@ import PaySlipCard from "../../components/hrm/PayslipCard";
 import SectionCard from "../../components/hrm/section/SectionCard";
 import TerminationCard from "../../components/hrm/TerminationCard";
 
+import BonusTypeCard from "../../components/hrm/bonus/BonusType";
 import DocsTypeCard from "../../components/hrm/docsType/DocsType";
 import GradeCard from "../../components/hrm/grade/GradeCard";
 import ShiftCard from "../../components/hrm/shift/ShiftCard";
@@ -81,6 +82,10 @@ const HrmSetup = () => {
       title: "Document Type",
       id: 14,
     },
+    {
+      title: "Bonus Type",
+      id: 15,
+    },
   ];
 
   return (
@@ -123,6 +128,7 @@ const HrmSetup = () => {
           {activeSetting == 12 && <ShiftCard />}
           {activeSetting == 13 && <GradeCard />}
           {activeSetting == 14 && <DocsTypeCard />}
+          {activeSetting == 15 && <BonusTypeCard />}
         </div>
       </div>
     </div>
