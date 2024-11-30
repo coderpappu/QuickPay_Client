@@ -15,16 +15,18 @@ const JobDetails = ({ employeeDetails }) => {
         <PersonalInfo
           title="Department"
           data={
-            employeeDetails?.EmployeeDepartment[0]?.department?.name ||
-            "No Department"
+            employeeDetails?.EmployeeDepartment[
+              employeeDetails?.EmployeeDepartment?.length - 1
+            ]?.department?.name || "No Department"
           }
         />
 
         <PersonalInfo
           title="Designation"
           data={
-            employeeDetails?.EmployeeDesignation[0]?.designation?.name ||
-            "No Designation"
+            employeeDetails?.EmployeeDesignation[
+              employeeDetails?.EmployeeDesignation?.length - 1
+            ]?.designation?.name || "No Designation"
           }
         />
         <PersonalInfo

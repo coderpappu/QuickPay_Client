@@ -1460,6 +1460,16 @@ export const apiSlice = createApi({
       }),
       providesTags: ["bonus_type"],
     }),
+
+    // promotion
+    createPromotion: builder.mutation({
+      query: (credentials) => ({
+        url: "/promotion/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["designation"],
+    }),
   }),
 });
 
@@ -1713,4 +1723,7 @@ export const {
   useDeleteBonusTypeMutation,
   useUpdateBonusTypeMutation,
   useGetBonusTypeDetailsQuery,
+
+  // promotion
+  useCreatePromotionMutation,
 } = apiSlice;

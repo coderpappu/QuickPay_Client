@@ -1,6 +1,7 @@
 import { Field, Form, Formik } from "formik";
 import React from "react";
 import {
+  useCreatePromotionMutation,
   useGetCompanyIdQuery,
   useGetDepartmentsQuery,
   useGetDesignationsQuery,
@@ -15,12 +16,25 @@ const PromotionForm = ({ onClose, employeeDetails }) => {
   const { data: deptList } = useGetDepartmentsQuery(companyId);
   const { data: desgList } = useGetDesignationsQuery(companyId);
   const { data: sectionList } = useGetSectionsQuery(companyId);
+  const [createPromotion] = useCreatePromotionMutation();
 
   const initialValues = {};
 
   return (
     <div className="w-full">
-      <Formik initialValues={initialValues} onSubmit={async (values) => {}}>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={async (values) => {
+          await createPromotion({
+            employeeId: employeeDetails?.id,
+            departmentId: values.departmentId || "",
+            designationId: values.designationId || "",
+            sectionId: values.sectionId || "",
+            companyId: companyId,
+          });
+          // onClose();
+        }}
+      >
         {({ isSubmitting }) => (
           <Form>
             {/* department */}
@@ -28,7 +42,7 @@ const PromotionForm = ({ onClose, employeeDetails }) => {
               <div className="mb-4 w-[50%]">
                 <InputTitle title="Department from" />
                 <InputBox
-                  name="jobTitle"
+                  name="department"
                   value={
                     employeeDetails?.EmployeeDepartment[0]?.department?.name
                   }
@@ -41,8 +55,8 @@ const PromotionForm = ({ onClose, employeeDetails }) => {
 
                 <Field
                   as="select"
-                  name="designationId"
-                  id="designationId"
+                  name="departmentId"
+                  id="departmentId"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                 >
                   <option value="">Select Department</option>
