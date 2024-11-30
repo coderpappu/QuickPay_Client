@@ -109,7 +109,7 @@ const BonusTypeCard = () => {
     <>
       <BrandCardWrapper>
         <HrmSetupCardHeader
-          title="Document Type List"
+          title="Bonus Type List"
           handleOpen={handleOpen}
           isPopupOpen={isPopupOpen}
         />

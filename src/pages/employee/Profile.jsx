@@ -14,10 +14,20 @@ import { GrDownload } from "react-icons/gr";
 import AssetCard from "../../components/employee/AssetCard";
 import JobDetails from "../../components/employee/JobDetails";
 import JobTimeLine from "../../components/employee/JobTimeLine";
+import PromotionForm from "../../components/employee/PromotionForm";
 import ProfileSkeleton from "../../skeletons/ProfileSkeleton";
 import SalarySettingsForm from "./SalarySetting/SalarySetting";
 const Profile = () => {
   const id = useParams()?.id;
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const onClose = () => {
+    setIsPopupOpen(false);
+  };
+
+  const handleOpen = (id = null) => {
+    setIsPopupOpen(true);
+  };
+
   const { data: employeeData } = useGetUserQuery();
   const { data, isLoading, isError } = useGetEmployeeDetailsQuery(
     id || employeeData?.data?.id
@@ -41,6 +51,14 @@ const Profile = () => {
     <div>
       <h2 className="dark:text-dark-heading-color"> Employee / Profile</h2>
       <div className="flex flex-wrap justify-end gap-2">
+        <div
+          className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border dark:border-blue-500 dark:text-dark-text-color dark:border-opacity-30 hover:bg-blue-500 w-fit flex justify-between items-center gap-3"
+          onClick={handleOpen}
+        >
+          Promotion
+          <GrDownload size={15} />
+        </div>
+
         <Link to={`/joiningletter/${id}`}>
           <div className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border dark:border-blue-500 dark:text-dark-text-color dark:border-opacity-30 hover:bg-blue-500 w-fit flex justify-between items-center gap-3">
             Joining Letter
@@ -139,6 +157,29 @@ const Profile = () => {
       {selected == "3" && <SalarySettingsForm />}
       {selected == "4" && <AssetCard />}
       {selected == "5" && <JobTimeLine />}
+      {isPopupOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white dark:bg-dark-card  rounded-lg p-6 w-full max-w-4xl">
+            <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-dark-border-color dark:border-opacity-5">
+              <h3 className="text-lg font-medium text-gray-800 dark:text-white">
+                Promotion Form
+              </h3>
+              <button
+                className="text-gray-500 hover:text-gray-800"
+                onClick={() => setIsPopupOpen(false)} // Close popup
+              >
+                &times;
+              </button>
+            </div>
+            <div className="mt-4">
+              <PromotionForm
+                onClose={onClose}
+                employeeDetails={employeeDetails}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
