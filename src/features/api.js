@@ -1468,7 +1468,15 @@ export const apiSlice = createApi({
         method: "POST",
         body: credentials,
       }),
-      invalidatesTags: ["designation"],
+      invalidatesTags: ["Employee"],
+    }),
+
+    getEmployeeSalaryIncrement: builder.query({
+      query: (employee_id, company_id) => ({
+        url: `/promotion/get/salaryincrement`,
+        params: { employee_id, company_id },
+      }),
+      providesTags: ["Employee"],
     }),
   }),
 });
@@ -1726,4 +1734,6 @@ export const {
 
   // promotion
   useCreatePromotionMutation,
+  useGetEmployeeSalaryIncrementQuery
+  
 } = apiSlice;

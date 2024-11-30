@@ -1,10 +1,12 @@
 import { Field, Form, Formik } from "formik";
 import React from "react";
+import { useParams } from "react-router-dom";
 import {
   useCreatePromotionMutation,
   useGetCompanyIdQuery,
   useGetDepartmentsQuery,
   useGetDesignationsQuery,
+  useGetEmployeeSalaryIncrementQuery,
   useGetSectionsQuery,
 } from "../../features/api";
 import { InputBox } from "../company/BrandInput";
@@ -12,11 +14,21 @@ import InputTitle from "../company/InputTitle";
 
 const PromotionForm = ({ onClose, employeeDetails }) => {
   const { data: companyId } = useGetCompanyIdQuery();
+  const employee_id = useParams().id;
 
   const { data: deptList } = useGetDepartmentsQuery(companyId);
   const { data: desgList } = useGetDesignationsQuery(companyId);
   const { data: sectionList } = useGetSectionsQuery(companyId);
   const [createPromotion] = useCreatePromotionMutation();
+  const { data: employeeSalaryIncrement } = useGetEmployeeSalaryIncrementQuery({
+    employee_id,
+    companyId,
+  });
+
+  const totalIncrementSalary = employeeSalaryIncrement?.data?.reduce(
+    (total, item) => total + item.increment_salary,
+    0
+  );
 
   const initialValues = {};
 
@@ -31,8 +43,10 @@ const PromotionForm = ({ onClose, employeeDetails }) => {
             designationId: values.designationId || "",
             sectionId: values.sectionId || "",
             companyId: companyId,
+            increment_salary: values.increment_salary || "",
+            increment_date: values.increment_date || "",
           });
-          // onClose();
+          onClose();
         }}
       >
         {({ isSubmitting }) => (
@@ -106,7 +120,7 @@ const PromotionForm = ({ onClose, employeeDetails }) => {
               <div className="mb-4 w-[50%]">
                 <InputTitle title="Section from" />
                 <InputBox
-                  name="section"
+                  name="sectionId"
                   value={employeeDetails?.EmployeeSection[0]?.section.name}
                   placeholder="Software Developer"
                   disabled
@@ -117,8 +131,8 @@ const PromotionForm = ({ onClose, employeeDetails }) => {
 
                 <Field
                   as="select"
-                  name="section"
-                  id="section"
+                  name="sectionId"
+                  id="sectionId"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
                 >
                   <option value="">Select Section</option>
@@ -133,13 +147,26 @@ const PromotionForm = ({ onClose, employeeDetails }) => {
 
             {/* increment */}
             <div className="flex gap-2">
-              <div className="mb-4 w-[50%]">
+              <div className="mb-4 w-[32%]">
                 <InputTitle title="Total increment" />
-                <InputBox name="increment" value="" placeholder="00" disabled />
+                <InputBox
+                  name="increment_salary"
+                  value={totalIncrementSalary}
+                  placeholder="00"
+                  disabled
+                />
               </div>
-              <div className="mb-4 w-[50%]">
+              <div className="mb-4 w-[32%]">
                 <InputTitle title="New increment" />
-                <InputBox name="increment" type="number" placeholder="00" />
+                <InputBox
+                  name="increment_salary"
+                  type="number"
+                  placeholder="00"
+                />
+              </div>
+              <div className="mb-4 w-[32%]">
+                <InputTitle title="Increment Date" />
+                <InputBox name="increment_date" type="date" />
               </div>
             </div>
 

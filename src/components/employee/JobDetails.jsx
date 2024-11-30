@@ -36,7 +36,9 @@ const JobDetails = ({ employeeDetails }) => {
         <PersonalInfo
           title="Section"
           data={
-            employeeDetails?.EmployeeSection[0]?.section.name || "No Section"
+            employeeDetails?.EmployeeSection[
+              employeeDetails?.EmployeeSection?.length - 1
+            ]?.section.name || "No Section"
           }
         />
 
