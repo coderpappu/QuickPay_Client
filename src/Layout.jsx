@@ -1,9 +1,8 @@
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
+import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
-import { useState } from "react";
-import Footer from "./components/Footer";
-import { useEffect } from "react";
 
 const Layout = () => {
   const [darkMode, setDarkMode] = useState(false);

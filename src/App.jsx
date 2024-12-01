@@ -46,6 +46,7 @@ import LeaveTypeForm from "./pages/leave/LeaveTypeForm";
 import LeaveTypeList from "./pages/leave/LeaveTypeList";
 import NotFound from "./pages/NotFound";
 
+import PaySlipCard from "./components/payroll/payslip/PaySlipCard";
 import GradeForm from "./pages/payroll/grade/gradeForm";
 import GradeList from "./pages/payroll/grade/gradeList";
 import LoanTypeForm from "./pages/payroll/Loan/LoanType/LoanTypeForm";
@@ -190,6 +191,9 @@ function App() {
                 path="/employee/setsalary/update/:id"
                 element={<SalaryUpdate />}
               />
+
+              {/* payslip  */}
+              <Route path="/employee/payslip" element={<PaySlipCard />} />
 
               {/* loader test route  */}
               <Route path="/loader/" element={<ProfileSkeleton />} />

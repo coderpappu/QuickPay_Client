@@ -19,6 +19,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const SetSalaryCard = () => {
+  
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [leaveTypeId, setleaveTypeId] = useState(null);
 

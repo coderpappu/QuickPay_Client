@@ -19,7 +19,6 @@ const HrmSetupCardHeader = ({ title, handleOpen, isPopupOpen }) => {
         <h3 className="text-base leading-6 dark:text-dark-heading-color">
           {title}
         </h3>
-        {/* <p className="text-xs text-light-text-color">{subTitle}</p> */}
       </div>
 
       <div
