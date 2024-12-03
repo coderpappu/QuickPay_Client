@@ -1478,6 +1478,22 @@ export const apiSlice = createApi({
       }),
       providesTags: ["Employee"],
     }),
+
+    GeneratedEmployeeSalaryBulk: builder.mutation({
+      query: (credentials) => ({
+        url: `/salarysetting/bulk-salary-generate`,
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["employeesalarysheet"],
+    }),
+    getGeneratedSalarySheet: builder.query({
+      query: ({ companyId, month, year }) => ({
+        url: `/salarysetting/getsalarysheet`,
+        params: { companyId, month, year },
+      }),
+      providesTags: ["employeesalarysheet"],
+    }),
   }),
 });
 
@@ -1734,6 +1750,8 @@ export const {
 
   // promotion
   useCreatePromotionMutation,
-  useGetEmployeeSalaryIncrementQuery
-  
+  useGetEmployeeSalaryIncrementQuery,
+
+  useGeneratedEmployeeSalaryBulkMutation,
+  useGetGeneratedSalarySheetQuery,
 } = apiSlice;
