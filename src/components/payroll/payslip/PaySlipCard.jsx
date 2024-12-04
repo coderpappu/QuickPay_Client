@@ -7,14 +7,89 @@ import {
   useGetGeneratedSalarySheetQuery,
 } from "../../../features/api";
 import BrandCardWrapper from "../../company/BrandCardWrapper";
+import PreviewPayslipCard from "./PreviewPayslipCard";
 
 const PaySlipCard = () => {
+  const labels = {
+    companyName: "R.S.B Industrial Ltd.",
+    cardNo: "Card No:",
+    name: "Name:",
+    department: "Department:",
+    section: "Section:",
+    otHours: "O.T. Hours:",
+    salaryBand: "Salary Band:",
+    slNo: "SL. No:",
+    month: "Month:",
+    payMode: "Pay Mode:",
+    bankAccount: "Bank AC:",
+    earnings: "Earnings",
+    deductions: "Deductions",
+    amount: "Amount",
+    totalSalaryEarned: "Total Salary Earned",
+    totalDeduction: "Total Deduction",
+    netAmount: "NET Amount",
+  };
+
+  // Employee data
+  const employeeData = {
+    cardNo: "M10059 (Prev.: M0315)",
+    name: "AVIRUP CHOWDHURY",
+    department: "PPIC",
+    section: "PPIC",
+    otHours: 0,
+    salaryBand: "N/A",
+    slNo: 1,
+    month: "September-2024",
+    payMode: "BANK-EBL",
+    bankAccount: "0141260036544",
+  };
+
+  // Earnings and deductions
+  const earningsData = {
+    "Gross Salary": 20000,
+    "Basic Salary": 15000,
+    "H. Rent": 3000,
+    "Medical Allowance": 2000,
+    "Attendance Bonus": 500,
+    "O.T. Amount": 0,
+    Allowance: 0,
+    "Transport Allowance": 0,
+    "Prod. Incentive": 0,
+    "Shift Allowance": 0,
+    "Other's": 0,
+  };
+
+  const deductionsData = {
+    "Absent Amount": 0,
+    Stamp: 0,
+    "Advance/Loan": 0,
+    "E.P.F": 0,
+    "Other's": 130,
+  };
+
+  // Calculate net amount
+  const netAmount =
+    Object.values(earningsData).reduce((sum, value) => sum + value, 0) -
+    Object.values(deductionsData).reduce((sum, value) => sum + value, 0);
+
   const { data: companyId } = useGetCompanyIdQuery();
   const { data: employeeList, isLoading } = useGetEmployeesQuery(companyId);
   const [generateBulkSalary] = useGeneratedEmployeeSalaryBulkMutation();
 
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
+  const [slipPreview, setSlipPreview] = useState("");
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const onClose = () => {
+    setIsPopupOpen(false);
+  };
+
+  const handleOpen = (slipData = null) => {
+    setIsPopupOpen(true);
+    setSlipPreview(slipData);
+  };
 
   const {
     data: employeeSalarySheet,
@@ -91,7 +166,10 @@ const PaySlipCard = () => {
           <h3>Success </h3>
         </div>
         <div className="dark:text-white w-[30%]">
-          <button className="px-4 py-2 bg-yellow-500 mx-2 rounded-md">
+          <button
+            className="px-4 py-2 bg-yellow-500 mx-2 rounded-md"
+            onClick={() => handleOpen(sheet)}
+          >
             Payslip
           </button>
           <button className="px-4 py-2 bg-purple-700 mx-2 rounded-md">
@@ -235,6 +313,34 @@ const PaySlipCard = () => {
           </div>
         </BrandCardWrapper>
       </div>
+      {isPopupOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white dark:bg-dark-card  rounded-lg p-6 w-full max-w-5xl">
+            <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-dark-border-color dark:border-opacity-5">
+              <h3 className="text-lg font-medium text-gray-800 dark:text-white">
+                Payslip
+              </h3>
+              <button
+                className="text-gray-500 hover:text-gray-800"
+                onClick={() => setIsPopupOpen(false)} // Close popup
+              >
+                &times;
+              </button>
+            </div>
+            <div className="mt-4">
+              <PreviewPayslipCard
+                employee={employeeData}
+                earnings={earningsData}
+                deductions={deductionsData}
+                netAmount={netAmount}
+                labels={labels}
+                slipPreview={slipPreview}
+                onClose={onClose}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
