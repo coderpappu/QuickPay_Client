@@ -90,8 +90,19 @@ const PaySlipCard = () => {
         <div className="dark:text-white w-[10%]">
           <h3>Success </h3>
         </div>
-        <div className="dark:text-white w-[10%]">
-          <h3>Action </h3>
+        <div className="dark:text-white w-[30%]">
+          <button className="px-4 py-2 bg-yellow-500 mx-2 rounded-md">
+            Payslip
+          </button>
+          <button className="px-4 py-2 bg-purple-700 mx-2 rounded-md">
+            Click To Paid
+          </button>
+          <button className="px-4 py-2 bg-blue-500 mx-2 rounded-md">
+            Edit
+          </button>
+          <button className="px-4 py-2 bg-green-500 mx-2 rounded-md">
+            Delete
+          </button>
         </div>
       </div>
     </>
@@ -214,7 +225,7 @@ const PaySlipCard = () => {
               <div className="dark:text-white w-[10%]">
                 <h3>Status </h3>
               </div>
-              <div className="dark:text-white w-[10%]">
+              <div className="dark:text-white w-[30%]">
                 <h3>Action </h3>
               </div>
             </div>
