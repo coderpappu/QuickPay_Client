@@ -9,13 +9,13 @@ const SalarySheet = ({
   slipPreview,
 }) => {
   const leftside = [
+    { basic: slipPreview?.basic_salary } || [],
     ...(slipPreview?.allowance_salary_sheet || []),
     ...(slipPreview?.overtime_salary_sheet || []),
-    ...(slipPreview?.commission || []),
+    ...(slipPreview?.commission_salary_sheet || []),
     ...(slipPreview?.other || []),
   ];
 
-  console.log(slipPreview?.overtime_salary_sheet);
   const rightside = [
     ...(slipPreview?.deduction_salary_sheet || []),
     ...(slipPreview?.loan || []),
@@ -84,14 +84,18 @@ const SalarySheet = ({
             >
               {/* Left Side (Earnings) */}
               <div className="p-2 border-r border-dark-card">
-                {leftside[index]?.EmployeeAllowance?.AllowanceType?.name ||
-                  "Overtime" ||
+                {(leftside?.[index]?.basic && "Basic Salary") ||
+                  leftside[index]?.EmployeeAllowance?.AllowanceType?.name ||
+                  (leftside[index]?.hour && "Overtime") ||
+                  leftside[index]?.name ||
                   ""}
               </div>
 
               <div className="p-2 border-r border-dark-card">
-                {leftside[index]?.amount ||
+                {leftside?.[index]?.basic ||
+                  leftside[index]?.amount ||
                   leftside[index]?.overtime_salary ||
+                  leftside[index]?.name ||
                   ""}
               </div>
 
