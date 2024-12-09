@@ -44,7 +44,6 @@
     "formik": "^2.4.6",
     "framer-motion": "^11.9.0",
     "heroicons": "^2.1.4",
-    "html2pdf.js": "^0.10.2",
     "keep-react": "^1.5.0",
     "lexical": "^0.18.0",
     "lucide-react": "^0.446.0",

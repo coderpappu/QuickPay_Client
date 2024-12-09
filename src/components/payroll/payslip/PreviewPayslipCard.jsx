@@ -21,6 +21,8 @@ const SalarySheet = ({
     ...(slipPreview?.loan || []),
   ];
 
+
+  
   return (
     <div className="max-w-5xl mx-auto bg-white dark:bg-dark-box shadow-md rounded-md p-6">
       {/* Header */}
