@@ -21,8 +21,6 @@ const SalarySheet = ({
     ...(slipPreview?.loan || []),
   ];
 
-
-  
   return (
     <div className="max-w-5xl mx-auto bg-white dark:bg-dark-box shadow-md rounded-md p-6">
       {/* Header */}
@@ -32,36 +30,36 @@ const SalarySheet = ({
       <div className="flex justify-between text-sm mb-2">
         <div>
           <p>
-            <strong>{labels.cardNo}</strong> {employee.cardNo}
+            <strong>ID No : </strong> {slipPreview?.EmployeeDe}
           </p>
           <p>
-            <strong>{labels.name}</strong> {employee.name}
+            <strong>Name :</strong> {employee.name}
           </p>
           <p>
-            <strong>{labels.department}</strong> {employee.department}
+            <strong>Department : </strong>{" "}
+            {slipPreview?.Employee?.EmployeeDepartment?.[0]?.department?.name}
           </p>
           <p>
-            <strong>{labels.section}</strong> {employee.section}
-          </p>
-          <p>
-            <strong>{labels.otHours}</strong> {employee.otHours}
+            <strong>Designation : </strong>{" "}
+            {slipPreview?.Employee?.EmployeeDesignation?.[0]?.designation?.name}
           </p>
         </div>
         <div className="text-right">
           <p>
-            <strong>{labels.salaryBand}</strong> {employee.salaryBand || "N/A"}
+            <strong>Section : </strong>{" "}
+            {slipPreview?.Employee?.EmployeeSection?.[0]?.section?.name}
           </p>
           <p>
-            <strong>{labels.slNo}</strong> {employee.slNo}
+            <strong>Shift</strong>{" "}
+            {slipPreview?.Employee?.EmployeeShift?.[0]?.shift?.name}
           </p>
           <p>
-            <strong>{labels.month}</strong> {employee.month}
+            <strong>O.T Hours</strong>{" "}
+            {Math.round(slipPreview?.overtime_salary_sheet?.[0]?.hour)}
           </p>
+
           <p>
-            <strong>{labels.payMode}</strong> {employee.payMode}
-          </p>
-          <p>
-            <strong>{labels.bankAccount}</strong> {employee.bankAccount}
+            <strong>{labels.month}</strong> {slipPreview?.generate_date}
           </p>
         </div>
       </div>

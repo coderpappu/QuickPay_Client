@@ -18,6 +18,8 @@ const config = {
         "fade-in": "fadeIn 0.3s ease-out",
       },
       colors: {
+        primary: "#3686FF",
+
         "dark-bg": "#0F172A",
         "dark-card": "#1E293B",
         "dark-box": "#293548",

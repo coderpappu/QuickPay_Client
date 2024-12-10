@@ -1,6 +1,7 @@
 import html2pdf from "html2pdf.js";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { Preview, print } from "react-html2pdf";
 import { CiLocationOn } from "react-icons/ci";
 import { FiPhone } from "react-icons/fi";
 import { MdOutlineEmail } from "react-icons/md";
@@ -168,53 +169,55 @@ function Application() {
       <div className="flex justify-end">
         <button
           className="bg-green-600 px-3 py-3 rounded-sm mb-2 flex  gap-2 items-center"
-          onClick={() => downloadBtn()}
+          onClick={() => print("a", "jsx-template")}
         >
           {" "}
           <TfiPrinter />
           Download PDF
         </button>
       </div>
-      <div
-        id="container"
-        className="dark:bg-dark-box dark:text-white text-black p-8 rounded-sm  h-auto"
-      >
-        <div className="flex justify-between items-center mb-8">
-          <img src={CompanyLogo} alt="" className="w-[180px] h-auto" />
-        </div>
-        {letterData.root.children.map((child, index) =>
-          renderElement(child, index)
-        )}
+      <Preview id={"jsx-template"}>
+        <div
+          id="container"
+          className="dark:bg-dark-box dark:text-white text-black p-8 rounded-sm  h-auto"
+        >
+          <div className="flex justify-between items-center mb-8">
+            <img src={CompanyLogo} alt="" className="w-[180px] h-auto" />
+          </div>
+          {letterData.root.children.map((child, index) =>
+            renderElement(child, index)
+          )}
 
-        <div className="mt-[250px] flex  gap-14  ">
-          <div className="flex justify-between items-center w-[170px]">
-            <div className="p-2 rounded-full bg-blue-500">
-              <FiPhone color="white" />
+          <div className="mt-[250px] flex  gap-14  ">
+            <div className="flex justify-between items-center w-[170px]">
+              <div className="p-2 rounded-full bg-blue-500">
+                <FiPhone color="white" />
+              </div>{" "}
+              <div className="text-sm">
+                <p className="text-sm">+8801884-815992</p>
+                <p className="text-sm">+8801884-815992</p>
+              </div>
             </div>{" "}
-            <div className="text-sm">
-              <p className="text-sm">+8801884-815992</p>
-              <p className="text-sm">+8801884-815992</p>
+            <div className="flex justify-between items-center w-[180px]">
+              <div className="p-2 rounded-full bg-blue-500">
+                <MdOutlineEmail color="white" />
+              </div>{" "}
+              <div className="text-sm">
+                <p className="text-sm">info@xceedbd.com</p>
+              </div>
             </div>
-          </div>{" "}
-          <div className="flex justify-between items-center w-[180px]">
-            <div className="p-2 rounded-full bg-blue-500">
-              <MdOutlineEmail color="white" />
-            </div>{" "}
-            <div className="text-sm">
-              <p className="text-sm">info@xceedbd.com</p>
-            </div>
-          </div>
-          <div className="flex justify-between items-center w-[210px] mt-3">
-            <div className="p-2 rounded-full bg-blue-500">
-              <CiLocationOn color="white" />
-            </div>{" "}
-            <div>
-              <p className="text-sm">Agrabad , Chittagong </p>
-              <p className="text-sm">Bangladesh </p>
+            <div className="flex justify-between items-center w-[210px] mt-3">
+              <div className="p-2 rounded-full bg-blue-500">
+                <CiLocationOn color="white" />
+              </div>{" "}
+              <div>
+                <p className="text-sm">Agrabad , Chittagong </p>
+                <p className="text-sm">Bangladesh </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Preview>
     </div>
   );
 }
