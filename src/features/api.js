@@ -1494,6 +1494,15 @@ export const apiSlice = createApi({
       }),
       providesTags: ["employeesalarysheet"],
     }),
+
+    updateSalarySheet: builder.mutation({
+      query: ({ employeeId, ...credentials }) => ({
+        url: `/salarysetting/update-salary/${employeeId}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["employeesalarysheet"],
+    }),
   }),
 });
 
@@ -1754,4 +1763,5 @@ export const {
 
   useGeneratedEmployeeSalaryBulkMutation,
   useGetGeneratedSalarySheetQuery,
+  useUpdateSalarySheetMutation,
 } = apiSlice;

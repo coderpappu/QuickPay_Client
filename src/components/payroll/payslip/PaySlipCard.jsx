@@ -5,72 +5,17 @@ import {
   useGetCompanyIdQuery,
   useGetEmployeesQuery,
   useGetGeneratedSalarySheetQuery,
+  useUpdateSalarySheetMutation,
 } from "../../../features/api";
 import BrandCardWrapper from "../../company/BrandCardWrapper";
 import PreviewPayslipCard from "./PreviewPayslipCard";
 
 const PaySlipCard = () => {
-  const labels = {
-    companyName: "R.S.B Industrial Ltd.",
-    cardNo: "Card No:",
-    name: "Name:",
-    department: "Department:",
-    section: "Section:",
-    otHours: "O.T. Hours:",
-    salaryBand: "Salary Band:",
-    slNo: "SL. No:",
-    month: "Month:",
-    payMode: "Pay Mode:",
-    bankAccount: "Bank AC:",
-    earnings: "Earnings",
-    deductions: "Deductions",
-    amount: "Amount",
-    totalSalaryEarned: "Total Salary Earned",
-    totalDeduction: "Total Deduction",
-    netAmount: "NET Amount",
-  };
+  const [updateSalarySheet] = useUpdateSalarySheetMutation();
 
-  // Employee data
-  const employeeData = {
-    cardNo: "M10059 (Prev.: M0315)",
-    name: "AVIRUP CHOWDHURY",
-    department: "PPIC",
-    section: "PPIC",
-    otHours: 0,
-    salaryBand: "N/A",
-    slNo: 1,
-    month: "September-2024",
-    payMode: "BANK-EBL",
-    bankAccount: "0141260036544",
+  const handleUpdateSalarySheet = async (employeeId) => {
+    await updateSalarySheet({ employeeId, status: "Paid" });
   };
-
-  // Earnings and deductions
-  const earningsData = {
-    "Gross Salary": 20000,
-    "Basic Salary": 15000,
-    "H. Rent": 3000,
-    "Medical Allowance": 2000,
-    "Attendance Bonus": 500,
-    "O.T. Amount": 0,
-    Allowance: 0,
-    "Transport Allowance": 0,
-    "Prod. Incentive": 0,
-    "Shift Allowance": 0,
-    "Other's": 0,
-  };
-
-  const deductionsData = {
-    "Absent Amount": 0,
-    Stamp: 0,
-    "Advance/Loan": 0,
-    "E.P.F": 0,
-    "Other's": 130,
-  };
-
-  // Calculate net amount
-  const netAmount =
-    Object.values(earningsData).reduce((sum, value) => sum + value, 0) -
-    Object.values(deductionsData).reduce((sum, value) => sum + value, 0);
 
   const { data: companyId } = useGetCompanyIdQuery();
   const { data: employeeList, isLoading } = useGetEmployeesQuery(companyId);
@@ -162,8 +107,13 @@ const PaySlipCard = () => {
         <div className="dark:text-white w-[10%]">
           <h3>{sheet?.deduction_salary_sheet?.[0].amount}</h3>
         </div>
-        <div className="dark:text-white w-[10%]">
-          <h3>Success </h3>
+        <div className="dark:text-white w-[7%] text-center">
+          <button
+            className={`px-4 py-2 w-24 border ${sheet?.status !== "Unpaid" ? "border-green-400 text-green-400" : "border-yellow-400 text-yellow-400"} mx-2 rounded-md`}
+            onClick={() => handleOpen(sheet)}
+          >
+            {sheet?.status}{" "}
+          </button>
         </div>
         <div className="dark:text-white w-[30%]">
           <button
@@ -172,7 +122,10 @@ const PaySlipCard = () => {
           >
             Payslip
           </button>
-          <button className="px-4 py-2 bg-purple-700 mx-2 rounded-md">
+          <button
+            className="px-4 py-2 bg-purple-700 mx-2 rounded-md"
+            onClick={() => handleUpdateSalarySheet(sheet?.Employee?.id)}
+          >
             Click To Paid
           </button>
           <button className="px-4 py-2 bg-blue-500 mx-2 rounded-md">
@@ -300,7 +253,7 @@ const PaySlipCard = () => {
               <div className="dark:text-white w-[10%]">
                 <h3>Deduction</h3>
               </div>
-              <div className="dark:text-white w-[10%]">
+              <div className="dark:text-white w-[7%] text-center">
                 <h3>Status </h3>
               </div>
               <div className="dark:text-white w-[30%]">
@@ -328,15 +281,7 @@ const PaySlipCard = () => {
               </button>
             </div>
             <div className="mt-4">
-              <PreviewPayslipCard
-                employee={employeeData}
-                earnings={earningsData}
-                deductions={deductionsData}
-                netAmount={netAmount}
-                labels={labels}
-                slipPreview={slipPreview}
-                onClose={onClose}
-              />
+              <PreviewPayslipCard slipPreview={slipPreview} onClose={onClose} />
             </div>
           </div>
         </div>

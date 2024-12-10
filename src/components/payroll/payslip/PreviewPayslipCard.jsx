@@ -1,14 +1,7 @@
 import React from "react";
 import { useGetbrandQuery, useGetCompanyIdQuery } from "../../../features/api";
 
-const SalarySheet = ({
-  employee,
-  earnings,
-  deductions,
-  netAmount,
-  labels,
-  slipPreview,
-}) => {
+const SalarySheet = ({ slipPreview }) => {
   const { data: companyId } = useGetCompanyIdQuery();
   const { data: brandDetails } = useGetbrandQuery(companyId);
 
@@ -25,7 +18,6 @@ const SalarySheet = ({
     ...(slipPreview?.loan || []),
   ];
 
-  console.log(slipPreview?.status);
   return (
     <div className="max-w-5xl mx-auto bg-white dark:bg-dark-box shadow-md rounded-md p-6">
       {/* Header */}
@@ -121,25 +113,23 @@ const SalarySheet = ({
         {/* Total Row */}
         <div className="grid grid-cols-4 font-bold">
           <div className="p-2 border-r border-dark-card">
-            {labels.totalSalaryEarned}
+            {/* {labels.totalSalaryEarned} */}
           </div>
           <div className="p-2 border-r border-dark-card">
-            {Object.values(earnings).reduce((sum, value) => sum + value, 0)}
+            {/* {Object.values(earnings).reduce((sum, value) => sum + value, 0)} */}
           </div>
           <div className="p-2 border-r border-dark-card">
-            {labels.totalDeduction}
+            {/* {labels.totalDeduction} */}
           </div>
           <div className="p-2">
-            {Object.values(deductions).reduce((sum, value) => sum + value, 0)}
+            {/* {Object.values(deductions).reduce((sum, value) => sum + value, 0)} */}
           </div>
         </div>
       </div>
 
       {/* Net Amount */}
       <div className="flex justify-end text-lg font-bold">
-        <p>
-          {labels.netAmount}: {netAmount}
-        </p>
+        <p>{/* {labels.netAmount}: {netAmount} */}</p>
       </div>
     </div>
   );
