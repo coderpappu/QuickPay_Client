@@ -1503,6 +1503,15 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["employeesalarysheet"],
     }),
+
+    deleteSalarySheet: builder.mutation({
+      query: (employeeId, generate_date) => ({
+        url: `/salarysetting/salary-sheet/delete`,
+        method: "DELETE",
+        params: { employeeId, generate_date },
+      }),
+      invalidatesTags: ["employeesalarysheet"],
+    }),
   }),
 });
 
@@ -1764,4 +1773,5 @@ export const {
   useGeneratedEmployeeSalaryBulkMutation,
   useGetGeneratedSalarySheetQuery,
   useUpdateSalarySheetMutation,
+  useDeleteSalarySheetMutation,
 } = apiSlice;

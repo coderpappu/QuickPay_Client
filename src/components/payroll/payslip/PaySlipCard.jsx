@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import {
+  useDeleteSalarySheetMutation,
   useGeneratedEmployeeSalaryBulkMutation,
   useGetCompanyIdQuery,
   useGetEmployeesQuery,
@@ -12,6 +13,12 @@ import PreviewPayslipCard from "./PreviewPayslipCard";
 
 const PaySlipCard = () => {
   const [updateSalarySheet] = useUpdateSalarySheetMutation();
+  const [deleteSalarySheet] = useDeleteSalarySheetMutation();
+
+  const handleDeleteSalarySheet = async (employeeId, generate_date) => {
+    await deleteSalarySheet({ employeeId, generate_date });
+    toast.success("Salary Sheet deleted successfully.");
+  };
 
   const handleUpdateSalarySheet = async (employeeId) => {
     await updateSalarySheet({ employeeId, status: "Paid" });
@@ -131,7 +138,12 @@ const PaySlipCard = () => {
           <button className="px-4 py-2 bg-blue-500 mx-2 rounded-md">
             Edit
           </button>
-          <button className="px-4 py-2 bg-green-500 mx-2 rounded-md">
+          <button
+            className="px-4 py-2 bg-green-500 mx-2 rounded-md"
+            onClick={() =>
+              deleteSalarySheet(sheet?.Employee?.id, sheet?.generate_date)
+            }
+          >
             Delete
           </button>
         </div>
