@@ -1,4 +1,5 @@
 import React from "react";
+import { useGetbrandQuery, useGetCompanyIdQuery } from "../../../features/api";
 
 const SalarySheet = ({
   employee,
@@ -8,6 +9,9 @@ const SalarySheet = ({
   labels,
   slipPreview,
 }) => {
+  const { data: companyId } = useGetCompanyIdQuery();
+  const { data: brandDetails } = useGetbrandQuery(companyId);
+
   const leftside = [
     { basic: slipPreview?.basic_salary } || [],
     ...(slipPreview?.allowance_salary_sheet || []),
@@ -21,19 +25,20 @@ const SalarySheet = ({
     ...(slipPreview?.loan || []),
   ];
 
+  console.log(slipPreview?.status);
   return (
     <div className="max-w-5xl mx-auto bg-white dark:bg-dark-box shadow-md rounded-md p-6">
       {/* Header */}
-      <div className="text-center text-xl font-bold mb-4">
-        {labels.companyName}
+      <div className="text-center text-xl font-bold mb-4 w-[150px] h-auto mx-auto">
+        <img src={brandDetails?.data?.lightImageUrl} alt="" />
       </div>
       <div className="flex justify-between text-sm mb-2">
         <div>
           <p>
-            <strong>ID No : </strong> {slipPreview?.EmployeeDe}
+            <strong>ID No : </strong> {slipPreview?.Employee?.employeeId}
           </p>
           <p>
-            <strong>Name :</strong> {employee.name}
+            <strong>Name :</strong> {slipPreview?.Employee?.name}
           </p>
           <p>
             <strong>Department : </strong>{" "}
@@ -43,23 +48,27 @@ const SalarySheet = ({
             <strong>Designation : </strong>{" "}
             {slipPreview?.Employee?.EmployeeDesignation?.[0]?.designation?.name}
           </p>
-        </div>
-        <div className="text-right">
           <p>
             <strong>Section : </strong>{" "}
             {slipPreview?.Employee?.EmployeeSection?.[0]?.section?.name}
           </p>
+        </div>
+        <div className="text-right">
           <p>
-            <strong>Shift</strong>{" "}
+            <strong>Shift : </strong>{" "}
             {slipPreview?.Employee?.EmployeeShift?.[0]?.shift?.name}
           </p>
           <p>
-            <strong>O.T Hours</strong>{" "}
+            <strong>O.T Hours : </strong>{" "}
             {Math.round(slipPreview?.overtime_salary_sheet?.[0]?.hour)}
           </p>
 
           <p>
-            <strong>{labels.month}</strong> {slipPreview?.generate_date}
+            <strong>Month :</strong> {slipPreview?.generate_date}
+          </p>
+
+          <p>
+            <strong>Status :</strong> {slipPreview?.status}
           </p>
         </div>
       </div>
