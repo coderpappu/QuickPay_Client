@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   useDeleteSalarySheetMutation,
@@ -30,9 +30,20 @@ const PaySlipCard = () => {
 
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
+
   const [slipPreview, setSlipPreview] = useState("");
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  useEffect(() => {
+    // Get the current month and year
+    const currentMonth = String(new Date().getMonth() + 1).padStart(2, "0");
+    const currentYear = String(new Date().getFullYear());
+
+    // Set them as default values
+    setMonth(currentMonth);
+    setYear(currentYear);
+  }, []);
 
   const onClose = () => {
     setIsPopupOpen(false);
@@ -106,13 +117,13 @@ const PaySlipCard = () => {
           <h3>{sheet?.Employee?.name}</h3>
         </div>
         <div className="dark:text-white w-[10%]">
-          <h3>{sheet?.overtime_salary_sheet?.[0].overtime_salary}</h3>
+          <h3>{sheet?.overtime_salary_sheet?.[0]?.overtime_salary}</h3>
         </div>
         <div className="dark:text-white w-[10%]">
-          <h3>{sheet?.allowance_salary_sheet?.[0].amount}</h3>
+          <h3>{sheet?.allowance_salary_sheet?.[0]?.amount}</h3>
         </div>
         <div className="dark:text-white w-[10%]">
-          <h3>{sheet?.deduction_salary_sheet?.[0].amount}</h3>
+          <h3>{sheet?.deduction_salary_sheet?.[0]?.amount}</h3>
         </div>
         <div className="dark:text-white w-[7%] text-center">
           <button
