@@ -20,8 +20,8 @@ const PaySlipCard = () => {
     toast.success("Salary Sheet deleted successfully.");
   };
 
-  const handleUpdateSalarySheet = async (employeeId) => {
-    await updateSalarySheet({ employeeId, status: "Paid" });
+  const handleUpdateSalarySheet = async (employeeId, generate_date) => {
+    await updateSalarySheet({ employeeId, generate_date, status: "Paid" });
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
@@ -117,7 +117,9 @@ const PaySlipCard = () => {
           <h3>{sheet?.Employee?.name}</h3>
         </div>
         <div className="dark:text-white w-[10%]">
-          <h3>{sheet?.overtime_salary_sheet?.[0]?.overtime_salary}</h3>
+          <h3>
+            {Math.round(sheet?.overtime_salary_sheet?.[0]?.overtime_salary)}
+          </h3>
         </div>
         <div className="dark:text-white w-[10%]">
           <h3>{sheet?.allowance_salary_sheet?.[0]?.amount}</h3>
@@ -142,7 +144,9 @@ const PaySlipCard = () => {
           </button>
           <button
             className="px-4 py-2 bg-purple-700 mx-2 rounded-md"
-            onClick={() => handleUpdateSalarySheet(sheet?.Employee?.id)}
+            onClick={() =>
+              handleUpdateSalarySheet(sheet?.Employee?.id, sheet?.generate_date)
+            }
           >
             Click To Paid
           </button>
@@ -152,7 +156,7 @@ const PaySlipCard = () => {
           <button
             className="px-4 py-2 bg-green-500 mx-2 rounded-md"
             onClick={() =>
-              deleteSalarySheet(sheet?.Employee?.id, sheet?.generate_date)
+              handleDeleteSalarySheet(sheet?.Employee?.id, sheet?.generate_date)
             }
           >
             Delete

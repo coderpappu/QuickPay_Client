@@ -1505,7 +1505,7 @@ export const apiSlice = createApi({
     }),
 
     deleteSalarySheet: builder.mutation({
-      query: (employeeId, generate_date) => ({
+      query: ({ employeeId, generate_date }) => ({
         url: `/salarysetting/salary-sheet/delete`,
         method: "DELETE",
         params: { employeeId, generate_date },
