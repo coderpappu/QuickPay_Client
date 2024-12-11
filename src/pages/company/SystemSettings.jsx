@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import BoardMenuButton from "../../components/company/BoardMenuButton";
 
-import BiometricCard from "../../components/company/BiometricCard";
 import BrandCard from "../../components/company/BrandCard";
 import CompanySettingCard from "../../components/company/CompanySetting";
 import CompanySettings from "../../components/company/CompanySettings";
@@ -16,6 +15,7 @@ import OfferLetterCard from "../../components/company/OfferLetterCard";
 import PaymentCard from "../../components/company/PaymentCard";
 import SystemSettingsCard from "../../components/company/SystemSettings";
 import ZoomMeetingCard from "../../components/company/ZoomMeetingCard";
+import BiometricsDeviceCard from "../../components/company/biometrics/BiometricDeviceCard";
 const SystemSettings = () => {
   const [activeSetting, setActiveSetting] = useState(1);
 
@@ -126,7 +126,7 @@ const SystemSettings = () => {
           {activeSetting == 11 && <ExperienceLetterCard />}
           {activeSetting == 12 && <LeaveApplicationCard />}
           {activeSetting == 13 && <NocCard />}
-          {activeSetting == 14 && <BiometricCard />}
+          {activeSetting == 14 && <BiometricsDeviceCard />}
           {activeSetting == 15 && <CompanySettingCard />}
         </div>
       </div>
