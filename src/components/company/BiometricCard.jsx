@@ -70,8 +70,8 @@ const BiometricCard = () => {
               subTitle="Edit your biometric settings"
             />
             <div className="px-6 py-3">
-              <div className="flex flex-wrap justify-between items-center">
-                <div className="w-[50%] mb-4">
+              <div className="flex flex-wrap items-center justify-between">
+                <div className="mb-4 w-[50%]">
                   <InputTitle title="ZKTeco Api URL" />
                   <InputBox
                     name="url"
@@ -81,10 +81,10 @@ const BiometricCard = () => {
                   <ErrorMessage
                     name="url"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
-                <div className="w-[22%] mb-4">
+                <div className="mb-4 w-[22%]">
                   <InputTitle title="Username" />
                   <InputBox
                     name="username"
@@ -94,10 +94,10 @@ const BiometricCard = () => {
                   <ErrorMessage
                     name="username"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
-                <div className="w-[22%] mb-4">
+                <div className="mb-4 w-[22%]">
                   <InputTitle title="Password" />
                   <InputBox
                     name="password"
@@ -107,22 +107,22 @@ const BiometricCard = () => {
                   <ErrorMessage
                     name="password"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
               </div>
-              <div className="w-[70%] my-3">
+              <div className="my-3 w-[70%]">
                 <InputTitle title="Auth Token" />
                 <Field
                   name="authToken"
                   as="textarea"
                   placeholder="Please provide the auth token"
-                  className="p-3 w-full dark:text-dark-text-color bg-light-bg dark:bg-dark-box border-none outline-none rounded-md"
+                  className="w-full rounded-md border-none bg-light-bg p-3 outline-none dark:bg-dark-box dark:text-dark-text-color"
                 />
                 <ErrorMessage
                   name="authToken"
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="mt-1 text-sm text-red-500"
                 />
               </div>
 

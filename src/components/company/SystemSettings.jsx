@@ -85,7 +85,7 @@ const CompanySettings = () => {
               {formFields.map((row, rowIndex) => (
                 <div
                   key={rowIndex}
-                  className="flex flex-wrap justify-between my-3"
+                  className="my-3 flex flex-wrap justify-between"
                 >
                   {row.map(
                     ({ name, title, placeholder, type = "text", list }) => (
@@ -108,10 +108,10 @@ const CompanySettings = () => {
                         <ErrorMessage
                           name={name}
                           component="div"
-                          className="text-red-500 text-sm"
+                          className="text-sm text-red-500"
                         />
                       </div>
-                    )
+                    ),
                   )}
                 </div>
               ))}

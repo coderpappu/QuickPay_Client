@@ -94,9 +94,9 @@ const SystemSettings = () => {
         <h2>Company/Settings</h2>
       </div>
 
-      <div className="flex justify-between my-4">
+      <div className="my-4 flex justify-between">
         {/* board of system menu */}
-        <div className="w-[25%] bg-white dark:bg-dark-card rounded-md h-full">
+        <div className="h-full w-[25%] rounded-md bg-white dark:bg-dark-card">
           {/* menu button  */}
           {systemMenuList?.map((menu) => (
             <BoardMenuButton
@@ -110,7 +110,7 @@ const SystemSettings = () => {
         </div>
 
         {/* show box  */}
-        <div className="w-[73%] overflow-auto  ">
+        <div className="w-[73%] overflow-auto">
           {/* settings Card  */}
           {activeSetting == 1 && <BrandCard />}
 

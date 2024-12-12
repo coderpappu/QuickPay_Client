@@ -1,42 +1,43 @@
-import { ErrorMessage, Field, Formik, useFormikContext } from "formik";
+import { ErrorMessage, Field, Form, Formik, useFormikContext } from "formik";
 import toast from "react-hot-toast";
-import { Form, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
+import { useGetCompanyIdQuery } from "../../../features/api";
 
-import {
-  useCreateDeviceMutation,
-  useGetCompanyIdQuery,
-  useGetDeviceDetailsQuery,
-  useUpdateDeviceMutation,
-} from "../../../features/api";
-import CardSkeleton from "../../../skeletons/card";
-
-const DeviceSchema = Yup.object().shape({
+const DeviceSchema = Yup.object({
   name: Yup.string().required("Device Name is required"),
-  configMethod: Yup.string().required("Configuration Method is required"),
+  configMethod: Yup.string()
+    .oneOf(["API", "IP"], "Invalid Configuration Method")
+    .required("Configuration Method is required"),
   apiUrl: Yup.string().when("configMethod", {
     is: "API",
-    then: Yup.string().required("API URL is required"),
+    then: (schema) => schema.required("API URL is required"),
+    otherwise: (schema) => schema.notRequired(),
   }),
   username: Yup.string().when("configMethod", {
     is: "API",
-    then: Yup.string().required("Username is required"),
+    then: (schema) => schema.required("Username is required"),
+    otherwise: (schema) => schema.notRequired(),
   }),
   password: Yup.string().when("configMethod", {
     is: "API",
-    then: Yup.string().required("Password is required"),
+    then: (schema) => schema.required("Password is required"),
+    otherwise: (schema) => schema.notRequired(),
   }),
   authKey: Yup.string().when("configMethod", {
     is: "API",
-    then: Yup.string().required("Auth Key is required"),
+    then: (schema) => schema.required("Auth Key is required"),
+    otherwise: (schema) => schema.notRequired(),
   }),
   ipAddress: Yup.string().when("configMethod", {
     is: "IP",
-    then: Yup.string().required("IP Address is required"),
+    then: (schema) => schema.required("IP Address is required"),
+    otherwise: (schema) => schema.notRequired(),
   }),
   port: Yup.string().when("configMethod", {
     is: "IP",
-    then: Yup.string().required("Port is required"),
+    then: (schema) => schema.required("Port is required"),
+    otherwise: (schema) => schema.notRequired(),
   }),
 });
 
@@ -60,12 +61,12 @@ const ConditionalFields = () => {
               name="apiUrl"
               id="apiUrl"
               placeholder="Enter API URL"
-              className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+              className="h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
             />
             <ErrorMessage
               name="apiUrl"
               component="div"
-              className="text-red-500 text-sm mt-1"
+              className="mt-1 text-sm text-red-500"
             />
           </div>
 
@@ -81,12 +82,12 @@ const ConditionalFields = () => {
               name="username"
               id="username"
               placeholder="Enter Username"
-              className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+              className="h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
             />
             <ErrorMessage
               name="username"
               component="div"
-              className="text-red-500 text-sm mt-1"
+              className="mt-1 text-sm text-red-500"
             />
           </div>
 
@@ -102,12 +103,12 @@ const ConditionalFields = () => {
               name="password"
               id="password"
               placeholder="Enter Password"
-              className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+              className="h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
             />
             <ErrorMessage
               name="password"
               component="div"
-              className="text-red-500 text-sm mt-1"
+              className="mt-1 text-sm text-red-500"
             />
           </div>
 
@@ -123,12 +124,12 @@ const ConditionalFields = () => {
               name="authKey"
               id="authKey"
               placeholder="Enter Auth Key"
-              className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+              className="h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
             />
             <ErrorMessage
               name="authKey"
               component="div"
-              className="text-red-500 text-sm mt-1"
+              className="mt-1 text-sm text-red-500"
             />
           </div>
         </>
@@ -148,12 +149,12 @@ const ConditionalFields = () => {
               name="ipAddress"
               id="ipAddress"
               placeholder="Enter IP Address"
-              className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+              className="h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
             />
             <ErrorMessage
               name="ipAddress"
               component="div"
-              className="text-red-500 text-sm mt-1"
+              className="mt-1 text-sm text-red-500"
             />
           </div>
 
@@ -169,12 +170,12 @@ const ConditionalFields = () => {
               name="port"
               id="port"
               placeholder="Enter Port"
-              className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+              className="h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
             />
             <ErrorMessage
               name="port"
               component="div"
-              className="text-red-500 text-sm mt-1"
+              className="mt-1 text-sm text-red-500"
             />
           </div>
         </>
@@ -187,19 +188,19 @@ const DeviceForm = ({ deviceId, setIsPopupOpen }) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [createDevice, { isLoading }] = useCreateDeviceMutation();
-  const [updateDevice] = useUpdateDeviceMutation();
+  // const [createDevice, { isLoading }] = useCreateDeviceMutation();
+  // const [updateDevice] = useUpdateDeviceMutation();
 
   const { data: company_id } = useGetCompanyIdQuery();
-  const { data: deviceData, isLoading: deviceLoading } =
-    useGetDeviceDetailsQuery(deviceId, {
-      skip: !deviceId,
-    });
+  // const { data: deviceData, isLoading: deviceLoading } =
+  //   useGetDeviceDetailsQuery(deviceId, {
+  //     skip: !deviceId,
+  //   });
 
-  if (deviceLoading) return <CardSkeleton />;
+  // if (deviceLoading) return <CardSkeleton />;
 
   const initialValues = {
-    name: deviceData?.data?.name || "",
+    name: "",
     configMethod: "API",
     apiUrl: "",
     username: "",
@@ -215,15 +216,16 @@ const DeviceForm = ({ deviceId, setIsPopupOpen }) => {
       initialValues={initialValues}
       validationSchema={DeviceSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
+        console.log(values);
         try {
           if (!deviceId) {
-            await createDevice({ ...values, company_id }).unwrap();
+            // await createDevice({ ...values, company_id }).unwrap();
           } else {
-            await updateDevice({
-              id: deviceId,
-              ...values,
-              company_id,
-            }).unwrap();
+            // await updateDevice({
+            //   id: deviceId,
+            //   ...values,
+            //   company_id,
+            // }).unwrap();
           }
 
           setIsPopupOpen(false);
@@ -237,7 +239,7 @@ const DeviceForm = ({ deviceId, setIsPopupOpen }) => {
       }}
     >
       {({ isSubmitting }) => (
-        <Form className="max-w-4xl mx-auto px-4 py-6">
+        <Form className="mx-auto max-w-4xl px-4 py-6">
           <div className="space-y-4">
             {/* Device Name */}
             <div>
@@ -252,12 +254,12 @@ const DeviceForm = ({ deviceId, setIsPopupOpen }) => {
                 name="name"
                 id="name"
                 placeholder="Enter Device Name"
-                className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+                className="h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
               />
               <ErrorMessage
                 name="name"
                 component="div"
-                className="text-red-500 text-sm mt-1"
+                className="mt-1 text-sm text-red-500"
               />
             </div>
 
@@ -273,7 +275,7 @@ const DeviceForm = ({ deviceId, setIsPopupOpen }) => {
                 as="select"
                 name="configMethod"
                 id="configMethod"
-                className="w-full px-2 py-1 border-dark-box border border-opacity-5 bg-light-bg  dark:bg-dark-card rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+                className="h-10 w-full rounded-md border border-dark-box border-opacity-5 bg-light-bg px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
               >
                 <option value="API">API</option>
                 <option value="IP">IP</option>
@@ -281,7 +283,7 @@ const DeviceForm = ({ deviceId, setIsPopupOpen }) => {
               <ErrorMessage
                 name="configMethod"
                 component="div"
-                className="text-red-500 text-sm mt-1"
+                className="mt-1 text-sm text-red-500"
               />
             </div>
 
@@ -293,9 +295,9 @@ const DeviceForm = ({ deviceId, setIsPopupOpen }) => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-4 py-2 bg-button-bg text-white rounded-md hover:bg-button-hover"
+                className="hover:bg-button-hover rounded-md bg-button-bg px-4 py-2 text-white"
               >
-                {/* { "Saving..." : "Submit"} */}
+                Save
               </button>
             </div>
           </div>
