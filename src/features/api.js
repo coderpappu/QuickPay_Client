@@ -1512,6 +1512,48 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["employeesalarysheet"],
     }),
+
+    // device configuration
+    addDeviceConfiguration: builder.mutation({
+      query: (credentials) => ({
+        url: "/device/add",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["device"],
+    }),
+
+    updateDeviceConfiguration: builder.mutation({
+      query: ({ deviceId, ...credentials }) => ({
+        url: `/device/update/${deviceId}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["device"],
+    }),
+    deleteDeviceConfigure: builder.mutation({
+      query: ({ deviceId }) => ({
+        url: `/device/delete`,
+        method: "DELETE",
+        params: { deviceId },
+      }),
+      invalidatesTags: ["device"],
+    }),
+
+    getDeviceList: builder.query({
+      query: (companyId) => ({
+        url: `/device/company-device`,
+        params: { companyId },
+      }),
+      providesTags: ["device"],
+    }),
+
+    getDeviceDetails: builder.query({
+      query: (deviceId) => ({
+        url: `/device/get-details/${deviceId}`,
+      }),
+      providesTags: ["device"],
+    }),
   }),
 });
 
@@ -1774,4 +1816,11 @@ export const {
   useGetGeneratedSalarySheetQuery,
   useUpdateSalarySheetMutation,
   useDeleteSalarySheetMutation,
+
+  // device configure
+  useAddDeviceConfigurationMutation,
+  useUpdateDeviceConfigurationMutation,
+  useDeleteDeviceConfigureMutation,
+  useGetDeviceListQuery,
+  useGetDeviceDetailsQuery,
 } = apiSlice;

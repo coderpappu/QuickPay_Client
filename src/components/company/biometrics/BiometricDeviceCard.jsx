@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import {
   useDeleteDepartmentMutation,
   useGetCompanyIdQuery,
-  useGetDepartmentsQuery,
+  useGetDeviceListQuery,
 } from "../../../features/api";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import FormSkeleton from "../../../skeletons/FormSkeleton";
@@ -14,7 +14,6 @@ import ErrorMessage from "../../../utils/ErrorMessage";
 import BrandCardWrapper from "../BrandCardWrapper";
 import { HrmSetupCardHeader } from "../SettingCardHeader";
 import DeviceForm from "./BiometricDeviceForm";
-
 const BiometricsDeviceCard = () => {
   const navigate = useNavigate();
 
@@ -34,11 +33,11 @@ const BiometricsDeviceCard = () => {
   const [deleteDepartment] = useDeleteDepartmentMutation();
 
   const {
-    data: departmentList,
+    data: deviceList,
     isLoading,
     isError,
     error,
-  } = useGetDepartmentsQuery(companyId);
+  } = useGetDeviceListQuery(companyId);
 
   const handleDeleteDepartment = async (id) => {
     const confirm = () =>
@@ -76,34 +75,136 @@ const BiometricsDeviceCard = () => {
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  if (!isLoading && !isError && departmentList?.data)
-    content = departmentList?.data?.map((department, index) => (
-      <div
-        key={department?.id}
-        className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
-      >
-        <div className="w-[35%] dark:text-white">
-          <h3>{department?.name}</h3>
-        </div>
-
-        <div className="w-[15%] dark:text-white">
-          <div className="flex flex-wrap justify-start gap-2">
-            {/* edit button  */}
-            <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-400 p-2">
-              <CiEdit size={20} onClick={() => handleOpen(department?.id)} />
+  if (!isLoading && !isError && deviceList?.data) {
+    content = deviceList.data.map((device) =>
+      device?.configMethod === "IP" ? (
+        <div
+          key={device?.id}
+          className="my-3 flex w-full flex-wrap items-center justify-between border border-dark-border-color px-3 py-4 text-[13px] dark:border-opacity-10"
+        >
+          <div className="w-[20%] dark:text-white">
+            <h2 className="text-sm leading-7 dark:text-dark-text-color">
+              Device Name
+            </h2>
+            <div className="w-full rounded-md border border-dark-box border-opacity-5 px-2 py-2 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color">
+              <h2>{device?.name}</h2>
             </div>
+          </div>
 
-            {/* delete button  */}
-            <div
-              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center"
-              onClick={() => handleDeleteDepartment(department?.id)}
-            >
-              <AiOutlineDelete size={20} />
+          <div className="w-[15%] dark:text-white">
+            <h2 className="text-sm leading-7 dark:text-dark-text-color">
+              Method
+            </h2>
+            <div className="w-full rounded-md border border-dark-box border-opacity-5 px-2 py-2 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color">
+              <h3>{device?.configMethod}</h3>
+            </div>
+          </div>
+          <div className="w-[25%] dark:text-white">
+            <h2 className="text-sm leading-7 dark:text-dark-text-color">
+              IP Address
+            </h2>
+            <div className="w-full rounded-md border border-dark-box border-opacity-5 px-2 py-2 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color">
+              <h3>{device?.ipAddress}</h3>
+            </div>
+          </div>
+          <div className="w-[15%] dark:text-white">
+            <h2 className="text-sm leading-7 dark:text-dark-text-color">
+              PORT
+            </h2>
+            <div className="w-full rounded-md border border-dark-box border-opacity-5 px-2 py-2 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color">
+              <h3>{device?.port}</h3>
+            </div>
+          </div>
+
+          <div className="w-[15%] dark:text-white">
+            <div className="flex flex-wrap justify-start gap-2">
+              {/* edit button  */}
+              <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md bg-green-400 p-2">
+                <CiEdit size={20} onClick={() => handleOpen(department?.id)} />
+              </div>
+
+              {/* delete button  */}
+              <div
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md bg-red-500 p-2 text-center"
+                onClick={() => handleDeleteDepartment(department?.id)}
+              >
+                <AiOutlineDelete size={20} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    ));
+      ) : (
+        <div
+          key={device?.id}
+          className="my-3 flex w-full flex-wrap items-center justify-between border border-dark-border-color px-3 py-4 text-[13px] dark:border-opacity-10"
+        >
+          <div className="my-2 flex w-full flex-wrap justify-between gap-4">
+            <div className="w-[20%] dark:text-white">
+              <h2 className="text-sm leading-7 dark:text-dark-text-color">
+                Device Name
+              </h2>
+              <div className="w-full rounded-md border border-dark-box border-opacity-5 px-2 py-2 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color">
+                <h2>{device?.name}</h2>
+              </div>
+            </div>
+
+            <div className="w-[25%] dark:text-white">
+              <h2 className="text-sm leading-7 dark:text-dark-text-color">
+                Method
+              </h2>
+              <div className="w-full rounded-md border border-dark-box border-opacity-5 px-2 py-2 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color">
+                <h3>{device?.configMethod}</h3>
+              </div>
+            </div>
+            <div className="w-[15%] dark:text-white">
+              <h2 className="text-sm leading-7 dark:text-dark-text-color">
+                Username
+              </h2>
+              <div className="w-full rounded-md border border-dark-box border-opacity-5 px-2 py-2 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color">
+                <h3>{device?.username}</h3>
+              </div>
+            </div>
+
+            <div className="flex w-[20%] flex-wrap justify-end gap-2 dark:text-white">
+              {/* edit button  */}
+              <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md bg-green-400 p-2">
+                <CiEdit size={20} onClick={() => handleOpen(department?.id)} />
+              </div>
+
+              {/* delete button  */}
+              <div
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md bg-red-500 p-2 text-center"
+                onClick={() => handleDeleteDepartment(department?.id)}
+              >
+                <AiOutlineDelete size={20} />
+              </div>
+            </div>
+          </div>
+          <div className="my-2 flex w-full flex-wrap justify-start gap-6">
+            <div className="w-[100%] dark:text-white">
+              <h2 className="text-sm leading-7 dark:text-dark-text-color">
+                API URL
+              </h2>
+              <div className="w-full rounded-md border border-dark-box border-opacity-5 px-2 py-2 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color">
+                <h3>{device?.apiUrl}</h3>
+              </div>
+            </div>
+          </div>
+
+          <div className="my-2 flex w-full flex-wrap justify-start gap-6">
+            <div className="w-[100%] dark:text-white">
+              <h2 className="text-sm leading-7 dark:text-dark-text-color">
+                Auth Token
+              </h2>
+              <div className="w-full rounded-md border border-dark-box border-opacity-5 px-2 py-5 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color">
+                <h3>{device?.authKey}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+    );
+  }
 
   return (
     <>
@@ -111,15 +212,6 @@ const BiometricsDeviceCard = () => {
         <HrmSetupCardHeader title="Department" handleOpen={handleOpen} />
         <div className="px-6 py-3">
           {/* header  */}
-          <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
-            <div className="w-[35%] dark:text-white">
-              <h3>Department</h3>
-            </div>
-
-            <div className="w-[15%] dark:text-white">
-              <h3>Actions</h3>
-            </div>
-          </div>
 
           {/* body  */}
           {content}
@@ -143,7 +235,6 @@ const BiometricsDeviceCard = () => {
                   departmentId={selectedDepartmentId}
                   setIsPopupOpen={setIsPopupOpen}
                 /> */}
-
                 <DeviceForm />
               </div>
             </div>

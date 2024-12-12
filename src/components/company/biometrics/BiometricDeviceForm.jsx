@@ -2,7 +2,11 @@ import { ErrorMessage, Field, Form, Formik, useFormikContext } from "formik";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
-import { useGetCompanyIdQuery } from "../../../features/api";
+import {
+  useAddDeviceConfigurationMutation,
+  useGetCompanyIdQuery,
+  useUpdateDeviceConfigurationMutation,
+} from "../../../features/api";
 
 const DeviceSchema = Yup.object({
   name: Yup.string().required("Device Name is required"),
@@ -188,7 +192,10 @@ const DeviceForm = ({ deviceId, setIsPopupOpen }) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  // const [createDevice, { isLoading }] = useCreateDeviceMutation();
+  const [addDevice] = useAddDeviceConfigurationMutation();
+  const { data: companyId } = useGetCompanyIdQuery();
+  const [updateDevice] = useUpdateDeviceConfigurationMutation();
+
   // const [updateDevice] = useUpdateDeviceMutation();
 
   const { data: company_id } = useGetCompanyIdQuery();
@@ -216,10 +223,9 @@ const DeviceForm = ({ deviceId, setIsPopupOpen }) => {
       initialValues={initialValues}
       validationSchema={DeviceSchema}
       onSubmit={async (values, { setSubmitting, resetForm }) => {
-        console.log(values);
         try {
           if (!deviceId) {
-            // await createDevice({ ...values, company_id }).unwrap();
+            await addDevice({ ...values, company_id }).unwrap();
           } else {
             // await updateDevice({
             //   id: deviceId,
@@ -232,6 +238,7 @@ const DeviceForm = ({ deviceId, setIsPopupOpen }) => {
           resetForm();
           toast.success("Device saved successfully!");
         } catch (error) {
+          console.log(error);
           toast.error(error?.data?.message || "An error occurred");
         } finally {
           setSubmitting(false);
