@@ -1554,6 +1554,13 @@ export const apiSlice = createApi({
       }),
       providesTags: ["device"],
     }),
+
+    getCompanyAttendance: builder.query({
+      query: (deviceId) => ({
+        url: `/device/get-attendance`,
+      }),
+      providesTags: ["device"],
+    }),
   }),
 });
 
@@ -1823,4 +1830,6 @@ export const {
   useDeleteDeviceConfigureMutation,
   useGetDeviceListQuery,
   useGetDeviceDetailsQuery,
+
+  useGetCompanyAttendanceQuery,
 } = apiSlice;

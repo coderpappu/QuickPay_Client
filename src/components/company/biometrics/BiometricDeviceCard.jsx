@@ -209,7 +209,7 @@ const BiometricsDeviceCard = () => {
   return (
     <>
       <BrandCardWrapper>
-        <HrmSetupCardHeader title="Department" handleOpen={handleOpen} />
+        <HrmSetupCardHeader title="Devices" handleOpen={handleOpen} />
         <div className="px-6 py-3">
           {/* header  */}
 
@@ -221,7 +221,7 @@ const BiometricsDeviceCard = () => {
             <div className="w-full max-w-md rounded-lg bg-white p-6 dark:bg-dark-card">
               <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-dark-border-color dark:border-opacity-5">
                 <h3 className="text-lg font-medium text-gray-800 dark:text-white">
-                  Department
+                  Device
                 </h3>
                 <button
                   className="text-gray-500 hover:text-gray-800"
