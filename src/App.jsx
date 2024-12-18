@@ -47,6 +47,7 @@ import LeaveTypeList from "./pages/leave/LeaveTypeList";
 import NotFound from "./pages/NotFound";
 
 import PaySlipCard from "./components/payroll/payslip/PaySlipCard";
+import BiometricAttendnaces from "./pages/attendnace/BiometricAttendnaces";
 import GradeForm from "./pages/payroll/grade/gradeForm";
 import GradeList from "./pages/payroll/grade/gradeList";
 import LoanTypeForm from "./pages/payroll/Loan/LoanType/LoanTypeForm";
@@ -145,6 +146,10 @@ function App() {
                 element={<ManualAttendance />}
               />
               <Route path="employee/attendences" element={<AttendanceList />} />
+              <Route
+                path="employee/bio/attendences"
+                element={<BiometricAttendnaces />}
+              />
               <Route path="company/calendar" element={<Calendar />} />
               <Route path="employee/leave" element={<Leave />} />
               <Route path="company/leave" element={<LeaveSettings />} />

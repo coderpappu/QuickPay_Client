@@ -15,6 +15,7 @@ import ErrorMessage from "../../utils/ErrorMessage";
 import formatTimeTo12Hour from "../../utils/timeConverter";
 
 const AttendanceList = () => {
+  
   const { data: companyId } = useGetCompanyIdQuery();
   const [deleteAttendance] = useDeleteAttendanceMutation();
 
@@ -63,7 +64,7 @@ const AttendanceList = () => {
         ),
         {
           duration: Infinity,
-        }
+        },
       );
 
     confirm();
@@ -82,14 +83,14 @@ const AttendanceList = () => {
         <tr
           key={attendance?.id}
           className={
-            index % 2 === 0 ? "" : "bg-gray-50 dark:bg-dark-box rounded-sm"
+            index % 2 === 0 ? "" : "rounded-sm bg-gray-50 dark:bg-dark-box"
           }
         >
-          <td className="py-2 text-sm text-center">{index + 1}</td>
-          <td className="py-2 text-sm font-semibold  text-center">
+          <td className="py-2 text-center text-sm">{index + 1}</td>
+          <td className="py-2 text-center text-sm font-semibold">
             {attendance?.employee?.name}
           </td>
-          <td className="py-2 text-sm text-center">
+          <td className="py-2 text-center text-sm">
             {
               // edit ? (
               //   <input
@@ -104,22 +105,22 @@ const AttendanceList = () => {
               //)
             }
           </td>
-          <td className="py-2 text-sm text-center">
+          <td className="py-2 text-center text-sm">
             {formatTimeTo12Hour(attendance?.check_out_time || "")}
           </td>
-          <td className="py-2 text-sm text-center">
+          <td className="py-2 text-center text-sm">
             {attendance?.late == false ? "No" : "Yes"}
           </td>
-          <td className="py-2 text-sm text-center">
+          <td className="py-2 text-center text-sm">
             {attendance?.over_time > 0 ? "Yes" : "No"}
           </td>
 
-          <td className="py-2 text-sm text-center">{attendance?.status}</td>
+          <td className="py-2 text-center text-sm">{attendance?.status}</td>
 
-          <td className="py-2 text-sm text-center">
-            <div className="flex flex-wrap justify-center gap-2 m-auto text-white">
+          <td className="py-2 text-center text-sm">
+            <div className="m-auto flex flex-wrap justify-center gap-2 text-white">
               {/* edit button  */}
-              <div className="w-8 h-8 bg-indigo-600 rounded-sm p-2 flex justify-center items-center cursor-pointer">
+              <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-indigo-600 p-2">
                 <Link
                   to={`/company/employee/details/${attendance?.employee?.id}`}
                 >
@@ -128,7 +129,7 @@ const AttendanceList = () => {
               </div>
 
               {/* delete button  */}
-              <div className="w-8 h-8 bg-red-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer">
+              <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center">
                 <MdOutlineDeleteOutline
                   size={20}
                   onClick={() => handleDeleteCompany(attendance.id)}
@@ -141,17 +142,17 @@ const AttendanceList = () => {
     ));
   return (
     <div>
-      <div className="flex flex-wrap justify-between items-center pb-2">
+      <div className="flex flex-wrap items-center justify-between pb-2">
         <div>
-          <h2 className="font-semibold text-lg pb-2 dark:text-dark-heading-color">
+          <h2 className="pb-2 text-lg font-semibold dark:text-dark-heading-color">
             Presents Employee
           </h2>
         </div>
       </div>
 
-      <div className="border-solid border-[1px] border-slate-200 bg-white dark:bg-dark-card dark:border-none rounded-md p-5 w-full h-auto">
-        <div className="flex flex-wrap justify-between mb-2">
-          <div className="font-medium text-base dark:text-dark-text-color">
+      <div className="h-auto w-full rounded-md border-[1px] border-solid border-slate-200 bg-white p-5 dark:border-none dark:bg-dark-card">
+        <div className="mb-2 flex flex-wrap justify-between">
+          <div className="text-base font-medium dark:text-dark-text-color">
             Now {attendances?.data?.length || 0} Employee Available
           </div>
           <div className="border dark:border-none">
@@ -159,29 +160,29 @@ const AttendanceList = () => {
               type="date"
               value={date}
               onChange={handleDateChange}
-              className="dark:bg-dark-box border-none outline-none dark:text-white px-2 py-1 text-[15px] rounded-sm "
+              className="rounded-sm border-none px-2 py-1 text-[15px] outline-none dark:bg-dark-box dark:text-white"
             />
           </div>
         </div>
 
         <div>
-          <table className="w-full h-auto table-auto">
+          <table className="h-auto w-full table-auto">
             {!isError && (
-              <thead className="border-b border-slate-200 dark:border-opacity-10 dark:text-white text-left mt-12">
+              <thead className="mt-12 border-b border-slate-200 text-left dark:border-opacity-10 dark:text-white">
                 <tr>
-                  <th className="pb-2 text-[14px] text-center">SL</th>
-                  <th className="pb-2 text-[14px] text-center">Name</th>
-                  <th className="pb-2 text-[14px] text-center">In Time</th>
-                  <th className="pb-2 text-[14px] text-center">Out Time</th>
-                  <th className="pb-2 text-[14px] text-center">Late</th>
-                  <th className="pb-2 text-[14px] text-center">Over Time</th>
-                  <th className="pb-2 text-[14px] text-center">Status</th>
-                  <th className="pb-2 text-[14px] text-center">Action</th>
+                  <th className="pb-2 text-center text-[14px]">SL</th>
+                  <th className="pb-2 text-center text-[14px]">Name</th>
+                  <th className="pb-2 text-center text-[14px]">In Time</th>
+                  <th className="pb-2 text-center text-[14px]">Out Time</th>
+                  <th className="pb-2 text-center text-[14px]">Late</th>
+                  <th className="pb-2 text-center text-[14px]">Over Time</th>
+                  <th className="pb-2 text-center text-[14px]">Status</th>
+                  <th className="pb-2 text-center text-[14px]">Action</th>
                 </tr>
               </thead>
             )}
 
-            <tbody className="dark:text-dark-text-color text-sm">
+            <tbody className="text-sm dark:text-dark-text-color">
               {content}
             </tbody>
           </table>

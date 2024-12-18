@@ -45,7 +45,7 @@ const adminMenuItems = [
         subMenu: [
           { title: "Attendance List", link: "/employee/attendences" },
           { title: "Manual Attendance ", link: "/employee/attendence" },
-          { title: "Biometric", link: "/employee/attendence-biometric" },
+          { title: "Biometric", link: "/employee/bio/attendences" },
         ],
       },
       {
