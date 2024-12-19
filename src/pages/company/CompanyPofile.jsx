@@ -1,22 +1,21 @@
-import React from "react";
-import { useGetCompanyDetailsQuery } from "../../features/api";
-import { useParams, Link } from "react-router-dom";
-import { FiEdit } from "react-icons/fi";
-import ProfileImg from "../../assets/profile-placeholder.png";
-import { useState } from "react";
-import Button from "../../components/company/Button";
-import { CiMail } from "react-icons/ci";
-import ProfileSection from "../../components/company/ProfileSection";
-import { BsTelephone } from "react-icons/bs";
-import { PiAddressBookThin } from "react-icons/pi";
-import { IoLocationOutline } from "react-icons/io5";
 import { format } from "date-fns";
-import { LiaFaxSolid } from "react-icons/lia";
-import { BsFileEarmarkPostFill } from "react-icons/bs";
+import React, { useState } from "react";
+import { BsFileEarmarkPostFill, BsTelephone } from "react-icons/bs";
+import { CiMail } from "react-icons/ci";
+import { FiEdit } from "react-icons/fi";
 import { IoIosTimer } from "react-icons/io";
-import { IoLanguageOutline } from "react-icons/io5";
-import { IoAlertCircleOutline } from "react-icons/io5";
+import {
+  IoAlertCircleOutline,
+  IoLanguageOutline,
+  IoLocationOutline,
+} from "react-icons/io5";
+import { LiaFaxSolid } from "react-icons/lia";
+import { PiAddressBookThin } from "react-icons/pi";
+import { Link, useParams } from "react-router-dom";
 import CompanyProfileImg from "../../assets/company-profile.jpg";
+import Button from "../../components/company/Button";
+import ProfileSection from "../../components/company/ProfileSection";
+import { useGetCompanyDetailsQuery } from "../../features/api";
 const CompanyPofile = () => {
   const { id } = useParams();
   const [selected, setSelected] = useState("1");
@@ -62,32 +61,32 @@ const CompanyPofile = () => {
     content = (
       <>
         {/* first Header section  */}
-        <div className="w-full p-5 mx-5 mt-5 mb-2 rounded-md bg-white dark:bg-dark-card flex flex-wrap justify-between ">
-          <div className="flex flex-wrap justify-between  w-full">
+        <div className="mx-5 mb-2 mt-5 flex w-full flex-wrap justify-between rounded-md bg-white p-5 dark:bg-dark-card">
+          <div className="flex w-full flex-wrap justify-between">
             {" "}
-            <div className="w-[15%] mr-4">
+            <div className="mr-4 w-[15%]">
               {/* company logic change only for this time  */}
               <img
                 src={!logo ? logo : CompanyProfileImg}
                 alt="profile pic"
-                className="w-[120px] h-[120px] rounded-full"
+                className="h-[120px] w-[120px] rounded-full"
               />
             </div>
             <div className="w-[78%]">
-              <h1 className="font-poppins text-2xl font-semibold  dark:text-dark-heading-color">
+              <h1 className="font-poppins text-2xl font-semibold dark:text-dark-heading-color">
                 {company_name}
               </h1>
-              <h3 className="text-[15px] font-medium mt-1 text-[#686767] dark:text-dark-text-color ">
+              <h3 className="mt-1 text-[15px] font-medium text-[#686767] dark:text-dark-text-color">
                 {address}
               </h3>
-              <h3 className="text-[15px] font-medium  text-[#686767] dark:text-dark-text-color ">
+              <h3 className="text-[15px] font-medium text-[#686767] dark:text-dark-text-color">
                 {city + ", " + country}
               </h3>
-              <h3 className="text-[15px] font-medium  text-[#686767] dark:text-dark-text-color">
+              <h3 className="text-[15px] font-medium text-[#686767] dark:text-dark-text-color">
                 {`Website : ${website_url}`}
               </h3>
             </div>
-            <div className="w-[40px] cursor-pointer  h-[40px] flex flex-col justify-center align-middle items-center rounded-full bg-[#85858512] dark:bg-dark-box mr-2">
+            <div className="mr-2 flex h-[40px] w-[40px] cursor-pointer flex-col items-center justify-center rounded-full bg-[#85858512] align-middle dark:bg-dark-box">
               <Link to={`/company/update/${id}`}>
                 <FiEdit className="dark:text-dark-text-color" />
               </Link>
@@ -96,7 +95,7 @@ const CompanyPofile = () => {
         </div>
 
         {/* toogle button for section toggle  */}
-        <div className="w-full mx-5 rounded-md bg-white  dark:bg-dark-card flex flex-wrap  ">
+        <div className="mx-5 flex w-full flex-wrap rounded-md bg-white dark:bg-dark-card">
           <Button
             buttonid="1"
             isActive={selected == "1"}
@@ -123,12 +122,12 @@ const CompanyPofile = () => {
           />
         </div>
 
-        <div className="w-full p-5 mx-5 mt-5 mb-2 rounded-md bg-white  dark:bg-dark-card flex flex-wrap justify-between ">
+        <div className="mx-5 mb-2 mt-5 flex w-full flex-wrap justify-between rounded-md bg-white p-5 dark:bg-dark-card">
           {/* Profile Section  */}
           {selected == "1" ? (
             <>
               <div className="w-[50%]">
-                <h1 className="font-semibold mb-2 dark:text-dark-heading-color">
+                <h1 className="mb-2 font-semibold dark:text-dark-heading-color">
                   Basic Information
                 </h1>
 
@@ -157,8 +156,8 @@ const CompanyPofile = () => {
                   title={`Created on ${formattedDate}`}
                 />
               </div>
-              <div className="w-[50%] border-l pl-3 ">
-                <h1 className="font-semibold mb-2 dark:text-dark-heading-color">
+              <div className="w-[50%] border-l pl-3">
+                <h1 className="mb-2 font-semibold dark:text-dark-heading-color">
                   Company Settings & Info
                 </h1>
                 <ProfileSection
@@ -189,7 +188,7 @@ const CompanyPofile = () => {
             </>
           ) : (
             <div className="flex flex-wrap items-center">
-              <IoAlertCircleOutline className="text-[red] mr-3" />{" "}
+              <IoAlertCircleOutline className="mr-3 text-[red]" />{" "}
               <lebel>No data available </lebel>
             </div>
           )}

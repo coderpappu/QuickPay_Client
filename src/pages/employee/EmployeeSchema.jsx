@@ -47,6 +47,7 @@ const Step4Schema = Yup.object({
   shiftId: Yup.string()
     .required("Shift is required")
     .notOneOf([""], "Please select a valid option"),
+  device_id: Yup.string().notRequired("Device ID "),
   image: Yup.mixed().notRequired(),
 });
 

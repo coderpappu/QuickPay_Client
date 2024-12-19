@@ -33,7 +33,6 @@ const steps = [
 ];
 
 const EmployeeRegistrationForm = () => {
-  
   const { id } = useParams();
   const { data: CompanyId } = useGetCompanyIdQuery();
   const navigate = useNavigate();
@@ -83,7 +82,7 @@ const EmployeeRegistrationForm = () => {
     id_number: employeeData?.data?.[0]?.id_number || "",
     status: employeeData?.data?.[0]?.status || "ACTIVE",
     company_id: CompanyId,
-    fingerprint_id: employeeData?.data?.[0]?.fingerprint_id || "",
+    deviceUserId: employeeData?.data?.[0]?.deviceUserId || null,
     designationId:
       employeeData?.data?.[0]?.EmployeeDesignation?.[0]?.designation_id || "",
     departmentId:
@@ -124,8 +123,8 @@ const EmployeeRegistrationForm = () => {
   };
 
   return (
-    <Box className="dark:bg-dark-card py-[5%] px-[10%] rounded-md">
-      <div className="w-full  text-center mt-3 mb-7">
+    <Box className="rounded-md px-[10%] py-[5%] dark:bg-dark-card">
+      <div className="mb-7 mt-3 w-full text-center">
         <h2 className="text-2xl font-semibold text-[#0c2580] dark:text-dark-heading-color">
           {id ? "Edit Employee" : "Employee Registration"}
         </h2>
@@ -168,8 +167,6 @@ const EmployeeRegistrationForm = () => {
                   employeeData?.data?.[0]?.EmployeeSection?.[0]?.id,
                 employeeShiftId:
                   employeeData?.data?.[0]?.EmployeeShift?.[0]?.id,
-
-                fingerprint_id: "1c37c5e4-7f40-4520-82b5-5fae3a973b74",
               }).unwrap();
               toast.success("Employee updated successfully");
             } else {
@@ -178,7 +175,6 @@ const EmployeeRegistrationForm = () => {
               await createEmployee({
                 ...values,
                 image: imageUrl,
-                fingerprint_id: "1c37c5e4-7f40-4520-82b5-5fae3a973b74",
               }).unwrap();
 
               toast.success("Employee registered successfully");
@@ -194,7 +190,7 @@ const EmployeeRegistrationForm = () => {
         {({ isSubmitting, setFieldValue, validateForm }) => (
           <Form>
             {step === 1 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label
                     htmlFor="name"
@@ -207,12 +203,12 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="name"
                     id="name"
-                    className="mt-1 block w-full px-3 py-2 dark:bg-dark-box  border border-gray-300 dark:border-dark-border-color dark:border-opacity-10 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="name"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
                 <div>
@@ -226,12 +222,12 @@ const EmployeeRegistrationForm = () => {
                     type="email"
                     name="email"
                     id="email"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="email"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
                 <div>
@@ -245,12 +241,12 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="phone"
                     id="phone"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="phone"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
                 <div>
@@ -264,12 +260,12 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="present_address"
                     id="present_address"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="present_address"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
                 <div>
@@ -283,12 +279,12 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="permanent_address"
                     id="permanent_address"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="permanent_address"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
                 <div>
@@ -302,7 +298,7 @@ const EmployeeRegistrationForm = () => {
                     as="select"
                     name="gender"
                     id="gender"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   >
                     <option>Select</option>
                     <option value="male">Male</option>
@@ -311,18 +307,18 @@ const EmployeeRegistrationForm = () => {
                   <ErrorMessage
                     name="gender"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
               </div>
             )}
 
             {step === 2 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label
                     htmlFor="religion"
-                    className="block text-sm font-medium text-gray-700  dark:text-dark-text-color"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
                   >
                     Religion
                   </label>
@@ -330,7 +326,7 @@ const EmployeeRegistrationForm = () => {
                     as="select"
                     name="religion"
                     id="religion"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   >
                     <option>Select</option>
                     <option value="ISLAM">ISLAM</option>
@@ -341,7 +337,7 @@ const EmployeeRegistrationForm = () => {
                   <ErrorMessage
                     name="religion"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
                 <div>
@@ -355,12 +351,12 @@ const EmployeeRegistrationForm = () => {
                     type="date"
                     name="birth_date"
                     id="birth_date"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="birth_date"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
                 <div>
@@ -374,12 +370,12 @@ const EmployeeRegistrationForm = () => {
                     type="date"
                     name="joining_date"
                     id="joining_date"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="joining_date"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
                 <div>
@@ -394,12 +390,12 @@ const EmployeeRegistrationForm = () => {
                     type="date"
                     name="terminate_date"
                     id="terminate_date"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="terminate_date"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
                 <div>
@@ -414,12 +410,12 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="reference"
                     id="reference"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="reference"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
 
@@ -435,18 +431,18 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="job_status"
                     id="job_status"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="job_status"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
               </div>
             )}
             {step === 3 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label
                     htmlFor="spouse_name"
@@ -459,12 +455,12 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="spouse_name"
                     id="spouse_name"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="spouse_name"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
                 <div>
@@ -479,12 +475,12 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="emergency_contact"
                     id="emergency_contact"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="emergency_contact"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
                 <div>
@@ -499,7 +495,7 @@ const EmployeeRegistrationForm = () => {
                     as="select"
                     name="id_type"
                     id="id_type"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   >
                     <option value="PASSPORT">PASSPORT</option>
                     <option value="NID">NID</option>
@@ -508,7 +504,7 @@ const EmployeeRegistrationForm = () => {
                   <ErrorMessage
                     name="id_type"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
                 <div>
@@ -523,19 +519,19 @@ const EmployeeRegistrationForm = () => {
                     type="text"
                     name="id_number"
                     id="id_number"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   />
                   <ErrorMessage
                     name="id_number"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
               </div>
             )}
 
             {step === 4 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label
                     htmlFor="designationId"
@@ -547,7 +543,7 @@ const EmployeeRegistrationForm = () => {
                     as="select"
                     name="designationId"
                     id="designationId"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   >
                     <option value="">Select Designation</option>
                     {designations?.data?.map((designation) => (
@@ -559,7 +555,7 @@ const EmployeeRegistrationForm = () => {
                   <ErrorMessage
                     name="designationId"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
                 <div>
@@ -573,7 +569,7 @@ const EmployeeRegistrationForm = () => {
                     as="select"
                     name="departmentId"
                     id="departmentId"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   >
                     <option value="">Select Department</option>
                     {departments?.data?.map((department) => (
@@ -585,7 +581,7 @@ const EmployeeRegistrationForm = () => {
                   <ErrorMessage
                     name="departmentId"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
                 <div>
@@ -599,7 +595,7 @@ const EmployeeRegistrationForm = () => {
                     as="select"
                     name="sectionId"
                     id="sectionId"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   >
                     <option value="">Select Section</option>
                     {sections?.data?.map((section) => (
@@ -611,7 +607,7 @@ const EmployeeRegistrationForm = () => {
                   <ErrorMessage
                     name="sectionId"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
                 <div>
@@ -625,7 +621,7 @@ const EmployeeRegistrationForm = () => {
                     as="select"
                     name="shiftId"
                     id="shiftId"
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box  dark:border-dark-border-color dark:border-opacity-10 dark:text-dark-text-color"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
                   >
                     <option value="">Select Shift</option>
                     {shifts?.data?.map((shift) => (
@@ -637,7 +633,27 @@ const EmployeeRegistrationForm = () => {
                   <ErrorMessage
                     name="shiftId"
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="deviceUserId"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
+                  >
+                    Fingerprint Device ID
+                  </label>
+                  <Field
+                    type="string"
+                    name="deviceUserId"
+                    id="deviceUserId"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
+                  />
+                  <ErrorMessage
+                    name="deviceUserId"
+                    component="div"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
               </div>
@@ -649,7 +665,7 @@ const EmployeeRegistrationForm = () => {
                 {id ? (
                   <>
                     {!editModeUploader && (
-                      <div className="flex justify-center mt-4">
+                      <div className="mt-4 flex justify-center">
                         <img
                           className="h-64 w-64 rounded-full object-cover object-center"
                           src={employeeData?.data?.[0]?.image}
@@ -672,7 +688,7 @@ const EmployeeRegistrationForm = () => {
                         <button
                           type="button"
                           onClick={() => setEditModeUploader(true)}
-                          className="mt-4 p-2 text-blue-500 border border-blue-500 rounded"
+                          className="mt-4 rounded border border-blue-500 p-2 text-blue-500"
                         >
                           Change Profile
                         </button>
@@ -693,7 +709,7 @@ const EmployeeRegistrationForm = () => {
               </>
             )}
 
-            <div className="flex justify-between mt-6">
+            <div className="mt-6 flex justify-between">
               {step > 1 && (
                 <Button
                   type="button"

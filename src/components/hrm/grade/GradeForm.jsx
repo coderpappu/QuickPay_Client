@@ -49,20 +49,20 @@ const GradeForm = ({ gradeId, onClose }) => {
     navigate("/");
   }
 
-  if (gradeLoading || isLoading) {
+  if (gradeLoading) {
     return <FormSkeleton />;
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white dark:bg-dark-card rounded-lg shadow-lg w-full max-w-md p-6 relative">
+      <div className="relative w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-dark-card">
         <button
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+          className="absolute right-3 top-3 text-gray-500 hover:text-gray-700 focus:outline-none"
           onClick={onClose}
         >
           &#x2715;
         </button>
-        <h2 className="text-xl font-semibold  dark:text-dark-heading-color mb-4">
+        <h2 className="mb-4 text-xl font-semibold dark:text-dark-heading-color">
           {gradeId ? "Edit Grade" : "Add Grade"}
         </h2>
         <Formik
@@ -84,7 +84,7 @@ const GradeForm = ({ gradeId, onClose }) => {
                     toast.error(res?.error?.data?.message);
                   } else {
                     toast.success("Grade added successfully");
-                    navigate("/company/allowance");
+
                     onClose();
                   }
                 });
@@ -125,7 +125,7 @@ const GradeForm = ({ gradeId, onClose }) => {
                 <ErrorMessage
                   name="name"
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="mt-1 text-sm text-red-500"
                 />
               </div>
 
@@ -145,7 +145,7 @@ const GradeForm = ({ gradeId, onClose }) => {
                 <ErrorMessage
                   name="basic_salary"
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="mt-1 text-sm text-red-500"
                 />
               </div>
 
@@ -165,7 +165,7 @@ const GradeForm = ({ gradeId, onClose }) => {
                 <ErrorMessage
                   name="overtime_rate"
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="mt-1 text-sm text-red-500"
                 />
               </div>
 
@@ -173,14 +173,14 @@ const GradeForm = ({ gradeId, onClose }) => {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="mr-4 px-4 py-2 bg-white rounded-md text-sm font-medium text-gray-800 border border-dark-border-color dark:border-opacity-10 "
+                  className="mr-4 rounded-md border border-dark-border-color bg-white px-4 py-2 text-sm font-medium text-gray-800 dark:border-opacity-10"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 bg-[#3686FF] rounded-md text-sm font-medium text-white "
+                  className="rounded-md bg-[#3686FF] px-4 py-2 text-sm font-medium text-white"
                 >
                   {gradeId ? "Update" : "Add"}
                 </button>
