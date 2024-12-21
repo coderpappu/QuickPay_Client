@@ -1,30 +1,42 @@
 import React from "react";
-import { useGetbrandQuery, useGetCompanyIdQuery } from "../../../features/api";
+import {
+  useGetbrandQuery,
+  useGetCompanyIdQuery,
+  useGetEmployeeSalarySheetQuery,
+} from "../../../features/api";
 
 const SalarySheet = ({ slipPreview }) => {
+  console.log(slipPreview);
   const { data: companyId } = useGetCompanyIdQuery();
   const { data: brandDetails } = useGetbrandQuery(companyId);
 
+  const { data: getEmployeeSalary } = useGetEmployeeSalarySheetQuery({
+    ...slipPreview,
+  });
+
+  console.log(getEmployeeSalary?.data);
+
   const leftside = [
-    { basic: slipPreview?.basic_salary } || [],
-    ...(slipPreview?.allowance_salary_sheet || []),
-    ...(slipPreview?.overtime_salary_sheet || []),
-    ...(slipPreview?.commission_salary_sheet || []),
-    ...(slipPreview?.other || []),
+    { basic: getEmployeeSalary?.data?.generatedSalary?.basic_salary } || [],
+    ...(getEmployeeSalary?.data?.generatedSalary?.allowance_salary_sheet || []),
+    ...(getEmployeeSalary?.data?.generatedSalary?.overtime_salary_sheet || []),
+    ...(getEmployeeSalary?.data?.generatedSalary?.commission_salary_sheet ||
+      []),
+    ...(getEmployeeSalary?.data?.generatedSalary?.other || []),
   ];
 
   const rightside = [
-    ...(slipPreview?.deduction_salary_sheet || []),
-    ...(slipPreview?.loan || []),
+    ...(getEmployeeSalary?.data?.generatedSalary?.deduction_salary_sheet || []),
+    ...(getEmployeeSalary?.data?.generatedSalary?.loan || []),
   ];
 
   return (
-    <div className="max-w-5xl mx-auto bg-white dark:bg-dark-box shadow-md rounded-md p-6">
+    <div className="mx-auto max-w-5xl rounded-md bg-white p-6 shadow-md dark:bg-dark-box">
       {/* Header */}
-      <div className="text-center text-xl font-bold mb-4 w-[150px] h-auto mx-auto">
+      <div className="mx-auto mb-4 h-auto w-[150px] text-center text-xl font-bold">
         <img src={brandDetails?.data?.lightImageUrl} alt="" />
       </div>
-      <div className="flex justify-between text-sm mb-2">
+      <div className="mb-2 flex justify-between text-sm">
         <div>
           <p>
             <strong>ID No : </strong> {slipPreview?.Employee?.employeeId}
@@ -66,12 +78,12 @@ const SalarySheet = ({ slipPreview }) => {
       </div>
 
       {/* Earnings and Deductions Table */}
-      <div className="border border-dark-card text-sm mb-4">
+      <div className="mb-4 border border-dark-card text-sm">
         {/* Header Row */}
         <div className="grid grid-cols-4 border-b border-dark-card font-bold">
-          <div className="p-2 border-r border-dark-card">Earnings</div>
-          <div className="p-2 border-r border-dark-card">Amount</div>
-          <div className="p-2 border-r border-dark-card">Deductions</div>
+          <div className="border-r border-dark-card p-2">Earnings</div>
+          <div className="border-r border-dark-card p-2">Amount</div>
+          <div className="border-r border-dark-card p-2">Deductions</div>
           <div className="p-2">Amount</div>
         </div>
 
@@ -84,7 +96,7 @@ const SalarySheet = ({ slipPreview }) => {
               key={index}
             >
               {/* Left Side (Earnings) */}
-              <div className="p-2 border-r border-dark-card">
+              <div className="border-r border-dark-card p-2">
                 {(leftside?.[index]?.basic && "Basic Salary") ||
                   leftside[index]?.EmployeeAllowance?.AllowanceType?.name ||
                   (leftside[index]?.hour && "Overtime") ||
@@ -92,7 +104,7 @@ const SalarySheet = ({ slipPreview }) => {
                   ""}
               </div>
 
-              <div className="p-2 border-r border-dark-card">
+              <div className="border-r border-dark-card p-2">
                 {leftside?.[index]?.basic ||
                   leftside[index]?.amount ||
                   leftside[index]?.overtime_salary ||
@@ -101,7 +113,7 @@ const SalarySheet = ({ slipPreview }) => {
               </div>
 
               {/* Right Side (Deductions) */}
-              <div className="p-2 border-r border-dark-card">
+              <div className="border-r border-dark-card p-2">
                 {rightside[index]?.EmployeeDeduction?.DeductionType?.name ||
                   rightside[index]?.name ||
                   ""}
@@ -112,24 +124,20 @@ const SalarySheet = ({ slipPreview }) => {
 
         {/* Total Row */}
         <div className="grid grid-cols-4 font-bold">
-          <div className="p-2 border-r border-dark-card">
-            {/* {labels.totalSalaryEarned} */}
+          <div className="border-r border-dark-card p-2">Total Allowance</div>
+          <div className="border-r border-dark-card p-2">
+            {Math.round(getEmployeeSalary?.data?.totalAllowance)}
           </div>
-          <div className="p-2 border-r border-dark-card">
-            {/* {Object.values(earnings).reduce((sum, value) => sum + value, 0)} */}
-          </div>
-          <div className="p-2 border-r border-dark-card">
-            {/* {labels.totalDeduction} */}
-          </div>
+          <div className="border-r border-dark-card p-2">Total Deduction</div>
           <div className="p-2">
-            {/* {Object.values(deductions).reduce((sum, value) => sum + value, 0)} */}
+            {Math.round(getEmployeeSalary?.data?.totalDeduction)}
           </div>
         </div>
       </div>
 
       {/* Net Amount */}
       <div className="flex justify-end text-lg font-bold">
-        <p>{/* {labels.netAmount}: {netAmount} */}</p>
+        <p>Net Salary : {Math.round(getEmployeeSalary?.data?.netSalary)}</p>
       </div>
     </div>
   );

@@ -1495,6 +1495,14 @@ export const apiSlice = createApi({
       providesTags: ["employeesalarysheet"],
     }),
 
+    getEmployeeSalarySheet: builder.query({
+      query: ({ employeeId, companyId, month, year }) => ({
+        url: `/salarysetting/getemployeesalary`,
+        params: { employeeId, companyId, month, year },
+      }),
+      providesTags: ["employeesalarysheet"],
+    }),
+
     updateSalarySheet: builder.mutation({
       query: ({ employeeId, ...credentials }) => ({
         url: `/salarysetting/update-salary/${employeeId}`,
@@ -1833,4 +1841,6 @@ export const {
   useGetDeviceDetailsQuery,
 
   useGetCompanyAttendanceQuery,
+
+  useGetEmployeeSalarySheetQuery,
 } = apiSlice;

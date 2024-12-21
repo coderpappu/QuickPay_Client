@@ -26,7 +26,8 @@ const PaySlipCard = () => {
 
   const { data: companyId } = useGetCompanyIdQuery();
   const { data: employeeList, isLoading } = useGetEmployeesQuery(companyId);
-  const [generateBulkSalary] = useGeneratedEmployeeSalaryBulkMutation();
+  const [generateBulkSalary, { data }] =
+    useGeneratedEmployeeSalaryBulkMutation();
 
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
@@ -49,9 +50,9 @@ const PaySlipCard = () => {
     setIsPopupOpen(false);
   };
 
-  const handleOpen = (slipData = null) => {
+  const handleOpen = (employeeId, companyId, month, year) => {
     setIsPopupOpen(true);
-    setSlipPreview(slipData);
+    setSlipPreview({ employeeId, companyId, month, year });
   };
 
   const {
@@ -109,52 +110,54 @@ const PaySlipCard = () => {
   content = employeeSalarySheet?.data?.map((sheet) => (
     <>
       {" "}
-      <div className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10">
-        <div className="dark:text-white w-[10%]">
+      <div className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10">
+        <div className="w-[10%] dark:text-white">
           <h3>{sheet?.Employee?.employeeId}</h3>
         </div>
-        <div className="dark:text-white w-[10%]">
+        <div className="w-[10%] dark:text-white">
           <h3>{sheet?.Employee?.name}</h3>
         </div>
-        <div className="dark:text-white w-[10%]">
+        <div className="w-[10%] dark:text-white">
           <h3>
             {Math.round(sheet?.overtime_salary_sheet?.[0]?.overtime_salary)}
           </h3>
         </div>
-        <div className="dark:text-white w-[10%]">
+        <div className="w-[10%] dark:text-white">
           <h3>{sheet?.allowance_salary_sheet?.[0]?.amount}</h3>
         </div>
-        <div className="dark:text-white w-[10%]">
+        <div className="w-[10%] dark:text-white">
           <h3>{sheet?.deduction_salary_sheet?.[0]?.amount}</h3>
         </div>
-        <div className="dark:text-white w-[7%] text-center">
+        <div className="w-[7%] text-center dark:text-white">
           <button
-            className={`px-4 py-2 w-24 border ${sheet?.status !== "Unpaid" ? "border-green-400 text-green-400" : "border-yellow-400 text-yellow-400"} mx-2 rounded-md`}
+            className={`w-24 border px-4 py-2 ${sheet?.status !== "Unpaid" ? "border-green-400 text-green-400" : "border-yellow-400 text-yellow-400"} mx-2 rounded-md`}
             onClick={() => handleOpen(sheet)}
           >
             {sheet?.status}{" "}
           </button>
         </div>
-        <div className="dark:text-white w-[30%]">
+        <div className="w-[30%] dark:text-white">
           <button
-            className="px-4 py-2 bg-yellow-500 mx-2 rounded-md"
-            onClick={() => handleOpen(sheet)}
+            className="mx-2 rounded-md bg-yellow-500 px-4 py-2"
+            onClick={() =>
+              handleOpen(sheet?.Employee?.id, companyId, month, year)
+            }
           >
             Payslip
           </button>
           <button
-            className="px-4 py-2 bg-purple-700 mx-2 rounded-md"
+            className="mx-2 rounded-md bg-purple-700 px-4 py-2"
             onClick={() =>
               handleUpdateSalarySheet(sheet?.Employee?.id, sheet?.generate_date)
             }
           >
             Click To Paid
           </button>
-          <button className="px-4 py-2 bg-blue-500 mx-2 rounded-md">
+          <button className="mx-2 rounded-md bg-blue-500 px-4 py-2">
             Edit
           </button>
           <button
-            className="px-4 py-2 bg-green-500 mx-2 rounded-md"
+            className="mx-2 rounded-md bg-green-500 px-4 py-2"
             onClick={() =>
               handleDeleteSalarySheet(sheet?.Employee?.id, sheet?.generate_date)
             }
@@ -168,10 +171,10 @@ const PaySlipCard = () => {
 
   return (
     <div>
-      <div className="w-full p-5 flex justify-end py-8 bg-dark-card rounded-md px-6">
-        <div className="flex gap-2 flex-wrap items-center w-[50%] justify-end">
+      <div className="flex w-full justify-end rounded-md bg-dark-card p-5 px-6 py-8">
+        <div className="flex w-[50%] flex-wrap items-center justify-end gap-2">
           <select
-            className="w-64 px-2 py-3 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-13 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+            className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 px-2 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
             value={month}
             onChange={handleMonthChange}
           >
@@ -191,7 +194,7 @@ const PaySlipCard = () => {
           </select>
 
           <select
-            className="w-64 px-3 py-3 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-13 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+            className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 px-3 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
             value={year}
             onChange={handleYearChange}
           >
@@ -203,7 +206,7 @@ const PaySlipCard = () => {
 
           <button
             onClick={handleGenerateSalary}
-            className="px-3 py-3 rounded-md bg-green-600 text-white"
+            className="rounded-md bg-green-600 px-3 py-3 text-white"
           >
             Generate Payslip
           </button>
@@ -212,15 +215,15 @@ const PaySlipCard = () => {
 
       <div className="my-3">
         <BrandCardWrapper>
-          <div className="flex justify-between items-center border-b border-dark-box border-opacity-5 dark:border-dark-border-color dark:border-opacity-5 px-6 py-4">
+          <div className="flex items-center justify-between border-b border-dark-box border-opacity-5 px-6 py-4 dark:border-dark-border-color dark:border-opacity-5">
             <div>
               <h3 className="text-base leading-6 dark:text-dark-heading-color">
                 Employee Payslip
               </h3>
             </div>
-            <div className="flex gap-2 flex-wrap items-center w-[51%] justify-end ">
+            <div className="flex w-[51%] flex-wrap items-center justify-end gap-2">
               <select
-                className="w-64 px-2 py-3 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-13 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+                className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 px-2 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
                 value={month}
                 onChange={handleMonthChange}
               >
@@ -240,7 +243,7 @@ const PaySlipCard = () => {
               </select>
 
               <select
-                className="w-64 px-3 py-3 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-13 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+                className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 px-3 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
                 value={year}
                 onChange={handleYearChange}
               >
@@ -250,40 +253,40 @@ const PaySlipCard = () => {
                 <option value="2025">2025</option>
               </select>
 
-              <button className="px-3 py-3 rounded-md bg-blue-500 text-white">
+              <button className="rounded-md bg-blue-500 px-3 py-3 text-white">
                 Export
               </button>
 
-              <button className="px-3 py-3 rounded-md bg-blue-500 text-white">
+              <button className="rounded-md bg-blue-500 px-3 py-3 text-white">
                 Bulk Payment
               </button>
             </div>
           </div>
           <div className="px-6 py-3">
             {/* header  */}
-            <div className="w-full bg-light-bg dark:bg-dark-box rounded-sm py-3 px-3 flex flex-wrap justify-between text-sm">
-              <div className="dark:text-white w-[10%]">
+            <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
+              <div className="w-[10%] dark:text-white">
                 <h3>Employee Id</h3>
               </div>
 
-              <div className="dark:text-white w-[10%]">
+              <div className="w-[10%] dark:text-white">
                 <h3>Name</h3>
               </div>
 
-              <div className="dark:text-white w-[10%]">
+              <div className="w-[10%] dark:text-white">
                 <h3>OverTime</h3>
               </div>
 
-              <div className="dark:text-white w-[10%]">
+              <div className="w-[10%] dark:text-white">
                 <h3>Allowance</h3>
               </div>
-              <div className="dark:text-white w-[10%]">
+              <div className="w-[10%] dark:text-white">
                 <h3>Deduction</h3>
               </div>
-              <div className="dark:text-white w-[7%] text-center">
+              <div className="w-[7%] text-center dark:text-white">
                 <h3>Status </h3>
               </div>
-              <div className="dark:text-white w-[30%]">
+              <div className="w-[30%] dark:text-white">
                 <h3>Action </h3>
               </div>
             </div>
@@ -294,9 +297,9 @@ const PaySlipCard = () => {
         </BrandCardWrapper>
       </div>
       {isPopupOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white dark:bg-dark-card  rounded-lg p-6 w-full max-w-5xl">
-            <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-dark-border-color dark:border-opacity-5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-5xl rounded-lg bg-white p-6 dark:bg-dark-card">
+            <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-dark-border-color dark:border-opacity-5">
               <h3 className="text-lg font-medium text-gray-800 dark:text-white">
                 Payslip
               </h3>
