@@ -49,10 +49,10 @@ const BiometricAttendnaces = () => {
           <h3>{TimeConverterFromUTC(attendance?.CHECK_OUT)}</h3>
         </div>
         <div className="w-[10%] dark:text-white">
-          <h3>Late</h3>
+          <h3>{attendance?.late}</h3>
         </div>
         <div className="w-[10%] dark:text-white">
-          <h3>Over Time</h3>
+          <h3>{attendance?.overtime}</h3>
         </div>
       </div>
     ));

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import {
   useGetCompanyIdQuery,
@@ -12,14 +12,26 @@ import SettingCardHeader from "./SettingCardHeader";
 const CompanySettingCard = () => {
   const [setSetting] = useSetSettingMutation();
   const { data: companyId } = useGetCompanyIdQuery();
-  const { data: setting } = useGetRootSettingQuery(companyId);
+  const { data: setting, isLoading } = useGetRootSettingQuery(companyId);
 
   const [selected, setSelected] = useState("1");
+
+  console.log(setting);
 
   const [overtime, setOvertime] = useState({
     overtime_status: false,
     overtime_min: "00", // Default value
   });
+
+  // Fetch the saved settings when the component mounts
+  useEffect(() => {
+    if (setting && setting.data) {
+      setOvertime({
+        overtime_status: setting.data.overtime_status,
+        overtime_min: setting.data.overtime_min,
+      });
+    }
+  }, [setting]);
 
   // Handle function for button state
   const handleSelect = (id) => {
@@ -44,21 +56,22 @@ const CompanySettingCard = () => {
 
   // Function to handle the save button click
   const settingHandler = async () => {
-    if (overtime.overtime_status === true) {
-      try {
-        await setSetting({
-          ...overtime,
-          company_id: companyId,
-          setting_id: setting?.data,
-        });
+    try {
+      await setSetting({
+        ...overtime,
+        company_id: companyId,
+        setting_id: setting?.data?.id,
+      });
 
-        toast.success("Employee Setting Set Successfully");
-      } catch (error) {
-        toast.error("Failed to set employee settings");
-      }
+      toast.success("Employee Setting Set Successfully");
+    } catch (error) {
+      toast.error("Failed to set employee settings");
     }
-    // Add your logic to save the settings
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <BrandCardWrapper>
@@ -67,22 +80,22 @@ const CompanySettingCard = () => {
         subTitle="Edit your company settings"
       />
       <div className="px-6 py-3 dark:text-dark-text-color">
-        <div className="w-[280px] h-[60px] mb-6 flex flex-wrap items-center justify-between">
+        <div className="mb-6 flex h-[60px] w-[280px] flex-wrap items-center justify-between">
           <h1 className="dark:text-dark-text-color">Over Time :</h1>
           <input
             type="checkbox"
-            className="w-4 h-4 dark:bg-dark-box"
-            checked={overtime.enabled}
+            className="h-4 w-4 dark:bg-dark-box"
+            checked={overtime.overtime_status}
             onChange={handleCheckboxChange}
           />
           <input
             type="number"
             placeholder="100"
-            value={overtime.minutes}
+            value={overtime.overtime_min}
             onChange={handleInputChange}
-            className="w-[100px] h-7 p-[2px] bg-[#e7ecff]  dark:bg-dark-box dark:text-dark-text-color rounded-sm text-center"
+            className="h-7 w-[100px] rounded-sm bg-[#e7ecff] p-[2px] text-center dark:bg-dark-box dark:text-dark-text-color"
           />
-          Miniute
+          Minute
         </div>
 
         <SettingCardFooter title="Save" handleUpdate={settingHandler} />
