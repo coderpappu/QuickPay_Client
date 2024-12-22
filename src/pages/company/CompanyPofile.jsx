@@ -12,13 +12,19 @@ import {
 import { LiaFaxSolid } from "react-icons/lia";
 import { PiAddressBookThin } from "react-icons/pi";
 import { Link, useParams } from "react-router-dom";
-import CompanyProfileImg from "../../assets/company-profile.jpg";
 import Button from "../../components/company/Button";
 import ProfileSection from "../../components/company/ProfileSection";
-import { useGetCompanyDetailsQuery } from "../../features/api";
+import {
+  useGetbrandQuery,
+  useGetCompanyDetailsQuery,
+  useGetCompanyIdQuery,
+  useGetEmailSettingQuery,
+} from "../../features/api";
 const CompanyPofile = () => {
   const { id } = useParams();
   const [selected, setSelected] = useState("1");
+
+  console.log(selected);
 
   // handle function for button state
   const handleSelect = (id) => {
@@ -26,6 +32,11 @@ const CompanyPofile = () => {
   };
 
   const { data, isLoading, isError } = useGetCompanyDetailsQuery(id);
+  const { data: companyId } = useGetCompanyIdQuery();
+  const { data: brandDetails } = useGetbrandQuery(companyId);
+  const { data: emailData } = useGetEmailSettingQuery(companyId);
+
+  console.log();
 
   let content = null;
   if (isLoading && !isError) content = "Loading...";
@@ -64,12 +75,12 @@ const CompanyPofile = () => {
         <div className="mx-5 mb-2 mt-5 flex w-full flex-wrap justify-between rounded-md bg-white p-5 dark:bg-dark-card">
           <div className="flex w-full flex-wrap justify-between">
             {" "}
-            <div className="mr-4 w-[15%]">
+            <div className="mr-4 h-[120px] w-[120px]">
               {/* company logic change only for this time  */}
               <img
-                src={!logo ? logo : CompanyProfileImg}
-                alt="profile pic"
-                className="h-[120px] w-[120px] rounded-full"
+                src={brandDetails?.data?.lightImageUrl}
+                alt="company logo"
+                className="rounded-full"
               />
             </div>
             <div className="w-[78%]">
@@ -99,25 +110,25 @@ const CompanyPofile = () => {
           <Button
             buttonid="1"
             isActive={selected == "1"}
-            handleSelect={handleSelect}
+            handleSelect={() => handleSelect(1)}
             title={"Profile"}
           />
           <Button
             buttonid="2"
             isActive={selected == "2"}
-            handleSelect={handleSelect}
+            handleSelect={() => handleSelect(2)}
             title={"Report"}
           />
           <Button
             buttonid="3"
             isActive={selected == "3"}
-            handleSelect={handleSelect}
+            handleSelect={() => handleSelect(3)}
             title={"Notice"}
           />
           <Button
             buttonid="4"
             isActive={selected == "4"}
-            handleSelect={handleSelect}
+            handleSelect={() => handleSelect(4)}
             title={"Info"}
           />
         </div>
@@ -134,7 +145,7 @@ const CompanyPofile = () => {
                 <ProfileSection
                   id={data.data.id}
                   icon={<CiMail className="dark:text-dark-text-color" />}
-                  title={email}
+                  title={emailData?.data?.address}
                 />
                 <ProfileSection
                   id={data.data.id}
