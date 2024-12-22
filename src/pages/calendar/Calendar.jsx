@@ -50,9 +50,10 @@ const MyCalendar = () => {
 
   // Dummy event data for demonstration
 
+  console.log(holidays);
   // Convert holidays to event format
   const events =
-    holidays?.data?.map((holiday) => ({
+    holidays?.data?.holidays?.map((holiday) => ({
       title: holiday.name,
       start: new Date(holiday.from_date),
       end: new Date(holiday.to_date),
@@ -116,7 +117,7 @@ const MyCalendar = () => {
         startAccessor="start"
         endAccessor="end"
         style={{ height: 700 }}
-        className="dark:bg-dark-card p-4 rounded-sm text-dark-text-color"
+        className="rounded-sm p-4 text-dark-text-color dark:bg-dark-card"
         defaultView="month"
         views={["month", "week", "day", "agenda"]}
         step={30}

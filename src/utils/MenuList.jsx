@@ -136,7 +136,7 @@ const adminMenuItems = [
       {
         title: "Security Settings",
         subMenu: [
-          { title: "Password", link: "/password-settings" },
+          { title: "Password", link: "/employee/loan/apply" },
           { title: "Two-Factor Auth", link: "/2fa-settings" },
         ],
       },
@@ -167,8 +167,8 @@ const employeeMenuItems = [
     icon: <TbCards size={20} />,
 
     subMenu: [
-      { title: "Apply Loan", link: "/" },
-      { title: "Reports", link: "/company/loan/type" },
+      { title: "Apply Loan", link: "/employee/loan/apply" },
+      { title: "Reports", link: "/employee/loan" },
     ],
   },
   {

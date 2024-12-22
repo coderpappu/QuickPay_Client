@@ -46,6 +46,8 @@ import LeaveTypeForm from "./pages/leave/LeaveTypeForm";
 import LeaveTypeList from "./pages/leave/LeaveTypeList";
 import NotFound from "./pages/NotFound";
 
+import EmployeeLoanForm from "./components/hrm/loan/Employee_Loan/EmployeeLoanForm";
+import EmployeeLoanList from "./components/hrm/loan/Employee_Loan/EmployeeLoanList";
 import PaySlipCard from "./components/payroll/payslip/PaySlipCard";
 import BiometricAttendnaces from "./pages/attendnace/BiometricAttendnaces";
 import GradeForm from "./pages/payroll/grade/gradeForm";
@@ -177,6 +179,11 @@ function App() {
               {/* <Route path="/company/allowance/" element={<AllowanceList />} /> */}
 
               {/* Loan  */}
+              <Route path="/employee/loan" element={<EmployeeLoanList />} />
+              <Route
+                path="/employee/loan/apply"
+                element={<EmployeeLoanForm />}
+              />
               <Route path="/account-settings" element={<Application />} />
               {/* letter and application format  */}
               <Route path="/leave/application/:id" element={<Application />} />

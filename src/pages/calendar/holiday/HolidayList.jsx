@@ -52,7 +52,7 @@ const HolidayList = () => {
         ),
         {
           duration: Infinity,
-        }
+        },
       );
 
     confirm();
@@ -73,33 +73,33 @@ const HolidayList = () => {
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  if (!isLoading && !isError && holidays?.data)
-    content = holidays?.data?.data?.holidays?.map((holiday, index) => (
+  if (!isLoading && !isError && holidays?.data?.holidays)
+    content = holidays?.data?.holidays?.map((holiday, index) => (
       <div
         key={holiday?.id}
-        className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
+        className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
       >
-        <div className="dark:text-white w-[15%]">
+        <div className="w-[15%] dark:text-white">
           <h3>{holiday?.name}</h3>
         </div>
-        <div className="dark:text-white w-[15%]">
+        <div className="w-[15%] dark:text-white">
           <h3>{holiday?.HolidayType?.name}</h3>
         </div>
-        <div className="dark:text-white w-[15%]">
+        <div className="w-[15%] dark:text-white">
           <h3>{holiday?.from_date}</h3>
         </div>
-        <div className="dark:text-white w-[15%]">
+        <div className="w-[15%] dark:text-white">
           <h3>{holiday?.to_date}</h3>
         </div>
-        <div className="dark:text-white w-[15%]">
+        <div className="w-[15%] dark:text-white">
           <h3>{holiday?.description}</h3>
         </div>
 
-        <div className="dark:text-white w-[15%]">
+        <div className="w-[15%] dark:text-white">
           <div className="flex flex-wrap justify-start gap-2">
             {/* delete button  */}
             <div
-              className="w-8 h-8 bg-red-500 m-auto text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
+              className="m-auto flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center"
               onClick={() => handleDeleteWeekend(holiday?.id)}
             >
               <AiOutlineDelete size={20} />
@@ -110,29 +110,29 @@ const HolidayList = () => {
     ));
 
   return (
-    <div className="w-[49%] ">
+    <div className="w-[49%]">
       <BrandCardWrapper>
-        <HrmSetupCardHeader title="Department" handleOpen={handleOpen} />
+        <HrmSetupCardHeader title="Holidays" handleOpen={handleOpen} />
         <div className="px-6 py-3">
           {/* header  */}
-          <div className="w-full bg-light-bg dark:bg-dark-box rounded-sm py-3 px-3 flex flex-wrap justify-between text-sm">
-            <div className="dark:text-white w-[15%]">
+          <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
+            <div className="w-[15%] dark:text-white">
               <h3>Name</h3>
             </div>
-            <div className="dark:text-white w-[15%]">
+            <div className="w-[15%] dark:text-white">
               <h3>Type</h3>
             </div>
-            <div className="dark:text-white w-[15%]">
+            <div className="w-[15%] dark:text-white">
               <h3>From</h3>
             </div>
-            <div className="dark:text-white w-[15%]">
+            <div className="w-[15%] dark:text-white">
               <h3>To</h3>
             </div>
-            <div className="dark:text-white w-[15%]">
+            <div className="w-[15%] dark:text-white">
               <h3>Description</h3>
             </div>
 
-            <div className="dark:text-white w-[15%] text-center">
+            <div className="w-[15%] text-center dark:text-white">
               <h3>Actions</h3>
             </div>
           </div>
@@ -142,9 +142,9 @@ const HolidayList = () => {
         </div>
 
         {isPopupOpen && (
-          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-            <div className="bg-white dark:bg-dark-card rounded-lg p-6 w-full max-w-md">
-              <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-dark-border-color dark:border-opacity-5">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="w-full max-w-md rounded-lg bg-white p-6 dark:bg-dark-card">
+              <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-dark-border-color dark:border-opacity-5">
                 <h3 className="text-lg font-medium text-gray-800 dark:text-white">
                   Holiday
                 </h3>

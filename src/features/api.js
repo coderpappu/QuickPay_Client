@@ -1040,6 +1040,51 @@ export const apiSlice = createApi({
       invalidatesTags: ["loanType"],
     }),
 
+    applyLoan: builder.mutation({
+      query: (credentials) => ({
+        url: "/loan/create",
+        method: "POST",
+        body: credentials,
+      }),
+
+      invalidatesTags: ["loanApply"],
+    }),
+
+    getApplyLoanList: builder.query({
+      query: (companyId) => ({
+        url: `/loan/type/list`,
+        params: { companyId },
+      }),
+      providesTags: ["loanType"],
+    }),
+
+    getAppliedLoanDetails: builder.query({
+      query: (id) => ({
+        url: `/loan/type/details`,
+        params: { id },
+      }),
+
+      providesTags: ["loanType"],
+    }),
+
+    deleteAppliedLoan: builder.mutation({
+      query: ({ loanTypeId }) => ({
+        url: `/loan/type/delete/`,
+        method: "DELETE",
+        params: { loanTypeId },
+      }),
+      invalidatesTags: ["loanType"],
+    }),
+
+    updateAppliedLoan: builder.mutation({
+      query: (credentials) => ({
+        url: `/loan/type/update`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["loanApply"],
+    }),
+
     // Company Setting System
 
     getRootSetting: builder.query({
@@ -1738,6 +1783,12 @@ export const {
   useSetSettingMutation,
   useGetRootSettingQuery,
   useGetEmployeeSettingQuery,
+
+  useApplyLoanMutation,
+  useGetApplyLoanListQuery,
+  useGetAppliedLoanDetailsQuery,
+  useDeleteAppliedLoanMutation,
+  useUpdateAppliedLoanMutation,
 
   // applicationFormat
   useCreateLeaveApplicationFormatMutation,
