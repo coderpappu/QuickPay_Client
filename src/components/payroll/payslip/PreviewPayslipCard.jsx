@@ -6,7 +6,6 @@ import {
 } from "../../../features/api";
 
 const SalarySheet = ({ slipPreview }) => {
-  console.log(slipPreview);
   const { data: companyId } = useGetCompanyIdQuery();
   const { data: brandDetails } = useGetbrandQuery(companyId);
 
@@ -14,7 +13,7 @@ const SalarySheet = ({ slipPreview }) => {
     ...slipPreview,
   });
 
-  console.log(getEmployeeSalary?.data);
+  const employeeData = getEmployeeSalary?.data?.generatedSalary?.Employee;
 
   const leftside = [
     { basic: getEmployeeSalary?.data?.generatedSalary?.basic_salary } || [],
@@ -30,6 +29,7 @@ const SalarySheet = ({ slipPreview }) => {
     ...(getEmployeeSalary?.data?.generatedSalary?.loan || []),
   ];
 
+  console.log();
   return (
     <div className="mx-auto max-w-5xl rounded-md bg-white p-6 shadow-md dark:bg-dark-box">
       {/* Header */}
@@ -39,40 +39,42 @@ const SalarySheet = ({ slipPreview }) => {
       <div className="mb-2 flex justify-between text-sm">
         <div>
           <p>
-            <strong>ID No : </strong> {slipPreview?.Employee?.employeeId}
+            <strong>ID No : </strong> {employeeData?.employeeId}
           </p>
           <p>
-            <strong>Name :</strong> {slipPreview?.Employee?.name}
+            <strong>Name :</strong> {employeeData?.name}
           </p>
           <p>
             <strong>Department : </strong>{" "}
-            {slipPreview?.Employee?.EmployeeDepartment?.[0]?.department?.name}
+            {employeeData?.EmployeeDepartment?.[0]?.department?.name}
           </p>
           <p>
             <strong>Designation : </strong>{" "}
-            {slipPreview?.Employee?.EmployeeDesignation?.[0]?.designation?.name}
+            {employeeData?.EmployeeDesignation?.[0]?.designation?.name}
           </p>
           <p>
             <strong>Section : </strong>{" "}
-            {slipPreview?.Employee?.EmployeeSection?.[0]?.section?.name}
+            {employeeData?.EmployeeSection?.[0]?.section?.name}
           </p>
         </div>
         <div className="text-right">
           <p>
             <strong>Shift : </strong>{" "}
-            {slipPreview?.Employee?.EmployeeShift?.[0]?.shift?.name}
+            {employeeData?.EmployeeShift?.[0]?.shift?.name}
           </p>
           <p>
             <strong>O.T Hours : </strong>{" "}
-            {Math.round(slipPreview?.overtime_salary_sheet?.[0]?.hour)}
+            {Math.round(getEmployeeSalary?.data?.totalOvertimeHours)}
           </p>
 
           <p>
-            <strong>Month :</strong> {slipPreview?.generate_date}
+            <strong>Month :</strong>{" "}
+            {getEmployeeSalary?.data?.generatedSalary?.generate_date}
           </p>
 
           <p>
-            <strong>Status :</strong> {slipPreview?.status}
+            <strong>Status :</strong>{" "}
+            {getEmployeeSalary?.data?.generatedSalary?.status}
           </p>
         </div>
       </div>
@@ -88,43 +90,66 @@ const SalarySheet = ({ slipPreview }) => {
         </div>
 
         {/* Dynamic Rows */}
+        {/* Dynamic Rows */}
         {Array(Math.max(leftside.length, rightside.length))
           .fill(null)
-          .map((_, index) => (
-            <div
-              className="grid grid-cols-4 border-b border-dark-card"
-              key={index}
-            >
-              {/* Left Side (Earnings) */}
-              <div className="border-r border-dark-card p-2">
-                {(leftside?.[index]?.basic && "Basic Salary") ||
-                  leftside[index]?.EmployeeAllowance?.AllowanceType?.name ||
-                  (leftside[index]?.hour && "Overtime") ||
-                  leftside[index]?.name ||
-                  ""}
-              </div>
+          .map((_, index) => {
+            const leftData = leftside[index];
+            const rightData = rightside[index];
 
-              <div className="border-r border-dark-card p-2">
-                {leftside?.[index]?.basic ||
-                  leftside[index]?.amount ||
-                  leftside[index]?.overtime_salary ||
-                  leftside[index]?.name ||
-                  ""}
-              </div>
+            if (!leftData && !rightData) {
+              return null; // Skip rendering if both left and right data are not found
+            }
 
-              {/* Right Side (Deductions) */}
-              <div className="border-r border-dark-card p-2">
-                {rightside[index]?.EmployeeDeduction?.DeductionType?.name ||
-                  rightside[index]?.name ||
-                  ""}
-              </div>
-              <div className="p-2">{rightside[index]?.amount || ""}</div>
-            </div>
-          ))}
+            return (
+              <div
+                className="grid grid-cols-4 border-b border-dark-card"
+                key={index}
+              >
+                {/* Left Side (Earnings) */}
+                {leftData && (
+                  <>
+                    <div className="border-r border-dark-card p-2">
+                      {leftData.basic
+                        ? "Basic Salary"
+                        : leftData.EmployeeAllowance?.AllowanceType?.name
+                          ? leftData.EmployeeAllowance.AllowanceType.name
+                          : leftData.hour_rate
+                            ? "Overtime Salary"
+                            : leftData.hour_rate
+                              ? "Hourly Rate"
+                              : leftData.name || ""}
+                    </div>
 
+                    <div className="border-r border-dark-card p-2">
+                      {leftData.basic ||
+                        leftData.amount ||
+                        (leftData.overtime_salary
+                          ? Number(leftData.overtime_salary)
+                          : "0") ||
+                        leftData.name ||
+                        ""}
+                    </div>
+                  </>
+                )}
+
+                {/* Right Side (Deductions) */}
+                {rightData && (
+                  <>
+                    <div className="border-r border-dark-card p-2">
+                      {rightData.EmployeeDeduction?.DeductionType?.name ||
+                        rightData.name ||
+                        ""}
+                    </div>
+                    <div className="p-2">{rightData.amount || ""}</div>
+                  </>
+                )}
+              </div>
+            );
+          })}
         {/* Total Row */}
         <div className="grid grid-cols-4 font-bold">
-          <div className="border-r border-dark-card p-2">Total Allowance</div>
+          <div className="border-r border-dark-card p-2">Total Earning</div>
           <div className="border-r border-dark-card p-2">
             {Math.round(getEmployeeSalary?.data?.totalAllowance)}
           </div>

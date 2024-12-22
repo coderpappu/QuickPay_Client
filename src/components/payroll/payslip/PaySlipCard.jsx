@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { CSVLink } from "react-csv";
 import toast from "react-hot-toast";
 import {
+  useBulkEmployeePaymentMutation,
   useDeleteSalarySheetMutation,
   useGeneratedEmployeeSalaryBulkMutation,
   useGetCompanyIdQuery,
@@ -14,10 +16,23 @@ import PreviewPayslipCard from "./PreviewPayslipCard";
 const PaySlipCard = () => {
   const [updateSalarySheet] = useUpdateSalarySheetMutation();
   const [deleteSalarySheet] = useDeleteSalarySheetMutation();
+  const [bulkEmployeePayment] = useBulkEmployeePaymentMutation();
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
+
+  const [slipPreview, setSlipPreview] = useState("");
+  const [csvData, setCsvData] = useState([]);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleDeleteSalarySheet = async (employeeId, generate_date) => {
     await deleteSalarySheet({ employeeId, generate_date });
     toast.success("Salary Sheet deleted successfully.");
+  };
+
+  const handleBulkPayment = async () => {
+    const generate_date = `${String(month).padStart(2, "0")}-${year}`;
+    await bulkEmployeePayment({ generate_date, status: "Paid" });
+    toast.success("Bulk payment processed successfully.");
   };
 
   const handleUpdateSalarySheet = async (employeeId, generate_date) => {
@@ -28,13 +43,6 @@ const PaySlipCard = () => {
   const { data: employeeList, isLoading } = useGetEmployeesQuery(companyId);
   const [generateBulkSalary, { data }] =
     useGeneratedEmployeeSalaryBulkMutation();
-
-  const [month, setMonth] = useState("");
-  const [year, setYear] = useState("");
-
-  const [slipPreview, setSlipPreview] = useState("");
-
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   useEffect(() => {
     // Get the current month and year
@@ -96,6 +104,21 @@ const PaySlipCard = () => {
     } catch (error) {
       toast.error("Error generating employees salary");
     }
+  };
+
+  // Handle export to CSV
+  const handleExport = () => {
+    const csvData = employeeSalarySheet?.data?.map((sheet) => ({
+      EmployeeId: sheet?.Employee?.employeeId,
+      Name: sheet?.Employee?.name,
+      OverTime: Math.round(sheet?.overtime_salary_sheet?.[0]?.overtime_salary),
+      Allowance: sheet?.allowance_salary_sheet?.[0]?.amount,
+      Deduction: sheet?.deduction_salary_sheet?.[0]?.amount,
+      Commission: sheet?.commission_salary_sheet?.[0]?.amount,
+      NetSalary: sheet?.net_salary,
+      Status: sheet?.status,
+    }));
+    setCsvData(csvData);
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -253,11 +276,19 @@ const PaySlipCard = () => {
                 <option value="2025">2025</option>
               </select>
 
-              <button className="rounded-md bg-blue-500 px-3 py-3 text-white">
+              <CSVLink
+                data={csvData}
+                filename={`salary_sheet_${month}_${year}.csv`}
+                className="rounded-md bg-blue-500 px-3 py-3 text-white"
+                onClick={handleExport}
+              >
                 Export
-              </button>
+              </CSVLink>
 
-              <button className="rounded-md bg-blue-500 px-3 py-3 text-white">
+              <button
+                className="rounded-md bg-blue-500 px-3 py-3 text-white"
+                onClick={handleBulkPayment}
+              >
                 Bulk Payment
               </button>
             </div>

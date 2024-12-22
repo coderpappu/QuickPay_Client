@@ -1503,6 +1503,15 @@ export const apiSlice = createApi({
       providesTags: ["employeesalarysheet"],
     }),
 
+    bulkEmployeePayment: builder.mutation({
+      query: (credentials) => ({
+        url: `/salarysetting/bulk-payment-update`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["employeesalarysheet"],
+    }),
+
     updateSalarySheet: builder.mutation({
       query: ({ employeeId, ...credentials }) => ({
         url: `/salarysetting/update-salary/${employeeId}`,
@@ -1843,4 +1852,5 @@ export const {
   useGetCompanyAttendanceQuery,
 
   useGetEmployeeSalarySheetQuery,
+  useBulkEmployeePaymentMutation,
 } = apiSlice;
