@@ -1051,11 +1051,11 @@ export const apiSlice = createApi({
     }),
 
     getApplyLoanList: builder.query({
-      query: (companyId) => ({
-        url: `/loan/type/list`,
-        params: { companyId },
+      query: (employeeId) => ({
+        url: `/loan/application/employee/list`,
+        params: { employeeId },
       }),
-      providesTags: ["loanType"],
+      providesTags: ["loanApply"],
     }),
 
     getAppliedLoanDetails: builder.query({

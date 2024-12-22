@@ -35,6 +35,10 @@ const EmployeeLoanList = () => {
     error,
   } = useGetApplyLoanListQuery(companyId);
 
+  //   pappudey.xceed@wegmail.com
+  //password
+
+  console.log(loanList);
   let content;
 
   if (isLoading && !isError) return <CardSkeleton />;
