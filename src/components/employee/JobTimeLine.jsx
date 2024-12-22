@@ -48,13 +48,18 @@ const JobTimeLine = () => {
   };
 
   if (isLoading && !isError) return <ListSkeleton />;
-  if (!isLoading && isError) return <ErrorMessage message={error?.message} />;
-  if (!jobTimeLineDetails) return <ErrorMessage message="Job not found" />;
+  if (!isLoading && isError)
+    content = (
+      <div className="ml-[30%]">
+        <ErrorMessage message="Job not found" />
+      </div>
+    );
+
   if (jobTimeLineDetails)
     content = jobTimeLineDetails?.data?.map((data, index) =>
       index == 0 ? (
         <li>
-          <div className="timeline-start text-dark-heading-color py-[2px] px-3 border  border-slate-500 border-opacity-35 rounded-full text-sm">
+          <div className="timeline-start rounded-full border border-slate-500 border-opacity-35 px-3 py-[2px] text-sm text-dark-heading-color">
             {yearPicker(jobTimeLineDetails?.data?.[0]?.jobStart) +
               " - " +
               yearPicker(jobTimeLineDetails?.data?.[0]?.jobEnd)}
@@ -73,8 +78,8 @@ const JobTimeLine = () => {
               />
             </svg>
           </div>
-          <div className="timeline-end bg-slate-50 dark:bg-dark-box border-dark-text-color border-opacity-10 rounded-md w-[350px] text-justify timeline-box">
-            <h2 className="text-sm text-dark-heading-color  font-bold">
+          <div className="timeline-end timeline-box w-[350px] rounded-md border-dark-text-color border-opacity-10 bg-slate-50 text-justify dark:bg-dark-box">
+            <h2 className="text-sm font-bold text-dark-heading-color">
               {" "}
               {data?.jobTitle}
             </h2>
@@ -82,19 +87,19 @@ const JobTimeLine = () => {
               {data?.company_name + " "}
               <label
                 htmlFor=""
-                className="py-[2px] px-2 border  border-slate-500 border-opacity-35 rounded-full  text-[10px]"
+                className="rounded-full border border-slate-500 border-opacity-35 px-2 py-[2px] text-[10px]"
               >
                 {data?.jobType}
               </label>{" "}
             </p>
-            <p className="text-xs mt-1">{data?.jobDescription}</p>
+            <p className="mt-1 text-xs">{data?.jobDescription}</p>
           </div>
           <hr className="bg-slate-300 dark:bg-slate-600" />
         </li>
       ) : (
         <li>
           <hr className="bg-slate-300 dark:bg-slate-600" />
-          <div className="timeline-start text-dark-heading-color py-[2px] px-3 border  border-slate-500 border-opacity-35 rounded-full text-sm">
+          <div className="timeline-start rounded-full border border-slate-500 border-opacity-35 px-3 py-[2px] text-sm text-dark-heading-color">
             {yearPicker(jobTimeLineDetails?.data?.[0]?.jobStart) +
               " - " +
               yearPicker(jobTimeLineDetails?.data?.[0]?.jobEnd)}
@@ -113,8 +118,8 @@ const JobTimeLine = () => {
               />
             </svg>
           </div>
-          <div className="timeline-end bg-slate-50 dark:bg-dark-box border-dark-text-color border-opacity-10 rounded-md w-[350px] text-justify timeline-box">
-            <h2 className="text-sm text-dark-heading-color font-bold">
+          <div className="timeline-end timeline-box w-[350px] rounded-md border-dark-text-color border-opacity-10 bg-slate-50 text-justify dark:bg-dark-box">
+            <h2 className="text-sm font-bold text-dark-heading-color">
               {" "}
               {data?.jobTitle}
             </h2>
@@ -122,34 +127,34 @@ const JobTimeLine = () => {
               {data?.company_name + " "}
               <label
                 htmlFor=""
-                className="py-[2px] px-2 border  border-slate-500 border-opacity-35 rounded-full  text-[10px]"
+                className="rounded-full border border-slate-500 border-opacity-35 px-2 py-[2px] text-[10px]"
               >
                 {data?.jobType}
               </label>{" "}
             </p>
-            <p className="text-xs mt-1">{data?.jobDescription}</p>
+            <p className="mt-1 text-xs">{data?.jobDescription}</p>
           </div>
           <hr className="bg-slate-300 dark:bg-slate-600" />
         </li>
-      )
+      ),
     );
 
   if (jobTimeLineDetails)
     editContent = jobTimeLineDetails?.data?.map((data, index) => (
       <div
-        className="w-[60%] mb-2 ml-6 dark:bg-dark-box p-3 rounded-md flex flex-wrap justify-between items-center"
+        className="mb-2 ml-6 flex w-[60%] flex-wrap items-center justify-between rounded-md p-3 dark:bg-dark-box"
         key={data?.id}
       >
-        <div className="border-r  py-2 px-3 border-slate-500 border-dashed border-opacity-35">
+        <div className="border-r border-dashed border-slate-500 border-opacity-35 px-3 py-2">
           {++index}
         </div>
         <div>
           <h2>{data?.jobTitle}</h2>
-          <p className="text-sm mt-1">{data?.company_name}</p>
+          <p className="mt-1 text-sm">{data?.company_name}</p>
         </div>
         <div className="flex items-center gap-2">
           <div
-            className="w-8 h-8 bg-green-400 text-white rounded-sm p-2 flex justify-center items-center cursor-pointer"
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-400 p-2 text-white"
             onClick={() => handleEditId(data?.id)}
           >
             <Link>
@@ -160,7 +165,7 @@ const JobTimeLine = () => {
           {/* delete button  */}
           <div
             onClick={() => handleJobTimeLine(data?.id)}
-            className="w-8 h-8 bg-red-500 text-white text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center text-white"
           >
             <AiOutlineDelete size={20} />
           </div>
@@ -197,27 +202,27 @@ const JobTimeLine = () => {
         ),
         {
           duration: Infinity,
-        }
+        },
       );
 
     confirm();
   };
 
   return (
-    <div className="w-[39%] mt-3 relative p-6 bg-white dark:bg-dark-card rounded-md">
+    <div className="relative mt-3 w-[39%] rounded-md bg-white p-6 dark:bg-dark-card">
       {/* Timeline View  */}
       <ul
-        className={`timeline timeline-vertical align left-[-150px] ${viewStatus ? "hidden" : "block"}`}
+        className={`align timeline timeline-vertical left-[-150px] ${viewStatus ? "hidden" : "block"}`}
       >
         {content}
       </ul>
 
       {/* edit board  */}
-      <div className={`w-full  ${!viewStatus ? "hidden" : "block"}`}>
+      <div className={`w-full ${!viewStatus ? "hidden" : "block"}`}>
         {editContent}
 
         <div
-          className="w-8 h-8 absolute right-5 top-3 rounded-full bg-green-500 text-center flex justify-center items-center  p-2 cursor-pointer"
+          className="absolute right-5 top-3 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-green-500 p-2 text-center"
           onClick={() => setIsPopupOpen(!isPopupOpen)}
           // onClick={() => handleOpen()}
         >
@@ -225,9 +230,9 @@ const JobTimeLine = () => {
             <IoAdd color="#fff" />
           </Link>
         </div>
-        <div className="flex justify-end mt-7">
+        <div className="mt-7 flex justify-end">
           <button
-            className="border border-red-500 transition-all   text-sm text-red-500 hover:bg-red-500 hover:text-white px-3 py-[6px] rounded-[5px]"
+            className="rounded-[5px] border border-red-500 px-3 py-[6px] text-sm text-red-500 transition-all hover:bg-red-500 hover:text-white"
             onClick={() => handleEdit()}
           >
             Cancel
@@ -239,7 +244,7 @@ const JobTimeLine = () => {
 
       {!viewStatus && (
         <div
-          className="absolute right-1 top-2 w-[40px] cursor-pointer h-[40px] flex flex-col justify-center align-middle items-center rounded-full bg-[#85858512] mr-2"
+          className="absolute right-1 top-2 mr-2 flex h-[40px] w-[40px] cursor-pointer flex-col items-center justify-center rounded-full bg-[#85858512] align-middle"
           onClick={() => handleEdit()}
         >
           <FiEdit className="text-blue-600" />

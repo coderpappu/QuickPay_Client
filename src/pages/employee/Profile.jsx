@@ -16,7 +16,6 @@ import JobDetails from "../../components/employee/JobDetails";
 import JobTimeLine from "../../components/employee/JobTimeLine";
 import PromotionForm from "../../components/employee/PromotionForm";
 import ProfileSkeleton from "../../skeletons/ProfileSkeleton";
-import SalarySettingsForm from "./SalarySetting/SalarySetting";
 const Profile = () => {
   const id = useParams()?.id;
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -30,7 +29,7 @@ const Profile = () => {
 
   const { data: employeeData } = useGetUserQuery();
   const { data, isLoading, isError } = useGetEmployeeDetailsQuery(
-    id || employeeData?.data?.id
+    id || employeeData?.data?.id,
   );
 
   const [selected, setSelected] = useState("1");
@@ -52,7 +51,7 @@ const Profile = () => {
       <h2 className="dark:text-dark-heading-color"> Employee / Profile</h2>
       <div className="flex flex-wrap justify-end gap-2">
         <div
-          className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border dark:border-blue-500 dark:text-dark-text-color dark:border-opacity-30 hover:bg-blue-500 w-fit flex justify-between items-center gap-3"
+          className="flex w-fit items-center justify-between gap-3 rounded-md border bg-white px-6 py-3 text-sm transition-all hover:bg-blue-500 hover:text-white dark:border-blue-500 dark:border-opacity-30 dark:bg-opacity-0 dark:text-dark-text-color"
           onClick={handleOpen}
         >
           Promotion
@@ -60,45 +59,45 @@ const Profile = () => {
         </div>
 
         <Link to={`/joiningletter/${id}`}>
-          <div className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border dark:border-blue-500 dark:text-dark-text-color dark:border-opacity-30 hover:bg-blue-500 w-fit flex justify-between items-center gap-3">
+          <div className="flex w-fit items-center justify-between gap-3 rounded-md border bg-white px-6 py-3 text-sm transition-all hover:bg-blue-500 hover:text-white dark:border-blue-500 dark:border-opacity-30 dark:bg-opacity-0 dark:text-dark-text-color">
             Joining Letter
             <GrDownload size={15} />
           </div>
         </Link>
         <Link to={`/experiencecertificate/${id}`}>
-          <div className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border border-dark-border-color dark:border-blue-500 dark:text-dark-text-color dark:border-opacity-30 hover:bg-blue-500 w-fit flex justify-between items-center gap-3">
+          <div className="flex w-fit items-center justify-between gap-3 rounded-md border border-dark-border-color bg-white px-6 py-3 text-sm transition-all hover:bg-blue-500 hover:text-white dark:border-blue-500 dark:border-opacity-30 dark:bg-opacity-0 dark:text-dark-text-color">
             Experience Certificate
             <GrDownload size={15} />
           </div>
         </Link>
         <Link to={`/nocletter/${id}`}>
-          <div className="px-6 py-3 hover:text-white dark:bg-opacity-0 text-sm transition-all rounded-md bg-white border dark:border-blue-500 dark:text-dark-text-color dark:border-opacity-30 hover:bg-blue-500 w-fit flex justify-between items-center gap-3">
+          <div className="flex w-fit items-center justify-between gap-3 rounded-md border bg-white px-6 py-3 text-sm transition-all hover:bg-blue-500 hover:text-white dark:border-blue-500 dark:border-opacity-30 dark:bg-opacity-0 dark:text-dark-text-color">
             NOC
             <GrDownload size={15} />
           </div>
         </Link>
       </div>
-      <div className="w-full p-5 mt-5 mb-1 rounded-md bg-white dark:bg-dark-card flex flex-wrap justify-between ">
-        <div className="flex flex-wrap justify-between items-center w-[50%]">
-          <div className="w-[20%] mr-4">
+      <div className="mb-1 mt-5 flex w-full flex-wrap justify-between rounded-md bg-white p-5 dark:bg-dark-card">
+        <div className="flex w-[50%] flex-wrap items-center justify-between">
+          <div className="mr-4 w-[20%]">
             <img
               src={employeeDetails?.image ? employeeDetails?.image : ProfileImg}
               alt="profile pic"
-              className="w-[100px] h-[100px] rounded-full"
+              className="h-[100px] w-[100px] rounded-full"
             />
           </div>
           <div className="w-[75%]">
-            <h1 className="font-poppins text-2xl dark:text-dark-text-color font-semibold">
+            <h1 className="font-poppins text-2xl font-semibold dark:text-dark-text-color">
               {employeeDetails?.name}
             </h1>
-            <h3 className="text-[15px] font-medium  text-[#686767] dark:text-dark-text-color">
+            <h3 className="text-[15px] font-medium text-[#686767] dark:text-dark-text-color">
               {employeeDetails?.EmployeeDesignation[0]?.designation?.name}
             </h3>
-            <h3 className="text-[15px] mt-2 font-semibold  text-[#3c3c3c] dark:text-dark-text-color">
+            <h3 className="mt-2 text-[15px] font-semibold text-[#3c3c3c] dark:text-dark-text-color">
               Employee Id : {employeeDetails?.employeeId}
               {/* {city + ", " + country} */}
             </h3>
-            <h3 className="text-[15px] font-medium  text-[#686767] dark:text-dark-text-color">
+            <h3 className="text-[15px] font-medium text-[#686767] dark:text-dark-text-color">
               {/* {`Website : ${website_url}`} */}
               Date of Join : {employeeDetails?.joining_date}
             </h3>
@@ -119,7 +118,7 @@ const Profile = () => {
         </div>
       </div>
 
-      <div className="w-full  rounded-md bg-white dark:bg-dark-card flex flex-wrap ">
+      <div className="flex w-full flex-wrap rounded-md bg-white dark:bg-dark-card">
         <Button
           button_id="1"
           isActive={selected == "1"}
@@ -132,20 +131,15 @@ const Profile = () => {
           handleSelect={handleSelect}
           title={"Job Details"}
         />
+
         <Button
           button_id="3"
-          isActive={selected == "3"}
-          handleSelect={handleSelect}
-          title={"Salary Details"}
-        />
-        <Button
-          button_id="4"
           isActive={selected == "4"}
           handleSelect={handleSelect}
           title={"Assets"}
         />
         <Button
-          button_id="5"
+          button_id="4"
           isActive={selected == "5"}
           handleSelect={handleSelect}
           title={"Career Timeline"}
@@ -154,13 +148,12 @@ const Profile = () => {
 
       {selected == "1" && <AboutCard employeeDetails={employeeDetails} />}
       {selected == "2" && <JobDetails employeeDetails={employeeDetails} />}
-      {selected == "3" && <SalarySettingsForm />}
-      {selected == "4" && <AssetCard />}
-      {selected == "5" && <JobTimeLine />}
+      {selected == "3" && <AssetCard />}
+      {selected == "4" && <JobTimeLine />}
       {isPopupOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white dark:bg-dark-card  rounded-lg p-6 w-full max-w-4xl">
-            <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-dark-border-color dark:border-opacity-5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-4xl rounded-lg bg-white p-6 dark:bg-dark-card">
+            <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-dark-border-color dark:border-opacity-5">
               <h3 className="text-lg font-medium text-gray-800 dark:text-white">
                 Promotion Form
               </h3>
