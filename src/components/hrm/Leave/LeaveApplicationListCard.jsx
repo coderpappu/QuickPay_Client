@@ -15,7 +15,7 @@ import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import CardSkeleton from "../../../skeletons/card";
-import DatePicker from "../../../utils/DatePicker";
+import { DateConverterFromUTC } from "../../../utils/Converter";
 import ErrorMessage from "../../../utils/ErrorMessage";
 import LeaveApplicationForm from "./LeaveApplicationForm";
 
@@ -80,7 +80,7 @@ const LeaveApplicationListCard = () => {
         ),
         {
           duration: Infinity,
-        }
+        },
       );
 
     confirm();
@@ -92,67 +92,67 @@ const LeaveApplicationListCard = () => {
         {leaveApplicationList?.data?.map((application, index) => (
           <div
             key={application?.id}
-            className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
+            className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
           >
-            <div className="dark:text-white w-[3%]">
+            <div className="w-[3%] dark:text-white">
               <h3>{++index}</h3>
             </div>
 
-            <div className="dark:text-white w-[8%]">
+            <div className="w-[8%] dark:text-white">
               <h3>{application.LeaveType?.name}</h3>
             </div>
 
-            <div className="dark:text-white w-[8%]">
-              <h3>{DatePicker(application?.created_at)}</h3>
+            <div className="w-[7%] dark:text-white">
+              <h3>{DateConverterFromUTC(application?.created_at)}</h3>
             </div>
 
-            <div className="dark:text-white w-5%]">
-              <h3>{DatePicker(application?.start_date)}</h3>
+            <div className="w-[7%] dark:text-white">
+              <h3>{DateConverterFromUTC(application?.start_date)}</h3>
             </div>
 
-            <div className="dark:text-white w-5%]">
-              <h3>{DatePicker(application?.end_date)}</h3>
+            <div className="w-[7%] dark:text-white">
+              <h3>{DateConverterFromUTC(application?.end_date)}</h3>
             </div>
-            <div className="dark:text-white w-[5%]">
+            <div className="w-[5%] dark:text-white">
               <h3>{application?.leaveDuration}</h3>
             </div>
-            <div className="dark:text-white w-[8%]">
+            <div className="w-[8%] dark:text-white">
               <h3>{application?.reason}</h3>
             </div>
 
-            <div className="dark:text-white w-[8%]">
+            <div className="w-[7%] dark:text-white">
               <h3>{application?.paid_status}</h3>
             </div>
-            <div className="dark:text-white w-[10%]">
+            <div className="w-[10%] dark:text-white">
               <h3>{application?.note || "..."}</h3>
             </div>
-            <div className="dark:text-white w-[8%]">
+            <div className="w-[8%] dark:text-white">
               <h3>Manager</h3>
             </div>
-            <div className="dark:text-white w-[8%]">
+            <div className="w-[8%] dark:text-white">
               <div
-                className={` ${statusColorHandler(application?.status)} w-32  px-1 py-2 rounded-full text-center text-gray-700 font-bold text-xs`}
+                className={` ${statusColorHandler(application?.status)} w-32 rounded-full px-1 py-2 text-center text-xs font-bold text-gray-700`}
               >
                 {application?.status}
               </div>
             </div>
 
-            <div className=" text-white w-[10%] flex  space-x-2 fex flex-wrap  gap-2">
+            <div className="fex flex w-[10%] flex-wrap gap-2 space-x-2 text-white">
               <div>
                 <Link to={`/leave/application/${application?.id}`}>
-                  <div className="w-8 h-8 bg-green-600  rounded-sm p-2 flex justify-center items-center cursor-pointer">
+                  <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-600 p-2">
                     <PiEyeLight size={20} />
                   </div>
                 </Link>
               </div>
 
               {/* edit button  */}
-              <div className="w-8 h-8 bg-indigo-700 rounded-sm p-2 flex justify-center items-center cursor-pointer">
+              <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-indigo-700 p-2">
                 <CiEdit size={20} onClick={() => handleOpen(application?.id)} />
               </div>
 
               {/* delete button  */}
-              <div className="w-8 h-8 bg-red-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer">
+              <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center">
                 <AiOutlineDelete
                   size={20}
                   onClick={() => handleDeleteApplication(application?.id)}
@@ -174,46 +174,46 @@ const LeaveApplicationListCard = () => {
         />
         <div className="px-6 py-3">
           {/* header  */}
-          <div className="w-full bg-light-bg dark:bg-dark-box rounded-sm py-3 px-3 flex flex-wrap justify-between text-sm">
-            <div className="dark:text-white w-[3%]">
+          <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
+            <div className="w-[3%] dark:text-white">
               <h3>SL</h3>
             </div>
 
-            <div className="dark:text-white w-[8%]">
+            <div className="w-[8%] dark:text-white">
               <h3>Leave Type</h3>
             </div>
 
-            <div className="dark:text-white w-[8%]">
+            <div className="w-[7%] dark:text-white">
               <h3>Applied on</h3>
             </div>
 
-            <div className="dark:text-white w-5%]">
+            <div className="w-[7%] dark:text-white">
               <h3>Start Date</h3>
             </div>
 
-            <div className="dark:text-white w-5%]">
+            <div className="w-[7%] dark:text-white">
               <h3>End Date</h3>
             </div>
-            <div className="dark:text-white w-[5%]">
+            <div className="w-[5%] dark:text-white">
               <h3>Days</h3>
             </div>
-            <div className="dark:text-white w-[8%]">
+            <div className="w-[8%] dark:text-white">
               <h3>Reason</h3>
             </div>
 
-            <div className="dark:text-white w-[8%]">
+            <div className="w-[7%] dark:text-white">
               <h3>Paid Status</h3>
             </div>
-            <div className="dark:text-white w-[10%]">
+            <div className="w-[10%] dark:text-white">
               <h3>Note</h3>
             </div>
-            <div className="dark:text-white w-[8%]">
+            <div className="w-[8%] dark:text-white">
               <h3>Approved By</h3>
             </div>
-            <div className="dark:text-white w-[8%]">
+            <div className="w-[8%] dark:text-white">
               <h3>Status</h3>
             </div>
-            <div className="dark:text-white w-[10%]">
+            <div className="w-[10%] dark:text-white">
               <h3>Action</h3>
             </div>
           </div>
@@ -222,9 +222,9 @@ const LeaveApplicationListCard = () => {
           {content}
         </div>
         {isPopupOpen && (
-          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-            <div className="bg-white dark:bg-dark-card  rounded-lg p-6 w-full max-w-md">
-              <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-dark-border-color dark:border-opacity-5">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="w-full max-w-md rounded-lg bg-white p-6 dark:bg-dark-card">
+              <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-dark-border-color dark:border-opacity-5">
                 <h3 className="text-lg font-medium text-gray-800 dark:text-white">
                   Designation
                 </h3>

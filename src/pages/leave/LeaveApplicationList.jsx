@@ -23,9 +23,9 @@ const Modal = ({ isOpen, onClose, onSave, leaveData, setLeaveData }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white dark:bg-dark-card p-5 rounded-md w-96">
-        <h3 className="text-xl font-semibold mb-4 dark:text-dark-heading-color">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="w-96 rounded-md bg-white p-5 dark:bg-dark-card">
+        <h3 className="mb-4 text-xl font-semibold dark:text-dark-heading-color">
           Edit Leave Application
         </h3>
         <form>
@@ -37,7 +37,7 @@ const Modal = ({ isOpen, onClose, onSave, leaveData, setLeaveData }) => {
               name="status"
               value={leaveData.status}
               onChange={handleChange}
-              className=" mt-2 p-2  w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color "
+              className="mt-2 h-10 w-full rounded-md border border-dark-box border-opacity-5 p-2 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
             >
               <option value="PENDING">PENDING</option>
               <option value="APPROVED">APPROVED</option>
@@ -52,7 +52,7 @@ const Modal = ({ isOpen, onClose, onSave, leaveData, setLeaveData }) => {
               name="paid_status"
               value={leaveData.paid_status}
               onChange={handleChange}
-              className=" mt-2 p-2  w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+              className="mt-2 h-10 w-full rounded-md border border-dark-box border-opacity-5 p-2 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
             >
               <option value="PAID">PAID</option>
               <option value="UNPAID">UNPAID</option>
@@ -66,20 +66,20 @@ const Modal = ({ isOpen, onClose, onSave, leaveData, setLeaveData }) => {
               name="note"
               value={leaveData.note}
               onChange={handleChange}
-              className=" mt-2 p-2  w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+              className="mt-2 h-10 w-full rounded-md border border-dark-box border-opacity-5 p-2 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
             />
           </div>
           <div className="flex justify-end">
             <button
               type="button"
-              className="mr-2 px-4 py-2 bg-gray-200 rounded-md"
+              className="mr-2 rounded-md bg-gray-200 px-4 py-2"
               onClick={onClose}
             >
               Cancel
             </button>
             <button
               type="button"
-              className="px-4 py-2 bg-[#3686FF] text-white rounded-md"
+              className="rounded-md bg-[#3686FF] px-4 py-2 text-white"
               onClick={onSave}
             >
               Save
@@ -152,46 +152,47 @@ const LeaveApplicationList = () => {
     }
   };
 
+
   if (!isLoading && !isError) {
     content = (
       <>
         {leaveApplicationList?.data?.map((leave, index) => (
           <tr
             key={leave?.id}
-            className={index % 2 === 0 ? "" : "bg-gray-50  rounded-sm"}
+            className={index % 2 === 0 ? "" : "rounded-sm bg-gray-50"}
           >
-            <td className="py-2 text-sm ">{++index}</td>
-            <td className="py-2 text-sm ">{leave?.LeaveType?.name}</td>
-            <td className="py-2 text-sm ">{DatePicker(leave?.created_at)}</td>
-            <td className="py-2 text-sm ">{DatePicker(leave?.start_date)}</td>
-            <td className="py-2 text-sm ">{DatePicker(leave?.end_date)}</td>
-            <td className="py-2 text-sm ">{leave?.leaveDuration}</td>
-            <td className="py-2 text-sm ">{leave?.reason}</td>
-            <td className="py-2 text-sm ">{leave?.paid_status}</td>
-            <td className="py-2 text-sm ">{leave?.note || "..."}</td>
-            <td className="py-2 text-sm ">Manager</td>
-            <td className="py-2 text-sm flex-wrap justify-center items-center">
+            <td className="py-2 text-sm">{++index}</td>
+            <td className="py-2 text-sm">{leave?.LeaveType?.name}</td>
+            <td className="py-2 text-sm">{DatePicker(leave?.created_at)}</td>
+            <td className="py-2 text-sm">{DatePicker(leave?.start_date)}</td>
+            <td className="py-2 text-sm">{DatePicker(leave?.end_date)}</td>
+            <td className="py-2 text-sm">{leave?.leaveDuration}</td>
+            <td className="py-2 text-sm">{leave?.reason}</td>
+            <td className="py-2 text-sm">{leave?.paid_status}</td>
+            <td className="py-2 text-sm">{leave?.note || "..."}</td>
+            <td className="py-2 text-sm">Manager</td>
+            <td className="flex-wrap items-center justify-center py-2 text-sm">
               <div
-                className={` ${statusColorHandler(leave.status)} w-32 m-auto px-1 py-2 rounded-full text-center text-gray-700 font-bold text-xs`}
+                className={` ${statusColorHandler(leave.status)} m-auto w-32 rounded-full px-1 py-2 text-center text-xs font-bold text-gray-700`}
               >
                 {leave?.status}
               </div>
             </td>
-            <td className="py-2 text-sm text-center flex justify-center items-center gap-2">
+            <td className="flex items-center justify-center gap-2 py-2 text-center text-sm">
               <div>
                 <Link to={`/leave/application/${leave?.id}`}>
-                  <div className="w-8 h-8 bg-green-600 text-white rounded-sm p-2 flex justify-center items-center cursor-pointer">
+                  <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-600 p-2 text-white">
                     <PiEyeLight size={20} onClick={() => openModal(leave)} />
                   </div>
                 </Link>
               </div>
               <div>
-                <div className="w-8 h-8 bg-indigo-600 text-white rounded-sm p-2 flex justify-center items-center cursor-pointer">
+                <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-indigo-600 p-2 text-white">
                   <CiEdit size={20} onClick={() => openModal(leave)} />
                 </div>
               </div>
 
-              <div className="w-8 h-8 bg-red-500 text-white text-center flex justify-center items-center rounded-sm p-2 cursor-pointer">
+              <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center text-white">
                 <AiOutlineDelete size={20} />
               </div>
             </td>
@@ -204,29 +205,29 @@ const LeaveApplicationList = () => {
   return (
     <>
       <div>
-        <h2 className="font-semibold text-lg pb-2 dark:text-dark-heading-color">
+        <h2 className="pb-2 text-lg font-semibold dark:text-dark-heading-color">
           Employee Leave Applications
         </h2>
       </div>
-      <div className="border-solid border-[1px] mt-3 border-slate-200 dark:border-none  bg-white dark:bg-dark-card rounded-md p-5 w-full h-auto ">
-        <div className="flex flex-wrap justify-between items-center mb-4">
+      <div className="mt-3 h-auto w-full rounded-md border-[1px] border-solid border-slate-200 bg-white p-5 dark:border-none dark:bg-dark-card">
+        <div className="mb-4 flex flex-wrap items-center justify-between">
           {/* <div className="dark:text-light-bg"></div> */}
         </div>
-        <table className="w-full h-auto">
-          <thead className="border-b border-slate-200 dark:border-dark-border-color dark:border-opacity-10 dark:text-white mt-8 text-left ">
+        <table className="h-auto w-full">
+          <thead className="mt-8 border-b border-slate-200 text-left dark:border-dark-border-color dark:border-opacity-10 dark:text-white">
             <tr>
-              <th className="pb-2 text-[14px] w-[3%]">SL</th>
-              <th className="pb-2 text-[14px] w-[10%]">Leave Type</th>
-              <th className="pb-2 text-[14px] w-[10%]">Applied on</th>
-              <th className="pb-2 text-[14px] w-[10%]">Start Date</th>
-              <th className="pb-2 text-[14px] w-[10%]">End Date</th>
-              <th className="pb-2 text-[14px] w-[5%]">Days</th>
-              <th className="pb-2 text-[14px] w-[10%]">Reason</th>
-              <th className="pb-2 text-[14px] w-[10%]">Paid Status</th>
-              <th className="pb-2 text-[14px] w-[10%]">Note</th>
-              <th className="pb-2 text-[14px] w-[8%]">Approved By</th>
-              <th className="pb-2 text-[14px] w-[10%] text-center">Status</th>
-              <th className="pb-2 text-[14px] w-[10%] text-center">Action</th>
+              <th className="w-[3%] pb-2 text-[14px]">SL</th>
+              <th className="w-[10%] pb-2 text-[14px]">Leave Type</th>
+              <th className="w-[10%] pb-2 text-[14px]">Applied on</th>
+              <th className="w-[10%] pb-2 text-[14px]">Start Date</th>
+              <th className="w-[10%] pb-2 text-[14px]">End Date</th>
+              <th className="w-[5%] pb-2 text-[14px]">Days</th>
+              <th className="w-[10%] pb-2 text-[14px]">Reason</th>
+              <th className="w-[10%] pb-2 text-[14px]">Paid Status</th>
+              <th className="w-[10%] pb-2 text-[14px]">Note</th>
+              <th className="w-[8%] pb-2 text-[14px]">Approved By</th>
+              <th className="w-[10%] pb-2 text-center text-[14px]">Status</th>
+              <th className="w-[10%] pb-2 text-center text-[14px]">Action</th>
             </tr>
           </thead>
           <tbody>{content}</tbody>

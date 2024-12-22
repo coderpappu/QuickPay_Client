@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import BrandCardWrapper from "../../components/company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../components/company/SettingCardHeader";
-import DatePicker from "../../utils/DatePicker";
 
 import {
   useGetAllEmployeeLeaveListQuery,
   useGetCompanyIdQuery,
 } from "../../features/api";
 import CardSkeleton from "../../skeletons/card";
+import { DateConverterFromUTC } from "../../utils/Converter";
 import ErrorMessage from "../../utils/ErrorMessage";
 import LeaveForm from "../employee/LeaveForm";
 const EmployeeLeaveApplication = () => {
@@ -55,31 +55,31 @@ const EmployeeLeaveApplication = () => {
     content = leaveApplications?.data?.map((application) => (
       <div
         key={application?.id}
-        className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
+        className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
       >
-        <div className="dark:text-white w-[14%]">
+        <div className="w-[14%] dark:text-white">
           <h3>{application?.LeaveType?.name}</h3>
         </div>
 
-        <div className="dark:text-white w-[14%]">
-          <h3>{DatePicker(application?.start_date)}</h3>
+        <div className="w-[14%] dark:text-white">
+          <h3>{DateConverterFromUTC(application?.start_date)}</h3>
         </div>
 
-        <div className="dark:text-white w-[14%]">
-          <h3>{DatePicker(application?.end_date)}</h3>
+        <div className="w-[14%] dark:text-white">
+          <h3>{DateConverterFromUTC(application?.end_date)}</h3>
         </div>
-        <div className="dark:text-white w-[14%]">
-          <h3>{DatePicker(application?.created_at)}</h3>
+        <div className="w-[14%] dark:text-white">
+          <h3>{DateConverterFromUTC(application?.created_at)}</h3>
         </div>
-        <div className="dark:text-white w-[14%]">
+        <div className="w-[14%] dark:text-white">
           <h3>{application?.reason}</h3>
         </div>
-        <div className="dark:text-white w-[14%]">
+        <div className="w-[14%] dark:text-white">
           <h3>{application?.note}</h3>
         </div>
-        <div className="dark:text-white w-[10%]">
+        <div className="w-[10%] dark:text-white">
           <div
-            className={` ${statusColorHandler(application?.status)} w-32  px-1 py-2 rounded-full text-center text-gray-700 font-bold text-xs`}
+            className={` ${statusColorHandler(application?.status)} w-32 rounded-full px-1 py-2 text-center text-xs font-bold text-gray-700`}
           >
             {application?.status}
           </div>
@@ -97,28 +97,28 @@ const EmployeeLeaveApplication = () => {
         />
         <div className="px-6 py-3">
           {/* header  */}
-          <div className="w-full bg-light-bg dark:bg-dark-box rounded-sm py-3 px-3 flex flex-wrap justify-between text-sm">
-            <div className="dark:text-white w-[14%]">
+          <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
+            <div className="w-[14%] dark:text-white">
               <h3>Leave Type</h3>
             </div>
 
-            <div className="dark:text-white w-[14%]">
+            <div className="w-[14%] dark:text-white">
               <h3>Start Date</h3>
             </div>
 
-            <div className="dark:text-white w-[14%]">
+            <div className="w-[14%] dark:text-white">
               <h3>End Date</h3>
             </div>
-            <div className="dark:text-white w-[14%]">
+            <div className="w-[14%] dark:text-white">
               <h3>Apply Date</h3>
             </div>
-            <div className="dark:text-white w-[14%]">
+            <div className="w-[14%] dark:text-white">
               <h3>Reason</h3>
             </div>
-            <div className="dark:text-white w-[14%]">
+            <div className="w-[14%] dark:text-white">
               <h3>Note</h3>
             </div>
-            <div className="dark:text-white w-[10%]">
+            <div className="w-[10%] dark:text-white">
               <h3>Status</h3>
             </div>
           </div>
@@ -127,9 +127,9 @@ const EmployeeLeaveApplication = () => {
           {content}
         </div>
         {isPopupOpen && (
-          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md">
-              <div className="flex justify-between items-center pb-3 border-b border-gray-200">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="w-full max-w-md rounded-lg bg-white p-6">
+              <div className="flex items-center justify-between border-b border-gray-200 pb-3">
                 <h3 className="text-lg font-medium text-gray-800">
                   Allowance List
                 </h3>
