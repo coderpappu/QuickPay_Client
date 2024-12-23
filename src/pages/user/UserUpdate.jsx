@@ -1,33 +1,21 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import toast from "react-hot-toast";
-import { LuEye, LuEyeOff } from "react-icons/lu";
-import { useRegisterUserMutation } from "../../features/api";
+import { useUpdateUserMutation } from "../../features/api";
 
-const UserRegistration = ({ onClose }) => {
-  const [register, { data, isError, isLoading }] = useRegisterUserMutation();
-  const [type, setType] = useState("password");
-  const [icon, setIcon] = useState(LuEyeOff);
-
-  const handleToggle = () => {
-    if (type === "password") {
-      setIcon(LuEye);
-      setType("text");
-    } else {
-      setIcon(LuEyeOff);
-      setType("password");
-    }
-  };
+const UserUpdate = ({ user, onClose }) => {
+  const [updateUser, { isError, isLoading }] = useUpdateUserMutation();
 
   return (
     <div className="py-4 md:w-full lg:w-[400px]">
       <Formik
         initialValues={{
-          first_name: "",
-          last_name: "",
-          phone: "",
-          email: "",
-          password: "",
+          first_name: user.first_name || "",
+          last_name: user.last_name || "",
+          phone: user.phone || "",
+          email: user.email || "",
+          role: user.type || "SUBSCRIBER",
+          status: user.status || "ACTIVE",
         }}
         validate={(values) => {
           const errors = {};
@@ -35,13 +23,13 @@ const UserRegistration = ({ onClose }) => {
           if (!values.first_name) {
             errors.first_name = "Required";
           } else if (values.first_name.length < 3) {
-            errors.first_name = "First name Must be at least 3 characters ";
+            errors.first_name = "First name must be at least 3 characters";
           }
-          // Last Name
+          // last name
           if (!values.last_name) {
             errors.last_name = "Required";
           } else if (values.last_name.length < 2) {
-            errors.last_name = "Last name Must be at least 2 characters ";
+            errors.last_name = "Last name must be at least 2 characters";
           }
           // email
           if (!values.email) {
@@ -57,11 +45,13 @@ const UserRegistration = ({ onClose }) => {
           } else if (values.phone.length < 10) {
             errors.phone = "Phone number must be at least 10 characters";
           }
-          // password
-          if (!values.password) {
-            errors.password = "Required";
-          } else if (values.password.length < 6) {
-            errors.password = "Password must be at least 6 characters";
+          // role
+          if (!values.role) {
+            errors.role = "Required";
+          }
+          // status
+          if (!values.status) {
+            errors.status = "Required";
           }
           return errors;
         }}
@@ -71,15 +61,17 @@ const UserRegistration = ({ onClose }) => {
             last_name: values.last_name,
             email: values.email,
             phone: values.phone,
-            password: values.password,
+            type: values.role,
+            status: values.status,
           };
           try {
-            await register(userData).unwrap();
+            await updateUser({ id: user.id, ...userData }).unwrap();
 
-            toast.success("User registration successfully completed!");
+            toast.success("User update successfully completed!");
+
             onClose();
           } catch (error) {
-            toast.error("User registration fail!");
+            toast.error("User update failed!");
           }
         }}
       >
@@ -137,30 +129,34 @@ const UserRegistration = ({ onClose }) => {
             />
             <ErrorMessage name="phone" component="div" className="text-[red]" />
 
-            <label htmlFor="password" className="text-md text-[#797979]">
-              Password
+            <label htmlFor="role" className="text-md text-[#797979]">
+              Role
             </label>
-            <div className="mb-4 flex">
-              <Field
-                type={type}
-                name="password"
-                autoComplete="current-password"
-                className="border-1 mb-3 mt-1 h-12 w-[100%] rounded-[5px] border-[#3686FF] px-1 dark:bg-dark-box"
-                placeholder="12345678"
-              />
-              <span
-                className="flex items-center justify-around"
-                onClick={handleToggle}
-              >
-                {type !== "password" ? (
-                  <LuEye className="absolute mr-10" />
-                ) : (
-                  <LuEyeOff className="absolute mr-10" />
-                )}
-              </span>
-            </div>
+            <Field
+              as="select"
+              name="role"
+              className="border-1 mb-3 mt-1 h-12 w-[100%] rounded-[5px] border-[#3686FF] px-1 dark:bg-dark-box"
+            >
+              <option value="SUPER_ADMIN">SUPER_ADMIN</option>
+              <option value="ADMIN">ADMIN</option>
+              <option value="SUBSCRIBER">SUBSCRIBER</option>
+            </Field>
+            <ErrorMessage name="role" component="div" className="text-[red]" />
+
+            <label htmlFor="status" className="text-md text-[#797979]">
+              Status
+            </label>
+            <Field
+              as="select"
+              name="status"
+              className="border-1 mb-3 mt-1 h-12 w-[100%] rounded-[5px] border-[#3686FF] px-1 dark:bg-dark-box"
+            >
+              <option value="ACTIVE">ACTIVE</option>
+              <option value="INACTIVE">INACTIVE</option>
+              <option value="SUSPENDED">SUSPENDED</option>
+            </Field>
             <ErrorMessage
-              name="password"
+              name="status"
               component="div"
               className="text-[red]"
             />
@@ -170,7 +166,7 @@ const UserRegistration = ({ onClose }) => {
               type="submit"
               disabled={isSubmitting}
             >
-              Register
+              Update
             </button>
           </Form>
         )}
@@ -179,4 +175,4 @@ const UserRegistration = ({ onClose }) => {
   );
 };
 
-export default UserRegistration;
+export default UserUpdate;

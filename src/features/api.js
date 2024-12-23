@@ -71,6 +71,14 @@ export const apiSlice = createApi({
       invalidatesTags: ["User"],
     }),
 
+    deleteUser: builder.mutation({
+      query: (id) => ({
+        url: `/user/deleteuser/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["User"],
+    }),
+
     // Company Related EndPoints
     getCompanies: builder.query({
       query: () => "/company/getcompany",
@@ -1650,10 +1658,9 @@ export const {
   useLoginUserMutation,
   useRegisterUserMutation,
   useGetUserQuery,
-  
+  useDeleteUserMutation,
+
   useUpdateUserMutation,
-
-
 
   useGetCompaniesQuery,
   useGetCompanyDetailsQuery,

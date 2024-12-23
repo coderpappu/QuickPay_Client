@@ -12,21 +12,32 @@ import toast from "react-hot-toast";
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useGetUsersQuery } from "../../features/api";
+import { useDeleteUserMutation, useGetUsersQuery } from "../../features/api";
 import UserRegistration from "./UserRegistration";
+import UserUpdate from "./UserUpdate";
 
 const Users = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
-  const [leaveTypeId, setleaveTypeId] = useState(null);
+  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false); // State to manage popup visibility
+  const [user, setUser] = useState(null);
 
   const handleOpen = (id) => {
     setIsPopupOpen(true);
-    setleaveTypeId(id);
   };
-
+  const handleEditOpen = (data) => {
+    setIsEditPopupOpen(true);
+    setUser(data);
+  };
+  const onClose = () => {
+    setIsPopupOpen(false);
+  };
+  const onEditClose = () => {
+    setIsEditPopupOpen(false);
+  };
   const { data: usersData, isLoading, isError, error } = useGetUsersQuery();
+  const [userDelete] = useDeleteUserMutation();
 
-  const handleDeleteEmployee = async (id) => {
+  const handleUserDelete = async (id) => {
     const confirm = () =>
       toast(
         (t) => (
@@ -34,19 +45,19 @@ const Users = () => {
             onConfirm={async () => {
               toast.dismiss(t.id);
               try {
-                // await deleteEmployee(id).then((res) => {
-                //   if (res.error != null) {
-                //     toast.error(res.error.data.message);
-                //   } else {
-                //     toast.success("Employee deleted successfully");
-                //   }
-                // });
+                await userDelete(id).then((res) => {
+                  if (res.error != null) {
+                    toast.error(res.error.data.message);
+                  } else {
+                    toast.success("User deleted successfully");
+                  }
+                });
               } catch (error) {
-                toast.error(error.message || "Failed to delete employee");
+                toast.error(error.message || "Failed to delete user");
               }
             }}
             onCancel={() => toast.dismiss(t.id)}
-            title="employee account"
+            title="User account delete"
           />
         ),
         {
@@ -96,29 +107,19 @@ const Users = () => {
                 <h3>{user?.status}</h3>
               </div>
 
-              {/* <div className="w-[15%] dark:text-white">
-                <h3>{employee?.EmployeeDepartment?.[0]?.department?.name}</h3>
-              </div>
-
-              <div className="w-[15%] dark:text-white">
-                <h3>{employee?.EmployeeDesignation[0]?.designation?.name}</h3>
-              </div>
-
-              <div className="w-[15%] dark:text-white">
-                <h3>{employee?.EmployeeSection?.[0]?.section?.name}</h3>
-              </div> */}
               <div className="w-[10%] dark:text-white">
                 <div className="flex flex-wrap justify-start gap-2">
                   {/* edit button  */}
-                  <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-400 p-2">
-                    <Link to={`/company/employee/update/${user?.id}`}>
-                      <CiEdit size={20} />
-                    </Link>
+                  <div
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-400 p-2"
+                    onClick={() => handleEditOpen(user)}
+                  >
+                    <CiEdit size={20} />
                   </div>
 
                   {/* delete button  */}
                   <div
-                    onClick={() => handleDeleteEmployee(user?.id)}
+                    onClick={() => handleUserDelete(user?.id)}
                     className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center"
                   >
                     <AiOutlineDelete size={20} />
@@ -172,7 +173,7 @@ const Users = () => {
             </div>
 
             <div className="w-[10%] dark:text-white">
-              <h3>Section</h3>
+              <h3>Status</h3>
             </div>
             <div className="w-[10%] dark:text-white">
               <h3>Action</h3>
@@ -186,6 +187,10 @@ const Users = () => {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="w-full max-w-md rounded-lg bg-white p-6 dark:bg-dark-card">
               <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-dark-border-color dark:border-opacity-5">
+                <h3 className="text-lg font-medium text-gray-800 dark:text-white">
+                  Registration
+                </h3>
+
                 <button
                   className="text-gray-500 hover:text-gray-800"
                   onClick={() => setIsPopupOpen(false)} // Close popup
@@ -194,7 +199,28 @@ const Users = () => {
                 </button>
               </div>
               <div className="mt-4">
-                <UserRegistration />
+                <UserRegistration onClose={onClose} />
+              </div>
+            </div>
+          </div>
+        )}
+        {isEditPopupOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="w-full max-w-md rounded-lg bg-white p-6 dark:bg-dark-card">
+              <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-dark-border-color dark:border-opacity-5">
+                <h3 className="text-lg font-medium text-gray-800 dark:text-white">
+                  User Account Update
+                </h3>
+
+                <button
+                  className="text-gray-500 hover:text-gray-800"
+                  onClick={() => setIsEditPopupOpen(false)}
+                >
+                  &times;
+                </button>
+              </div>
+              <div className="mt-4">
+                <UserUpdate user={user} onClose={onEditClose} />
               </div>
             </div>
           </div>
