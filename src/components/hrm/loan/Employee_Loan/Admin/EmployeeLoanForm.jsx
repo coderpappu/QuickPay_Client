@@ -3,24 +3,44 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
 import {
-  useApplyLoanMutation,
   useGetAppliedLoanDetailsQuery,
   useGetCompanyIdQuery,
   useGetLoanTypeListQuery,
   useUpdateAppliedLoanMutation,
+  useUpdateLoanApplicationApprovalMutation,
 } from "../../../../../features/api";
 
 const loanSchema = Yup.object().shape({
   loanType_id: Yup.string().required("Loan Type is required"),
   amount: Yup.number().required("Amount is required"),
   installment_month: Yup.number().required("Installment Month is required"),
+  // approval_interest_rate: Yup.number().when("status", {
+  //   is: "APPROVED",
+  //   then: Yup.number().required("Approval Interest Rate is required"),
+  //   otherwise: Yup.number().notRequired(),
+  // }),
+  // issue_date: Yup.date().when("status", {
+  //   is: "APPROVED",
+  //   then: Yup.date().required("Issue Date is required"),
+  //   otherwise: Yup.date().notRequired(),
+  // }),
+  // repayment_start_date: Yup.date().when("status", {
+  //   is: "APPROVED",
+  //   then: Yup.date().required("Repayment Start Date is required"),
+  //   otherwise: Yup.date().notRequired(),
+  // }),
+  // repayment_end_date: Yup.date().when("status", {
+  //   is: "APPROVED",
+  //   then: Yup.date().required("Repayment End Date is required"),
+  //   otherwise: Yup.date().notRequired(),
+  // }),
+  status: Yup.string().required("Status is required"),
 });
 
 const EmployeeLoanForm = ({ selectId, setIsPopupOpen }) => {
-  
   const { data: companyId } = useGetCompanyIdQuery();
   const { data: loanTypes } = useGetLoanTypeListQuery(companyId);
-  const [applyLoan] = useApplyLoanMutation();
+  const [loanApprovalUpdate] = useUpdateLoanApplicationApprovalMutation();
   const { data: loanDetails, isLoading } = useGetAppliedLoanDetailsQuery(
     selectId,
     {
@@ -32,6 +52,11 @@ const EmployeeLoanForm = ({ selectId, setIsPopupOpen }) => {
     loanType_id: "",
     amount: "",
     installment_month: "",
+    approval_interest_rate: "",
+    issue_date: "",
+    repayment_start_date: "",
+    repayment_end_date: "",
+    status: "PENDING",
   });
 
   const [updateLoan] = useUpdateAppliedLoanMutation();
@@ -42,6 +67,21 @@ const EmployeeLoanForm = ({ selectId, setIsPopupOpen }) => {
         loanType_id: loanDetails?.data?.loanType_id,
         amount: loanDetails?.data?.amount,
         installment_month: loanDetails?.data?.installment_month,
+        approval_interest_rate: loanDetails?.data?.approval_interest_rate,
+        issue_date: loanDetails?.data?.issue_date
+          ? new Date(loanDetails?.data?.issue_date).toISOString().split("T")[0]
+          : "",
+        repayment_start_date: loanDetails?.data?.repayment_start_date
+          ? new Date(loanDetails?.data?.repayment_start_date)
+              .toISOString()
+              .split("T")[0]
+          : "",
+        repayment_end_date: loanDetails?.data?.repayment_end_date
+          ? new Date(loanDetails?.data?.repayment_end_date)
+              .toISOString()
+              .split("T")[0]
+          : "",
+        status: loanDetails?.data?.loan_status || "PENDING",
       });
     }
   }, [loanDetails]);
@@ -73,14 +113,31 @@ const EmployeeLoanForm = ({ selectId, setIsPopupOpen }) => {
           initialValues={initialValues}
           validationSchema={loanSchema}
           onSubmit={async (values, { setSubmitting }) => {
-            const { loanType_id, amount, installment_month } = values;
+            const {
+              loanType_id,
+              amount,
+              installment_month,
+              approval_interest_rate,
+              issue_date,
+              repayment_start_date,
+              repayment_end_date,
+              status,
+            } = values;
 
             try {
-              await applyLoan({
-                id: selectId,
+              await loanApprovalUpdate({
+                loanId: selectId,
                 loanType_id,
                 amount,
                 installment_month,
+                approval_interest_rate:
+                  status === "APPROVED" ? approval_interest_rate : null,
+                issue_date: status === "APPROVED" ? issue_date : null,
+                repayment_start_date:
+                  status === "APPROVED" ? repayment_start_date : null,
+                repayment_end_date:
+                  status === "APPROVED" ? repayment_end_date : null,
+                loan_status: status,
                 company_id: companyId,
               }).then((res) => {
                 if (res.error) {
@@ -97,7 +154,7 @@ const EmployeeLoanForm = ({ selectId, setIsPopupOpen }) => {
             }
           }}
         >
-          {({ isSubmitting, setFieldValue }) => (
+          {({ isSubmitting, setFieldValue, values }) => (
             <Form>
               <div className="mb-4">
                 <label
@@ -166,6 +223,114 @@ const EmployeeLoanForm = ({ selectId, setIsPopupOpen }) => {
                   className="mt-1 text-sm text-red-500"
                 />
               </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="status"
+                  className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
+                >
+                  Status
+                </label>
+                <Field
+                  as="select"
+                  name="status"
+                  id="status"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm dark:border-none dark:bg-dark-box dark:text-dark-text-color"
+                >
+                  <option value="PENDING">PENDING</option>
+                  <option value="APPROVED">APPROVED</option>
+                  <option value="REJECTED">REJECTED</option>
+                </Field>
+                <ErrorMessage
+                  name="status"
+                  component="div"
+                  className="mt-1 text-sm text-red-500"
+                />
+              </div>
+
+              {values.status === "APPROVED" && (
+                <>
+                  <div className="mb-4">
+                    <label
+                      htmlFor="approval_interest_rate"
+                      className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
+                    >
+                      Approval Interest Rate
+                    </label>
+                    <Field
+                      type="number"
+                      name="approval_interest_rate"
+                      id="approval_interest_rate"
+                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm dark:border-none dark:bg-dark-box dark:text-dark-text-color"
+                    />
+                    <ErrorMessage
+                      name="approval_interest_rate"
+                      component="div"
+                      className="mt-1 text-sm text-red-500"
+                    />
+                  </div>
+
+                  <div className="mb-4">
+                    <label
+                      htmlFor="issue_date"
+                      className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
+                    >
+                      Issue Date
+                    </label>
+                    <Field
+                      type="date"
+                      name="issue_date"
+                      id="issue_date"
+                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm dark:border-none dark:bg-dark-box dark:text-dark-text-color"
+                    />
+                    <ErrorMessage
+                      name="issue_date"
+                      component="div"
+                      className="mt-1 text-sm text-red-500"
+                    />
+                  </div>
+
+                  <div className="mb-4">
+                    <label
+                      htmlFor="repayment_start_date"
+                      className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
+                    >
+                      Repayment Start Date
+                    </label>
+                    <Field
+                      type="date"
+                      name="repayment_start_date"
+                      id="repayment_start_date"
+                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm dark:border-none dark:bg-dark-box dark:text-dark-text-color"
+                    />
+                    <ErrorMessage
+                      name="repayment_start_date"
+                      component="div"
+                      className="mt-1 text-sm text-red-500"
+                    />
+                  </div>
+
+                  <div className="mb-4">
+                    <label
+                      htmlFor="repayment_end_date"
+                      className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
+                    >
+                      Repayment End Date
+                    </label>
+                    <Field
+                      type="date"
+                      name="repayment_end_date"
+                      id="repayment_end_date"
+                      className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm dark:border-none dark:bg-dark-box dark:text-dark-text-color"
+                    />
+                    <ErrorMessage
+                      name="repayment_end_date"
+                      component="div"
+                      className="mt-1 text-sm text-red-500"
+                    />
+                  </div>
+                </>
+              )}
 
               <div className="flex justify-end">
                 <button

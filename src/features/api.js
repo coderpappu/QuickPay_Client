@@ -1093,6 +1093,15 @@ export const apiSlice = createApi({
       providesTags: ["loanApply"],
     }),
 
+    updateLoanApplicationApproval: builder.mutation({
+      query: (credentials) => ({
+        url: `/loan/approval/update`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["loanApply"],
+    }),
+
     // Company Setting System
 
     getRootSetting: builder.query({
@@ -1798,6 +1807,7 @@ export const {
   useDeleteAppliedLoanMutation,
   useUpdateAppliedLoanMutation,
   useGetCompanyLoanListQuery,
+  useUpdateLoanApplicationApprovalMutation,
 
   // applicationFormat
   useCreateLeaveApplicationFormatMutation,

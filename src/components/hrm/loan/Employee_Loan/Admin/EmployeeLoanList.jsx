@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
-import { PiEyeLight } from "react-icons/pi";
-import { Link } from "react-router-dom";
 import {
   useDeleteAppliedLoanMutation,
   useGetCompanyIdQuery,
@@ -73,6 +71,18 @@ const EmployeeLoanList = () => {
       );
     confirm();
   };
+  const statusColorHandler = (status) => {
+    switch (status) {
+      case "PENDING":
+        return "bg-yellow-300 text-black";
+      case "APPROVED":
+        return "bg-green-500 text-white";
+      case "REJECTED":
+        return "bg-red-500 text-white";
+      default:
+        return "text-gray-500";
+    }
+  };
 
   if (!isLoading && !isError) {
     content = (
@@ -105,19 +115,13 @@ const EmployeeLoanList = () => {
               <h3>{loan?.installment_month}</h3>
             </div>
 
-            <div className="w-[7%] dark:text-white">
+            <div
+              className={` ${statusColorHandler(loan?.loan_status)} w-[7%] rounded-full px-1 py-2 text-center text-xs font-bold text-gray-700`}
+            >
               <h3>{loan?.loan_status}</h3>
             </div>
 
             <div className="fex flex w-[10%] flex-wrap gap-2 space-x-2 text-white">
-              <div>
-                <Link to={`/loan/application/${loan?.id}`}>
-                  <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-600 p-2">
-                    <PiEyeLight size={20} />
-                  </div>
-                </Link>
-              </div>
-
               <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-indigo-700 p-2">
                 <CiEdit size={20} onClick={() => handleOpen(loan?.id)} />
               </div>
@@ -138,7 +142,7 @@ const EmployeeLoanList = () => {
   return (
     <>
       <BrandCardWrapper>
-        <HrmSetupCardHeader title="Loan Applications" handleOpen={handleOpen} />
+        <HrmSetupCardHeader title="Loan Applications" />
         <div className="px-6 py-3">
           <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
             <div className="w-[3%] dark:text-white">
