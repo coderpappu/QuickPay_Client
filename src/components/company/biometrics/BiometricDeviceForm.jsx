@@ -238,7 +238,7 @@ const DeviceForm = ({ deviceId, setIsPopupOpen }) => {
           resetForm();
           toast.success("Device saved successfully!");
         } catch (error) {
-          console.log(error);
+      
           toast.error(error?.data?.message || "An error occurred");
         } finally {
           setSubmitting(false);

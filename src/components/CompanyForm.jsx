@@ -133,8 +133,6 @@ const CompanyForm = () => {
             logo,
           } = values;
 
-          // console.log("HERE logo is ",logo);
-
           try {
             if (id == null) {
               await createNewCompany({
@@ -158,7 +156,6 @@ const CompanyForm = () => {
               });
               toast.success("company created successfully");
             } else {
-              // console.log("name is ",company_name);
               await updateCompany({
                 id,
                 company_name,
@@ -184,14 +181,13 @@ const CompanyForm = () => {
             setSubmitting(false);
             navigate("/company/list");
           } catch (error) {
-            console.log(error);
             toast.error(error.message);
           }
         }}
       >
         {({ isSubmitting, setFieldValue }) => (
           <Form>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {[
                 { label: "Company Name", name: "company_name", type: "text" },
                 { label: "Address", name: "address", type: "text" },
@@ -225,12 +221,12 @@ const CompanyForm = () => {
                     type={field.type}
                     name={field.name}
                     id={field.name}
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   />
                   <ErrorMessage
                     name={field.name}
                     component="div"
-                    className="text-red-500 text-sm mt-1"
+                    className="mt-1 text-sm text-red-500"
                   />
                 </div>
               ))}
@@ -244,7 +240,7 @@ const CompanyForm = () => {
                       alt="Image description"
                     ></img>
                     <button
-                      className="text-red-500 hover:text-red-700 ml-2"
+                      className="ml-2 text-red-500 hover:text-red-700"
                       type="button"
                       onClick={handleDeleteLogo}
                     >
@@ -263,7 +259,7 @@ const CompanyForm = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#3686FF]  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="inline-flex w-full justify-center rounded-md border border-transparent bg-[#3686FF] px-4 py-2 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
                 Submit
               </button>

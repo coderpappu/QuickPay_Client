@@ -50,7 +50,6 @@ const MyCalendar = () => {
 
   // Dummy event data for demonstration
 
-  console.log(holidays);
   // Convert holidays to event format
   const events =
     holidays?.data?.holidays?.map((holiday) => ({

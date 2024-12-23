@@ -29,7 +29,6 @@ const SalarySheet = ({ slipPreview }) => {
     ...(getEmployeeSalary?.data?.generatedSalary?.loan || []),
   ];
 
-  console.log();
   return (
     <div className="mx-auto max-w-5xl rounded-md bg-white p-6 shadow-md dark:bg-dark-box">
       {/* Header */}

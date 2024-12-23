@@ -729,7 +729,7 @@ const EmployeeRegistrationForm = () => {
                     if (Object.keys(errors).length === 0) {
                       //handleSubmit(); // If no errors, submit the form
                     } else {
-                      //console.log("Validation errors:", errors);
+                      toast.error("Please fill all the required fields");
                     }
                   } else {
                     const errors = await validateForm(); // Validate the current step
@@ -737,7 +737,6 @@ const EmployeeRegistrationForm = () => {
                       handleNext(); // Move to the next step if no errors
                     } else {
                       // Optional: You can display a message or perform other actions here
-                      //console.log("Validation errors:", errors);
                     }
                   }
                 }}

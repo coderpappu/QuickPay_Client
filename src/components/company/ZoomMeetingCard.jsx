@@ -49,7 +49,6 @@ const ZoomMeetingCard = () => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values) => {
-          console.log("Form Values: ", values);
           await createZoomSetting({ ...values, company_id });
           // Add your form submission logic here
         }}
@@ -57,7 +56,7 @@ const ZoomMeetingCard = () => {
         {({ errors, touched }) => (
           <Form>
             <div className="px-6 py-3">
-              <div className="flex justify-between my-2">
+              <div className="my-2 flex justify-between">
                 <div className="w-[48%]">
                   <InputTitle title="Zoom Account ID" />
                   <Field name="zoom_id">
@@ -72,7 +71,7 @@ const ZoomMeetingCard = () => {
                   <ErrorMessage
                     name="zoom_id"
                     component="div"
-                    className="text-red-500 text-xs"
+                    className="text-xs text-red-500"
                   />
                 </div>
 
@@ -90,11 +89,11 @@ const ZoomMeetingCard = () => {
                   <ErrorMessage
                     name="client_id"
                     component="div"
-                    className="text-red-500 text-xs"
+                    className="text-xs text-red-500"
                   />
                 </div>
               </div>
-              <div className="flex justify-between my-2">
+              <div className="my-2 flex justify-between">
                 <div className="w-[48%]">
                   <InputTitle title="Zoom Client Secret Key" />
                   <Field name="secret_key">
@@ -109,7 +108,7 @@ const ZoomMeetingCard = () => {
                   <ErrorMessage
                     name="secret_key"
                     component="div"
-                    className="text-red-500 text-xs"
+                    className="text-xs text-red-500"
                   />
                 </div>
               </div>

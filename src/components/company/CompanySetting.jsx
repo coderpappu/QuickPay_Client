@@ -16,8 +16,6 @@ const CompanySettingCard = () => {
 
   const [selected, setSelected] = useState("1");
 
-  console.log(setting);
-
   const [overtime, setOvertime] = useState({
     overtime_status: false,
     overtime_min: "00", // Default value

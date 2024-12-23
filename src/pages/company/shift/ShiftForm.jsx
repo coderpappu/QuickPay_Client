@@ -1,15 +1,14 @@
+import { Form, Formik } from "formik";
+import React from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import formValidate from "../../../components/validationSchmea/UserValidation";
 import InputField from "../../../components/user/InputField";
+import ShiftValidate from "../../../components/validationSchmea/shiftValidation";
 import {
   useAddShiftMutation,
   useGetCompanyIdQuery,
   useUpdateShiftMutation,
 } from "../../../features/api";
-import toast, { Toaster } from "react-hot-toast";
-import ShiftValidate from "../../../components/validationSchmea/shiftValidation";
-import React from "react";
 
 const ShiftForm = ({ shiftData }) => {
   const [shiftAdd, { data, isLoading, isError, error }] = useAddShiftMutation();
@@ -35,8 +34,6 @@ const ShiftForm = ({ shiftData }) => {
           company_id: companyId,
         }).unwrap();
 
-        // console.log(data);
-
         toast.success("Shift successfully added");
         navigate("/company/shift/list");
       } catch (error) {
@@ -52,14 +49,14 @@ const ShiftForm = ({ shiftData }) => {
         toast.success("Successfully updated");
         navigate("/company/shift/list");
       } catch (error) {
-        console.error(error.message);
+        toast.error(error?.data?.message);
       } finally {
         setSubmitting(false);
       }
     }
   };
   return (
-    <div className="py-4 md:w-full lg:w-[400px]  m-auto">
+    <div className="m-auto py-4 md:w-full lg:w-[400px]">
       <Formik
         initialValues={{
           name: shiftData?.name,
@@ -98,7 +95,7 @@ const ShiftForm = ({ shiftData }) => {
             />
 
             <button
-              className="px-10 py-2 lg:px-16 lg:py-3 bg-[#61638A] rounded-md text-white mt-4"
+              className="mt-4 rounded-md bg-[#61638A] px-10 py-2 text-white lg:px-16 lg:py-3"
               type="submit"
               disabled={isSubmitting}
             >

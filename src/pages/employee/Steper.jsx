@@ -68,7 +68,7 @@
 //   };
 
 //   const handleSubmit = () => {
-//     console.log("Employee Data Submitted:", formData);
+//
 //     // Here you would typically handle form submission (e.g., send data to an API)
 //   };
 

@@ -24,8 +24,6 @@ const CompanyPofile = () => {
   const { id } = useParams();
   const [selected, setSelected] = useState("1");
 
-  console.log(selected);
-
   // handle function for button state
   const handleSelect = (id) => {
     setSelected(id);
@@ -35,8 +33,6 @@ const CompanyPofile = () => {
   const { data: companyId } = useGetCompanyIdQuery();
   const { data: brandDetails } = useGetbrandQuery(companyId);
   const { data: emailData } = useGetEmailSettingQuery(companyId);
-
-  console.log();
 
   let content = null;
   if (isLoading && !isError) content = "Loading...";

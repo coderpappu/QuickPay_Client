@@ -46,8 +46,6 @@ const LeaveTypeForm = ({ onClose }) => {
   const { data: leaveType, isLoading: isWeekendLoading } =
     useGetLeaveTypeDetailsQuery(id, { skip: !id });
 
-  console.log("Leave Data: ", leaveType);
-
   useEffect(() => {
     if (leaveType?.data) {
       setInitialValues({

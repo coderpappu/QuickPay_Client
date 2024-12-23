@@ -15,7 +15,7 @@
 // // Listen for changes in localStorage
 // window.addEventListener("storage", function (event) {
 //   if (event.key === "companyId" && event.newValue === null) {
-//     console.log("companyId has been removed from localStorage.");
+
 //     companyId = null;
 //     // You can add additional logic here if needed
 //   }
