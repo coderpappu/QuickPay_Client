@@ -87,6 +87,13 @@ const EmployeeLoanList = () => {
             </div>
 
             <div className="w-[8%] dark:text-white">
+              <h3>{loan?.Employee?.employeeId}</h3>
+            </div>
+            <div className="w-[8%] dark:text-white">
+              <h3>{loan?.Employee?.name}</h3>
+            </div>
+
+            <div className="w-[8%] dark:text-white">
               <h3>{loan.LoanType?.name}</h3>
             </div>
 
@@ -136,6 +143,12 @@ const EmployeeLoanList = () => {
           <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
             <div className="w-[3%] dark:text-white">
               <h3>SL</h3>
+            </div>
+            <div className="w-[8%] dark:text-white">
+              <h3>Employee ID</h3>
+            </div>
+            <div className="w-[8%] dark:text-white">
+              <h3>Employee Name</h3>
             </div>
 
             <div className="w-[8%] dark:text-white">

@@ -17,6 +17,7 @@ const loanSchema = Yup.object().shape({
 });
 
 const EmployeeLoanForm = ({ selectId, setIsPopupOpen }) => {
+  
   const { data: companyId } = useGetCompanyIdQuery();
   const { data: loanTypes } = useGetLoanTypeListQuery(companyId);
   const [applyLoan] = useApplyLoanMutation();

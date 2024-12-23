@@ -1060,11 +1060,10 @@ export const apiSlice = createApi({
 
     getAppliedLoanDetails: builder.query({
       query: (id) => ({
-        url: `/loan/type/details`,
-        params: { id },
+        url: `/loan/application/employee/${id}`,
       }),
 
-      providesTags: ["loanType"],
+      providesTags: ["loanApply"],
     }),
 
     deleteAppliedLoan: builder.mutation({
