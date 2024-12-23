@@ -61,6 +61,7 @@ import SectionSettings from "./pages/section/SectionSettings";
 import LoginPage from "./pages/user/LoginPage";
 import ProfileUpdate from "./pages/user/ProfileUpdate";
 import RegistraionPage from "./pages/user/RegistraionPage";
+import Users from "./pages/user/UserList";
 import CompanyPrivateRoute from "./privateRoute/CompanyPrivateRoute";
 import PrivateRoute from "./privateRoute/PrivateRoute";
 import ProfileSkeleton from "./skeletons/ProfileSkeleton";
@@ -73,6 +74,8 @@ function App() {
         <Route path="/" element={<PrivateRoute />}>
           <Route path="/" element={<Layout />}>
             {/* employee dashboard route  */}
+            <Route path="/users" element={<Users />} />
+
             <Route path="employee/profile" element={<EmployeeProfile />} />
 
             <Route

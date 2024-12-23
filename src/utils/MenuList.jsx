@@ -118,7 +118,7 @@ const adminMenuItems = [
     title: "User Management",
     icon: <LuUser2 size={19} />,
     subMenu: [
-      { title: "User", link: "/add-product" },
+      { title: "User", link: "/users" },
       { title: "Role", link: "/manage-products" },
     ],
   },

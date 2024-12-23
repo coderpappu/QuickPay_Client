@@ -37,9 +37,10 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({
     // user Related EndPoints
     getUsers: builder.query({
-      query: () => "/users",
+      query: () => "/user/getusers",
       providesTags: ["User"],
     }),
+
     loginUser: builder.mutation({
       query: (credentials) => ({
         url: "/user/login",
@@ -1649,7 +1650,11 @@ export const {
   useLoginUserMutation,
   useRegisterUserMutation,
   useGetUserQuery,
+  
   useUpdateUserMutation,
+
+
+
   useGetCompaniesQuery,
   useGetCompanyDetailsQuery,
   useCreateNewCompanyMutation,
