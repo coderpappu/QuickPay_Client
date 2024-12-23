@@ -1085,6 +1085,15 @@ export const apiSlice = createApi({
       invalidatesTags: ["loanApply"],
     }),
 
+    // Loan Admin
+    getCompanyLoanList: builder.query({
+      query: (companyId) => ({
+        url: `/loan/company/application/employee/list`,
+        params: { companyId },
+      }),
+      providesTags: ["loanApply"],
+    }),
+
     // Company Setting System
 
     getRootSetting: builder.query({
@@ -1789,6 +1798,7 @@ export const {
   useGetAppliedLoanDetailsQuery,
   useDeleteAppliedLoanMutation,
   useUpdateAppliedLoanMutation,
+  useGetCompanyLoanListQuery,
 
   // applicationFormat
   useCreateLeaveApplicationFormatMutation,

@@ -58,9 +58,7 @@ const adminMenuItems = [
 
       {
         title: "Loan Management",
-        subMenu: [
-          { title: "Loan Application", link: "/company/leave/application" },
-        ],
+        subMenu: [{ title: "Loan Application", link: "/admin/employee/loan" }],
       },
       {
         title: "Performance Setup",

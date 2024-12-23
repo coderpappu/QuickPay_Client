@@ -46,8 +46,10 @@ import LeaveTypeForm from "./pages/leave/LeaveTypeForm";
 import LeaveTypeList from "./pages/leave/LeaveTypeList";
 import NotFound from "./pages/NotFound";
 
-import EmployeeLoanForm from "./components/hrm/loan/Employee_Loan/EmployeeLoanForm";
+import AdminEmployeeLoanForm from "./components/hrm/loan/Employee_Loan/Admin/EmployeeLoanForm";
+import AdminEmployeeLoanList from "./components/hrm/loan/Employee_Loan/Admin/EmployeeLoanList";
 import EmployeeLoanList from "./components/hrm/loan/Employee_Loan/EmployeeLoanList";
+
 import PaySlipCard from "./components/payroll/payslip/PaySlipCard";
 import BiometricAttendnaces from "./pages/attendnace/BiometricAttendnaces";
 import GradeForm from "./pages/payroll/grade/gradeForm";
@@ -182,7 +184,16 @@ function App() {
               <Route path="/employee/loan" element={<EmployeeLoanList />} />
               <Route
                 path="/employee/loan/apply"
-                element={<EmployeeLoanForm />}
+                element={<AdminEmployeeLoanForm />}
+              />
+
+              <Route
+                path="/admin/employee/loan"
+                element={<AdminEmployeeLoanList />}
+              />
+              <Route
+                path="/admin/employee/loan/apply"
+                element={<AdminEmployeeLoanForm />}
               />
               <Route path="/account-settings" element={<Application />} />
               {/* letter and application format  */}

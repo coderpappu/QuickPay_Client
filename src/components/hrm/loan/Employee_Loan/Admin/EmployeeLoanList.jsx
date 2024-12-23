@@ -6,15 +6,15 @@ import { PiEyeLight } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import {
   useDeleteAppliedLoanMutation,
-  useGetApplyLoanListQuery,
   useGetCompanyIdQuery,
-} from "../../../../features/api";
+  useGetCompanyLoanListQuery,
+} from "../../../../../features/api";
 
-import ConfirmDialog from "../../../../helpers/ConfirmDialog";
-import CardSkeleton from "../../../../skeletons/card";
-import ErrorMessage from "../../../../utils/ErrorMessage";
-import BrandCardWrapper from "../../../company/BrandCardWrapper";
-import { HrmSetupCardHeader } from "../../../company/SettingCardHeader";
+import ConfirmDialog from "../../../../../helpers/ConfirmDialog";
+import CardSkeleton from "../../../../../skeletons/card";
+import ErrorMessage from "../../../../../utils/ErrorMessage";
+import BrandCardWrapper from "../../../../company/BrandCardWrapper";
+import { HrmSetupCardHeader } from "../../../../company/SettingCardHeader";
 import LoanApplicationForm from "./EmployeeLoanForm";
 
 const EmployeeLoanList = () => {
@@ -33,7 +33,7 @@ const EmployeeLoanList = () => {
     isLoading,
     isError,
     error,
-  } = useGetApplyLoanListQuery(companyId);
+  } = useGetCompanyLoanListQuery(companyId);
 
   //   pappudey.xceed@wegmail.com
   //password
