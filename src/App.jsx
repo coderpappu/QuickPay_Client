@@ -62,6 +62,7 @@ import LoginPage from "./pages/user/LoginPage";
 import ProfileUpdate from "./pages/user/ProfileUpdate";
 import RegistraionPage from "./pages/user/RegistraionPage";
 import Users from "./pages/user/UserList";
+import UserProfile from "./pages/user/UserProfile";
 import CompanyPrivateRoute from "./privateRoute/CompanyPrivateRoute";
 import PrivateRoute from "./privateRoute/PrivateRoute";
 import ProfileSkeleton from "./skeletons/ProfileSkeleton";
@@ -75,6 +76,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             {/* employee dashboard route  */}
             <Route path="/users" element={<Users />} />
+            <Route path="/user/profile/:id" element={<UserProfile />} />
 
             <Route path="employee/profile" element={<EmployeeProfile />} />
 

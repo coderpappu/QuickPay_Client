@@ -62,6 +62,14 @@ export const apiSlice = createApi({
       query: () => "/user/getuser",
       providesTags: ["User"],
     }),
+
+    getUserDetails: builder.query({
+      query: (id) => ({
+        url: `/user/getuser/details/${id}`,
+      }),
+      providesTags: ["User"],
+    }),
+
     updateUser: builder.mutation({
       query: ({ id, ...credentials }) => ({
         url: `/user/update/${id}`,
@@ -1659,6 +1667,7 @@ export const {
   useRegisterUserMutation,
   useGetUserQuery,
   useDeleteUserMutation,
+  useGetUserDetailsQuery,
 
   useUpdateUserMutation,
 

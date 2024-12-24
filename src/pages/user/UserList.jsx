@@ -24,17 +24,21 @@ const Users = () => {
   const handleOpen = (id) => {
     setIsPopupOpen(true);
   };
+
   const handleEditOpen = (data) => {
     setIsEditPopupOpen(true);
     setUser(data);
   };
+
   const onClose = () => {
     setIsPopupOpen(false);
   };
+
   const onEditClose = () => {
     setIsEditPopupOpen(false);
   };
   const { data: usersData, isLoading, isError, error } = useGetUsersQuery();
+
   const [userDelete] = useDeleteUserMutation();
 
   const handleUserDelete = async (id) => {
@@ -80,14 +84,14 @@ const Users = () => {
         {users?.map((user, index) => (
           <>
             <div
-              key={user?.id}
+              key={user.id}
               className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
             >
               <div className="w-[5%] dark:text-white">
                 <h3>{++index}</h3>
               </div>
               <div className="w-[15%] dark:text-white">
-                <Link to={`/company/employee/details/${user?.id}`}>
+                <Link to={`/user/profile/${user?.id}`}>
                   <div className="w-[60%] rounded-md border border-dark-heading-color px-2 py-2 text-center text-dark-heading-color transition-all duration-150 hover:bg-button-bg hover:text-white">
                     <h3>{user?.first_name + " " + user?.last_name}</h3>
                   </div>
