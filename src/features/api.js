@@ -78,7 +78,14 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["User"],
     }),
-
+    updatePassword: builder.mutation({
+      query: (credentials) => ({
+        url: `/user/update/password`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["User"],
+    }),
     deleteUser: builder.mutation({
       query: (id) => ({
         url: `/user/deleteuser/${id}`,
@@ -1668,7 +1675,7 @@ export const {
   useGetUserQuery,
   useDeleteUserMutation,
   useGetUserDetailsQuery,
-
+  useUpdatePasswordMutation,
   useUpdateUserMutation,
 
   useGetCompaniesQuery,

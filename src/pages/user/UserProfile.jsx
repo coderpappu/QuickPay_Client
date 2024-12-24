@@ -20,8 +20,6 @@ const UserProfile = () => {
 
   const { data: userData, isLoading, isError } = useGetUserDetailsQuery(id);
 
-  console.log(userData);
-
   const [selected, setSelected] = useState("1");
   // handle function for button state
   const handleSelect = (id) => {
@@ -70,14 +68,7 @@ const UserProfile = () => {
             </h3>
           </div>
         </div>
-        <div className="w-[50%] border-l-2 border-dotted border-[#cacaca]">
-          {/* <InfoBox title="Phone" data={employeeDetails?.phone} />
-          <InfoBox title="Email" data={employeeDetails?.email} />
-          <InfoBox title="BirthDay" data={employeeDetails?.birth_date} />
-          <InfoBox title="Address" data={employeeDetails?.present_address} />
-          <InfoBox title="Gender" data={employeeDetails?.gender} />
-          <InfoBox title="Reports to " data="Sarwar " /> */}
-        </div>
+        <div className="w-[50%] border-l-2 border-dotted border-[#cacaca]"></div>
       </div>
 
       <div className="flex w-full flex-wrap rounded-md bg-white dark:bg-dark-card">
@@ -85,7 +76,7 @@ const UserProfile = () => {
           button_id="1"
           isActive={selected == "1"}
           handleSelect={handleSelect}
-          title={"About"}
+          title={"Password"}
         />
       </div>
 

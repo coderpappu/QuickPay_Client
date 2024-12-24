@@ -1,14 +1,17 @@
 /* eslint-disable react/prop-types */
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import * as Yup from "yup";
 import InputTitle from "../../components/company/InputTitle";
+import { useUpdatePasswordMutation } from "../../features/api";
 3;
 const PasswordChange = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [updatePassword] = useUpdatePasswordMutation();
 
   const validationSchema = Yup.object().shape({
     oldPassword: Yup.string().required("Old password is required"),
@@ -20,9 +23,14 @@ const PasswordChange = () => {
       .required("Confirm password is required"),
   });
 
-  const handleSubmit = (values) => {
+  const handleSubmit = async (values) => {
     // Handle form submission
-    console.log(values);
+    try {
+      await updatePassword(values).unwrap();
+      toast.success("User password successfully updated!");
+    } catch (error) {
+      toast.error("User password update failed!");
+    }
   };
 
   return (
@@ -66,7 +74,8 @@ const PasswordChange = () => {
                 type={showNewPassword ? "text" : "password"}
                 placeholder="New Password"
                 className="h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
-              />``
+              />
+
               <button
                 type="button"
                 onClick={() => setShowNewPassword(!showNewPassword)}
