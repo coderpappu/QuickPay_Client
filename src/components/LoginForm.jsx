@@ -19,15 +19,9 @@ const LoginForm = ({ handleLogin }) => {
   };
 
   return (
-    <div className="w-full md:w-[50%]  h-full pt-6 xl:pt-10 px-3 sm:px-10 md:px-5">
-      <p className="absolute right-8 lg:right-3 xl:right-16 text-[#a8a8a8]">
-        Don’t have an account?{" "}
-        <Link to="/registration" className="text-[#61638A]">
-          Sign up now
-        </Link>
-      </p>
-      <h2 className="text-2xl font-semibold pt-16 mb-6">
-        Sign in to <label className="text-[#3686FF] font-bold">Employee</label>{" "}
+    <div className="bg-blue h-full w-full px-3 pt-6 sm:px-10 md:w-[50%] md:px-5 xl:pt-10">
+      <h2 className="mb-6 pt-16 text-2xl font-semibold">
+        Sign in to <label className="font-bold text-[#4153EF]">Admin</label>{" "}
       </h2>
 
       <div className="py-4 md:w-full lg:w-[400px]">
@@ -58,14 +52,14 @@ const LoginForm = ({ handleLogin }) => {
         >
           {({ isSubmitting }) => (
             <Form>
-              <label htmlFor="" className="text-md text-[#a8a8a8]">
+              <label htmlFor="" className="text-md text-slate-400">
                 Username or Email Address
               </label>
               <Field
                 type="email"
                 name="email"
                 placeholder="coder@gmail.com"
-                className="w-[100%] h-12 border-1 border-[#3686FF]	rounded-[5px] mt-1 mb-3 px-1"
+                className="border-1 mb-3 mt-1 h-12 w-[100%] rounded-[5px] border-[#3686FF] bg-slate-100 px-1 text-slate-600"
               />
               <ErrorMessage
                 name="email"
@@ -80,11 +74,11 @@ const LoginForm = ({ handleLogin }) => {
                   type={type}
                   name="password"
                   autoComplete="current-password"
-                  className="w-[100%] h-12 border-1 border-[#3686FF]	rounded-[5px] mt-1 mb-3 px-1"
+                  className="border-1 mb-3 mt-1 h-12 w-[100%] rounded-[5px] border-[#3686FF] bg-slate-100 px-1 text-slate-600"
                   placeholder="12345678"
                 />
                 <span
-                  className="flex justify-around items-center"
+                  className="flex cursor-pointer items-center justify-around"
                   onClick={handleToggle}
                 >
                   {type !== "password" ? (
@@ -103,17 +97,20 @@ const LoginForm = ({ handleLogin }) => {
               <div className="flex flex-wrap justify-between py-3">
                 <div>
                   {" "}
-                  <input type="checkbox" className="border-[#a8a8a8]" />{" "}
-                  <label className="text-sm lg:text-lg text-[#a8a8a8]">
+                  <input
+                    type="checkbox"
+                    className="border-[#a8a8a8] bg-slate-100"
+                  />{" "}
+                  <label className="text-sm text-[#a8a8a8] lg:text-lg">
                     Keep me logged in
                   </label>
                 </div>{" "}
-                <Link to="#" className="text-[#61638A] text-sm lg:text-lg">
+                <Link to="#" className="text-sm text-[#61638A] lg:text-lg">
                   Forgot Password
                 </Link>
               </div>
               <button
-                className="px-10 py-2 lg:px-16 lg:py-3 bg-[#334155] rounded-md text-white mt-4"
+                className="mt-4 w-full rounded-md bg-[#4153EF] px-10 py-2 text-white hover:bg-blue-600 lg:px-16 lg:py-3"
                 type="submit"
                 disabled={isSubmitting}
               >
@@ -122,12 +119,6 @@ const LoginForm = ({ handleLogin }) => {
             </Form>
           )}
         </Formik>
-        <Link
-          to="/employee/login"
-          className="text-[#ff1616] text-sm lg:text-lg"
-        >
-          Employee Login
-        </Link>
       </div>
     </div>
   );

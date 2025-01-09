@@ -4,8 +4,10 @@ let companyId = null;
 
 export const apiSlice = createApi({
   reducerPath: "api",
+
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:3000/api",
+
     prepareHeaders: (headers, { getState }) => {
       const token = localStorage.getItem("token");
       // getState().auth.token ||
@@ -16,6 +18,7 @@ export const apiSlice = createApi({
       return headers;
     },
   }),
+
   tagTypes: [
     "User",
     "Company",
@@ -99,13 +102,29 @@ export const apiSlice = createApi({
       query: () => "/company/getcompany",
       providesTags: ["Company"],
     }),
+
+    getActiveCompany: builder.query({
+      query: () => "/company/activecompany",
+      providesTags: ["Company"],
+    }),
+
     getCompanyDetails: builder.query({
       query: (id) => `/company/getcompanydetails/${id}`,
       providesTags: ["Company"],
     }),
+
     createNewCompany: builder.mutation({
       query: (credentials) => ({
         url: "/company/createcompany",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["Company"],
+    }),
+
+    createActiveCompany: builder.mutation({
+      query: (credentials) => ({
+        url: "/company/activecompany",
         method: "POST",
         body: credentials,
       }),
@@ -1951,4 +1970,6 @@ export const {
 
   useGetEmployeeSalarySheetQuery,
   useBulkEmployeePaymentMutation,
+  useGetActiveCompanyQuery,
+  useCreateActiveCompanyMutation,
 } = apiSlice;

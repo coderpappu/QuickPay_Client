@@ -8,9 +8,10 @@ import { Link } from "react-router-dom";
 import BrandCardWrapper from "../../components/company/BrandCardWrapper";
 
 import {
+  useCreateActiveCompanyMutation,
   useDeleteCompanyMutation,
+  useGetActiveCompanyQuery,
   useGetCompaniesQuery,
-  useGetCompanyIdQuery,
   useSetCompanyIdMutation,
 } from "../../features/api";
 
@@ -23,13 +24,15 @@ const CompanyList = () => {
   const [deleteCompany] = useDeleteCompanyMutation();
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [leaveTypeId, setleaveTypeId] = useState(null);
+  const [addActiveCompany] = useCreateActiveCompanyMutation();
+  const { data: activeCompanyId } = useGetActiveCompanyQuery();
 
   const handleOpen = (id) => {
     setIsPopupOpen(true);
     setleaveTypeId(id);
   };
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = activeCompanyId?.data?.company_id;
 
   const {
     data: companyData,
@@ -42,7 +45,7 @@ const CompanyList = () => {
 
   // Effect to set company ID from local storage on component mount
   useEffect(() => {
-    const storedCompanyId = localStorage.getItem("companyId");
+    const storedCompanyId = activeCompanyId?.data?.company_id;
     if (storedCompanyId) {
       setCompanyId(storedCompanyId)
         .unwrap()
@@ -52,26 +55,12 @@ const CompanyList = () => {
     }
   }, [setCompanyId]);
 
-  const handleActivate = (id) => {
-    setCompanyId(id)
-      .unwrap()
-      .then(() => {
-        localStorage.setItem("companyId", id);
-      })
-      .catch((error) => {
-        console.error("Failed to set company ID:", error);
-      });
+  const handleActivate = async (id) => {
+    await addActiveCompany({ company_id: id });
   };
 
-  const handleDeactivate = () => {
-    setCompanyId(null)
-      .unwrap()
-      .then(() => {
-        localStorage.removeItem("companyId");
-      })
-      .catch((error) => {
-        console.error("Failed to clear company ID:", error);
-      });
+  const handleDeactivate = async () => {
+    await addActiveCompany({ company_id: "00" });
   };
 
   // Render loading or error states
@@ -104,7 +93,7 @@ const CompanyList = () => {
         ),
         {
           duration: Infinity,
-        }
+        },
       );
 
     confirm();
@@ -123,55 +112,55 @@ const CompanyList = () => {
           <>
             <div
               key={company?.id}
-              className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
+              className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
             >
-              <div className="dark:text-white w-[5%]">
+              <div className="w-[5%] dark:text-white">
                 <h3>{++index}</h3>
               </div>
 
-              <div className="dark:text-white w-[15%]">
+              <div className="w-[15%] dark:text-white">
                 <h3>{company?.company_name}</h3>
               </div>
 
-              <div className="dark:text-white w-[13%]">
+              <div className="w-[13%] dark:text-white">
                 <h3>{company?.phone_number}</h3>
               </div>
-              <div className="dark:text-white w-[13%]">
+              <div className="w-[13%] dark:text-white">
                 <h3>{company?.company_registration_no}</h3>
               </div>
-              <div className="dark:text-white w-[13%]">
+              <div className="w-[13%] dark:text-white">
                 <h3>{company?.country}</h3>
               </div>
-              <div className="dark:text-white w-[13%]">
+              <div className="w-[13%] dark:text-white">
                 <h3>{company?.city}</h3>
               </div>
-              <div className="dark:text-white w-[10%]">
+              <div className="w-[10%] dark:text-white">
                 {company.id === companyId ? (
                   <button
-                    className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-3 rounded text-sm w-28"
+                    className="w-28 rounded bg-green-500 px-3 py-1 text-sm font-bold text-white hover:bg-green-600"
                     onClick={handleDeactivate}
                   >
                     Deactivate
                   </button>
                 ) : (
                   <button
-                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded text-sm w-28"
+                    className="w-28 rounded bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600"
                     onClick={() => handleActivate(company.id)}
                   >
                     Activate
                   </button>
                 )}
               </div>
-              <div className="dark:text-white w-[10%]">
+              <div className="w-[10%] dark:text-white">
                 <div className="flex flex-wrap justify-start gap-2">
                   {/* edit button  */}
-                  <div className="w-8 h-8 bg-orange-400 rounded-sm p-2 flex justify-center items-center cursor-pointer">
+                  <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-orange-400 p-2">
                     <Link to={`/company/details/${company.id}`}>
                       <VscEye size={20} />
                     </Link>
                   </div>
 
-                  <div className="w-8 h-8 bg-green-400 rounded-sm p-2 flex justify-center items-center cursor-pointer">
+                  <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-400 p-2">
                     <Link to={`/company/update/${company.id}`}>
                       <CiEdit size={20} />
                     </Link>
@@ -180,7 +169,7 @@ const CompanyList = () => {
                   {/* delete button  */}
                   <div
                     onClick={() => handleDeleteCompany(company?.id)}
-                    className="w-8 h-8 bg-red-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center"
                   >
                     <AiOutlineDelete size={20} />
                   </div>
@@ -195,7 +184,7 @@ const CompanyList = () => {
   return (
     <>
       <BrandCardWrapper>
-        <div className="flex justify-between items-center border-b border-dark-box border-opacity-5 dark:border-dark-border-color dark:border-opacity-5 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-dark-box border-opacity-5 px-6 py-4 dark:border-dark-border-color dark:border-opacity-5">
           <div>
             <h3 className="text-base leading-6 dark:text-dark-heading-color">
               Company List
@@ -204,7 +193,7 @@ const CompanyList = () => {
           </div>
 
           <div
-            className="w-8 h-8 bg-green-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-500 p-2 text-center"
             onClick={() => handleOpen()}
           >
             <Link to="/company/create">
@@ -214,32 +203,32 @@ const CompanyList = () => {
         </div>
         <div className="px-6 py-3">
           {/* header  */}
-          <div className="w-full bg-light-bg dark:bg-dark-box rounded-sm py-3 px-3 flex flex-wrap justify-between text-sm">
-            <div className="dark:text-white w-[5%]">
+          <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
+            <div className="w-[5%] dark:text-white">
               <h3>SL</h3>
             </div>
-            <div className="dark:text-white w-[15%]">
+            <div className="w-[15%] dark:text-white">
               <h3>Name</h3>
             </div>
-            <div className="dark:text-white w-[13%]">
+            <div className="w-[13%] dark:text-white">
               <h3>Phone</h3>
             </div>
 
-            <div className="dark:text-white w-[13%]">
+            <div className="w-[13%] dark:text-white">
               <h3>Reg. No</h3>
             </div>
 
-            <div className="dark:text-white w-[13%]">
+            <div className="w-[13%] dark:text-white">
               <h3>Country</h3>
             </div>
-            <div className="dark:text-white w-[13%]">
+            <div className="w-[13%] dark:text-white">
               <h3>City</h3>
             </div>
 
-            <div className="dark:text-white w-[10%]">
+            <div className="w-[10%] dark:text-white">
               <h3>Status</h3>
             </div>
-            <div className="dark:text-white w-[10%]">
+            <div className="w-[10%] dark:text-white">
               <h3>Action</h3>
             </div>
           </div>

@@ -9,7 +9,6 @@ import {
 } from "@material-tailwind/react";
 import {
   $createParagraphNode,
-  $getRoot,
   $getSelection,
   $isRangeSelection,
 } from "lexical";
@@ -55,11 +54,11 @@ import {
 import { $isAtNodeEnd, $wrapNodes } from "@lexical/selection";
 import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
 import {
-  $createTextNode,
   $getNodeByKey,
   FORMAT_TEXT_COMMAND,
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
+
 import SettingCardFooter from "./SettingCardFooter";
 
 const LowPriority = 1;
@@ -94,7 +93,7 @@ function Divider() {
 function Placeholder() {
   return (
     <div className="pointer-events-none absolute left-2.5 top-4 inline-block select-none overflow-hidden text-base font-normal text-gray-400">
-      Play around with the editor...
+      Play around with the editor.....
     </div>
   );
 }
@@ -252,12 +251,12 @@ function BlockOptionsDropdownList({
 
   return (
     <List
-      className="absolute z-[5] flex flex-col gap-0.5 rounded-lg border border-blue-gray-50 bg-white p-1 "
+      className="border-blue-gray-50 absolute z-[5] flex flex-col gap-0.5 rounded-lg border bg-white p-1"
       ref={dropDownRef}
     >
       <ListItem
         selected={blockType === "paragraph"}
-        className="rounded-md py-2 "
+        className="rounded-md py-2"
         onClick={formatParagraph}
       >
         <ListItemPrefix>
@@ -662,8 +661,8 @@ function FloatingLinkEditor({ editor }) {
           updateLinkEditor();
           return true;
         },
-        LowPriority
-      )
+        LowPriority,
+      ),
     );
   }, [editor, updateLinkEditor]);
 
@@ -712,7 +711,7 @@ function FloatingLinkEditor({ editor }) {
         />
       ) : (
         <>
-          <div className="relative box-border flex w-full items-center justify-between rounded-lg border-0 bg-white px-3 py-2 font-[inherit] text-gray-900 ">
+          <div className="relative box-border flex w-full items-center justify-between rounded-lg border-0 bg-white px-3 py-2 font-[inherit] text-gray-900">
             <Typography
               as="a"
               variant="small"
@@ -822,8 +821,8 @@ function ToolbarPlugin() {
           updateToolbar();
           return false;
         },
-        LowPriority
-      )
+        LowPriority,
+      ),
     );
   }, [editor, updateToolbar]);
 
@@ -839,7 +838,7 @@ function ToolbarPlugin() {
         }
       });
     },
-    [editor, selectedElementKey]
+    [editor, selectedElementKey],
   );
 
   const insertLink = useCallback(() => {
@@ -852,7 +851,7 @@ function ToolbarPlugin() {
 
   return (
     <div
-      className="m-1 flex items-center gap-0.5 rounded-lg bg-gray-100 dark:bg-dark-card dark:text-white p-1"
+      className="m-1 flex items-center gap-0.5 rounded-lg bg-gray-100 p-1 dark:bg-dark-card dark:text-white"
       ref={toolbarRef}
     >
       {supportedBlockTypes.has(blockType) && (
@@ -887,7 +886,7 @@ function ToolbarPlugin() {
                 toolbarRef={toolbarRef}
                 setShowBlockOptionsDropDown={setShowBlockOptionsDropDown}
               />,
-              document.body
+              document.body,
             )}
           <Divider />
         </>
@@ -1023,18 +1022,20 @@ function ToolbarPlugin() {
     </div>
   );
 }
-const initialEditorState = () => {
-  const root = $getRoot();
-  const paragraph = $createParagraphNode();
-  paragraph.append($createTextNode("This is a sample text."));
-  root.append(paragraph);
-};
+// Get editor initial state (e.g. loaded from backend)
+
+// const initialEditorState = () => {
+//   const root = $getRoot();
+//   const paragraph = $createParagraphNode();
+//   paragraph.append($createTextNode("This is the initial text in the editor."));
+//   root.append(paragraph);
+// };
 const editorConfig = {
   namespace: "MyEditor",
   onError(error) {
     throw error;
   },
-  initialEditorState: initialEditorState,
+  initialEditorState: null,
   nodes: [
     HeadingNode,
     ListNode,
@@ -1069,8 +1070,8 @@ function SaveOnClickPlugin({ onSave }) {
 }
 
 export default function TextEditor({ checkSave }) {
-  const [savedData, setSavedData] = useState(null);
-  const [initialContent, setInitialContent] = useState();
+  const [savedData, setSavedData] = useState("dsf");
+  const [initialContent, setInitialContent] = useState("sdf");
 
   // Handle save and display editor state
   const handleSave = (editorState) => {
@@ -1080,29 +1081,24 @@ export default function TextEditor({ checkSave }) {
     checkSave(JSON.stringify(editorState));
   };
 
-  const initialEditorState = () => {
-    if (initialContent) {
-      return initialContent; // Return fetched content as initial state
-    }
-    // Default initial state if no content is fetched
-    return {}; // Adjust according to your default structure
-  };
-
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      <div className="relative mx-auto overflow-hidden my-5 w-full max-w-full rounded-xl border border-gray-300 dark:border-dark-border-color dark:border-opacity-5 bg-white dark:bg-dark-box text-left font-normal leading-5 text-gray-900">
+      <div className="relative mx-auto my-5 w-full max-w-full overflow-hidden rounded-xl border border-gray-300 bg-white text-left font-normal leading-5 text-gray-900 dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-box">
         <ToolbarPlugin />
+
         <div className="relative rounded-b-lg border-opacity-5 bg-white dark:bg-dark-box dark:text-dark-text-color">
           <RichTextPlugin
             contentEditable={
-              <ContentEditable className="lexical h-[280px] overflow-y-scroll resize-none px-2.5 py-4 text-base caret-gray-900 outline-none" />
+              <ContentEditable className="lexical h-[280px] resize-none overflow-y-scroll px-2.5 py-4 text-base caret-gray-900 outline-none" />
             }
             placeholder={<Placeholder />}
             ErrorBoundary={null}
           />
+
           <AutoFocusPlugin />
           <ListPlugin />
           <LinkPlugin />
+
           {/* SaveOnClickPlugin to save the editor content when button is clicked */}
         </div>
       </div>

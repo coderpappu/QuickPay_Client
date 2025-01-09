@@ -37,3 +37,7 @@
 .lexical code {
   @apply rounded-md bg-gray-900/[0.1] px-1 py-0.5 text-sm font-normal text-gray-900;
 }
+:root,
+[data-theme] {
+  background-color: rgb(238, 238, 238);
+}
