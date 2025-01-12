@@ -20,7 +20,7 @@ const Step2Schema = Yup.object({
   birth_date: Yup.date().required("Birth Date is required"),
   joining_date: Yup.date().required("Joining Date is required"),
   terminate_date: Yup.date().notRequired(),
-  reference: Yup.string().required("Reference is required"),
+
   status: Yup.string().required("Status is required"),
 });
 
@@ -48,6 +48,10 @@ const Step4Schema = Yup.object({
     .required("Shift is required")
     .notOneOf([""], "Please select a valid option"),
   device_id: Yup.string().notRequired("Device ID "),
+  branchId: Yup.string()
+    .required("Section is required")
+    .notOneOf([""], "Please select a valid option"),
+
   image: Yup.mixed().notRequired(),
 });
 

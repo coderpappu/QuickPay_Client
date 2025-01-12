@@ -579,7 +579,7 @@ export const apiSlice = createApi({
         method: "POST",
         body: credentials,
       }),
-      invalidatesTags: ["leaveType"],
+      invalidatesTags: ["earnLeave"],
     }),
 
     employeeCreateLeave: builder.mutation({

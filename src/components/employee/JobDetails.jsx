@@ -6,9 +6,9 @@ import PersonalInfo from "../../components/employee/PersonalInfo";
 
 const JobDetails = ({ employeeDetails }) => {
   return (
-    <div className="w-full mt-5 mb-2 rounded-mde flex flex-wrap justify-between ">
-      <div className="w-[49%] relative p-4 bg-white dark:bg-dark-card rounded-md">
-        <h1 className="text-xl font-medium mb-4 dark:text-dark-heading-color">
+    <div className="rounded-mde mb-2 mt-5 flex w-full flex-wrap justify-between">
+      <div className="relative w-[49%] rounded-md bg-white p-4 dark:bg-dark-card">
+        <h1 className="mb-4 text-xl font-medium dark:text-dark-heading-color">
           Job Details{" "}
         </h1>
 
@@ -43,11 +43,11 @@ const JobDetails = ({ employeeDetails }) => {
         />
 
         <PersonalInfo
-          title="Grade"
-          data={employeeDetails?.Employeegrade[0]?.grade.name || "No Section"}
+          title="Branch"
+          data={employeeDetails?.EmployeeBranch[0]?.branch.name || "No Branch"}
         />
 
-        <div className="absolute right-1 top-2  w-[40px] cursor-pointer  h-[40px] flex flex-col justify-center align-middle items-center rounded-full bg-[#85858512] mr-2">
+        <div className="absolute right-1 top-2 mr-2 flex h-[40px] w-[40px] cursor-pointer flex-col items-center justify-center rounded-full bg-[#85858512] align-middle">
           <Link
           // to={`/company/update/${data._id}`}
           >

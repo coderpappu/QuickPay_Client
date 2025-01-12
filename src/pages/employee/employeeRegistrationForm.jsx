@@ -10,6 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import {
   useCreateNewEmployeeMutation,
+  useGetBranchListQuery,
   useGetCompanyIdQuery,
   useGetDepartmentsQuery,
   useGetDesignationsQuery,
@@ -41,6 +42,8 @@ const EmployeeRegistrationForm = () => {
   const { data: designations } = useGetDesignationsQuery(CompanyId);
   const { data: sections } = useGetSectionsQuery(CompanyId);
   const { data: shifts } = useGetShiftListQuery(CompanyId);
+  const { data: branchs } = useGetBranchListQuery(CompanyId);
+
   const [createEmployee] = useCreateNewEmployeeMutation();
   const [updateEmployee] = useUpdateEmployeeMutation();
 
@@ -85,6 +88,8 @@ const EmployeeRegistrationForm = () => {
     deviceUserId: employeeData?.data?.[0]?.deviceUserId || null,
     designationId:
       employeeData?.data?.[0]?.EmployeeDesignation?.[0]?.designation_id || "",
+    branchId: employeeData?.data?.[0]?.EmployeeBranch?.[0]?.branch_id || "",
+
     departmentId:
       employeeData?.data?.[0]?.EmployeeDepartment?.[0]?.department_id || "",
     sectionId: employeeData?.data?.[0]?.EmployeeSection?.[0]?.section_id || "",
@@ -167,6 +172,8 @@ const EmployeeRegistrationForm = () => {
                   employeeData?.data?.[0]?.EmployeeSection?.[0]?.id,
                 employeeShiftId:
                   employeeData?.data?.[0]?.EmployeeShift?.[0]?.id,
+                employeeBranchId:
+                  employeeData?.data?.[0]?.EmployeeBranch?.[0]?.id,
               }).unwrap();
               toast.success("Employee updated successfully");
             } else {
@@ -632,6 +639,34 @@ const EmployeeRegistrationForm = () => {
                   </Field>
                   <ErrorMessage
                     name="shiftId"
+                    component="div"
+                    className="mt-1 text-sm text-red-500"
+                  />
+                </div>
+
+                {/* branch  */}
+                <div>
+                  <label
+                    htmlFor="branchId"
+                    className="block text-sm font-medium text-gray-700 dark:text-dark-text-color"
+                  >
+                    Branch
+                  </label>
+                  <Field
+                    as="select"
+                    name="branchId"
+                    id="branchId"
+                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-box dark:text-dark-text-color"
+                  >
+                    <option value="">Select branch</option>
+                    {branchs?.data?.map((branch) => (
+                      <option key={branch.id} value={branch.id}>
+                        {branch.name}
+                      </option>
+                    ))}
+                  </Field>
+                  <ErrorMessage
+                    name="bran"
                     component="div"
                     className="mt-1 text-sm text-red-500"
                   />
