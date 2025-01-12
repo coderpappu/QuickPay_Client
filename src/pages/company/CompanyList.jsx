@@ -16,7 +16,6 @@ import {
 } from "../../features/api";
 
 import ConfirmDialog from "../../helpers/ConfirmDialog";
-import CardSkeleton from "../../skeletons/card";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import ErrorMessage from "../../utils/ErrorMessage";
 
@@ -25,7 +24,8 @@ const CompanyList = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [leaveTypeId, setleaveTypeId] = useState(null);
   const [addActiveCompany] = useCreateActiveCompanyMutation();
-  const { data: activeCompanyId } = useGetActiveCompanyQuery();
+  const { data: activeCompanyId, refetch: refetchActiveCompany } =
+    useGetActiveCompanyQuery();
 
   const handleOpen = (id) => {
     setIsPopupOpen(true);
@@ -46,6 +46,7 @@ const CompanyList = () => {
   // Effect to set company ID from local storage on component mount
   useEffect(() => {
     const storedCompanyId = activeCompanyId?.data?.company_id;
+
     if (storedCompanyId) {
       setCompanyId(storedCompanyId)
         .unwrap()
@@ -55,17 +56,25 @@ const CompanyList = () => {
     }
   }, [setCompanyId]);
 
-  const handleActivate = async (id) => {
-    await addActiveCompany({ company_id: id });
-  };
-
-  const handleDeactivate = async () => {
-    await addActiveCompany({ company_id: "00" });
+  const handleToggleActive = async (id) => {
+    try {
+      if (companyId === id) {
+        await addActiveCompany({ company_id: null }).unwrap();
+        toast.success("Company deactivated successfully");
+        setCompanyId(null); // Update the state to reflect the deactivation
+      } else {
+        await addActiveCompany({ company_id: id }).unwrap();
+        toast.success("Company activated successfully");
+        setCompanyId(id); // Update the state to reflect the activation
+      }
+      refetchActiveCompany(); // Refetch the active company data
+    } catch (error) {
+      toast.error("Failed to toggle company status");
+    }
   };
 
   // Render loading or error states
-  if (isLoading) return <CardSkeleton />;
-  if (isError) return <div>Error: {error.message}</div>;
+
   const handleDeleteCompany = async (id) => {
     const confirm = () =>
       toast(
@@ -73,6 +82,7 @@ const CompanyList = () => {
           <ConfirmDialog
             onConfirm={async () => {
               toast.dismiss(t.id);
+
               try {
                 await deleteCompany(id).then((res) => {
                   if (res.error != null) {
@@ -135,21 +145,12 @@ const CompanyList = () => {
                 <h3>{company?.city}</h3>
               </div>
               <div className="w-[10%] dark:text-white">
-                {company.id === companyId ? (
-                  <button
-                    className="w-28 rounded bg-green-500 px-3 py-1 text-sm font-bold text-white hover:bg-green-600"
-                    onClick={handleDeactivate}
-                  >
-                    Deactivate
-                  </button>
-                ) : (
-                  <button
-                    className="w-28 rounded bg-red-500 px-3 py-1 text-sm font-bold text-white hover:bg-red-600"
-                    onClick={() => handleActivate(company.id)}
-                  >
-                    Activate
-                  </button>
-                )}
+                <button
+                  className={`w-28 rounded px-3 py-1 text-sm font-bold text-white ${companyId === company.id ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"}`}
+                  onClick={() => handleToggleActive(company.id)}
+                >
+                  {companyId === company.id ? "Deactivate" : "Activate"}
+                </button>
               </div>
               <div className="w-[10%] dark:text-white">
                 <div className="flex flex-wrap justify-start gap-2">

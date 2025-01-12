@@ -105,7 +105,7 @@ export const apiSlice = createApi({
 
     getActiveCompany: builder.query({
       query: () => "/company/activecompany",
-      providesTags: ["Company"],
+      providesTags: ["ActiveId"],
     }),
 
     getCompanyDetails: builder.query({
@@ -128,7 +128,7 @@ export const apiSlice = createApi({
         method: "POST",
         body: credentials,
       }),
-      invalidatesTags: ["Company"],
+      invalidatesTags: ["ActiveId"],
     }),
     updateCompany: builder.mutation({
       query: ({ id, ...credentials }) => ({
@@ -216,14 +216,14 @@ export const apiSlice = createApi({
         companyId = newCompanyId;
         return { data: companyId };
       },
-      invalidatesTags: [{ type: "CompanyID", id: "CURRENT" }],
+      invalidatesTags: ["CompanyID"],
     }),
 
     getCompanyId: builder.query({
       queryFn: async () => {
         return { data: companyId };
       },
-      providesTags: [{ type: "CompanyID", id: "CURRENT" }],
+      providesTags: ["CompanyID"],
     }),
 
     // Shift Related EndPoints
