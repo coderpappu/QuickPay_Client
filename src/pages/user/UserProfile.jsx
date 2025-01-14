@@ -7,6 +7,7 @@ import { useGetUserDetailsQuery } from "../../features/api";
 
 import ProfileSkeleton from "../../skeletons/ProfileSkeleton";
 import PasswordChange from "./PasswordChange";
+import Permission from "./Permission";
 const UserProfile = () => {
   const id = useParams()?.id;
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -78,9 +79,22 @@ const UserProfile = () => {
           handleSelect={handleSelect}
           title={"Password"}
         />
+        <Button
+          button_id="2"
+          isActive={selected == "2"}
+          handleSelect={handleSelect}
+          title={"Company Permission"}
+        />
+        <Button
+          button_id="3"
+          isActive={selected == "3"}
+          handleSelect={handleSelect}
+          title={"Module Permission"}
+        />
       </div>
 
       {selected == "1" && <PasswordChange />}
+      {selected == "2" && <Permission />}
     </div>
   );
 };

@@ -20,6 +20,7 @@ import {
   useGetCompanyIdQuery,
   useGetEmailSettingQuery,
 } from "../../features/api";
+
 const CompanyPofile = () => {
   const { id } = useParams();
   const [selected, setSelected] = useState("1");
