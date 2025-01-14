@@ -30,7 +30,7 @@ const Permission = () => {
       onSubmit={handleSubmit}
     >
       {() => (
-        <Form className="rounded-mde mb-2 mt-5 flex w-full flex-wrap justify-between">
+        <Form className="rounded-mde mb-2 mt-3 flex w-full flex-wrap justify-between">
           <div className="relative w-[49%] rounded-md bg-white p-4 dark:bg-dark-card">
             <h1 className="mb-4 text-xl font-medium dark:text-dark-heading-color">
               Permission Manager

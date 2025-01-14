@@ -6,6 +6,7 @@ import Button from "../../components/company/Button";
 import { useGetUserDetailsQuery } from "../../features/api";
 
 import ProfileSkeleton from "../../skeletons/ProfileSkeleton";
+import UserPermission from "../permission/UserPermission";
 import PasswordChange from "./PasswordChange";
 import Permission from "./Permission";
 const UserProfile = () => {
@@ -95,6 +96,7 @@ const UserProfile = () => {
 
       {selected == "1" && <PasswordChange />}
       {selected == "2" && <Permission />}
+      {selected == "3" && <UserPermission />}
     </div>
   );
 };

@@ -1684,6 +1684,48 @@ export const apiSlice = createApi({
       }),
       providesTags: ["device"],
     }),
+
+    // module permission
+    addModulePermission: builder.mutation({
+      query: (credentials) => ({
+        url: "/modulepermission/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["modulePermission"],
+    }),
+
+    getModuleList: builder.query({
+      query: () => ({
+        url: `/modulepermission/modulelist`,
+      }),
+      providesTags: ["modulePermission"],
+    }),
+
+    getModuleDetails: builder.query({
+      query: (deviceId) => ({
+        url: `/modulepermission/details/${deviceId}`,
+      }),
+      providesTags: ["modulePermission"],
+    }),
+
+    updateModuleDetails: builder.mutation({
+      query: ({ moduleId, ...credentials }) => ({
+        url: `/modulepermission/update/${moduleId}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["modulePermission"],
+    }),
+
+    deleteModule: builder.mutation({
+      query: (moduleId) => ({
+        url: `/modulepermission/delete`,
+        method: "DELETE",
+        params: { moduleId },
+      }),
+      invalidatesTags: ["modulePermission"],
+    }),
   }),
 });
 
@@ -1972,4 +2014,10 @@ export const {
   useBulkEmployeePaymentMutation,
   useGetActiveCompanyQuery,
   useCreateActiveCompanyMutation,
+
+  useAddModulePermissionMutation,
+  useGetModuleListQuery,
+  useGetModuleDetailsQuery,
+  useUpdateModuleDetailsMutation,
+  useDeleteModuleMutation,
 } = apiSlice;

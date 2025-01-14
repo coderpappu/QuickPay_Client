@@ -4,6 +4,12 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { InputBox } from "../../components/company/BrandInput";
+import {
+  useAddModulePermissionMutation,
+  useGetModuleDetailsQuery,
+  useGetModuleListQuery,
+  useUpdateModuleDetailsMutation,
+} from "../../features/api";
 
 const permissionSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
@@ -12,32 +18,29 @@ const permissionSchema = Yup.object().shape({
 
 const PermissionForm = ({ moduleId, onClose }) => {
   const navigate = useNavigate();
-
-  // Dummy array to simulate database data
-  const modules = [
-    { id: 1, name: "Dashboard", slug: "dashboard", parent_id: null },
-    { id: 2, name: "Settings", slug: "settings", parent_id: null },
-    { id: 3, name: "User Management", slug: "user-management", parent_id: 2 },
-  ];
+  const { data: moduleList } = useGetModuleListQuery();
+  const [addModulePermission] = useAddModulePermissionMutation();
+  const { data: moduleDetails } = useGetModuleDetailsQuery(moduleId);
+  const [updateModulePermission] = useUpdateModuleDetailsMutation();
 
   const [initialValues, setInitialValues] = useState({
     name: "",
     slug: "",
-    parent_name: "",
+    parent_id: "",
   });
 
   useEffect(() => {
     if (moduleId) {
-      const module = modules.find((mod) => mod.id === moduleId);
+      const module = moduleList?.data?.find((mod) => mod.id === moduleId);
       if (module) {
         setInitialValues({
           name: module.name,
           slug: module.slug,
-          parent_name: module.parent_id || "",
+          parent_id: module.parent_id || "",
         });
       }
     }
-  }, [moduleId, modules]);
+  }, [moduleId, moduleList]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -57,24 +60,24 @@ const PermissionForm = ({ moduleId, onClose }) => {
           validationSchema={permissionSchema}
           onSubmit={async (values, { setSubmitting }) => {
             try {
-              const { name, slug, parent_name } = values;
+              const { name, slug, parent_id } = values;
 
               if (!moduleId) {
-                // Handle creation logic here
-                console.log("Creating permission:", {
+                await addModulePermission({
                   name,
                   slug,
-                  parent_id: parent_name || null,
-                });
+                  parent_id: parent_id || null,
+                }).unwrap();
+
                 toast.success("Permission added successfully");
               } else {
                 // Handle update logic here
-                console.log("Updating permission:", {
-                  id: moduleId,
+                await updateModulePermission({
+                  moduleId,
                   name,
                   slug,
-                  parent_id: parent_name || null,
-                });
+                  parent_id: parent_id || null,
+                }).unwrap();
                 toast.success("Permission updated successfully");
               }
               onClose();
@@ -117,19 +120,19 @@ const PermissionForm = ({ moduleId, onClose }) => {
               </div>
               <div className="mb-4">
                 <label
-                  htmlFor="parent_name"
+                  htmlFor="parent_id"
                   className="block text-sm font-medium dark:text-dark-text-color"
                 >
                   Parent Module
                 </label>
                 <Field
                   as="select"
-                  name="parent_name"
+                  name="parent_id"
                   className="h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
                 >
                   <option value="">None</option>
-                  {modules
-                    .filter((mod) => !mod.parent_id)
+                  {moduleList?.data
+                    ?.filter((mod) => !mod.parent_id)
                     .map((module) => (
                       <option key={module.id} value={module.id}>
                         {module.name}
@@ -137,7 +140,7 @@ const PermissionForm = ({ moduleId, onClose }) => {
                     ))}
                 </Field>
                 <ErrorMessage
-                  name="parent_name"
+                  name="parent_id"
                   component="div"
                   className="mt-1 text-sm text-red-500"
                 />
