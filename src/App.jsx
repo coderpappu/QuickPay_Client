@@ -56,6 +56,7 @@ import GradeForm from "./pages/payroll/grade/gradeForm";
 import GradeList from "./pages/payroll/grade/gradeList";
 import LoanTypeForm from "./pages/payroll/Loan/LoanType/LoanTypeForm";
 import LoanTypeList from "./pages/payroll/Loan/LoanType/LoanTypeList";
+import PermissionCard from "./pages/permission/PermissionCard";
 import SectionList from "./pages/section/SectionList";
 import SectionSettings from "./pages/section/SectionSettings";
 import LoginPage from "./pages/user/LoginPage";
@@ -225,6 +226,9 @@ function App() {
 
               {/* loader test route  */}
               <Route path="/loader/" element={<ProfileSkeleton />} />
+
+              {/* Permission  */}
+              <Route path="/permission-manager" element={<PermissionCard />} />
             </Route>
           </Route>
         </Route>

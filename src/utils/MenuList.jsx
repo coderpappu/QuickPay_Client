@@ -132,6 +132,11 @@ const adminMenuItems = [
         link: "/systemsettings",
       },
       {
+        title: "Permission Manager",
+        link: "/permission-manager",
+      },
+
+      {
         title: "Security Settings",
         subMenu: [
           { title: "Password", link: "/employee/loan/apply" },
