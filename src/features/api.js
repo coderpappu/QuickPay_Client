@@ -1726,6 +1726,16 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["modulePermission"],
     }),
+
+    // user permission
+    createUserPermission: builder.mutation({
+      query: (credentials) => ({
+        url: "/userpermission/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["userPermission"],
+    }),
   }),
 });
 
@@ -2020,4 +2030,6 @@ export const {
   useGetModuleDetailsQuery,
   useUpdateModuleDetailsMutation,
   useDeleteModuleMutation,
+
+  useCreateUserPermissionMutation,
 } = apiSlice;

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import BrandCardWrapper from "../../components/company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../components/company/SettingCardHeader";
-import { useGetModuleListQuery } from "../../features/api";
+import {
+  useCreateUserPermissionMutation,
+  useGetModuleListQuery,
+} from "../../features/api";
 
-const UserPermission = () => {
+const UserPermission = ({ userId }) => {
   const { data: moduleList } = useGetModuleListQuery();
   const [hierarchy, setHierarchy] = useState([]);
-  const [permissions, setPermissions] = useState({}); // Track permissions for each child module
+  const [permissions, setPermissions] = useState({});
+  const [createUserPermission] = useCreateUserPermissionMutation();
 
   useEffect(() => {
     const structuredData = buildHierarchy(moduleList?.data);
@@ -22,8 +26,13 @@ const UserPermission = () => {
   };
 
   // Handle Save button click
-  const handleSave = () => {
-    console.log("Selected Permissions:", permissions);
+  const handleSave = async () => {
+    const payload = Object.entries(permissions).map(([moduleId, action]) => ({
+      moduleId: parseInt(moduleId, 10),
+      action,
+    }));
+    await createUserPermission({ userId, payload });
+
     // You can send the `permissions` object to your backend here
   };
 

@@ -96,7 +96,7 @@ const UserProfile = () => {
 
       {selected == "1" && <PasswordChange />}
       {selected == "2" && <Permission />}
-      {selected == "3" && <UserPermission />}
+      {selected == "3" && <UserPermission userId={id} />}
     </div>
   );
 };

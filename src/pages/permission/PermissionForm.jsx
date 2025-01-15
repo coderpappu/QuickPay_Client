@@ -17,12 +17,15 @@ const permissionSchema = Yup.object().shape({
 });
 
 const PermissionForm = ({ moduleId, onClose }) => {
+
   const navigate = useNavigate();
+
   const { data: moduleList } = useGetModuleListQuery();
   const [addModulePermission] = useAddModulePermissionMutation();
   const { data: moduleDetails } = useGetModuleDetailsQuery(moduleId);
   const [updateModulePermission] = useUpdateModuleDetailsMutation();
 
+  
   const [initialValues, setInitialValues] = useState({
     name: "",
     slug: "",
