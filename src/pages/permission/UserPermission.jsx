@@ -4,6 +4,7 @@ import { HrmSetupCardHeader } from "../../components/company/SettingCardHeader";
 import {
   useCreateUserPermissionMutation,
   useGetModuleListQuery,
+  useGetUserPermissionQuery,
 } from "../../features/api";
 
 const UserPermission = ({ userId }) => {
@@ -11,26 +12,41 @@ const UserPermission = ({ userId }) => {
   const [hierarchy, setHierarchy] = useState([]);
   const [permissions, setPermissions] = useState({});
   const [createUserPermission] = useCreateUserPermissionMutation();
+  const { data: userPermissions } = useGetUserPermissionQuery(userId);
 
   useEffect(() => {
     const structuredData = buildHierarchy(moduleList?.data);
     setHierarchy(structuredData);
-  }, [moduleList]);
+
+    if (userPermissions?.data) {
+      const initialPermissions = userPermissions.data.reduce((acc, perm) => {
+        acc[perm.moduleId] = {
+          moduleName: perm.moduleName,
+          action: perm.action,
+        };
+        return acc;
+      }, {});
+      setPermissions(initialPermissions);
+    }
+  }, [moduleList, userPermissions]);
 
   // Handle permission selection
-  const handlePermissionChange = (moduleId, permission) => {
+  const handlePermissionChange = (moduleId, moduleName, action) => {
     setPermissions((prev) => ({
       ...prev,
-      [moduleId]: permission,
+      [moduleId]: { moduleName, action },
     }));
   };
 
   // Handle Save button click
   const handleSave = async () => {
-    const payload = Object.entries(permissions).map(([moduleId, action]) => ({
-      moduleId: parseInt(moduleId, 10),
-      action,
-    }));
+    const payload = Object.entries(permissions).map(
+      ([moduleId, { moduleName, action }]) => ({
+        moduleId: parseInt(moduleId, 10),
+        moduleName,
+        action,
+      }),
+    );
     await createUserPermission({ userId, payload });
 
     // You can send the `permissions` object to your backend here
@@ -66,8 +82,10 @@ const UserPermission = ({ userId }) => {
                 type="radio"
                 className="h-4 w-4 appearance-none rounded-full border border-dark-box bg-slate-600 checked:border-blue-500 checked:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 name={`permission_${child.id}`}
-                onChange={() => handlePermissionChange(child.id, "None")}
-                checked={permissions[child.id] === "None"}
+                onChange={() =>
+                  handlePermissionChange(child.id, child.name, "None")
+                }
+                checked={permissions[child.id]?.action === "None"}
               />
             </div>
             <div className="w-[15%] text-center">
@@ -75,8 +93,10 @@ const UserPermission = ({ userId }) => {
                 type="radio"
                 className="h-4 w-4 appearance-none rounded-full border border-dark-box bg-slate-600 checked:border-blue-500 checked:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 name={`permission_${child.id}`}
-                onChange={() => handlePermissionChange(child.id, "View")}
-                checked={permissions[child.id] === "View"}
+                onChange={() =>
+                  handlePermissionChange(child.id, child.name, "View")
+                }
+                checked={permissions[child.id]?.action === "View"}
               />
             </div>
             <div className="w-[15%] text-center">
@@ -84,8 +104,10 @@ const UserPermission = ({ userId }) => {
                 type="radio"
                 className="h-4 w-4 appearance-none rounded-full border border-dark-box bg-slate-600 checked:border-blue-500 checked:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 name={`permission_${child.id}`}
-                onChange={() => handlePermissionChange(child.id, "View & Edit")}
-                checked={permissions[child.id] === "View & Edit"}
+                onChange={() =>
+                  handlePermissionChange(child.id, child.name, "ViewEdit")
+                }
+                checked={permissions[child.id]?.action === "ViewEdit"}
               />
             </div>
             <div className="w-[15%] text-center">
@@ -93,8 +115,10 @@ const UserPermission = ({ userId }) => {
                 type="radio"
                 className="h-4 w-4 appearance-none rounded-full border border-dark-box bg-slate-600 checked:border-blue-500 checked:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 name={`permission_${child.id}`}
-                onChange={() => handlePermissionChange(child.id, "Admin")}
-                checked={permissions[child.id] === "Admin"}
+                onChange={() =>
+                  handlePermissionChange(child.id, child.name, "Admin")
+                }
+                checked={permissions[child.id]?.action === "Admin"}
               />
             </div>
           </div>
