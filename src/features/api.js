@@ -1743,6 +1743,13 @@ export const apiSlice = createApi({
       }),
       providesTags: ["userPermission"],
     }),
+
+    getUserPerModule: builder.query({
+      query: (userId) => ({
+        url: `/userpermission/get/module/${userId}`,
+      }),
+      providesTags: ["userPermission"],
+    }),
   }),
 });
 
@@ -2040,4 +2047,5 @@ export const {
 
   useCreateUserPermissionMutation,
   useGetUserPermissionQuery,
+  useGetUserPerModuleQuery,
 } = apiSlice;

@@ -3,7 +3,11 @@ import { IoIosArrowForward } from "react-icons/io";
 import { PiDotDuotone } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
-import { useGetCompanyIdQuery, useGetUserQuery } from "../features/api";
+import {
+  useGetCompanyIdQuery,
+  useGetUserPerModuleQuery,
+  useGetUserQuery,
+} from "../features/api";
 import { adminMenuItems, employeeMenuItems } from "../utils/MenuList";
 const Sidebar = () => {
   const { data: companyId } = useGetCompanyIdQuery();
@@ -11,6 +15,10 @@ const Sidebar = () => {
   const [activeMenu, setActiveMenu] = useState(null);
   const [activeSubMenu, setActiveSubMenu] = useState(null);
   const [activeUserType, setActiveUserType] = useState(null);
+
+  const userId = userData?.data?.id;
+
+  const { data: userPermissions } = useGetUserPerModuleQuery(userId);
 
   const handleMenuClick = (index) => {
     setActiveMenu((prev) => (prev === index ? null : index));
@@ -21,18 +29,46 @@ const Sidebar = () => {
     setActiveSubMenu(index);
   };
 
-  // Determine the correct menu items based on user type
+  // Determine the correct menu items based on user type and permissions
   let currentMenuItems;
-  if (userData?.data && userData?.data?.type === "SUPER_ADMIN") {
+  if (
+    (userData?.data && userData?.data?.type === "SUPER_ADMIN") ||
+    userData?.data?.type === "ADMIN"
+  ) {
     currentMenuItems = adminMenuItems;
   } else {
     currentMenuItems = employeeMenuItems;
   }
 
+  // Filter menu items based on user permissions
+  const filterMenuItemsByPermissions = (menuItems) => {
+    if (userData?.data?.type === "SUPER_ADMIN") {
+      return menuItems; // Show full admin menu for super admin
+    }
+
+    if (!userPermissions) {
+      return []; // Return an empty array if userPermissions is not yet loaded
+    }
+
+    return menuItems
+      .map((menu) => {
+        if (menu.subMenu) {
+          menu.subMenu = filterMenuItemsByPermissions(menu.subMenu);
+          return menu.subMenu.length > 0 ? menu : null;
+        }
+
+        const hasPermission = userPermissions?.data?.includes(menu.title);
+        return hasPermission ? menu : null;
+      })
+      .filter(Boolean);
+  };
+
+  const filteredMenuItems = filterMenuItemsByPermissions(currentMenuItems);
+
   // Recursive function to render nested submenus
   const renderSubMenu = (subMenus) => {
     return (
-      <ul className="pl-5 mt-2 space-y-2">
+      <ul className="mt-2 space-y-2 pl-5">
         {subMenus?.map((sub, subIndex) => (
           <li key={subIndex}>
             {sub.subMenu ? (
@@ -40,7 +76,7 @@ const Sidebar = () => {
                 {/* Handle nested submenu */}
                 <button
                   onClick={() => handleSubMenuClick(subIndex)}
-                  className="w-full flex justify-between items-center pl-3 pr-4 py-2"
+                  className="flex w-full items-center justify-between py-2 pl-3 pr-4"
                 >
                   <div className="flex items-center gap-1">
                     <PiDotDuotone color="#3686FF" size={20} />
@@ -58,7 +94,7 @@ const Sidebar = () => {
                 <PiDotDuotone color="#3686FF" size={20} />
                 <Link
                   to={sub.link}
-                  className="block pr-4 py-2 hover:text-white"
+                  className="block py-2 pr-4 hover:text-white"
                 >
                   <span>{sub.title}</span>
                 </Link>
@@ -71,19 +107,19 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="flex flex-col  shadow-inner text-white w-64 xl:w-64 2xl:w-[284px] flex-shrink-0">
-      <div className="lg:px-4 xl:px-4 font-poppins text-[15px] text-[#d5d5d5]">
+    <div className="flex w-64 flex-shrink-0 flex-col text-white shadow-inner xl:w-64 2xl:w-[284px]">
+      <div className="font-poppins text-[15px] text-[#d5d5d5] lg:px-4 xl:px-4">
         <div className="py-6">
           <Logo />
         </div>
         <ul className="mt-4">
-          {currentMenuItems.map((menu, menuIndex) => (
+          {filteredMenuItems.map((menu, menuIndex) => (
             <li key={menuIndex}>
               {menu.subMenu ? (
                 // Handle nested menus
                 <button
                   onClick={() => handleMenuClick(menuIndex)}
-                  className={`w-full py-3 mb-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex items-center justify-between ${
+                  className={`mb-2 flex w-full cursor-pointer items-center justify-between rounded-[3px] px-4 py-3 transition-all hover:bg-[#3686FF] hover:text-white ${
                     activeMenu === menuIndex && "bg-[#3686FF] text-white"
                   }`}
                 >
@@ -99,7 +135,7 @@ const Sidebar = () => {
                 // Handle single-level menus
                 <Link
                   to={menu.link}
-                  className={` w-full py-3 mb-2 px-4 rounded-[3px] transition-all hover:text-white hover:bg-[#3686FF] cursor-pointer flex items-center ${
+                  className={`mb-2 flex w-full cursor-pointer items-center rounded-[3px] px-4 py-3 transition-all hover:bg-[#3686FF] hover:text-white ${
                     activeMenu === menuIndex && "bg-[#3686FF] text-white"
                   }`}
                 >
