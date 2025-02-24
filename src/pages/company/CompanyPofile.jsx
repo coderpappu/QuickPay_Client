@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsFileEarmarkPostFill, BsTelephone } from "react-icons/bs";
 import { CiMail } from "react-icons/ci";
 import { FiEdit } from "react-icons/fi";
@@ -20,24 +20,36 @@ import {
   useGetCompanyIdQuery,
   useGetEmailSettingQuery,
 } from "../../features/api";
+import ProfileSkeleton from "../../skeletons/ProfileSkeleton";
+import ErrorMessage from "../../utils/ErrorMessage";
 
 const CompanyPofile = () => {
   const { id } = useParams();
   const [selected, setSelected] = useState("1");
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedDarkMode = localStorage.getItem("darkMode");
+    if (savedDarkMode !== null) {
+      setIsDarkMode(JSON.parse(savedDarkMode));
+    }
+  }, []);
 
   // handle function for button state
   const handleSelect = (id) => {
     setSelected(id);
   };
 
-  const { data, isLoading, isError } = useGetCompanyDetailsQuery(id);
+  const { data, isLoading, isError, error } = useGetCompanyDetailsQuery(id);
   const { data: companyId } = useGetCompanyIdQuery();
   const { data: brandDetails } = useGetbrandQuery(companyId);
   const { data: emailData } = useGetEmailSettingQuery(companyId);
 
   let content = null;
-  if (isLoading && !isError) content = "Loading...";
-  if (!isLoading && isError) content = "An error occured";
+  if (isLoading && !isError) content = <ProfileSkeleton />;
+  if (!isLoading && isError)
+    content = <ErrorMessage message={error?.message} />;
+
   if (!isLoading && !isError && data) {
     const {
       id,
@@ -64,6 +76,7 @@ const CompanyPofile = () => {
     } = data.data;
 
     const dateGet = new Date(createdAt);
+
     const formattedDate = format(dateGet, "MMMM d, yyyy, h:mm:ss a");
 
     content = (
@@ -75,7 +88,11 @@ const CompanyPofile = () => {
             <div className="mr-4 h-[120px] w-[120px]">
               {/* company logic change only for this time  */}
               <img
-                src={brandDetails?.data?.lightImageUrl}
+                src={
+                  isDarkMode
+                    ? brandDetails?.data?.darkImageUrl
+                    : brandDetails?.data?.lightImageUrl
+                }
                 alt="company logo"
                 className="rounded-full"
               />

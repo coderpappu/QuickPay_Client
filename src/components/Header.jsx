@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { CiBellOn } from "react-icons/ci";
+import { CiBellOn, CiDark, CiLight } from "react-icons/ci";
+import { FiUser } from "react-icons/fi";
+import { IoIosPower } from "react-icons/io";
 import { IoChatbubbleOutline } from "react-icons/io5";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
-import ProfilePalceholderImg from "../assets/profile-placeholder.png";
 import ManProfile from "../assets/man-placeholder.jpg";
-import { useGetUserQuery } from "../features/api";
-import { CiDark } from "react-icons/ci";
-import { CiLight } from "react-icons/ci";
-import { FiUser } from "react-icons/fi";
-import { IoIosPower } from "react-icons/io";
+import {
+  useGetbrandQuery,
+  useGetCompanyIdQuery,
+  useGetUserQuery,
+} from "../features/api";
 
 const Header = ({ darkModeHandler, darkMode }) => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
   const { data: userData, isLoading, isError } = useGetUserQuery();
+  const { data: companyId } = useGetCompanyIdQuery();
+  const { data: brandDetails } = useGetbrandQuery(companyId);
+
+  console.log(brandDetails);
 
   const handleToggle = () => {
     setShow(!show);
@@ -35,19 +40,19 @@ const Header = ({ darkModeHandler, darkMode }) => {
     }, [checkToken]);
   };
   return (
-    <div className="bg-[#fff] dark:bg-dark-card w-full py-2 xl:px-6">
-      <div className="lg:wrapper-container xl:w-full flex flex-wrap items-center justify-between ">
+    <div className="w-full bg-[#fff] py-2 xl:px-6 dark:bg-dark-card">
+      <div className="flex flex-wrap items-center justify-between lg:wrapper-container xl:w-full">
         {/* Product Brand Logo  */}
         <div className="w-[80%]">
-          <h2 className="font-semibold text-2xl text-[#0E1A34] dark:text-white font-poppins">
-            Xceed Bangladesh LTD
+          <h2 className="font-poppins text-2xl font-semibold text-[#0E1A34] dark:text-white">
+            {brandDetails?.data?.titleText || "Your Company Name"}
           </h2>
         </div>
 
         {/* Company Name  */}
 
-        <div className="w-[20%] flex flex-wrap align-center justify-end">
-          <div className="w-[40px] h-[40px] flex flex-col items-center rounded-md bg-[#e9e9e961] dark:text-white dark:bg-dark-box mr-2">
+        <div className="align-center flex w-[20%] flex-wrap justify-end">
+          <div className="mr-2 flex h-[40px] w-[40px] flex-col items-center rounded-md bg-[#e9e9e961] dark:bg-dark-box dark:text-white">
             {darkMode ? (
               <CiLight
                 size={20}
@@ -62,53 +67,53 @@ const Header = ({ darkModeHandler, darkMode }) => {
               />
             )}
           </div>
-          <div className="w-[40px] h-[40px] flex flex-col items-center rounded-md bg-[#e9e9e961] dark:bg-dark-box mr-2">
-            <CiBellOn className="text-2xl text-[#0E1A34] dark:text-white m-auto" />
+          <div className="mr-2 flex h-[40px] w-[40px] flex-col items-center rounded-md bg-[#e9e9e961] dark:bg-dark-box">
+            <CiBellOn className="m-auto text-2xl text-[#0E1A34] dark:text-white" />
           </div>
-          <div className="w-[40px] h-[40px] flex flex-col items-center rounded-md bg-[#e9e9e961] dark:bg-dark-box mr-2">
-            <IoChatbubbleOutline className="text-2xl text-[#0E1A34] dark:text-white m-auto" />
+          <div className="mr-2 flex h-[40px] w-[40px] flex-col items-center rounded-md bg-[#e9e9e961] dark:bg-dark-box">
+            <IoChatbubbleOutline className="m-auto text-2xl text-[#0E1A34] dark:text-white" />
           </div>
           <div className="relative">
             {/* profile here  */}
 
-            <div className="flex flex-wrap items-center ">
+            <div className="flex flex-wrap items-center">
               <img
                 src={userData?.data?.file || ManProfile}
                 alt="Avatar "
-                className="w-[40px] h-[40px] rounded-full border border-[#0E1A34]"
+                className="h-[40px] w-[40px] rounded-full border border-[#0E1A34]"
               />
 
-              <label className="ml-1 font-medium text-[#0E1A34] dark:text-white ">
+              <label className="ml-1 font-medium text-[#0E1A34] dark:text-white">
                 {userData?.data?.first_name}
               </label>
               <MdOutlineKeyboardArrowDown
-                className="text-[#0E1A34] dark:text-white text-xl cursor-pointer"
+                className="cursor-pointer text-xl text-[#0E1A34] dark:text-white"
                 onClick={handleToggle}
               />
             </div>
             {show && (
-              <div className="absolute w-[150px] h-[100px] p-2 rounded-md bg-[#ffffff] dark:bg-dark-card  top-14 right-0">
-                <div className="flex flex-wrap gap-2 hover:bg-[#EFF0F2] hover:dark:bg-dark-box rounded-md px-2 py-2">
+              <div className="absolute right-0 top-14 h-[100px] w-[150px] rounded-md bg-[#ffffff] p-2 dark:bg-dark-card">
+                <div className="flex flex-wrap gap-2 rounded-md px-2 py-2 hover:bg-[#EFF0F2] hover:dark:bg-dark-box">
                   <FiUser className="dark:text-white" />
                   {userData?.data?.type == "employee" ? (
                     <Link
                       to="employee/profile"
-                      className="font-medium text-sm dark:text-white"
+                      className="text-sm font-medium dark:text-white"
                     >
                       Profile
                     </Link>
                   ) : (
                     <Link
                       to="/profile"
-                      className="font-medium text-sm dark:text-white"
+                      className="text-sm font-medium dark:text-white"
                     >
                       Profile
                     </Link>
                   )}
                 </div>
-                <div className="flex flex-wrap gap-2 hover:bg-[#EFF0F2] hover:dark:bg-dark-box dark:text-white rounded-md px-2 py-2">
+                <div className="flex flex-wrap gap-2 rounded-md px-2 py-2 hover:bg-[#EFF0F2] dark:text-white hover:dark:bg-dark-box">
                   <IoIosPower />
-                  <Link className="font-medium text-sm" onClick={handleLogOut}>
+                  <Link className="text-sm font-medium" onClick={handleLogOut}>
                     Logout
                   </Link>
                 </div>
