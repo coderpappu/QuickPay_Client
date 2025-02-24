@@ -24,20 +24,20 @@ const Layout = () => {
   return (
     // main container
     <div
-      className={`bg-[#EBEFF2] w-full dark:bg-dark-bg ${darkMode && "dark"} h-[100%] lg:wrapper-container xl:w-full flex flex-wrap justify-between`}
+      className={`w-full bg-[#EBEFF2] dark:bg-dark-bg ${darkMode && "dark"} flex h-[100%] flex-wrap justify-between lg:wrapper-container xl:w-full`}
     >
       {/* sidebar  */}
-      <div className="2xl:w-[15%] xl:w-[20%] lg:w-[20%] fixed h-screen bg-[#0E1A34] ">
+      <div className="fixed h-screen bg-[#0E1A34] lg:w-[20%] xl:w-[20%] 2xl:w-[15%]">
         <Sidebar />
       </div>
 
       {/* container  */}
-      <div className="xl:w-[80%] 2xl:w-[100%] lg:w-[80%] left-0 pl-[15%] min-h-screen flex flex-col">
+      <div className="left-0 flex min-h-screen flex-col pl-[15%] lg:w-[80%] xl:w-[80%] 2xl:w-[100%]">
         {/* header  */}
         <Header darkModeHandler={darkModeHandler} darkMode={darkMode} />
 
         {/* content  */}
-        <div className="lg:p-4 xl:py-5 xl:px-14 flex-grow">
+        <div className="flex-grow lg:p-4 xl:px-14 xl:py-5">
           <Outlet />
         </div>
 

@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { PiDotDuotone } from "react-icons/pi";
+import { TbCards } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
+
 import {
   useGetCompanyIdQuery,
   useGetUserPerModuleQuery,
@@ -29,8 +31,38 @@ const Sidebar = () => {
     setActiveSubMenu(index);
   };
 
+  console.log(companyId);
+
+  useEffect(() => {
+    const ws = new WebSocket("ws://localhost:8080");
+
+    ws.onopen = () => {
+      console.log("Connected to WebSocket server");
+    };
+
+    ws.onmessage = (event) => {
+      const message = event.data;
+      console.log("Message from server:", message);
+      // Optionally, you can display this message in your UI
+      // Example: show an alert with the message
+    };
+
+    ws.onclose = () => {
+      console.log("Disconnected from WebSocket server");
+    };
+
+    ws.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, []);
+
   // Determine the correct menu items based on user type and permissions
   let currentMenuItems;
+
   if (
     (userData?.data && userData?.data?.type === "SUPER_ADMIN") ||
     userData?.data?.type === "ADMIN"
@@ -109,49 +141,63 @@ const Sidebar = () => {
   return (
     <div className="flex w-64 flex-shrink-0 flex-col text-white shadow-inner xl:w-64 2xl:w-[284px]">
       <div className="font-poppins text-[15px] text-[#d5d5d5] lg:px-4 xl:px-4">
-        <div className="py-6">
-          <Logo />
-        </div>
-        <ul className="mt-4">
-          {filteredMenuItems.map((menu, menuIndex) => (
-            <li key={menuIndex}>
-              {menu.subMenu ? (
-                // Handle nested menus
-                <button
-                  onClick={() => handleMenuClick(menuIndex)}
-                  className={`mb-2 flex w-full cursor-pointer items-center justify-between rounded-[3px] px-4 py-3 transition-all hover:bg-[#3686FF] hover:text-white ${
-                    activeMenu === menuIndex && "bg-[#3686FF] text-white"
-                  }`}
-                >
-                  <span className="flex items-center">
-                    {menu.icon}
-                    <span className="ml-2">{menu.title}</span>
-                  </span>
-                  <IoIosArrowForward
-                    className={`${activeMenu === menuIndex ? "rotate-90" : ""} transition-transform`}
-                  />
-                </button>
-              ) : (
-                // Handle single-level menus
-                <Link
-                  to={menu.link}
-                  className={`mb-2 flex w-full cursor-pointer items-center rounded-[3px] px-4 py-3 transition-all hover:bg-[#3686FF] hover:text-white ${
-                    activeMenu === menuIndex && "bg-[#3686FF] text-white"
-                  }`}
-                >
-                  <span className="flex items-center">
-                    {menu.icon}
-                    <span className="ml-2">{menu.title}</span>
-                  </span>
-                </Link>
-              )}
+        <Logo />
 
-              {/* Render submenu if active */}
-              {activeMenu === menuIndex &&
-                menu.subMenu &&
-                renderSubMenu(menu.subMenu)}
+        <ul className="mt-4">
+          {companyId == null ? (
+            <li>
+              <Link
+                to="/company/list"
+                className="mb-2 flex w-full cursor-pointer items-center rounded-[3px] px-4 py-3 transition-all hover:bg-[#3686FF] hover:text-white"
+              >
+                <span className="flex items-center">
+                  <TbCards size={20} />
+
+                  <span className="ml-2">Manage Company</span>
+                </span>
+              </Link>
             </li>
-          ))}
+          ) : (
+            filteredMenuItems.map((menu, menuIndex) => (
+              <li key={menuIndex}>
+                {menu.subMenu ? (
+                  // Handle nested menus
+                  <button
+                    onClick={() => handleMenuClick(menuIndex)}
+                    className={`mb-2 flex w-full cursor-pointer items-center justify-between rounded-[3px] px-4 py-3 transition-all hover:bg-[#3686FF] hover:text-white ${
+                      activeMenu === menuIndex && "bg-[#3686FF] text-white"
+                    }`}
+                  >
+                    <span className="flex items-center">
+                      {menu.icon}
+                      <span className="ml-2">{menu.title}</span>
+                    </span>
+                    <IoIosArrowForward
+                      className={`${activeMenu === menuIndex ? "rotate-90" : ""} transition-transform`}
+                    />
+                  </button>
+                ) : (
+                  // Handle single-level menus
+                  <Link
+                    to={menu.link}
+                    className={`mb-2 flex w-full cursor-pointer items-center rounded-[3px] px-4 py-3 transition-all hover:bg-[#3686FF] hover:text-white ${
+                      activeMenu === menuIndex && "bg-[#3686FF] text-white"
+                    }`}
+                  >
+                    <span className="flex items-center">
+                      {menu.icon}
+                      <span className="ml-2">{menu.title}</span>
+                    </span>
+                  </Link>
+                )}
+
+                {/* Render submenu if active */}
+                {activeMenu === menuIndex &&
+                  menu.subMenu &&
+                  renderSubMenu(menu.subMenu)}
+              </li>
+            ))
+          )}
         </ul>
       </div>
     </div>
