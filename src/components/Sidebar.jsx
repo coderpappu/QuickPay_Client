@@ -12,6 +12,7 @@ import {
 } from "../features/api";
 import { adminMenuItems, employeeMenuItems } from "../utils/MenuList";
 const Sidebar = () => {
+  
   const { data: companyId } = useGetCompanyIdQuery();
   const { data: userData } = useGetUserQuery();
   const [activeMenu, setActiveMenu] = useState(null);

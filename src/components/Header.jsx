@@ -19,8 +19,6 @@ const Header = ({ darkModeHandler, darkMode }) => {
   const { data: companyId } = useGetCompanyIdQuery();
   const { data: brandDetails } = useGetbrandQuery(companyId);
 
-  console.log(brandDetails);
-
   const handleToggle = () => {
     setShow(!show);
   };
