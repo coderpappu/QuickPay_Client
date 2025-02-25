@@ -786,7 +786,7 @@ export const apiSlice = createApi({
         url: `/setsalary/allowance/types`,
         params: { companyId },
       }),
-      providesTags: ["allowance_types"],
+      providesTags: ["allowance_type"],
     }),
     getAllowanceTypeDetails: builder.query({
       query: (id) => ({
@@ -794,7 +794,7 @@ export const apiSlice = createApi({
         params: { id },
       }),
 
-      providesTags: ["allowance_types"],
+      providesTags: ["allowance_type"],
     }),
 
     getEmployeeAllowance: builder.query({

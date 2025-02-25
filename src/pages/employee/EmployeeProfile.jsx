@@ -19,7 +19,7 @@ const EmployeeProfile = () => {
   const { data: employeeData } = useGetUserQuery();
 
   const { data, isLoading, isError } = useGetEmployeeDetailsQuery(
-    id || employeeData?.data?.id
+    id || employeeData?.data?.id,
   );
 
   const [selected, setSelected] = useState("1");
@@ -40,13 +40,13 @@ const EmployeeProfile = () => {
   return (
     <div>
       <h2> Employee / Profile</h2>
-      <div className="w-full p-5 mx-5 mt-5 mb-1 rounded-md bg-white dark:bg-dark-card flex flex-wrap justify-between ">
-        <div className="flex flex-wrap justify-between items-center w-[50%]">
-          <div className="w-[20%] mr-4">
+      <div className="mx-5 mb-1 mt-5 flex w-full flex-wrap justify-between rounded-md bg-white p-5 dark:bg-dark-card">
+        <div className="flex w-[50%] flex-wrap items-center justify-between">
+          <div className="mr-4 w-[20%]">
             <img
               src={employeeDetails?.image ? employeeDetails?.image : ProfileImg}
               alt="profile pic"
-              className="w-[100px] h-[100px] rounded-full"
+              className="h-[100px] w-[100px] rounded-full"
             />
           </div>
           <div className="w-[75%]">
@@ -54,14 +54,14 @@ const EmployeeProfile = () => {
               {employeeDetails?.name}
             </h1>
 
-            <h3 className="text-[15px] font-medium  text-[#686767] dark:text-dark-text-color">
+            <h3 className="text-[15px] font-medium text-[#686767] dark:text-dark-text-color">
               Software Enginner
             </h3>
-            <h3 className="text-[15px] mt-2 font-semibold  text-[#3c3c3c] dark:text-dark-text-color">
+            <h3 className="mt-2 text-[15px] font-semibold text-[#3c3c3c] dark:text-dark-text-color">
               Employee Id : 20.23.LA
               {/* {city + ", " + country} */}
             </h3>
-            <h3 className="text-[15px] font-medium  text-[#686767] dark:text-dark-text-color">
+            <h3 className="text-[15px] font-medium text-[#686767] dark:text-dark-text-color">
               {/* {`Website : ${website_url}`} */}
               Date of Join : {employeeDetails?.joining_date}
             </h3>
@@ -82,7 +82,7 @@ const EmployeeProfile = () => {
         </div>
       </div>
 
-      <div className="w-full mx-5 rounded-md bg-white dark:bg-dark-card flex flex-wrap ">
+      <div className="mx-5 flex w-full flex-wrap rounded-md bg-white dark:bg-dark-card">
         <Button
           button_id="1"
           isActive={selected == "1"}

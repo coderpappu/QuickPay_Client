@@ -39,8 +39,10 @@ const formFields = [
 
 const BrandCard = () => {
   const [createBrand] = useCreateBrandMutation();
+
   const { data: companyId, isLoading: isCompanyIdLoading } =
     useGetCompanyIdQuery();
+
   const { data: companyData } = useGetCompanyDetailsQuery(companyId);
 
   // Fetch existing brand details
@@ -119,7 +121,7 @@ const BrandCard = () => {
               subTitle="Edit your brand details"
             />
             <div className="py-3">
-              <div className="px-6 py-3 flex justify-between ">
+              <div className="flex justify-between px-6 py-3">
                 <LogoUploadCard
                   title="Logo Dark"
                   handleFileChange={(event) =>
@@ -146,9 +148,9 @@ const BrandCard = () => {
                 />
               </div>
               {formFields.map((row, rowIndex) => (
-                <div className="px-6 py-3 flex justify-between" key={rowIndex}>
+                <div className="flex justify-between px-6 py-3" key={rowIndex}>
                   {row.map(({ name, title, placeholder }, rowIndex) => (
-                    <div className="w-[24%] relative" key={rowIndex}>
+                    <div className="relative w-[24%]" key={rowIndex}>
                       <InputTitle title={title} />
                       {name === "language" ? (
                         <SelectOptionBox
@@ -165,7 +167,7 @@ const BrandCard = () => {
                       <ErrorMessage
                         name={name}
                         component="div"
-                        className="text-red-500 text-xs"
+                        className="text-xs text-red-500"
                       />
                     </div>
                   ))}

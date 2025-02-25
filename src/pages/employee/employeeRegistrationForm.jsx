@@ -11,6 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   useCreateNewEmployeeMutation,
   useGetBranchListQuery,
+  useGetCompanyDetailsQuery,
   useGetCompanyIdQuery,
   useGetDepartmentsQuery,
   useGetDesignationsQuery,
@@ -22,7 +23,7 @@ import {
 
 import Box from "@mui/material/Box";
 import { useState } from "react";
-import UploadForm from "../../helpers/UploadForm";
+import LogoUploadCard from "../../components/company/LogoUploadCard";
 import EmployeeSchema from "./EmployeeSchema";
 
 const steps = [
@@ -47,6 +48,11 @@ const EmployeeRegistrationForm = () => {
   const [createEmployee] = useCreateNewEmployeeMutation();
   const [updateEmployee] = useUpdateEmployeeMutation();
 
+  const { data: companyId, isLoading: isCompanyIdLoading } =
+    useGetCompanyIdQuery();
+
+  const { data: companyData } = useGetCompanyDetailsQuery(companyId);
+
   const [editModeUploader, setEditModeUploader] = useState(false);
 
   const [imageUrl, setImageUrl] = useState(null);
@@ -66,34 +72,34 @@ const EmployeeRegistrationForm = () => {
   if (isError) return <ErrorMessage message={error} />;
 
   const initialValues = {
-    name: employeeData?.data?.[0]?.name || "",
-    email: employeeData?.data?.[0]?.email || "",
-    phone: employeeData?.data?.[0]?.phone || "",
-    present_address: employeeData?.data?.[0]?.present_address || "",
-    permanent_address: employeeData?.data?.[0]?.email || "",
-    gender: employeeData?.data?.[0]?.gender || "",
-    religion: employeeData?.data?.[0]?.religion || "MUSLIM",
-    birth_date: employeeData?.data?.[0]?.birth_date || "",
-    joining_date: employeeData?.data?.[0]?.joining_date || "",
-    terminate_date: employeeData?.data?.[0]?.terminate_date || "",
-    image: employeeData?.data?.[0]?.image || "",
-    job_status: employeeData?.data?.[0]?.job_status || "PERMANENT",
-    reference: employeeData?.data?.[0]?.reference || "",
-    spouse_name: employeeData?.data?.[0]?.spouse_name || "",
-    emergency_contact: employeeData?.data?.[0]?.emergency_contact || "",
-    id_type: employeeData?.data?.[0]?.id_type || "NID",
-    id_number: employeeData?.data?.[0]?.id_number || "",
-    status: employeeData?.data?.[0]?.status || "ACTIVE",
+    name: employeeData?.data?.name || "",
+    email: employeeData?.data?.email || "",
+    phone: employeeData?.data?.phone || "",
+    present_address: employeeData?.data?.present_address || "",
+    permanent_address: employeeData?.data?.email || "",
+    gender: employeeData?.data?.gender || "",
+    religion: employeeData?.data?.religion || "MUSLIM",
+    birth_date: employeeData?.data?.birth_date || "",
+    joining_date: employeeData?.data?.joining_date || "",
+    terminate_date: employeeData?.data?.terminate_date || "",
+    image: employeeData?.data?.image || "",
+    job_status: employeeData?.data?.job_status || "PERMANENT",
+    reference: employeeData?.data?.reference || "",
+    spouse_name: employeeData?.data?.spouse_name || "",
+    emergency_contact: employeeData?.data?.emergency_contact || "",
+    id_type: employeeData?.data?.id_type || "NID",
+    id_number: employeeData?.data?.id_number || "",
+    status: employeeData?.data?.status || "ACTIVE",
     company_id: CompanyId,
-    deviceUserId: employeeData?.data?.[0]?.deviceUserId || null,
+    deviceUserId: employeeData?.data?.deviceUserId || null,
     designationId:
-      employeeData?.data?.[0]?.EmployeeDesignation?.[0]?.designation_id || "",
-    branchId: employeeData?.data?.[0]?.EmployeeBranch?.[0]?.branch_id || "",
+      employeeData?.data?.EmployeeDesignation?.[0]?.designation_id || "",
+    branchId: employeeData?.data?.EmployeeBranch?.[0]?.branch_id || "",
 
     departmentId:
-      employeeData?.data?.[0]?.EmployeeDepartment?.[0]?.department_id || "",
-    sectionId: employeeData?.data?.[0]?.EmployeeSection?.[0]?.section_id || "",
-    shiftId: employeeData?.data?.[0]?.EmployeeShift?.[0]?.shift_id || "",
+      employeeData?.data?.EmployeeDepartment?.[0]?.department_id || "",
+    sectionId: employeeData?.data?.EmployeeSection?.[0]?.section_id || "",
+    shiftId: employeeData?.data?.EmployeeShift?.[0]?.shift_id || "",
   };
 
   const isLastStep = step === 5;
@@ -112,6 +118,19 @@ const EmployeeRegistrationForm = () => {
 
   const handleReset = () => {
     setActiveStep(0);
+  };
+
+  // Handle file changes to show image preview
+  const handleFileChange = (event, fileKey, setFieldValue) => {
+    const file = event.target.files[0];
+    if (file) {
+      // Set the file object for submission
+      setFieldValue(fileKey, file);
+
+      // Create a preview URL for the file and store it in a corresponding preview key
+      const previewKey = `${fileKey}Preview`;
+      setFieldValue(previewKey, URL.createObjectURL(file));
+    }
   };
 
   /// delete the logo from any online storage.
@@ -158,34 +177,26 @@ const EmployeeRegistrationForm = () => {
         validationSchema={EmployeeSchema(step)}
         onSubmit={async (values, { setSubmitting }) => {
           try {
+            const formData = new FormData();
+
+            formData.append("companyName", companyData?.data?.company_name);
+            formData.append("id", id);
+
+            Object.keys(values).forEach((key) => {
+              formData.append(key, values[key]);
+            });
+
             if (id) {
               // Update existing employee
-              await updateEmployee({
-                id,
-                ...values,
-                image: imageUrl || employeeData?.data?.[0]?.image,
-                employeeDesginationId:
-                  employeeData?.data?.[0]?.EmployeeDesignation?.[0]?.id,
-                employeeDepartmentId:
-                  employeeData?.data?.[0]?.EmployeeDepartment?.[0]?.id,
-                employeeSectionId:
-                  employeeData?.data?.[0]?.EmployeeSection?.[0]?.id,
-                employeeShiftId:
-                  employeeData?.data?.[0]?.EmployeeShift?.[0]?.id,
-                employeeBranchId:
-                  employeeData?.data?.[0]?.EmployeeBranch?.[0]?.id,
-              }).unwrap();
+
+              await updateEmployee({ id, formData }).unwrap();
               toast.success("Employee updated successfully");
             } else {
               // Create new employee
-
-              await createEmployee({
-                ...values,
-                image: imageUrl,
-              }).unwrap();
-
+              await createEmployee(formData).unwrap();
               toast.success("Employee registered successfully");
             }
+
             navigate("/company/employee");
           } catch (error) {
             toast.error(error?.data?.message);
@@ -194,7 +205,7 @@ const EmployeeRegistrationForm = () => {
           }
         }}
       >
-        {({ isSubmitting, setFieldValue, validateForm }) => (
+        {({ isSubmitting, setFieldValue, validateForm, values }) => (
           <Form>
             {step === 1 && (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -697,50 +708,16 @@ const EmployeeRegistrationForm = () => {
             {step === 5 && (
               <>
                 <label htmlFor="image">Upload Image</label>
-                {id ? (
-                  <>
-                    {!editModeUploader && (
-                      <div className="mt-4 flex justify-center">
-                        <img
-                          className="h-64 w-64 rounded-full object-cover object-center"
-                          src={employeeData?.data?.[0]?.image}
-                          alt="Uploaded Preview"
-                        />
-                      </div>
-                    )}
-                    <div>
-                      {editModeUploader ? (
-                        <UploadForm
-                          setFieldValue={(field, value) => {
-                            setImageUrl(value); // Update the image URL state
-                          }}
-                          canSubmit={canSubmit}
-                          setCanSubmit={setCanSubmit}
-                          uploadedImageUrl={imageUrl}
-                          name="image"
-                        />
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => setEditModeUploader(true)}
-                          className="mt-4 rounded border border-blue-500 p-2 text-blue-500"
-                        >
-                          Change Profile
-                        </button>
-                      )}{" "}
-                    </div>
-                  </>
-                ) : (
-                  <UploadForm
-                    setFieldValue={(field, value) => {
-                      handleUploadComplete(value); // Handle upload completion
-                    }}
-                    canSubmit={canSubmit}
-                    setCanSubmit={setCanSubmit}
-                    uploadedImageUrl={imageUrl}
-                    name="image"
-                  />
-                )}
+                <LogoUploadCard
+                  title="Profile Photo"
+                  handleFileChange={(event) =>
+                    handleFileChange(event, "image", setFieldValue)
+                  }
+                  selectedFile={
+                    values.imagePreview || employeeData?.data?.image
+                  } // Show the preview image
+                  name="image"
+                />
               </>
             )}
 
