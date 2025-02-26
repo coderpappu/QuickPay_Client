@@ -189,7 +189,7 @@ const EmployeeRegistrationForm = () => {
             if (id) {
               // Update existing employee
 
-              await updateEmployee({ id, formData }).unwrap();
+              await updateEmployee(formData).unwrap();
               toast.success("Employee updated successfully");
             } else {
               // Create new employee

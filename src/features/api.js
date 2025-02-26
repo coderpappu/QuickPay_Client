@@ -194,8 +194,8 @@ export const apiSlice = createApi({
     }),
 
     updateEmployee: builder.mutation({
-      query: ({ id, ...credentials }) => ({
-        url: `/employee/update/${id}`,
+      query: (credentials) => ({
+        url: `/employee/update`,
         method: "PUT",
         body: credentials,
       }),
@@ -747,7 +747,6 @@ export const apiSlice = createApi({
         url: `/grade/basicsalary/details`,
         params: { employeeId, companyId },
       }),
-
       providesTags: ["basic_salary"],
     }),
 
@@ -768,7 +767,6 @@ export const apiSlice = createApi({
         method: "POST",
         body: credentials,
       }),
-
       invalidatesTags: ["employee_allowance"],
     }),
 
@@ -793,7 +791,6 @@ export const apiSlice = createApi({
         url: `/setsalary/allowance/type/details`,
         params: { id },
       }),
-
       providesTags: ["allowance_type"],
     }),
 
