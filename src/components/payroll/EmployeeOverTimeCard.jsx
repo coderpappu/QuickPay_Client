@@ -43,13 +43,13 @@ const EmployeeOverTimeCard = () => {
     content = employeeOverTimeDetails?.data?.map((overTime) => (
       <div
         key={overTime?.id}
-        className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
+        className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
       >
-        <div className="dark:text-white w-[20%]">
+        <div className="w-[20%] dark:text-white">
           <h3>{overTime?.hour} </h3>
         </div>
 
-        <div className="dark:text-white w-[20%]">
+        <div className="w-[20%] dark:text-white">
           <h3>{overTime?.rate}</h3>
         </div>
       </div>
@@ -59,18 +59,18 @@ const EmployeeOverTimeCard = () => {
     <>
       <BrandCardWrapper>
         <HrmSetupCardHeader
-          title="Basic Salary"
+          title="Hour Rate"
           handleOpen={handleOpen}
           isPopupOpen={isPopupOpen}
         />
         <div className="px-6 py-3">
           {/* header  */}
-          <div className="w-full bg-light-bg dark:bg-dark-box rounded-sm py-3 px-3 flex flex-wrap justify-between text-sm">
-            <div className="dark:text-white w-[20%]">
+          <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
+            <div className="w-[20%] dark:text-white">
               <h3>Hour</h3>
             </div>
 
-            <div className="dark:text-white w-[20%]">
+            <div className="w-[20%] dark:text-white">
               <h3>Rate</h3>
             </div>
           </div>
@@ -79,9 +79,9 @@ const EmployeeOverTimeCard = () => {
           {content}
         </div>
         {isPopupOpen && (
-          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-            <div className="bg-white dark:bg-dark-card  rounded-lg p-6 w-full max-w-md">
-              <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-dark-border-color dark:border-opacity-5">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="w-full max-w-md rounded-lg bg-white p-6 dark:bg-dark-card">
+              <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-dark-border-color dark:border-opacity-5">
                 <h3 className="text-lg font-medium text-gray-800 dark:text-white">
                   Basic Salary
                 </h3>
