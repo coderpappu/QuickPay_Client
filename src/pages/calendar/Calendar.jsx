@@ -27,14 +27,14 @@ const localizer = dateFnsLocalizer({
 
 const MyCalendar = () => {
   const { data: companyId } = useGetCompanyIdQuery();
-  // Replace with actual company ID
+
   const { data } = useGetEmployeeQuery();
 
-  const { data: holidays } = useGetHolidayListQuery(companyId, {
+  const { data: holidaysData } = useGetHolidayListQuery(companyId, {
     skip: companyId == null,
   });
 
-  const { data: weekends } = useGetWeekendListQuery(companyId, {
+  const { data: weekendsData } = useGetWeekendListQuery(companyId, {
     skip: companyId == null,
   });
 
@@ -45,23 +45,37 @@ const MyCalendar = () => {
     setIsDarkMode(darkModeEnabled);
   }, []);
 
+  // Extract weekend days (e.g., "friday")
   const weekendDays =
-    weekends?.data?.map((day) => day.name.toLowerCase()) || [];
-
-  // Dummy event data for demonstration
+    weekendsData?.data?.map((day) => day.name.toLowerCase()) || [];
 
   // Convert holidays to event format
-  const events =
-    holidays?.data?.holidays?.map((holiday) => ({
+  const holidays =
+    holidaysData?.data?.holidays?.map((holiday) => ({
       title: holiday.name,
       start: new Date(holiday.from_date),
       end: new Date(holiday.to_date),
       allDay: true,
       resource: {
         description: holiday.description,
-        holidayType: holiday.HolidayType.name,
+        holidayType: holiday.HolidayType?.name,
       },
     })) || [];
+
+  // Convert fridays to event format
+  const fridays =
+    holidaysData?.data?.fridayDates?.map((date) => ({
+      title: "Friday (Weekend)",
+      start: new Date(date),
+      end: new Date(date),
+      allDay: true,
+      resource: {
+        description: "Weekly weekend",
+      },
+    })) || [];
+
+  // Merge holidays and fridays into events list
+  const events = [...holidays, ...fridays];
 
   const [selectedEvent, setSelectedEvent] = useState(null);
 
@@ -73,14 +87,19 @@ const MyCalendar = () => {
     setSelectedEvent(null);
   };
 
-  // Custom style function
+  // Custom event styling
   function eventStyleGetter(event, start, end, isSelected) {
     const dayOfWeek = moment(start).format("dddd").toLowerCase();
+    const isFriday = event.title.includes("Friday");
     const isWeekend = weekendDays.includes(dayOfWeek);
 
     const style = {
-      backgroundColor: isWeekend ? `lightcoral ` : ` #3174ad`,
-      borderRadius: "0px",
+      backgroundColor: isFriday
+        ? "#FFA500"
+        : isWeekend
+          ? "lightcoral"
+          : "#15B392",
+      borderRadius: "4px",
       opacity: 0.8,
       color: "white",
       border: "0px",
@@ -92,19 +111,17 @@ const MyCalendar = () => {
     };
   }
 
-  // <div className="block opacity-[0.8] color-[#fff] border-0 dark:bg-dark-heading-color "></div>;
-
   // Custom dayPropGetter to style entire days
   function dayPropGetter(date) {
-    const dayOfWeek = moment(date).format("dddd").toLowerCase();
-    const isWeekend = weekendDays.includes(dayOfWeek);
+    const formattedDate = moment(date).format("YYYY-MM-DD");
+    const isFriday = holidaysData?.data?.fridayDates?.includes(formattedDate);
 
     const style = {
-      backgroundColor: isWeekend ? "#FFCCCC" : "#fff", // Light red for weekends
+      backgroundColor: isFriday ? "#FFF3CD" : "#fff",
     };
 
     return {
-      className: "dark:bg-dark-box",
+      style: style,
     };
   }
 
@@ -116,11 +133,10 @@ const MyCalendar = () => {
         startAccessor="start"
         endAccessor="end"
         style={{ height: 700 }}
-        className="rounded-sm p-4 text-dark-text-color dark:bg-dark-card"
+        className="rounded-sm p-4 dark:bg-dark-card"
         defaultView="month"
         views={["month", "week", "day", "agenda"]}
         step={30}
-        selectables
         popup
         components={{
           toolbar: CustomToolbar,

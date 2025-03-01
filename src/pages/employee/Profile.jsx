@@ -28,6 +28,7 @@ const Profile = () => {
   };
 
   const { data: employeeData } = useGetUserQuery();
+
   const { data, isLoading, isError } = useGetEmployeeDetailsQuery(
     id || employeeData?.data?.id,
   );
@@ -44,7 +45,7 @@ const Profile = () => {
 
   if (!isLoading && isError) content = <p>Error fetching data</p>;
 
-  let employeeDetails = data?.data;
+  let employeeDetails = data?.data[0];
 
   return (
     <div>
