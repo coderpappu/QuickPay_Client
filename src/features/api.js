@@ -99,7 +99,11 @@ export const apiSlice = createApi({
 
     // Company Related EndPoints
     getCompanies: builder.query({
-      query: () => "/company/getcompany",
+      query: (id) => ({
+        url: "/company/getcompany",
+        params: { id },
+      }),
+
       providesTags: ["Company"],
     }),
 

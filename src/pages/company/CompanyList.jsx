@@ -12,6 +12,7 @@ import {
   useDeleteCompanyMutation,
   useGetActiveCompanyQuery,
   useGetCompaniesQuery,
+  useGetUserQuery,
   useSetCompanyIdMutation,
 } from "../../features/api";
 
@@ -24,6 +25,9 @@ const CompanyList = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [leaveTypeId, setleaveTypeId] = useState(null);
   const [addActiveCompany] = useCreateActiveCompanyMutation();
+
+  const { data: userData } = useGetUserQuery();
+
   const { data: activeCompanyId, refetch: refetchActiveCompany } =
     useGetActiveCompanyQuery();
 
@@ -39,11 +43,12 @@ const CompanyList = () => {
     isLoading,
     isError,
     error,
-  } = useGetCompaniesQuery();
+  } = useGetCompaniesQuery(userData?.data?.id);
 
   const [setCompanyId] = useSetCompanyIdMutation();
 
   // Effect to set company ID from local storage on component mount
+
   useEffect(() => {
     const storedCompanyId = activeCompanyId?.data?.company_id;
 
@@ -51,7 +56,7 @@ const CompanyList = () => {
       setCompanyId(storedCompanyId)
         .unwrap()
         .catch((error) => {
-          console.error("Failed to set company ID:", error);
+          toast.error("Failed to set company ID");
         });
     }
   }, [setCompanyId]);
