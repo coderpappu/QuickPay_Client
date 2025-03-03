@@ -14,6 +14,8 @@ const CompanySettingCard = () => {
   const { data: companyId } = useGetCompanyIdQuery();
   const { data: setting, isLoading } = useGetRootSettingQuery(companyId);
 
+  console.log(setting);
+
   const [selected, setSelected] = useState("1");
 
   const [overtime, setOvertime] = useState({
@@ -58,7 +60,7 @@ const CompanySettingCard = () => {
       await setSetting({
         ...overtime,
         company_id: companyId,
-        setting_id: setting?.data?.id,
+        setting_id: setting?.data?.id || "1",
       });
 
       toast.success("Employee Setting Set Successfully");

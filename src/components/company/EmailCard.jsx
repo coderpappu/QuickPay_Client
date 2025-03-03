@@ -115,10 +115,10 @@ const EmailCard = () => {
           const emailSetting = await createEmailSettings({
             ...values,
             company_id,
-          });
-          toast.success(emailSetting?.data?.message);
+          }).unwrap();
+          toast.success(emailSetting?.message);
         } catch (error) {
-          toast.error(error.message);
+          toast.error(error?.data?.message);
         }
       }}
     >
@@ -135,15 +135,15 @@ const EmailCard = () => {
               {/* title and text section  */}
               {formFields.map((row, rowIndex) => (
                 <div
-                  className="px-6 py-3 flex justify-start gap-12"
+                  className="flex justify-start gap-12 px-6 py-3"
                   key={rowIndex}
                 >
                   {row.map(
                     (
                       { name, title, placeholder, type = "text", list },
-                      rowIndex
+                      rowIndex,
                     ) => (
-                      <div className="w-[30%] relative" key={rowIndex}>
+                      <div className="relative w-[30%]" key={rowIndex}>
                         <InputTitle title={title} />
                         {type == "list" ? (
                           <>
@@ -162,10 +162,10 @@ const EmailCard = () => {
                         <ErrorMessage
                           name={name}
                           component="div"
-                          className="text-red-500 text-xs "
+                          className="text-xs text-red-500"
                         />
                       </div>
-                    )
+                    ),
                   )}
                 </div>
               ))}

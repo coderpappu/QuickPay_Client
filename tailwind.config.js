@@ -19,7 +19,6 @@ const config = {
       },
       colors: {
         primary: "#3686FF",
-
         "dark-bg": "#0F172A",
         "dark-card": "#1E293B",
         "dark-box": "#293548",
@@ -31,6 +30,7 @@ const config = {
         "light-text-color": "#a5a5a5b8",
         "light-bg": "#e5e7eb6e",
         "gray-text": "#8b8b8b",
+        "light-input": "#F1F5F9",
       },
     },
   },

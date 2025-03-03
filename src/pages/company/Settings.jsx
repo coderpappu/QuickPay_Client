@@ -12,6 +12,8 @@ const Settings = () => {
   const { data: companyId } = useGetCompanyIdQuery();
   const { data: setting } = useGetRootSettingQuery(companyId);
 
+  console.log(setting);
+
   const [selected, setSelected] = useState("1");
   const [overtime, setOvertime] = useState({
     overtime_status: false,
@@ -60,13 +62,13 @@ const Settings = () => {
   return (
     <div>
       <div className="border-b border-[#e6e6e6] pb-2">
-        <h2 className="text-[26px] font-poppins font-bold">Settings</h2>
-        <p className="text-base text-[#747474] font-medium mt-1">
+        <h2 className="font-poppins text-[26px] font-bold">Settings</h2>
+        <p className="mt-1 text-base font-medium text-[#747474]">
           Manage your account setting and preferences.
         </p>
       </div>
       <div>
-        <div className="w-full my-2  rounded-sm bg-[#fff] flex flex-wrap">
+        <div className="my-2 flex w-full flex-wrap rounded-sm bg-[#fff]">
           <Button
             buttonid="1"
             isActive={selected === "1"}
@@ -94,12 +96,12 @@ const Settings = () => {
         </div>
         {selected === "1" && (
           <div>
-            <div className="w-full mt-2 border-solid border-[1px] border-slate-200 bg-white rounded-md p-5">
-              <div className="w-[280px] h-[60px] mb-6 flex flex-wrap items-center justify-between">
+            <div className="mt-2 w-full rounded-md border-[1px] border-solid border-slate-200 bg-white p-5">
+              <div className="mb-6 flex h-[60px] w-[280px] flex-wrap items-center justify-between">
                 <h1>Over Time :</h1>
                 <input
                   type="checkbox"
-                  className="w-4 h-4"
+                  className="h-4 w-4"
                   checked={overtime.enabled}
                   onChange={handleCheckboxChange}
                 />
@@ -108,13 +110,13 @@ const Settings = () => {
                   placeholder="100"
                   value={overtime.minutes}
                   onChange={handleInputChange}
-                  className="w-[100px] h-7 p-[2px] bg-[#e7ecff] rounded-sm text-center"
+                  className="h-7 w-[100px] rounded-sm bg-[#e7ecff] p-[2px] text-center"
                 />{" "}
                 Miniute
               </div>
 
               <button
-                className="py-2 px-10 bg-[#3686FF] rounded-[4px] text-white mt-6"
+                className="mt-6 rounded-[4px] bg-[#3686FF] px-10 py-2 text-white"
                 onClick={settingHandler}
               >
                 Save

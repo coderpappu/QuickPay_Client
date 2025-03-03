@@ -2,9 +2,9 @@ import React from "react";
 
 const SettingCardFooter = ({ title, handleUpdate }) => {
   return (
-    <div className="border-t border-dark-box border-opacity-5 dark:border-dark-border-color dark:border-opacity-5 px-6 py-4 flex justify-end items-center">
+    <div className="flex items-center justify-end border-t border-dark-box border-opacity-5 px-6 py-4 dark:border-dark-border-color dark:border-opacity-5">
       <button
-        className="px-8 py-2 rounded-md text-white bg-button-bg"
+        className="rounded-md bg-button-bg px-8 py-2 text-white"
         onClick={() => handleUpdate()}
         type="submit"
       >

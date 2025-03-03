@@ -180,7 +180,7 @@ const EmployeeRegistrationForm = () => {
             const formData = new FormData();
 
             formData.append("companyName", companyData?.data?.company_name);
-            formData.append("id", id);
+            // formData.append("id", id);
 
             Object.keys(values).forEach((key) => {
               formData.append(key, values[key]);

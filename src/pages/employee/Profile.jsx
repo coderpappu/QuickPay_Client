@@ -45,7 +45,7 @@ const Profile = () => {
 
   if (!isLoading && isError) content = <p>Error fetching data</p>;
 
-  let employeeDetails = data?.data[0];
+  let employeeDetails = data?.data;
 
   return (
     <div>

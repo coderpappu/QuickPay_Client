@@ -3,7 +3,7 @@ import { IoAdd } from "react-icons/io5";
 
 const SettingCardHeader = ({ title, subTitle }) => {
   return (
-    <div className="border-b border-dark-box border-opacity-5 dark:border-dark-border-color dark:border-opacity-5 px-6 py-4">
+    <div className="border-b border-dark-box border-opacity-5 px-6 py-4 dark:border-dark-border-color dark:border-opacity-5">
       <h3 className="text-base leading-6 dark:text-dark-heading-color">
         {title}
       </h3>
@@ -14,7 +14,7 @@ const SettingCardHeader = ({ title, subTitle }) => {
 
 const HrmSetupCardHeader = ({ title, handleOpen, isPopupOpen }) => {
   return (
-    <div className="flex justify-between items-center border-b border-dark-box border-opacity-5 dark:border-dark-border-color dark:border-opacity-5 px-6 py-4">
+    <div className="flex items-center justify-between border-b border-dark-box border-opacity-5 px-6 py-4 dark:border-dark-border-color dark:border-opacity-5">
       <div>
         <h3 className="text-base leading-6 dark:text-dark-heading-color">
           {title}
@@ -22,7 +22,7 @@ const HrmSetupCardHeader = ({ title, handleOpen, isPopupOpen }) => {
       </div>
 
       <div
-        className="w-8 h-8 bg-green-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
+        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-500 p-2 text-center"
         onClick={() => handleOpen()}
       >
         <IoAdd color="#fff" />
