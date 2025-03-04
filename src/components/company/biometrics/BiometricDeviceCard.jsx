@@ -4,7 +4,7 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import {
-  useDeleteDepartmentMutation,
+  useDeleteDeviceConfigureMutation,
   useGetCompanyIdQuery,
   useGetDeviceListQuery,
 } from "../../../features/api";
@@ -18,7 +18,7 @@ const BiometricsDeviceCard = () => {
   const navigate = useNavigate();
 
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
-  const [selectedDepartmentId, setSelectedDepartmentId] = useState(null);
+  const [selectedDeviceId, setSelectedDeviceId] = useState(null);
 
   const onClose = () => {
     setIsPopupOpen(false);
@@ -26,11 +26,11 @@ const BiometricsDeviceCard = () => {
 
   const handleOpen = (id = null) => {
     setIsPopupOpen(true);
-    setSelectedDepartmentId(id);
+    setSelectedDeviceId(id);
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const [deleteDepartment] = useDeleteDepartmentMutation();
+  const [deleteDepartment] = useDeleteDeviceConfigureMutation();
 
   const {
     data: deviceList,
@@ -39,7 +39,7 @@ const BiometricsDeviceCard = () => {
     error,
   } = useGetDeviceListQuery(companyId);
 
-  const handleDeleteDepartment = async (id) => {
+  const handleDeleteDevice = async (id) => {
     const confirm = () =>
       toast(
         (t) => (
@@ -51,15 +51,15 @@ const BiometricsDeviceCard = () => {
                   if (res.error != null) {
                     toast.error(res.error.data.message);
                   } else {
-                    toast.success("Department deleted successfully");
+                    toast.success("Device deleted successfully");
                   }
                 });
               } catch (error) {
-                toast.error(error.message || "Failed to delete department");
+                toast.error(error.message || "Failed to delete device");
               }
             }}
             onCancel={() => toast.dismiss(t.id)}
-            title="Department"
+            title="Device"
           />
         ),
         {
@@ -69,13 +69,17 @@ const BiometricsDeviceCard = () => {
 
     confirm();
   };
+
   let content;
 
   if (isLoading && !isError) return <FormSkeleton />;
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  if (!isLoading && !isError && deviceList?.data) {
+  if (!isLoading && !isError && deviceList?.data?.length == 0)
+    content = <ErrorMessage message="Please add your device!" />;
+
+  if (!isLoading && !isError && deviceList?.data?.length > 0) {
     content = deviceList.data.map((device) =>
       device?.configMethod === "IP" ? (
         <div
@@ -120,13 +124,13 @@ const BiometricsDeviceCard = () => {
             <div className="flex flex-wrap justify-start gap-2">
               {/* edit button  */}
               <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md bg-green-400 p-2">
-                <CiEdit size={20} onClick={() => handleOpen(department?.id)} />
+                <CiEdit size={20} onClick={() => handleOpen(device?.id)} />
               </div>
 
               {/* delete button  */}
               <div
                 className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md bg-red-500 p-2 text-center"
-                onClick={() => handleDeleteDepartment(department?.id)}
+                onClick={() => handleDeleteDevice(device?.id)}
               >
                 <AiOutlineDelete size={20} />
               </div>
@@ -168,13 +172,13 @@ const BiometricsDeviceCard = () => {
             <div className="flex w-[20%] flex-wrap justify-end gap-2 dark:text-white">
               {/* edit button  */}
               <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md bg-green-400 p-2">
-                <CiEdit size={20} onClick={() => handleOpen(department?.id)} />
+                <CiEdit size={20} onClick={() => handleOpen(device?.id)} />
               </div>
 
               {/* delete button  */}
               <div
                 className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-md bg-red-500 p-2 text-center"
-                onClick={() => handleDeleteDepartment(department?.id)}
+                onClick={() => handleDeleteDevice(device?.id)}
               >
                 <AiOutlineDelete size={20} />
               </div>
@@ -231,11 +235,10 @@ const BiometricsDeviceCard = () => {
                 </button>
               </div>
               <div className="mt-4">
-                {/* <DepartmentForm
-                  departmentId={selectedDepartmentId}
+                <DeviceForm
+                  deviceId={selectedDeviceId}
                   setIsPopupOpen={setIsPopupOpen}
-                /> */}
-                <DeviceForm />
+                />
               </div>
             </div>
           </div>

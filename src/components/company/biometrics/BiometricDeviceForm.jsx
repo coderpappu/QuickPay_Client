@@ -1,12 +1,14 @@
 import { ErrorMessage, Field, Form, Formik, useFormikContext } from "formik";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import {
   useAddDeviceConfigurationMutation,
   useGetCompanyIdQuery,
+  useGetDeviceDetailsQuery,
   useUpdateDeviceConfigurationMutation,
 } from "../../../features/api";
+import FormSkeleton from "../../../skeletons/FormSkeleton";
 
 const DeviceSchema = Yup.object({
   name: Yup.string().required("Device Name is required"),
@@ -190,31 +192,28 @@ const ConditionalFields = () => {
 
 const DeviceForm = ({ deviceId, setIsPopupOpen }) => {
   const navigate = useNavigate();
-  const { id } = useParams();
-
   const [addDevice] = useAddDeviceConfigurationMutation();
   const { data: companyId } = useGetCompanyIdQuery();
   const [updateDevice] = useUpdateDeviceConfigurationMutation();
 
-  // const [updateDevice] = useUpdateDeviceMutation();
-
   const { data: company_id } = useGetCompanyIdQuery();
-  // const { data: deviceData, isLoading: deviceLoading } =
-  //   useGetDeviceDetailsQuery(deviceId, {
-  //     skip: !deviceId,
-  //   });
 
-  // if (deviceLoading) return <CardSkeleton />;
+  const { data: deviceData, isLoading: deviceLoading } =
+    useGetDeviceDetailsQuery(deviceId, {
+      skip: !deviceId,
+    });
+
+  if (deviceLoading) return <FormSkeleton />;
 
   const initialValues = {
-    name: "",
-    configMethod: "API",
-    apiUrl: "",
-    username: "",
-    password: "",
-    authKey: "",
-    ipAddress: "",
-    port: "",
+    name: deviceData?.name || "",
+    configMethod: deviceData?.configMethod || "API",
+    apiUrl: deviceData?.apiUrl || "",
+    username: deviceData?.username || "",
+    password: deviceData?.password || "",
+    authKey: deviceData?.authKey || "",
+    ipAddress: deviceData?.ipAddress || "",
+    port: deviceData?.port || "",
   };
 
   return (
@@ -226,19 +225,19 @@ const DeviceForm = ({ deviceId, setIsPopupOpen }) => {
         try {
           if (!deviceId) {
             await addDevice({ ...values, company_id }).unwrap();
+            toast.success("Device saved successfully!");
           } else {
-            // await updateDevice({
-            //   id: deviceId,
-            //   ...values,
-            //   company_id,
-            // }).unwrap();
+            await updateDevice({
+              deviceId,
+              ...values,
+              company_id,
+            }).unwrap();
+            toast.success("Device updated successfully!");
           }
 
           setIsPopupOpen(false);
           resetForm();
-          toast.success("Device saved successfully!");
         } catch (error) {
-      
           toast.error(error?.data?.message || "An error occurred");
         } finally {
           setSubmitting(false);

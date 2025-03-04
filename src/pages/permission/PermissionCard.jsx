@@ -11,12 +11,19 @@ import {
   useGetModuleListQuery,
 } from "../../features/api";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
+import ListSkeleton from "../../skeletons/ListSkeleton";
+import ErrorMessage from "../../utils/ErrorMessage";
 import PermissionForm from "./PermissionForm";
 
 const PermissionCard = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [selectId, setSelectId] = useState(null);
-  const { data: moduleList } = useGetModuleListQuery();
+  const {
+    data: moduleList,
+    isLoading,
+    isError,
+    error,
+  } = useGetModuleListQuery();
   const [deleteModule] = useDeleteModuleMutation();
 
   const onClose = () => {
@@ -33,7 +40,6 @@ const PermissionCard = () => {
   useEffect(() => {
     // Convert flat data into a hierarchical structure
     const structuredData = buildHierarchy(moduleList?.data);
-
     setHierarchy(structuredData);
   }, [moduleList]);
 
@@ -78,6 +84,11 @@ const PermissionCard = () => {
 
     confirm();
   };
+  let content;
+
+  if (isLoading && !isError) return <ListSkeleton />;
+  if (!isLoading && isError)
+    content = <ErrorMessage message={error?.data?.message} />;
 
   const renderModules = (modules, indent = 0) => {
     return modules.map((module) => (
@@ -142,10 +153,9 @@ const PermissionCard = () => {
           </div>
 
           {/* body  */}
-          {renderModules(hierarchy)}
-
+          {content || renderModules(hierarchy)}
         </div>
-        
+
         {isPopupOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="w-full max-w-md rounded-lg bg-white p-6 dark:bg-dark-card">

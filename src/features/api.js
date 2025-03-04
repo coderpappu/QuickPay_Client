@@ -1655,10 +1655,10 @@ export const apiSlice = createApi({
       invalidatesTags: ["device"],
     }),
     deleteDeviceConfigure: builder.mutation({
-      query: ({ deviceId }) => ({
+      query: (id) => ({
         url: `/device/delete`,
         method: "DELETE",
-        params: { deviceId },
+        params: { id },
       }),
       invalidatesTags: ["device"],
     }),

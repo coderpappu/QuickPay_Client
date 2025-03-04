@@ -73,7 +73,10 @@ const HolidayList = () => {
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
 
-  if (!isLoading && !isError && holidays?.data?.holidays)
+  if (holidays?.data?.holidays.length == 0)
+    content = <ErrorMessage message="No holiday found!" />;
+
+  if (!isLoading && !isError && holidays?.data?.holidays.length > 0)
     content = holidays?.data?.holidays?.map((holiday, index) => (
       <div
         key={holiday?.id}

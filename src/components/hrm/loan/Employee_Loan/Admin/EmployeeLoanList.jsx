@@ -84,7 +84,10 @@ const EmployeeLoanList = () => {
     }
   };
 
-  if (!isLoading && !isError) {
+  if (loanList?.data?.length == 0)
+    content = <ErrorMessage message="No loan application found!" />;
+
+  if (!isLoading && !isError && loanList?.data?.length > 0) {
     content = (
       <>
         {loanList?.data?.map((loan, index) => (
