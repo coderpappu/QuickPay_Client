@@ -24,6 +24,7 @@ import {
 import Box from "@mui/material/Box";
 import { useState } from "react";
 import LogoUploadCard from "../../components/company/LogoUploadCard";
+import FormSkeleton from "../../skeletons/FormSkeleton";
 import EmployeeSchema from "./EmployeeSchema";
 
 const steps = [
@@ -61,15 +62,25 @@ const EmployeeRegistrationForm = () => {
 
   const [canSubmit, setCanSubmit] = useState(false);
 
+  if (
+    departments?.data ||
+    shifts?.data ||
+    sections?.data ||
+    branchs?.data ||
+    designations?.data == undefined
+  ) {
+    return <h1> Please complete the hrm setup</h1>;
+  }
+
   const {
     data: employeeData,
     isLoading,
     isError,
     error,
-  } = useGetEmployeeDetailsQuery(id);
+  } = useGetEmployeeDetailsQuery(id, { skip: !id }); // Conditionally fetch employee details
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <ErrorMessage message={error} />;
+  if (isLoading) return <FormSkeleton />;
+  if (isError) return <ErrorMessage message={error?.data?.message} />;
 
   const initialValues = {
     name: employeeData?.data?.name || "",
@@ -180,7 +191,7 @@ const EmployeeRegistrationForm = () => {
             const formData = new FormData();
 
             formData.append("companyName", companyData?.data?.company_name);
-            // formData.append("id", id);
+            formData.append("id", id);
 
             Object.keys(values).forEach((key) => {
               formData.append(key, values[key]);

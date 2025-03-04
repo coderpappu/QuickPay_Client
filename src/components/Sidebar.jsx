@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { PiDotDuotone } from "react-icons/pi";
 import { TbCards } from "react-icons/tb";
@@ -12,7 +12,6 @@ import {
 } from "../features/api";
 import { adminMenuItems, employeeMenuItems } from "../utils/MenuList";
 const Sidebar = () => {
-  
   const { data: companyId } = useGetCompanyIdQuery();
   const { data: userData } = useGetUserQuery();
   const [activeMenu, setActiveMenu] = useState(null);
@@ -31,35 +30,6 @@ const Sidebar = () => {
   const handleSubMenuClick = (index) => {
     setActiveSubMenu(index);
   };
-
-  console.log(companyId);
-
-  useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080");
-
-    ws.onopen = () => {
-      console.log("Connected to WebSocket server");
-    };
-
-    ws.onmessage = (event) => {
-      const message = event.data;
-      console.log("Message from server:", message);
-      // Optionally, you can display this message in your UI
-      // Example: show an alert with the message
-    };
-
-    ws.onclose = () => {
-      console.log("Disconnected from WebSocket server");
-    };
-
-    ws.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
-
-    return () => {
-      ws.close();
-    };
-  }, []);
 
   // Determine the correct menu items based on user type and permissions
   let currentMenuItems;

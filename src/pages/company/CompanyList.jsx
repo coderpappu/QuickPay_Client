@@ -240,7 +240,7 @@ const CompanyList = () => {
           </div>
 
           {/* body  */}
-          {content}
+          <div>{content}</div>
         </div>
       </BrandCardWrapper>
     </>

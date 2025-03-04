@@ -10,6 +10,8 @@ import {
   useGetGeneratedSalarySheetQuery,
   useUpdateSalarySheetMutation,
 } from "../../../features/api";
+import ListSkeleton from "../../../skeletons/ListSkeleton";
+import ErrorMessage from "../../../utils/ErrorMessage";
 import BrandCardWrapper from "../../company/BrandCardWrapper";
 import PreviewPayslipCard from "./PreviewPayslipCard";
 
@@ -25,14 +27,22 @@ const PaySlipCard = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleDeleteSalarySheet = async (employeeId, generate_date) => {
-    await deleteSalarySheet({ employeeId, generate_date });
-    toast.success("Salary Sheet deleted successfully.");
+    try {
+      await deleteSalarySheet({ employeeId, generate_date });
+      toast.success("Salary Sheet deleted successfully.");
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const handleBulkPayment = async () => {
     const generate_date = `${String(month).padStart(2, "0")}-${year}`;
-    await bulkEmployeePayment({ generate_date, status: "Paid" });
-    toast.success("Bulk payment processed successfully.");
+    try {
+      await bulkEmployeePayment({ generate_date, status: "Paid" }).unwrap();
+      toast.success("Bulk payment processed successfully.");
+    } catch (error) {
+      toast.error("There was an error processing");
+    }
   };
 
   const handleUpdateSalarySheet = async (employeeId, generate_date) => {
@@ -40,7 +50,11 @@ const PaySlipCard = () => {
   };
 
   const { data: companyId } = useGetCompanyIdQuery();
-  const { data: employeeList, isLoading } = useGetEmployeesQuery(companyId);
+  const {
+    data: employeeList,
+    isLoading,
+    error,
+  } = useGetEmployeesQuery(companyId);
   const [generateBulkSalary, { data }] =
     useGeneratedEmployeeSalaryBulkMutation();
 
@@ -67,6 +81,7 @@ const PaySlipCard = () => {
     data: employeeSalarySheet,
     isLoading: isSheetLoding,
     isError: isSheetError,
+    error: sheetError,
   } = useGetGeneratedSalarySheetQuery({
     companyId,
     month,
@@ -120,77 +135,84 @@ const PaySlipCard = () => {
     }));
     setCsvData(csvData);
   };
-
-  if (isLoading) return <div>Loading...</div>;
-  if (!employeeList || !employeeList.data || employeeList.data.length === 0)
-    return <div>No employees found.</div>;
-
-  if (isSheetLoding && !isSheetError) return "Loading...";
-  if (isSheetError) return "Error fetching salary sheet.";
-
   let content;
 
-  content = employeeSalarySheet?.data?.map((sheet) => (
-    <>
-      {" "}
-      <div className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10">
-        <div className="w-[10%] dark:text-white">
-          <h3>{sheet?.Employee?.employeeId}</h3>
+  if (isLoading) return <ListSkeleton />;
+  if (!employeeList || !employeeList.data || employeeList.data.length === 0)
+    content = <ErrorMessage message={error?.data?.message} />;
+
+  if (isSheetLoding && !isSheetError) return <ListSkeleton />;
+
+  if (isSheetError) return <ErrorMessage message={sheetError?.data?.message} />;
+
+  if (employeeSalarySheet?.data.length !== 0)
+    content = employeeSalarySheet?.data?.map((sheet) => (
+      <>
+        {" "}
+        <div className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10">
+          <div className="w-[10%] dark:text-white">
+            <h3>{sheet?.Employee?.employeeId}</h3>
+          </div>
+          <div className="w-[10%] dark:text-white">
+            <h3>{sheet?.Employee?.name}</h3>
+          </div>
+          <div className="w-[10%] dark:text-white">
+            <h3>
+              {Math.round(sheet?.overtime_salary_sheet?.[0]?.overtime_salary)}
+            </h3>
+          </div>
+          <div className="w-[10%] dark:text-white">
+            <h3>{sheet?.allowance_salary_sheet?.[0]?.amount}</h3>
+          </div>
+          <div className="w-[10%] dark:text-white">
+            <h3>{sheet?.deduction_salary_sheet?.[0]?.amount}</h3>
+          </div>
+          <div className="w-[7%] text-center dark:text-white">
+            <button
+              className={`w-24 border px-4 py-2 ${sheet?.status !== "Unpaid" ? "border-green-400 text-green-400" : "border-yellow-400 text-yellow-400"} mx-2 rounded-md`}
+              onClick={() => handleOpen(sheet)}
+            >
+              {sheet?.status}{" "}
+            </button>
+          </div>
+          <div className="w-[30%] dark:text-white">
+            <button
+              className="mx-2 rounded-md bg-yellow-500 px-4 py-2"
+              onClick={() =>
+                handleOpen(sheet?.Employee?.id, companyId, month, year)
+              }
+            >
+              Payslip
+            </button>
+            <button
+              className="mx-2 rounded-md bg-purple-700 px-4 py-2"
+              onClick={() =>
+                handleUpdateSalarySheet(
+                  sheet?.Employee?.id,
+                  sheet?.generate_date,
+                )
+              }
+            >
+              Click To Paid
+            </button>
+            <button className="mx-2 rounded-md bg-blue-500 px-4 py-2">
+              Edit
+            </button>
+            <button
+              className="mx-2 rounded-md bg-green-500 px-4 py-2"
+              onClick={() =>
+                handleDeleteSalarySheet(
+                  sheet?.Employee?.id,
+                  sheet?.generate_date,
+                )
+              }
+            >
+              Delete
+            </button>
+          </div>
         </div>
-        <div className="w-[10%] dark:text-white">
-          <h3>{sheet?.Employee?.name}</h3>
-        </div>
-        <div className="w-[10%] dark:text-white">
-          <h3>
-            {Math.round(sheet?.overtime_salary_sheet?.[0]?.overtime_salary)}
-          </h3>
-        </div>
-        <div className="w-[10%] dark:text-white">
-          <h3>{sheet?.allowance_salary_sheet?.[0]?.amount}</h3>
-        </div>
-        <div className="w-[10%] dark:text-white">
-          <h3>{sheet?.deduction_salary_sheet?.[0]?.amount}</h3>
-        </div>
-        <div className="w-[7%] text-center dark:text-white">
-          <button
-            className={`w-24 border px-4 py-2 ${sheet?.status !== "Unpaid" ? "border-green-400 text-green-400" : "border-yellow-400 text-yellow-400"} mx-2 rounded-md`}
-            onClick={() => handleOpen(sheet)}
-          >
-            {sheet?.status}{" "}
-          </button>
-        </div>
-        <div className="w-[30%] dark:text-white">
-          <button
-            className="mx-2 rounded-md bg-yellow-500 px-4 py-2"
-            onClick={() =>
-              handleOpen(sheet?.Employee?.id, companyId, month, year)
-            }
-          >
-            Payslip
-          </button>
-          <button
-            className="mx-2 rounded-md bg-purple-700 px-4 py-2"
-            onClick={() =>
-              handleUpdateSalarySheet(sheet?.Employee?.id, sheet?.generate_date)
-            }
-          >
-            Click To Paid
-          </button>
-          <button className="mx-2 rounded-md bg-blue-500 px-4 py-2">
-            Edit
-          </button>
-          <button
-            className="mx-2 rounded-md bg-green-500 px-4 py-2"
-            onClick={() =>
-              handleDeleteSalarySheet(sheet?.Employee?.id, sheet?.generate_date)
-            }
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-    </>
-  ));
+      </>
+    ));
 
   return (
     <div>

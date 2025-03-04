@@ -50,9 +50,9 @@ const ProfileUpdate = () => {
     // eslint-disable-next-line no-unsafe-optional-chaining
     const { first_name, last_name, phone, email, file } = data?.data;
     content = (
-      <div className="w-full md:w-[50%] h-full pt-6 xl:pt-10 px-3 sm:px-10 md:px-5">
-        <h2 className="text-2xl font-semibold pt-16 mb-6">
-          Profile <label className="text-[#3686FF] font-bold">Update</label>
+      <div className="h-full w-full px-3 pt-6 sm:px-10 md:w-[50%] md:px-5 xl:pt-10">
+        <h2 className="mb-6 pt-16 text-2xl font-semibold">
+          Profile <label className="font-bold text-[#3686FF]">Update</label>
         </h2>
         <div className="py-4 md:w-full lg:w-[400px]">
           <Formik
@@ -104,14 +104,14 @@ const ProfileUpdate = () => {
                       <img
                         src={values.existingFile}
                         alt="Profile"
-                        className="w-32 h-32 mb-3"
+                        className="mb-3 h-32 w-32"
                       />
                     </div>
                   )}
                   <input
                     type="file"
                     name="file"
-                    className="w-[100%] h-12 border-1 border-[#3686FF] rounded-[5px] mt-1 mb-3 px-1"
+                    className="border-1 mb-3 mt-1 h-12 w-[100%] rounded-[5px] border-[#3686FF] px-1"
                     onChange={(event) => {
                       setFieldValue("file", event.currentTarget.files[0]);
                     }}
@@ -125,7 +125,7 @@ const ProfileUpdate = () => {
                 </div>
 
                 <button
-                  className="px-10 py-2 lg:px-16 lg:py-3 bg-[#61638A] rounded-md text-white mt-4"
+                  className="mt-4 rounded-md bg-[#61638A] px-10 py-2 text-white lg:px-16 lg:py-3"
                   type="submit"
                   disabled={isSubmitting}
                 >
