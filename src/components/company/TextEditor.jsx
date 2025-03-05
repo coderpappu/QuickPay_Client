@@ -101,8 +101,10 @@ function Placeholder() {
 
 // Custom plugin to set initial text
 
-function SetInitialTextPlugin({ initialJSON }) {
+function SetInitialTextPlugin({ value }) {
   const [editor] = useLexicalComposerContext();
+  if (!value) return; // Return if initialJSON is undefined or null
+  let initialJSON = JSON.parse(value);
 
   useEffect(() => {
     editor.update(() => {
@@ -126,7 +128,7 @@ function SetInitialTextPlugin({ initialJSON }) {
             lexicalNode = $createCodeNode();
             break;
           case "list":
-            lexicalNode = $createListNode(node.listType);
+            // lexicalNode = $createListNode(node.listType);
             break;
           case "listitem":
             // lexicalNode = $createListItemNode();
@@ -1149,7 +1151,7 @@ export default function TextEditor({ checkSave, initialJSON }) {
           <ListPlugin />
           <LinkPlugin />
 
-          <SetInitialTextPlugin initialJSON={JSON.parse(initialJSON)} />
+          <SetInitialTextPlugin value={initialJSON} />
 
           {/* SaveOnClickPlugin to save the editor content when button is clicked */}
         </div>

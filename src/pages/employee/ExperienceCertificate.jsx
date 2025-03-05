@@ -12,6 +12,8 @@ import {
   useGetEmployeeDetailsQuery,
   useGetExperienceCertificateFormatQuery,
 } from "../../features/api";
+import ListSkeleton from "../../skeletons/ListSkeleton";
+import ErrorMessage from "../../utils/ErrorMessage";
 import calculateTotalHours from "../../utils/TimeCalculator";
 import formatTimeTo12Hour from "../../utils/timeConverter";
 import todayDate from "../../utils/TodayDate";
@@ -38,29 +40,28 @@ function ExperienceCertificate() {
   const { data: experienceCertificateQuery, isLoading: isFormatLoading } =
     useGetExperienceCertificateFormatQuery(company_id);
 
-  if (isLoading && isFormatLoading && !isError) return "Loading.....";
+  if (isLoading && isFormatLoading && !isError) return <ListSkeleton />;
 
-  if (!experienceCertificateQuery?.data?.formatData) return "Unexpected Error";
+  if (!experienceCertificateQuery?.data?.formatData)
+    return <ErrorMessage message="We have not found any certificate!" />;
 
   // Function to calculate time difference in hours and minutes
 
   const initialApplicationData = {
-    company_name: employeeDetails?.data?.[0]?.company?.company_name || "",
-    employee_name: employeeDetails?.data?.[0]?.name || "",
+    company_name: employeeDetails?.data?.company?.company_name || "",
+    employee_name: employeeDetails?.data?.name || "",
     date: todayDate() || "",
-    branch: employeeDetails?.data?.[0]?.company?.company_name || "",
+    branch: employeeDetails?.data?.company?.company_name || "",
     designation:
-      employeeDetails?.data?.[0]?.EmployeeDesignation?.[0]?.designation?.name ||
-      "",
-    start_date: employeeDetails?.data?.[0]?.joining_date || "",
+      employeeDetails?.data?.EmployeeDesignation?.[0]?.designation?.name || "",
+    start_date: employeeDetails?.data?.joining_date || "",
     total_hours: calculateTotalHours(
-      employeeDetails?.data?.[0]?.EmployeeShift?.[0]?.shift?.start_time,
-      employeeDetails?.data?.[0]?.EmployeeShift?.[0]?.shift?.end_time
+      employeeDetails?.data?.EmployeeShift?.[0]?.shift?.start_time,
+      employeeDetails?.data?.EmployeeShift?.[0]?.shift?.end_time,
     ),
     start_time:
-      employeeDetails?.data?.[0]?.EmployeeShift?.[0]?.shift?.start_time || "",
-    end_time:
-      employeeDetails?.data?.[0]?.EmployeeShift?.[0]?.shift?.end_time || "",
+      employeeDetails?.data?.EmployeeShift?.[0]?.shift?.start_time || "",
+    end_time: employeeDetails?.data?.EmployeeShift?.[0]?.shift?.end_time || "",
   };
 
   // Function to replace placeholders
@@ -78,7 +79,7 @@ function ExperienceCertificate() {
     };
     return text.replace(
       /{(\w+)}/g,
-      (match, placeholder) => placeholderValues[placeholder] || match
+      (match, placeholder) => placeholderValues[placeholder] || match,
     );
   };
 
@@ -99,7 +100,7 @@ function ExperienceCertificate() {
           >
             {replacePlaceholders(text.text)}
           </span>
-        ))
+        )),
       );
     } else if (child.type === "paragraph") {
       // Check if paragraph is empty
@@ -137,10 +138,10 @@ function ExperienceCertificate() {
   };
 
   return (
-    <div className="text-white w-[1000px] m-auto">
+    <div className="m-auto w-[1000px] text-white">
       <div className="flex justify-end">
         <button
-          className="bg-green-600 px-3 py-3 rounded-sm mb-2 flex  gap-2 items-center"
+          className="mb-2 flex items-center gap-2 rounded-sm bg-green-600 px-3 py-3"
           onClick={() => downloadBtn()}
         >
           {" "}
@@ -150,20 +151,20 @@ function ExperienceCertificate() {
       </div>
       <div
         id="container"
-        className="bg-white dark:bg-dark-box dark:text-white text-black p-8 rounded-sm  h-auto"
+        className="h-auto rounded-sm bg-white p-8 text-black dark:bg-dark-box dark:text-white"
       >
-        <div className="flex justify-between items-center mb-8">
-          <img src={CompanyLogo} alt="" className="w-[180px] h-auto" />
+        <div className="mb-8 flex items-center justify-between">
+          <img src={CompanyLogo} alt="" className="h-auto w-[180px]" />
         </div>
         <div className="h-[820px]">
           {JSON.parse(
-            experienceCertificateQuery?.data?.formatData
+            experienceCertificateQuery?.data?.formatData,
           ).root.children.map((child, index) => renderElement(child, index))}
         </div>
 
-        <div className=" flex  gap-14  ">
-          <div className="flex justify-between items-center w-[170px]">
-            <div className="p-2 rounded-full bg-blue-500">
+        <div className="flex gap-14">
+          <div className="flex w-[170px] items-center justify-between">
+            <div className="rounded-full bg-blue-500 p-2">
               <FiPhone color="white" />
             </div>{" "}
             <div className="text-sm">
@@ -171,16 +172,16 @@ function ExperienceCertificate() {
               <p className="text-sm">+8801884-815992</p>
             </div>
           </div>{" "}
-          <div className="flex justify-between items-center w-[180px]">
-            <div className="p-2 rounded-full bg-blue-500">
+          <div className="flex w-[180px] items-center justify-between">
+            <div className="rounded-full bg-blue-500 p-2">
               <MdOutlineEmail color="white" />
             </div>{" "}
             <div className="text-sm">
               <p className="text-sm">info@xceedbd.com</p>
             </div>
           </div>
-          <div className="flex justify-between items-center w-[210px] mt-3">
-            <div className="p-2 rounded-full bg-blue-500">
+          <div className="mt-3 flex w-[210px] items-center justify-between">
+            <div className="rounded-full bg-blue-500 p-2">
               <CiLocationOn color="white" />
             </div>{" "}
             <div>
