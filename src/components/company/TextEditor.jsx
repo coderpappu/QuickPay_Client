@@ -54,13 +54,14 @@ import {
 import { $isAtNodeEnd, $wrapNodes } from "@lexical/selection";
 import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
 import {
+  $createTextNode,
   $getNodeByKey,
+  $getRoot,
   FORMAT_TEXT_COMMAND,
   SELECTION_CHANGE_COMMAND,
 } from "lexical";
 
 import SettingCardFooter from "./SettingCardFooter";
-
 const LowPriority = 1;
 
 const supportedBlockTypes = new Set([
@@ -98,6 +99,56 @@ function Placeholder() {
   );
 }
 
+// Custom plugin to set initial text
+
+function SetInitialTextPlugin({ initialJSON }) {
+  const [editor] = useLexicalComposerContext();
+
+  useEffect(() => {
+    editor.update(() => {
+      const root = $getRoot();
+      root.clear();
+
+      // Parse the JSON and create nodes
+      initialJSON.root.children.forEach((node) => {
+        let lexicalNode;
+        switch (node.type) {
+          case "paragraph":
+            lexicalNode = $createParagraphNode();
+            break;
+          case "heading":
+            lexicalNode = $createHeadingNode(node.tag);
+            break;
+          case "quote":
+            lexicalNode = $createQuoteNode();
+            break;
+          case "code":
+            lexicalNode = $createCodeNode();
+            break;
+          case "list":
+            lexicalNode = $createListNode(node.listType);
+            break;
+          case "listitem":
+            // lexicalNode = $createListItemNode();
+            break;
+          default:
+            return;
+        }
+
+        node.children.forEach((textNode) => {
+          if (textNode.type === "text") {
+            const lexicalTextNode = $createTextNode(textNode.text);
+            lexicalNode.append(lexicalTextNode);
+          }
+        });
+
+        root.append(lexicalNode);
+      });
+    });
+  }, [editor, initialJSON]);
+
+  return null;
+}
 function Select({ onChange, className, options, value }) {
   return (
     <select className={className} onChange={onChange} value={value}>
@@ -1069,7 +1120,7 @@ function SaveOnClickPlugin({ onSave }) {
   );
 }
 
-export default function TextEditor({ checkSave }) {
+export default function TextEditor({ checkSave, initialJSON }) {
   const [savedData, setSavedData] = useState("dsf");
   const [initialContent, setInitialContent] = useState("sdf");
 
@@ -1085,7 +1136,6 @@ export default function TextEditor({ checkSave }) {
     <LexicalComposer initialConfig={editorConfig}>
       <div className="relative mx-auto my-5 w-full max-w-full overflow-hidden rounded-xl border border-gray-300 bg-white text-left font-normal leading-5 text-gray-900 dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-box">
         <ToolbarPlugin />
-
         <div className="relative rounded-b-lg border-opacity-5 bg-white dark:bg-dark-box dark:text-dark-text-color">
           <RichTextPlugin
             contentEditable={
@@ -1098,6 +1148,8 @@ export default function TextEditor({ checkSave }) {
           <AutoFocusPlugin />
           <ListPlugin />
           <LinkPlugin />
+
+          <SetInitialTextPlugin initialJSON={JSON.parse(initialJSON)} />
 
           {/* SaveOnClickPlugin to save the editor content when button is clicked */}
         </div>

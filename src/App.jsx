@@ -52,6 +52,7 @@ import EmployeeLoanList from "./components/hrm/loan/Employee_Loan/EmployeeLoanLi
 
 import PaySlipCard from "./components/payroll/payslip/PaySlipCard";
 import BiometricAttendnaces from "./pages/attendnace/BiometricAttendnaces";
+import EditorComponent from "./pages/editor-test/EditorComponent";
 import GradeForm from "./pages/payroll/grade/gradeForm";
 import GradeList from "./pages/payroll/grade/gradeList";
 import LoanTypeForm from "./pages/payroll/Loan/LoanType/LoanTypeForm";
@@ -213,6 +214,7 @@ function App() {
 
               <Route path="/company/loan/type" element={<LoanTypeList />} />
               <Route path="/company/loan/type/:id" element={<LoanTypeForm />} />
+              <Route path="/editor" element={<EditorComponent />} />
 
               {/* salary route  */}
               <Route path="/employee/setsalary" element={<SetSalaryCard />} />

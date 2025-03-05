@@ -9,7 +9,7 @@ const adminMenuItems = [
     title: "Dashboard",
     icon: <RxHome size={20} />,
     subMenu: [
-      { title: "Overview", link: "/company/calendar" },
+      { title: "Overview", link: "/editor" },
       { title: "Reports", link: "company/settings" },
       { title: "Reports", link: "/holiday" },
       { title: "Holiday Type", link: "/holiday/type/add" },
