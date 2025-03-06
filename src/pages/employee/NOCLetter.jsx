@@ -1,5 +1,6 @@
-import html2pdf from "html2pdf.js";
-import React from "react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import React, { useRef } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { FiPhone } from "react-icons/fi";
 import { MdOutlineEmail } from "react-icons/md";
@@ -17,6 +18,7 @@ import ErrorMessage from "../../utils/ErrorMessage";
 import todayDate from "../../utils/TodayDate";
 
 function NOCLetter() {
+  const componentRef = useRef();
   let { id } = useParams();
 
   // Fetching company ID
@@ -32,21 +34,17 @@ function NOCLetter() {
   const { data: NOCLetterFormat, isLoading: isFormatLoading } =
     useGetNocLetterFormatQuery(company_id);
 
-  if (isLoading && isFormatLoading && !isError) return <ListSkeleton />;
+  if (isLoading || isFormatLoading) return <ListSkeleton />;
 
   if (!NOCLetterFormat?.data?.formatData)
     return <ErrorMessage message="We have not found any certificate!" />;
 
-  // Function to calculate time difference in hours and minutes
-
   const initialApplicationData = {
-    company_name: employeeDetails?.data?.[0]?.company?.company_name || "",
-    employee_name: employeeDetails?.data?.[0]?.name || "",
+    company_name: employeeDetails?.data?.company?.company_name || "",
+    employee_name: employeeDetails?.data?.name || "",
     date: todayDate() || "",
-
     designation:
-      employeeDetails?.data?.[0]?.EmployeeDesignation?.[0]?.designation?.name ||
-      "",
+      employeeDetails?.data?.EmployeeDesignation?.[0]?.designation?.name || "",
   };
 
   // Function to replace placeholders
@@ -55,7 +53,6 @@ function NOCLetter() {
       company_name: initialApplicationData?.company_name,
       employee_name: initialApplicationData?.employee_name,
       date: initialApplicationData?.date,
-
       designation: initialApplicationData?.designation,
     };
     return text.replace(
@@ -84,8 +81,6 @@ function NOCLetter() {
         )),
       );
     } else if (child.type === "paragraph") {
-      // Check if paragraph is empty
-
       if (!child.children || child.children.length === 0) {
         return <br key={index} />; // Render line break for empty paragraph
       }
@@ -108,13 +103,18 @@ function NOCLetter() {
     }
   };
 
-  // Function to handle PDF download
-  const downloadBtn = () => {
-    var element = document.getElementById("container");
-    html2pdf(element, {
-      margin: 10,
-      filename:
-        initialApplicationData?.employee_name + "-" + todayDate() + ".pdf",
+  // Function to generate PDF
+  const handleDownloadPDF = () => {
+    const input = componentRef.current;
+
+    html2canvas(input, { scale: 2 }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "A4");
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+      pdf.save("NOC_Letter.pdf");
     });
   };
 
@@ -122,16 +122,16 @@ function NOCLetter() {
     <div className="m-auto w-[1000px] text-white">
       <div className="flex justify-end">
         <button
+          onClick={handleDownloadPDF}
           className="mb-2 flex items-center gap-2 rounded-sm bg-green-600 px-3 py-3"
-          onClick={() => downloadBtn()}
         >
-          {" "}
           <TfiPrinter />
           Download PDF
         </button>
       </div>
       <div
         id="container"
+        ref={componentRef}
         className="h-auto rounded-sm bg-white p-8 text-black dark:bg-dark-box dark:text-white"
       >
         <div className="mb-8 flex items-center justify-between">

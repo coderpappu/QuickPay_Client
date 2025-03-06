@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import {
   useCreateJoiningLetterFormatMutation,
   useGetCompanyIdQuery,
+  useGetJoiningLetterFormatQuery,
 } from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
 import SettingCardHeader from "./SettingCardHeader";
@@ -16,6 +17,7 @@ const JoiningLetterCard = () => {
   const { data: company_id } = useGetCompanyIdQuery();
   const [editorData, setEditorData] = useState(null); // Store the editor's state data
   const [createJoiningLetter] = useCreateJoiningLetterFormatMutation();
+  const { data } = useGetJoiningLetterFormatQuery(company_id);
 
   // Define handleEditorData as a function that accepts editor state data
   const handleEditorData = async (data) => {
@@ -40,20 +42,20 @@ const JoiningLetterCard = () => {
           subTitle="Edit your joining letter"
         />
         <div className="px-6 py-3">
-          <h2 className="text-white my-2">Palceholder</h2>
+          <h2 className="my-2 text-white">Palceholder</h2>
 
-          <div className=" bg-[#F3F4F6] dark:bg-dark-box p-3 rounded-md">
-            <div className="w-full h-auto flex justify-between items-center">
+          <div className="rounded-md bg-[#F3F4F6] p-3 dark:bg-dark-box">
+            <div className="flex h-auto w-full items-center justify-between">
               <TextBoxLetter title="Applicant Name" varName="applicant_name" />
               <TextBoxLetter title="Company Name" varName="company_name" />
               <TextBoxLetter title="Employee Name" varName="employee_name" />
             </div>
-            <div className="w-full h-auto  flex justify-between items-center">
+            <div className="flex h-auto w-full items-center justify-between">
               <TextBoxLetter title="Address" varName="address" />
               <TextBoxLetter title="Designation" varName="designation" />
               <TextBoxLetter title="Start Date" varName="start_date" />
             </div>
-            <div className="w-full h-auto  flex justify-between items-center">
+            <div className="flex h-auto w-full items-center justify-between">
               <TextBoxLetter title="Branch" varName="branch" />
               <TextBoxLetter title="Start Time" varName="start_time" />
               <TextBoxLetter title="End Time" varName="end_time" />
@@ -62,7 +64,10 @@ const JoiningLetterCard = () => {
             <TextBoxLetter title="Number of Hours" varName="hours" />
           </div>
 
-          <TextEditor checkSave={handleEditorData} />
+          <TextEditor
+            checkSave={handleEditorData}
+            initialJSON={data?.data?.formatData}
+          />
         </div>
         {/* <SettingCardFooter title="Update" handleUpdate={handleSave} /> */}
       </BrandCardWrapper>

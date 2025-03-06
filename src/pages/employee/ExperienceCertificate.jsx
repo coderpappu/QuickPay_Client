@@ -1,4 +1,3 @@
-import html2pdf from "html2pdf.js";
 import React, { useState } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { FiPhone } from "react-icons/fi";
@@ -128,21 +127,21 @@ function ExperienceCertificate() {
   };
 
   // Function to handle PDF download
-  const downloadBtn = () => {
-    var element = document.getElementById("container");
-    html2pdf(element, {
-      margin: 10,
-      filename:
-        initialApplicationData?.employee_name + "-" + todayDate() + ".pdf",
-    });
-  };
+  // const downloadBtn = () => {
+  //   var element = document.getElementById("container");
+  //   html2pdf(element, {
+  //     margin: 10,
+  //     filename:
+  //       initialApplicationData?.employee_name + "-" + todayDate() + ".pdf",
+  //   });
+  // };
 
   return (
     <div className="m-auto w-[1000px] text-white">
       <div className="flex justify-end">
         <button
           className="mb-2 flex items-center gap-2 rounded-sm bg-green-600 px-3 py-3"
-          onClick={() => downloadBtn()}
+          // onClick={() => downloadBtn()}
         >
           {" "}
           <TfiPrinter />

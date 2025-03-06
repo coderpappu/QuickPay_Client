@@ -1,65 +1,19 @@
+import jsPDF from "jspdf";
 import React from "react";
-import LexicalEditor from "./Lexical";
 
-const initialJSON = {
-  root: {
-    children: [
-      {
-        children: [
-          {
-            detail: 0,
-            format: 0,
-            mode: "normal",
-            style: "",
-            text: "hiksdfkljsdfjsd",
-            type: "text",
-            version: 1,
-          },
-        ],
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        type: "paragraph",
-        version: 1,
-        textFormat: 0,
-        textStyle: "",
-      },
-      {
-        children: [
-          {
-            detail: 0,
-            format: 0,
-            mode: "normal",
-            style: "",
-            text: "hiksdfkljsdfjsd",
-            type: "text",
-            version: 1,
-          },
-        ],
-        direction: "ltr",
-        format: "",
-        indent: 0,
-        type: "paragraph",
-        version: 1,
-        textFormat: 0,
-        textStyle: "",
-      },
-    ],
-    direction: "ltr",
-    format: "",
-    indent: 0,
-    type: "root",
-    version: 1,
-  },
-};
+const EditorComponent = () => {
+  const handleGeneratePDF = () => {
+    const doc = new jsPDF();
+    doc.text("Hello, World!", 10, 10);
+    doc.save("output.pdf");
+  };
 
-function App() {
   return (
     <div>
-      <h1>My Lexical Text Editor</h1>
-      <LexicalEditor initialJSON={initialJSON} />
+      <h1>PDF Generator</h1>
+      <button onClick={handleGeneratePDF}>Generate PDF</button>
     </div>
   );
-}
+};
 
-export default App;
+export default EditorComponent;

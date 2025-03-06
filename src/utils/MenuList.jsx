@@ -1,9 +1,9 @@
 import { AiOutlineSetting } from "react-icons/ai";
-import { LuListTodo, LuUsers2 } from "react-icons/lu";
+import { LuListTodo } from "react-icons/lu";
 import { RxHome } from "react-icons/rx";
 import { TbCards, TbMoneybag } from "react-icons/tb";
 
-import { LuUser2 } from "react-icons/lu";
+// import { LuUser2 } from "react-icons/lu";
 const adminMenuItems = [
   {
     title: "Dashboard",
@@ -24,7 +24,7 @@ const adminMenuItems = [
   },
   {
     title: "HRM system",
-    icon: <LuUsers2 size={20} />,
+    // icon: <LuUsers2 size={20} />,
     subMenu: [
       { title: "Employee Setup", link: "/company/employee" },
       {
@@ -116,7 +116,7 @@ const adminMenuItems = [
   },
   {
     title: "User Management",
-    icon: <LuUser2 size={19} />,
+    // icon: <LuUser2 size={19} />,
     subMenu: [
       { title: "User", link: "/users" },
       { title: "Role", link: "/manage-products" },

@@ -1,7 +1,6 @@
-import html2pdf from "html2pdf.js";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Preview, print } from "react-html2pdf";
+
 import { CiLocationOn } from "react-icons/ci";
 import { FiPhone } from "react-icons/fi";
 import { MdOutlineEmail } from "react-icons/md";
@@ -105,7 +104,7 @@ function Application() {
     };
     return text.replace(
       /{(\w+)}/g,
-      (match, placeholder) => placeholderValues[placeholder] || match
+      (match, placeholder) => placeholderValues[placeholder] || match,
     );
   };
 
@@ -126,7 +125,7 @@ function Application() {
           >
             {replacePlaceholders(text.text)}
           </span>
-        ))
+        )),
       );
     } else if (child.type === "paragraph") {
       // Check if paragraph is empty
@@ -152,23 +151,23 @@ function Application() {
   };
 
   // Function to handle PDF download
-  const downloadBtn = () => {
-    var element = document.getElementById("container");
-    html2pdf(element, {
-      margin: 10,
-      filename:
-        applicationDetails?.data?.Employee?.name +
-        "-" +
-        DatePicker(applicationData?.createDate) +
-        ".pdf",
-    });
-  };
+  // const downloadBtn = () => {
+  //   var element = document.getElementById("container");
+  //   html2pdf(element, {
+  //     margin: 10,
+  //     filename:
+  //       applicationDetails?.data?.Employee?.name +
+  //       "-" +
+  //       DatePicker(applicationData?.createDate) +
+  //       ".pdf",
+  //   });
+  // };
 
   return (
-    <div className="text-white w-[1000px] m-auto">
+    <div className="m-auto w-[1000px] text-white">
       <div className="flex justify-end">
         <button
-          className="bg-green-600 px-3 py-3 rounded-sm mb-2 flex  gap-2 items-center"
+          className="mb-2 flex items-center gap-2 rounded-sm bg-green-600 px-3 py-3"
           onClick={() => print("a", "jsx-template")}
         >
           {" "}
@@ -179,18 +178,18 @@ function Application() {
       <Preview id={"jsx-template"}>
         <div
           id="container"
-          className="dark:bg-dark-box dark:text-white text-black p-8 rounded-sm  h-auto"
+          className="h-auto rounded-sm p-8 text-black dark:bg-dark-box dark:text-white"
         >
-          <div className="flex justify-between items-center mb-8">
-            <img src={CompanyLogo} alt="" className="w-[180px] h-auto" />
+          <div className="mb-8 flex items-center justify-between">
+            <img src={CompanyLogo} alt="" className="h-auto w-[180px]" />
           </div>
           {letterData.root.children.map((child, index) =>
-            renderElement(child, index)
+            renderElement(child, index),
           )}
 
-          <div className="mt-[250px] flex  gap-14  ">
-            <div className="flex justify-between items-center w-[170px]">
-              <div className="p-2 rounded-full bg-blue-500">
+          <div className="mt-[250px] flex gap-14">
+            <div className="flex w-[170px] items-center justify-between">
+              <div className="rounded-full bg-blue-500 p-2">
                 <FiPhone color="white" />
               </div>{" "}
               <div className="text-sm">
@@ -198,16 +197,16 @@ function Application() {
                 <p className="text-sm">+8801884-815992</p>
               </div>
             </div>{" "}
-            <div className="flex justify-between items-center w-[180px]">
-              <div className="p-2 rounded-full bg-blue-500">
+            <div className="flex w-[180px] items-center justify-between">
+              <div className="rounded-full bg-blue-500 p-2">
                 <MdOutlineEmail color="white" />
               </div>{" "}
               <div className="text-sm">
                 <p className="text-sm">info@xceedbd.com</p>
               </div>
             </div>
-            <div className="flex justify-between items-center w-[210px] mt-3">
-              <div className="p-2 rounded-full bg-blue-500">
+            <div className="mt-3 flex w-[210px] items-center justify-between">
+              <div className="rounded-full bg-blue-500 p-2">
                 <CiLocationOn color="white" />
               </div>{" "}
               <div>

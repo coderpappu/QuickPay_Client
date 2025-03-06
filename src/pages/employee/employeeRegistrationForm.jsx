@@ -63,13 +63,13 @@ const EmployeeRegistrationForm = () => {
   const [canSubmit, setCanSubmit] = useState(false);
 
   if (
-    departments?.data ||
-    shifts?.data ||
-    sections?.data ||
-    branchs?.data ||
-    designations?.data == undefined
+    departments?.data?.length &&
+    shifts?.data?.length &&
+    sections?.data?.length &&
+    branchs?.data?.length &&
+    designations?.data?.length === undefined
   ) {
-    return <h1> Please complete the hrm setup</h1>;
+    return <ErrorMessage message={"Please complete the HRM setup"} />;
   }
 
   const {
