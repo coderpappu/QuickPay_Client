@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { CiLocationOn } from "react-icons/ci";
-import { FiPhone } from "react-icons/fi";
-import { MdOutlineEmail } from "react-icons/md";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import React, { useRef, useState } from "react";
 import { TfiPrinter } from "react-icons/tfi";
 import { useParams } from "react-router-dom";
 import "../../Applicaion.css";
@@ -25,7 +24,8 @@ function ExperienceCertificate() {
   const [address, setAddress] = useState("Raozan");
   const [appName, setAppName] = useState("My Company");
   let { id } = useParams();
-
+  const headerRef = useRef();
+  const componentRef = useRef();
   // Fetching company ID
   const { data: company_id } = useGetCompanyIdQuery();
 
@@ -127,21 +127,122 @@ function ExperienceCertificate() {
   };
 
   // Function to handle PDF download
-  // const downloadBtn = () => {
-  //   var element = document.getElementById("container");
-  //   html2pdf(element, {
-  //     margin: 10,
-  //     filename:
-  //       initialApplicationData?.employee_name + "-" + todayDate() + ".pdf",
-  //   });
-  // };
+  const handleDownloadPDF = async () => {
+    const input = componentRef.current;
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 10;
+    const lineHeight = 7;
+    const brSpacing = 3;
+    const footerText = "Xceed Bangladesh | +8801884-815992 | info@xceedbd.com";
+
+    if (!input) return;
+
+    // Step 1: Capture the header as an image
+    const headerCanvas = await html2canvas(headerRef.current);
+    const headerData = headerCanvas.toDataURL("image/png");
+    const headerHeight =
+      (headerCanvas.height * (pageWidth - 20)) / headerCanvas.width; // Calculate height in mm
+
+    // Step 2: Extract text and <br> markers
+    const lines = [];
+    const walker = document.createTreeWalker(
+      input,
+      NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT,
+      null,
+    );
+
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "BR") {
+        lines.push("%%BR%%");
+      } else if (
+        node.nodeType === Node.TEXT_NODE &&
+        node.textContent.trim() !== ""
+      ) {
+        const textLines = node.textContent
+          .split("\n")
+          .map((line) => line.trim());
+        lines.push(...textLines);
+      }
+    }
+
+    // Step 3: Generate PDF with header, content, and footer
+    let yPosition = margin + headerHeight + 10; // Start below the header
+    let currentPage = 1;
+
+    // Add header to the first page
+    pdf.addImage(
+      headerData,
+      "PNG",
+      margin,
+      margin,
+      pageWidth - 20,
+      headerHeight,
+    );
+
+    lines.forEach((line) => {
+      const isBr = line === "%%BR%%";
+      const currentSpacing = isBr ? brSpacing : lineHeight;
+
+      if (yPosition + currentSpacing > pageHeight - 20) {
+        // Add footer and new page
+        pdf.setFontSize(10);
+        pdf.text(footerText, margin, pageHeight - 10);
+        pdf.addPage();
+        currentPage++;
+        // Add header to the new page
+        pdf.addImage(
+          headerData,
+          "PNG",
+          margin,
+          margin,
+          pageWidth - 20,
+          headerHeight,
+        );
+        yPosition = margin + headerHeight + 10; // Reset position below header
+      }
+
+      if (isBr) {
+        yPosition += currentSpacing;
+      } else {
+        const wrappedLines = pdf.splitTextToSize(line, pageWidth - 20);
+        wrappedLines.forEach((wrappedLine) => {
+          if (yPosition + currentSpacing > pageHeight - 20) {
+            pdf.setFontSize(10);
+            pdf.text(footerText, margin, pageHeight - 10);
+            pdf.addPage();
+            currentPage++;
+            pdf.addImage(
+              headerData,
+              "PNG",
+              margin,
+              margin,
+              pageWidth - 20,
+              headerHeight,
+            );
+            yPosition = margin + headerHeight + 10;
+          }
+          pdf.setFontSize(12);
+          pdf.text(wrappedLine, margin, yPosition);
+          yPosition += currentSpacing;
+        });
+      }
+    });
+
+    // Add footer to the last page
+    pdf.setFontSize(10);
+    pdf.text(footerText, margin, pageHeight - 10);
+    pdf.save("Experience_Letter.pdf");
+  };
 
   return (
     <div className="m-auto w-[1000px] text-white">
       <div className="flex justify-end">
         <button
           className="mb-2 flex items-center gap-2 rounded-sm bg-green-600 px-3 py-3"
-          // onClick={() => downloadBtn()}
+          onClick={() => handleDownloadPDF()}
         >
           {" "}
           <TfiPrinter />
@@ -149,45 +250,22 @@ function ExperienceCertificate() {
         </button>
       </div>
       <div
+        ref={componentRef}
         id="container"
         className="h-auto rounded-sm bg-white p-8 text-black dark:bg-dark-box dark:text-white"
       >
-        <div className="mb-8 flex items-center justify-between">
-          <img src={CompanyLogo} alt="" className="h-auto w-[180px]" />
+        {/* Header with ref */}
+        <div ref={headerRef} className="mb-8 flex items-center justify-between">
+          <img
+            src={CompanyLogo}
+            alt="Company Logo"
+            className="h-auto w-[180px]"
+          />
         </div>
         <div className="h-[820px]">
           {JSON.parse(
             experienceCertificateQuery?.data?.formatData,
           ).root.children.map((child, index) => renderElement(child, index))}
-        </div>
-
-        <div className="flex gap-14">
-          <div className="flex w-[170px] items-center justify-between">
-            <div className="rounded-full bg-blue-500 p-2">
-              <FiPhone color="white" />
-            </div>{" "}
-            <div className="text-sm">
-              <p className="text-sm">+8801884-815992</p>
-              <p className="text-sm">+8801884-815992</p>
-            </div>
-          </div>{" "}
-          <div className="flex w-[180px] items-center justify-between">
-            <div className="rounded-full bg-blue-500 p-2">
-              <MdOutlineEmail color="white" />
-            </div>{" "}
-            <div className="text-sm">
-              <p className="text-sm">info@xceedbd.com</p>
-            </div>
-          </div>
-          <div className="mt-3 flex w-[210px] items-center justify-between">
-            <div className="rounded-full bg-blue-500 p-2">
-              <CiLocationOn color="white" />
-            </div>{" "}
-            <div>
-              <p className="text-sm">Agrabad , Chittagong </p>
-              <p className="text-sm">Bangladesh </p>
-            </div>
-          </div>
         </div>
       </div>
     </div>

@@ -1,31 +1,23 @@
-import React, { useState } from "react";
-import { CiLocationOn } from "react-icons/ci";
-import { FiPhone } from "react-icons/fi";
-import { MdOutlineEmail } from "react-icons/md";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import React, { useRef } from "react";
+import { TfiPrinter } from "react-icons/tfi";
 import { useParams } from "react-router-dom";
-
 import "../../Applicaion.css";
 import CompanyLogo from "../../assets/xceed-bangladesh-logo.png";
 import {
   useGetCompanyIdQuery,
   useGetEmployeeDetailsQuery,
-  useGetJoiningLetterFormatQuery,
+  useGetJoiningLetterFormatQuery, // Custom query for Joining Letter format
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import ErrorMessage from "../../utils/ErrorMessage";
-import calculateTotalHours from "../../utils/TimeCalculator";
-import formatTimeTo12Hour from "../../utils/timeConverter";
 import todayDate from "../../utils/TodayDate";
 
 function JoiningLetter() {
-  const [letterData, setLetterData] = useState(null);
-  const [date, setDate] = useState("10");
-  const [name, setEmployeeName] = useState("John Doe");
-  const [start_date, setStart_date] = useState("John Doe");
-  const [address, setAddress] = useState("Raozan");
-  const [appName, setAppName] = useState("My Company");
+  const componentRef = useRef();
   let { id } = useParams();
-
+  const headerRef = useRef();
   // Fetching company ID
   const { data: company_id } = useGetCompanyIdQuery();
 
@@ -35,48 +27,42 @@ function JoiningLetter() {
     isError,
   } = useGetEmployeeDetailsQuery(id);
 
-  // Fetching leave application format
-  const { data: joiningLetterFormat, isLoading: isFormatLoading } =
+  // Fetching joining letter format
+  const { data: JoiningLetterFormat, isLoading: isFormatLoading } =
     useGetJoiningLetterFormatQuery(company_id);
 
   if (isLoading || isFormatLoading) return <ListSkeleton />;
 
-  if (!joiningLetterFormat?.data?.formatData)
-    return <ErrorMessage message="We have not found any certificate" />;
+  if (!JoiningLetterFormat?.data?.formatData)
+    return (
+      <ErrorMessage message="We have not found any joining letter format!" />
+    );
 
-  // Function to calculate time difference in hours and minutes
+  console.log(employeeDetails);
 
-  const initialApplicationData = {
+  const initialJoiningData = {
     company_name: employeeDetails?.data?.company?.company_name || "",
     employee_name: employeeDetails?.data?.name || "",
     date: todayDate() || "",
-    branch: employeeDetails?.data?.company?.company_name || "",
     designation:
       employeeDetails?.data?.EmployeeDesignation?.[0]?.designation?.name || "",
-    start_date: employeeDetails?.data?.joining_date || "",
-    total_hours: calculateTotalHours(
-      employeeDetails?.data?.EmployeeShift?.[0]?.shift?.start_time,
-      employeeDetails?.data?.EmployeeShift?.[0]?.shift?.end_time,
-    ),
-    start_time:
-      employeeDetails?.data?.EmployeeShift?.[0]?.shift?.start_time || "",
-    end_time: employeeDetails?.data?.EmployeeShift?.[0]?.shift?.end_time || "",
-    address: employeeDetails?.data?.present_address || "",
+    address: employeeDetails?.data?.present_address,
+    branch: employeeDetails?.data?.EmployeeBranch?.[0]?.branch?.name || "",
+    joining_date: employeeDetails?.data?.joining_date || "",
+    terminate_date: employeeDetails?.data?.terminate_date || "",
   };
 
   // Function to replace placeholders
   const replacePlaceholders = (text) => {
     const placeholderValues = {
-      company_name: initialApplicationData?.company_name,
-      employee_name: initialApplicationData?.employee_name,
-      date: initialApplicationData?.date,
-      branch: initialApplicationData?.branch,
-      designation: initialApplicationData?.designation,
-      start_date: initialApplicationData?.start_date,
-      total_hours: initialApplicationData?.total_hours,
-      start_time: formatTimeTo12Hour(initialApplicationData?.start_time),
-      end_time: formatTimeTo12Hour(initialApplicationData?.end_time),
-      address: initialApplicationData?.address,
+      company_name: initialJoiningData?.company_name,
+      date: todayDate() || "",
+      employee_name: initialJoiningData?.employee_name,
+      address: initialJoiningData?.address,
+      branch: initialJoiningData?.branch,
+      joining_date: initialJoiningData?.joining_date,
+      terminate_date: initialJoiningData?.terminate_date,
+      designation: initialJoiningData?.designation,
     };
     return text.replace(
       /{(\w+)}/g,
@@ -104,8 +90,6 @@ function JoiningLetter() {
         )),
       );
     } else if (child.type === "paragraph") {
-      // Check if paragraph is empty
-
       if (!child.children || child.children.length === 0) {
         return <br key={index} />; // Render line break for empty paragraph
       }
@@ -128,68 +112,144 @@ function JoiningLetter() {
     }
   };
 
-  // Function to handle PDF download
-  // const downloadBtn = () => {
-  //   var element = document.getElementById("container");
-  //   html2pdf(element, {
-  //     margin: 10,
-  //     filename:
-  //       initialApplicationData?.employee_name + "-" + todayDate() + ".pdf",
-  //   });
-  // };
+  // Function to generate PDF with footer on every page
+  const handleDownloadPDF = async () => {
+    const input = componentRef.current;
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 13;
+    const lineHeight = 7;
+    const brSpacing = 3;
+    const footerText = "Xceed Bangladesh | +8801884-815992 | info@xceedbd.com";
+
+    if (!input) return;
+
+    // Step 1: Capture the header as an image
+    const headerCanvas = await html2canvas(headerRef.current);
+    const headerData = headerCanvas.toDataURL("image/png");
+    const headerHeight =
+      (headerCanvas.height * (pageWidth - 20)) / headerCanvas.width; // Calculate height in mm
+
+    // Step 2: Extract text and <br> markers
+    const lines = [];
+    const walker = document.createTreeWalker(
+      input,
+      NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT,
+      null,
+    );
+
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "BR") {
+        lines.push("%%BR%%");
+      } else if (
+        node.nodeType === Node.TEXT_NODE &&
+        node.textContent.trim() !== ""
+      ) {
+        const textLines = node.textContent
+          .split("\n")
+          .map((line) => line.trim());
+        lines.push(...textLines);
+      }
+    }
+
+    // Step 3: Generate PDF with header, content, and footer
+    let yPosition = margin + headerHeight + 10; // Start below the header
+    let currentPage = 1;
+
+    // Add header to the first page
+    pdf.addImage(
+      headerData,
+      "PNG",
+      margin,
+      margin,
+      pageWidth - 20,
+      headerHeight,
+    );
+
+    lines.forEach((line) => {
+      const isBr = line === "%%BR%%";
+      const currentSpacing = isBr ? brSpacing : lineHeight;
+
+      if (yPosition + currentSpacing > pageHeight - 20) {
+        // Add footer and new page
+        pdf.setFontSize(10);
+        pdf.text(footerText, margin, pageHeight - 10);
+        pdf.addPage();
+        currentPage++;
+        // Add header to the new page
+        pdf.addImage(
+          headerData,
+          "PNG",
+          margin,
+          margin,
+          pageWidth - 20,
+          headerHeight,
+        );
+        yPosition = margin + headerHeight + 10; // Reset position below header
+      }
+
+      if (isBr) {
+        yPosition += currentSpacing;
+      } else {
+        const wrappedLines = pdf.splitTextToSize(line, pageWidth - 20);
+        wrappedLines.forEach((wrappedLine) => {
+          if (yPosition + currentSpacing > pageHeight - 20) {
+            pdf.setFontSize(10);
+            pdf.text(footerText, margin, pageHeight - 10);
+            pdf.addPage();
+            currentPage++;
+            pdf.addImage(
+              headerData,
+              "PNG",
+              margin,
+              margin,
+              pageWidth - 20,
+              headerHeight,
+            );
+            yPosition = margin + headerHeight + 10;
+          }
+          pdf.setFontSize(12);
+          pdf.text(wrappedLine, margin, yPosition);
+          yPosition += currentSpacing;
+        });
+      }
+    });
+
+    // Add footer to the last page
+    pdf.setFontSize(10);
+    pdf.text(footerText, margin, pageHeight - 10);
+    pdf.save("Joining_Letter.pdf");
+  };
 
   return (
     <div className="m-auto w-[1000px] text-white">
       <div className="flex justify-end">
         <button
+          onClick={handleDownloadPDF}
           className="mb-2 flex items-center gap-2 rounded-sm bg-green-600 px-3 py-3"
-          // onClick={() => reactToPrintFn()}
         >
-          {" "}
+          <TfiPrinter />
           Download PDF
         </button>
       </div>
       <div
-        // ref={contentRef}
-        id="container"
+        ref={componentRef}
         className="h-auto rounded-sm bg-white p-8 text-black dark:bg-dark-box dark:text-white"
       >
-        <div className="mb-8 flex items-center justify-between">
-          <img src={CompanyLogo} alt="" className="h-auto w-[180px]" />
+        {/* Header with ref */}
+        <div ref={headerRef} className="mb-8 flex items-center justify-between">
+          <img
+            src={CompanyLogo}
+            alt="Company Logo"
+            className="h-auto w-[180px]"
+          />
         </div>
-        <div className="h-auto">
-          {JSON.parse(joiningLetterFormat?.data?.formatData).root.children.map(
+        <div className="content">
+          {JSON.parse(JoiningLetterFormat?.data?.formatData).root.children.map(
             (child, index) => renderElement(child, index),
           )}
-        </div>
-
-        <div className="flex gap-14">
-          <div className="flex w-[170px] items-center justify-between">
-            <div className="rounded-full bg-blue-500 p-2">
-              <FiPhone color="white" />
-            </div>{" "}
-            <div className="text-sm">
-              <p className="text-sm">+8801884-815992</p>
-              <p className="text-sm">+8801884-815992</p>
-            </div>
-          </div>{" "}
-          <div className="flex w-[180px] items-center justify-between">
-            <div className="rounded-full bg-blue-500 p-2">
-              <MdOutlineEmail color="white" />
-            </div>{" "}
-            <div className="text-sm">
-              <p className="text-sm">info@xceedbd.com</p>
-            </div>
-          </div>
-          <div className="mt-3 flex w-[210px] items-center justify-between">
-            <div className="rounded-full bg-blue-500 p-2">
-              <CiLocationOn color="white" />
-            </div>{" "}
-            <div>
-              <p className="text-sm">Agrabad , Chittagong </p>
-              <p className="text-sm">Bangladesh </p>
-            </div>
-          </div>
         </div>
       </div>
     </div>

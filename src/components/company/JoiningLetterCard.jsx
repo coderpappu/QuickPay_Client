@@ -53,12 +53,12 @@ const JoiningLetterCard = () => {
             <div className="flex h-auto w-full items-center justify-between">
               <TextBoxLetter title="Address" varName="address" />
               <TextBoxLetter title="Designation" varName="designation" />
-              <TextBoxLetter title="Start Date" varName="start_date" />
+              <TextBoxLetter title="Joining Date" varName="joining_date" />
             </div>
             <div className="flex h-auto w-full items-center justify-between">
               <TextBoxLetter title="Branch" varName="branch" />
-              <TextBoxLetter title="Start Time" varName="start_time" />
-              <TextBoxLetter title="End Time" varName="end_time" />
+              <TextBoxLetter title="Joining Date" varName="joining_date" />
+              <TextBoxLetter title="Terminate Date" varName="terminate_date" />
             </div>
 
             <TextBoxLetter title="Number of Hours" varName="hours" />

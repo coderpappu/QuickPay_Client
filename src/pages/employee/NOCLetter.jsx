@@ -1,9 +1,6 @@
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import React, { useRef } from "react";
-import { CiLocationOn } from "react-icons/ci";
-import { FiPhone } from "react-icons/fi";
-import { MdOutlineEmail } from "react-icons/md";
 import { TfiPrinter } from "react-icons/tfi";
 import { useParams } from "react-router-dom";
 import "../../Applicaion.css";
@@ -20,7 +17,7 @@ import todayDate from "../../utils/TodayDate";
 function NOCLetter() {
   const componentRef = useRef();
   let { id } = useParams();
-
+  const headerRef = useRef();
   // Fetching company ID
   const { data: company_id } = useGetCompanyIdQuery();
 
@@ -103,19 +100,115 @@ function NOCLetter() {
     }
   };
 
-  // Function to generate PDF
-  const handleDownloadPDF = () => {
+  // Function to generate PDF with footer on every page
+  const handleDownloadPDF = async () => {
     const input = componentRef.current;
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 10;
+    const lineHeight = 7;
+    const brSpacing = 3;
+    const footerText = "Xceed Bangladesh | +8801884-815992 | info@xceedbd.com";
 
-    html2canvas(input, { scale: 2 }).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "A4");
-      const imgWidth = 210; // A4 width in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    if (!input) return;
 
-      pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-      pdf.save("NOC_Letter.pdf");
+    // Step 1: Capture the header as an image
+    const headerCanvas = await html2canvas(headerRef.current);
+    const headerData = headerCanvas.toDataURL("image/png");
+    const headerHeight =
+      (headerCanvas.height * (pageWidth - 20)) / headerCanvas.width; // Calculate height in mm
+
+    // Step 2: Extract text and <br> markers
+    const lines = [];
+    const walker = document.createTreeWalker(
+      input,
+      NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT,
+      null,
+    );
+
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "BR") {
+        lines.push("%%BR%%");
+      } else if (
+        node.nodeType === Node.TEXT_NODE &&
+        node.textContent.trim() !== ""
+      ) {
+        const textLines = node.textContent
+          .split("\n")
+          .map((line) => line.trim());
+        lines.push(...textLines);
+      }
+    }
+
+    // Step 3: Generate PDF with header, content, and footer
+    let yPosition = margin + headerHeight + 10; // Start below the header
+    let currentPage = 1;
+
+    // Add header to the first page
+    pdf.addImage(
+      headerData,
+      "PNG",
+      margin,
+      margin,
+      pageWidth - 20,
+      headerHeight,
+    );
+
+    lines.forEach((line) => {
+      const isBr = line === "%%BR%%";
+      const currentSpacing = isBr ? brSpacing : lineHeight;
+
+      if (yPosition + currentSpacing > pageHeight - 20) {
+        // Add footer and new page
+        pdf.setFontSize(10);
+        pdf.text(footerText, margin, pageHeight - 10);
+        pdf.addPage();
+        currentPage++;
+        // Add header to the new page
+        pdf.addImage(
+          headerData,
+          "PNG",
+          margin,
+          margin,
+          pageWidth - 20,
+          headerHeight,
+        );
+        yPosition = margin + headerHeight + 10; // Reset position below header
+      }
+
+      if (isBr) {
+        yPosition += currentSpacing;
+      } else {
+        const wrappedLines = pdf.splitTextToSize(line, pageWidth - 20);
+        wrappedLines.forEach((wrappedLine) => {
+          if (yPosition + currentSpacing > pageHeight - 20) {
+            pdf.setFontSize(10);
+            pdf.text(footerText, margin, pageHeight - 10);
+            pdf.addPage();
+            currentPage++;
+            pdf.addImage(
+              headerData,
+              "PNG",
+              margin,
+              margin,
+              pageWidth - 20,
+              headerHeight,
+            );
+            yPosition = margin + headerHeight + 10;
+          }
+          pdf.setFontSize(12);
+          pdf.text(wrappedLine, margin, yPosition);
+          yPosition += currentSpacing;
+        });
+      }
     });
+
+    // Add footer to the last page
+    pdf.setFontSize(10);
+    pdf.text(footerText, margin, pageHeight - 10);
+    pdf.save("NOC_Letter.pdf");
   };
 
   return (
@@ -130,46 +223,17 @@ function NOCLetter() {
         </button>
       </div>
       <div
-        id="container"
         ref={componentRef}
         className="h-auto rounded-sm bg-white p-8 text-black dark:bg-dark-box dark:text-white"
       >
-        <div className="mb-8 flex items-center justify-between">
+        {/* Header with ref */}
+        <div ref={headerRef} className="mb-8 flex items-center justify-between">
           <img src={CompanyLogo} alt="" className="h-auto w-[180px]" />
         </div>
-        <div className="h-[820px]">
+        <div className="content">
           {JSON.parse(NOCLetterFormat?.data?.formatData).root.children.map(
             (child, index) => renderElement(child, index),
           )}
-        </div>
-
-        <div className="flex gap-14">
-          <div className="flex w-[170px] items-center justify-between">
-            <div className="rounded-full bg-blue-500 p-2">
-              <FiPhone color="white" />
-            </div>{" "}
-            <div className="text-sm">
-              <p className="text-sm">+8801884-815992</p>
-              <p className="text-sm">+8801884-815992</p>
-            </div>
-          </div>{" "}
-          <div className="flex w-[180px] items-center justify-between">
-            <div className="rounded-full bg-blue-500 p-2">
-              <MdOutlineEmail color="white" />
-            </div>{" "}
-            <div className="text-sm">
-              <p className="text-sm">info@xceedbd.com</p>
-            </div>
-          </div>
-          <div className="mt-3 flex w-[210px] items-center justify-between">
-            <div className="rounded-full bg-blue-500 p-2">
-              <CiLocationOn color="white" />
-            </div>{" "}
-            <div>
-              <p className="text-sm">Agrabad , Chittagong </p>
-              <p className="text-sm">Bangladesh </p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
