@@ -2,6 +2,7 @@ import { useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { PiDotDuotone } from "react-icons/pi";
 import { TbCards } from "react-icons/tb";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
 
@@ -12,6 +13,9 @@ import {
 } from "../features/api";
 import { adminMenuItems, employeeMenuItems } from "../utils/MenuList";
 const Sidebar = () => {
+  const dispatch = useDispatch();
+  
+  const companyIdFromStore = useSelector((state) => state.company.companyId); // Get company ID from the store
   const { data: companyId } = useGetCompanyIdQuery();
   const { data: userData } = useGetUserQuery();
   const [activeMenu, setActiveMenu] = useState(null);
@@ -115,7 +119,7 @@ const Sidebar = () => {
         <Logo />
 
         <ul className="mt-4">
-          {companyId == null ? (
+          {companyIdFromStore == null ? (
             <li>
               <Link
                 to="/company/list"

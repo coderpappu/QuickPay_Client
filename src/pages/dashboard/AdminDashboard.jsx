@@ -1,26 +1,42 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FcBriefcase } from "react-icons/fc";
 // employee icon
 import { FcNightLandscape, FcVoicePresentation } from "react-icons/fc";
+import { useDispatch } from "react-redux";
 import StatusCard from "../../components/dashboard/StatusCard";
 import {
+  useGetActiveCompanyQuery,
   useGetAttendancesQuery,
-  useGetCompanyIdQuery,
   useGetEmployeesQuery,
   useGetShiftListQuery,
 } from "../../features/api";
+import { setCompanyId } from "../../features/companySlice";
 import DatePicker from "../../utils/DatePicker";
 
 const AdminDashboard = () => {
   // company related request
-  const { data: companyId } = useGetCompanyIdQuery();
+  const dispatch = useDispatch();
+
+  const { data: activeCompanyId, refetch: refetchActiveCompany } =
+    useGetActiveCompanyQuery();
+
+  const companyId = activeCompanyId?.data?.company_id;
 
   const { data: employees } = useGetEmployeesQuery(companyId);
   const { data: shifts } = useGetShiftListQuery(companyId);
+
   const { data: attendances } = useGetAttendancesQuery({
     companyId,
     date: DatePicker(),
   });
+
+  // Effect to set company ID from local storage on component mount
+
+  useEffect(() => {
+    if (companyId) {
+      dispatch(setCompanyId(companyId)); // Dispatch action to set company ID in the store
+    }
+  }, [companyId, dispatch]);
 
   // company data
   let totalEmployees = employees?.data.length || 0;

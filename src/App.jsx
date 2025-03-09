@@ -79,9 +79,7 @@ function App() {
             {/* employee dashboard route  */}
             <Route path="/users" element={<Users />} />
             <Route path="/user/profile/:id" element={<UserProfile />} />
-
             <Route path="employee/profile" element={<EmployeeProfile />} />
-
             <Route
               path="company/leave/application"
               element={<LeaveApplicationListCard />}
@@ -91,17 +89,13 @@ function App() {
               path="/employee/leave/application"
               element={<EmployeeLeaveApplication />}
             />
-
             <Route index element={<Home />} />
             <Route path="company/list" element={<CompanyList />} />
-
             <Route path="profile" element={<Profile />} />
             <Route path="profile/:id" element={<ProfileUpdate />} />
-
             <Route path="company/create" element={<CompanySettings />} />
             <Route path="company/update/:id" element={<CompanySettings />} />
             <Route path="company/details/:id" element={<CompanyPofile />} />
-
             {/* Company-specific private routes */}
             <Route element={<CompanyPrivateRoute />}>
               <Route path="company/employee" element={<EmployeeList />} />
@@ -118,20 +112,15 @@ function App() {
                 path="company/employee/details/:id"
                 element={<Profile />}
               />
-
               <Route path="employee/profile" element={<EmployeeProfile />} />
-
               <Route path="company/shift/list" element={<ShiftList />} />
               <Route path="company/add/shift" element={<AddShift />} />
               <Route path="company/edit/shift/:id" element={<EditShift />} />
-
               <Route path="department/list" element={<DepartmentList />} />
-
               <Route
                 path="department/update/:id"
                 element={<DepartmentForm />}
               />
-
               <Route path="department/create" element={<DepartmentSetting />} />
               <Route path="designation/list" element={<DesignationList />} />
               <Route
@@ -142,15 +131,12 @@ function App() {
                 path="designation/update/:id"
                 element={<DesignationSetting />}
               />
-
               <Route path="section/list" element={<SectionList />} />
               <Route path="section/create" element={<SectionSettings />} />
               <Route path="section/update/:id" element={<SectionSettings />} />
-
               <Route path="company/settings" element={<Settings />} />
               <Route path="/systemsettings" element={<SystemSettings />} />
               <Route path="/hrm-setup" element={<HrmSetup />} />
-
               {/* Attendance  */}
               <Route
                 path="employee/attendence"
@@ -193,7 +179,6 @@ function App() {
                 path="/employee/loan/apply"
                 element={<AdminEmployeeLoanForm />}
               />
-
               <Route
                 path="/admin/employee/loan"
                 element={<AdminEmployeeLoanList />}

@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { IoAdd } from "react-icons/io5";
 import { VscEye } from "react-icons/vsc";
+
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import BrandCardWrapper from "../../components/company/BrandCardWrapper";
 
@@ -13,16 +15,18 @@ import {
   useGetActiveCompanyQuery,
   useGetCompaniesQuery,
   useGetUserQuery,
-  useSetCompanyIdMutation,
 } from "../../features/api";
 
+import { removeCompanyId, setCompanyId } from "../../features/companySlice";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import ErrorMessage from "../../utils/ErrorMessage";
 
 const CompanyList = () => {
+  const dispatch = useDispatch();
+
   const [deleteCompany] = useDeleteCompanyMutation();
-  const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [leaveTypeId, setleaveTypeId] = useState(null);
   const [addActiveCompany] = useCreateActiveCompanyMutation();
 
@@ -44,27 +48,19 @@ const CompanyList = () => {
     isError,
     error,
   } = useGetCompaniesQuery(userData?.data?.id);
-
-  const [setCompanyId] = useSetCompanyIdMutation();
-
   // Effect to set company ID from local storage on component mount
 
   useEffect(() => {
-    const storedCompanyId = activeCompanyId?.data?.company_id;
-
-    if (storedCompanyId) {
-      setCompanyId(storedCompanyId)
-        .unwrap()
-        .catch((error) => {
-          toast.error("Failed to set company ID");
-        });
+    if (companyId) {
+      dispatch(setCompanyId(companyId)); // Dispatch action to set company ID in the store
     }
-  }, [setCompanyId]);
+  }, [companyId, dispatch]);
 
   const handleToggleActive = async (id) => {
     try {
       if (companyId === id) {
         await addActiveCompany({ company_id: null }).unwrap();
+        dispatch(removeCompanyId());
         toast.success("Company deactivated successfully");
         setCompanyId(null); // Update the state to reflect the deactivation
       } else {
