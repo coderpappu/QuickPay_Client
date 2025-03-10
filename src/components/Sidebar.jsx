@@ -6,17 +6,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
 
-import {
-  useGetCompanyIdQuery,
-  useGetUserPerModuleQuery,
-  useGetUserQuery,
-} from "../features/api";
+import { useGetUserPerModuleQuery, useGetUserQuery } from "../features/api";
 import { adminMenuItems, employeeMenuItems } from "../utils/MenuList";
 const Sidebar = () => {
   const dispatch = useDispatch();
-  
-  const companyIdFromStore = useSelector((state) => state.company.companyId); // Get company ID from the store
-  const { data: companyId } = useGetCompanyIdQuery();
+
+  const companyIdFromStore = useSelector((state) => state.company.companyId);
+
+  console.log(companyIdFromStore);
+
+  // Get company ID from the store
+
   const { data: userData } = useGetUserQuery();
   const [activeMenu, setActiveMenu] = useState(null);
   const [activeSubMenu, setActiveSubMenu] = useState(null);

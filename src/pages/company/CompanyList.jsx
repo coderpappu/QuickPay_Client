@@ -28,19 +28,20 @@ const CompanyList = () => {
   const [deleteCompany] = useDeleteCompanyMutation();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [leaveTypeId, setleaveTypeId] = useState(null);
-  const [addActiveCompany] = useCreateActiveCompanyMutation();
+  const [companyLocalActivate, setCompanyLocalActive] = useState(0);
 
+  const [addActiveCompany] = useCreateActiveCompanyMutation();
   const { data: userData } = useGetUserQuery();
 
   const { data: activeCompanyId, refetch: refetchActiveCompany } =
-    useGetActiveCompanyQuery();
+    useGetActiveCompanyQuery(companyLocalActivate);
+
+  const companyId = activeCompanyId?.data?.company_id;
 
   const handleOpen = (id) => {
     setIsPopupOpen(true);
     setleaveTypeId(id);
   };
-
-  const companyId = activeCompanyId?.data?.company_id;
 
   const {
     data: companyData,
@@ -48,8 +49,8 @@ const CompanyList = () => {
     isError,
     error,
   } = useGetCompaniesQuery(userData?.data?.id);
-  // Effect to set company ID from local storage on component mount
 
+  // Effect to set company ID from local storage on component mount
   useEffect(() => {
     if (companyId) {
       dispatch(setCompanyId(companyId)); // Dispatch action to set company ID in the store
@@ -59,17 +60,19 @@ const CompanyList = () => {
   const handleToggleActive = async (id) => {
     try {
       if (companyId === id) {
-        await addActiveCompany({ company_id: null }).unwrap();
+        setCompanyLocalActive(id); // Update the state to reflect the deactivation
+        await addActiveCompany({ company_id: id }).unwrap();
         dispatch(removeCompanyId());
         toast.success("Company deactivated successfully");
-        setCompanyId(null); // Update the state to reflect the deactivation
       } else {
+        setCompanyLocalActive(id); // Update the state to reflect the activation
         await addActiveCompany({ company_id: id }).unwrap();
+        dispatch(setCompanyId(id));
         toast.success("Company activated successfully");
-        setCompanyId(id); // Update the state to reflect the activation
       }
       refetchActiveCompany(); // Refetch the active company data
     } catch (error) {
+      console.log(error);
       toast.error("Failed to toggle company status");
     }
   };
@@ -90,7 +93,7 @@ const CompanyList = () => {
                     toast.error(res.error.data.msg);
                   } else {
                     if (companyId === id) {
-                      setCompanyId(null);
+                      setCompanyLocalActive(0);
                     }
                     toast.success("Company deleted successfully");
                   }

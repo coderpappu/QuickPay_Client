@@ -1,20 +1,19 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
 import {
   useCreateExperienceCertificateFormatMutation,
-  useGetCompanyIdQuery,
   useGetExperienceCertificateFormatQuery,
 } from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
 import SettingCardHeader from "./SettingCardHeader";
 import TextBoxLetter from "./TextBoxLetter";
 import TextEditor from "./TextEditor";
-
 const ExperienceCertificate = () => {
   const [editorState, setEditorState] = useState(null); // Store the editor's state
   const [isSaving, setIsSaving] = useState(false); // Track saving status
   const [error, setError] = useState(null); // Store potential errors
-  const { data: company_id } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   const [editorData, setEditorData] = useState(null); // Store the editor's state data
   const [createExperienceCertificate] =

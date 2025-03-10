@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
 import {
-  useGetCompanyIdQuery,
   useGetRootSettingQuery,
   useSetSettingMutation,
 } from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
 import SettingCardFooter from "./SettingCardFooter";
 import SettingCardHeader from "./SettingCardHeader";
-
 const CompanySettingCard = () => {
   const [setSetting] = useSetSettingMutation();
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const { data: setting, isLoading } = useGetRootSettingQuery(companyId);
 
   console.log(setting);

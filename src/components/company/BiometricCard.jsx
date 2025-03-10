@@ -1,11 +1,11 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React from "react";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
   useCreateBiometricSettingMutation,
   useGetBiometricSettingQuery,
-  useGetCompanyIdQuery,
 } from "../../features/api";
 import CardSkeleton from "../../skeletons/card";
 import BrandCardWrapper from "./BrandCardWrapper";
@@ -15,7 +15,7 @@ import SettingCardFooter from "./SettingCardFooter";
 import SettingCardHeader from "./SettingCardHeader";
 
 const BiometricCard = () => {
-  const { data: company_id } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   const [createBiometricSettings] = useCreateBiometricSettingMutation();
 
@@ -23,7 +23,7 @@ const BiometricCard = () => {
     data: biometricSettings,
     isLoading,
     isError,
-  } = useGetBiometricSettingQuery(company_id);
+  } = useGetBiometricSettingQuery(companyId);
 
   if (isLoading) return <CardSkeleton />;
 

@@ -1,12 +1,12 @@
 import { ErrorMessage, Form, Formik } from "formik";
 import React from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
   useCreateBrandMutation,
   useGetbrandQuery,
   useGetCompanyDetailsQuery,
-  useGetCompanyIdQuery,
 } from "../../features/api";
 import CardSkeleton from "../../skeletons/card";
 import BrandCardWrapper from "./BrandCardWrapper";
@@ -15,7 +15,6 @@ import InputTitle from "./InputTitle";
 import LogoUploadCard from "./LogoUploadCard";
 import SettingCardFooter from "./SettingCardFooter";
 import SettingCardHeader from "./SettingCardHeader";
-
 // task  : initial state data not set properly when edit is clicked
 
 // Validation schema using Yup
@@ -40,8 +39,7 @@ const formFields = [
 const BrandCard = () => {
   const [createBrand] = useCreateBrandMutation();
 
-  const { data: companyId, isLoading: isCompanyIdLoading } =
-    useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   const { data: companyData } = useGetCompanyDetailsQuery(companyId);
 

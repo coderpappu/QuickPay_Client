@@ -4,19 +4,16 @@ import { FiUser } from "react-icons/fi";
 import { IoIosPower } from "react-icons/io";
 import { IoChatbubbleOutline } from "react-icons/io5";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ManProfile from "../assets/man-placeholder.jpg";
-import {
-  useGetbrandQuery,
-  useGetCompanyIdQuery,
-  useGetUserQuery,
-} from "../features/api";
+import { useGetbrandQuery, useGetUserQuery } from "../features/api";
 
 const Header = ({ darkModeHandler, darkMode }) => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
   const { data: userData, isLoading, isError } = useGetUserQuery();
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const { data: brandDetails } = useGetbrandQuery(companyId);
 
   const handleToggle = () => {

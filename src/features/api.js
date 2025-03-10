@@ -108,7 +108,11 @@ export const apiSlice = createApi({
     }),
 
     getActiveCompany: builder.query({
-      query: () => "/company/activecompany",
+      query: (companyId) => ({
+        url: "/company/activecompany",
+        params: { companyId },
+      }),
+    
       providesTags: ["ActiveId"],
     }),
 

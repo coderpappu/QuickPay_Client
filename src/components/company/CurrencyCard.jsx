@@ -1,9 +1,9 @@
 import { ErrorMessage, Form, Formik } from "formik";
 import React from "react";
+import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
   useCreateCurrencySettingMutation,
-  useGetCompanyIdQuery,
   useGetCurrencySettingQuery,
 } from "../../features/api";
 import CardSkeleton from "../../skeletons/card";
@@ -18,7 +18,6 @@ const validationSchema = Yup.object().shape({
   currency: Yup.string().required("Currency is required"),
   currency_symbol: Yup.string().required("Currency symbol is required"),
 });
-
 const formFields = [
   // ... (rest of your form fields)
   [
@@ -69,7 +68,7 @@ const formFields = [
 ];
 
 const CurrencyCard = () => {
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   const [createCurrencySetting] = useCreateCurrencySettingMutation();
   const {
@@ -116,13 +115,13 @@ const CurrencyCard = () => {
             <div className="py-3">
               {/* title and text section  */}
               {formFields.map((row, rowIndex) => (
-                <div className="px-6 py-3 flex justify-between" key={rowIndex}>
+                <div className="flex justify-between px-6 py-3" key={rowIndex}>
                   {row.map(
                     (
                       { name, title, placeholder, type = "text", list },
-                      rowIndex
+                      rowIndex,
                     ) => (
-                      <div className="w-[48%] relative" key={rowIndex}>
+                      <div className="relative w-[48%]" key={rowIndex}>
                         <InputTitle title={title} />
                         {type == "list" ? (
                           <>
@@ -141,17 +140,17 @@ const CurrencyCard = () => {
                         <ErrorMessage
                           name={name}
                           component="div"
-                          className="text-red-500 text-xs "
+                          className="text-xs text-red-500"
                         />
                       </div>
-                    )
+                    ),
                   )}
                 </div>
               ))}
               <div className="flex justify-between px-6">
-                <div className="w-[48%]  pr-44">
+                <div className="w-[48%] pr-44">
                   <InputTitle title={"Currency Symbol Position"} />
-                  <div className="flex flex-wrap justify-between mt-2">
+                  <div className="mt-2 flex flex-wrap justify-between">
                     <RadioInput
                       title={"Pre"}
                       name={"currencySymbolPosition"}
@@ -166,9 +165,9 @@ const CurrencyCard = () => {
                   </div>
                 </div>
 
-                <div className="w-[48%]  pr-44">
+                <div className="w-[48%] pr-44">
                   <InputTitle title={"Currency Symbol Space"} />
-                  <div className="flex flex-wrap justify-between mt-2">
+                  <div className="mt-2 flex flex-wrap justify-between">
                     <RadioInput
                       title={"With Space"}
                       name={"currencySymbolSpace"}
@@ -183,10 +182,10 @@ const CurrencyCard = () => {
                 </div>
               </div>
 
-              <div className="flex justify-between mt-6 px-6">
-                <div className="w-[48%]  pr-14">
+              <div className="mt-6 flex justify-between px-6">
+                <div className="w-[48%] pr-14">
                   <InputTitle title={"Currency Symbol & Name"} />
-                  <div className="flex flex-wrap justify-between mt-2">
+                  <div className="mt-2 flex flex-wrap justify-between">
                     <RadioInput
                       title={"With Currency Symbol"}
                       value={"With Currency Symbol"}
@@ -200,7 +199,7 @@ const CurrencyCard = () => {
                   </div>
                 </div>
                 <div className="w-[48%]">
-                  <p className="dark:text-dark-text-color text-sm">
+                  <p className="text-sm dark:text-dark-text-color">
                     Preview : 10.000,00USD
                   </p>
                 </div>
