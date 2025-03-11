@@ -1,24 +1,24 @@
 import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import PopUp from "../components/PopUp";
-
-import { useGetUserQuery, useSetCompanyIdMutation } from "../features/api";
+import { useGetUserQuery } from "../features/api";
+import { setCompanyId } from "../features/companySlice";
 import AdminDashboard from "./dashboard/AdminDashboard";
 
 const Home = () => {
-  const [setCompanyId] = useSetCompanyIdMutation();
-
+  const dispatch = useDispatch();
   const { data: employeeData } = useGetUserQuery();
 
   useEffect(() => {
     const storedCompanyId = localStorage.getItem("companyId");
     if (storedCompanyId) {
-      setCompanyId(storedCompanyId);
+      dispatch(setCompanyId(storedCompanyId));
     }
-  }, [setCompanyId]);
+  }, [dispatch]);
 
   return (
     <div className="">
-      <h1 className="text-6xl text-dark-heading-color font-bold text-center">
+      <h1 className="text-center text-6xl font-bold text-dark-heading-color">
         QuickPay
       </h1>
 
@@ -31,7 +31,7 @@ const Home = () => {
       </div>
 
       <div className="flex flex-wrap items-center justify-start">
-        {/* show card  */}
+        {/* show card */}
         <AdminDashboard />
       </div>
     </div>

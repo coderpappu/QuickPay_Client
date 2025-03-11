@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   useDeleteDepartmentMutation,
-  useGetCompanyIdQuery,
-  useGetDepartmentsQuery,
+  useGetDepartmentsQuery
 } from "../../../features/api";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import FormSkeleton from "../../../skeletons/FormSkeleton";
@@ -14,7 +14,6 @@ import ErrorMessage from "../../../utils/ErrorMessage";
 import BrandCardWrapper from "../../company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../company/SettingCardHeader";
 import DepartmentForm from "./DepartmentForm";
-
 const DepartmentCard = () => {
   const navigate = useNavigate();
 
@@ -30,7 +29,7 @@ const DepartmentCard = () => {
     setSelectedDepartmentId(id);
   };
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [deleteDepartment] = useDeleteDepartmentMutation();
 
   const {

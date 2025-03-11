@@ -1,9 +1,9 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React from "react";
+import { useSelector } from "react-redux";
 import * as Yup from "yup"; // Import Yup for validation
 import {
   useCreateZoomSettingMutation,
-  useGetCompanyIdQuery,
   useGetZoomSettingQuery,
 } from "../../features/api";
 import CardSkeleton from "../../skeletons/card";
@@ -12,10 +12,9 @@ import { InputBox } from "./BrandInput";
 import InputTitle from "./InputTitle";
 import SettingCardFooter from "./SettingCardFooter";
 import SettingCardHeader from "./SettingCardHeader";
-
 const ZoomMeetingCard = () => {
   const [createZoomSetting] = useCreateZoomSettingMutation();
-  const { data: company_id } = useGetCompanyIdQuery();
+  const company_id = useSelector((state) => state.company.companyId);
 
   const {
     data: zoomSettings,

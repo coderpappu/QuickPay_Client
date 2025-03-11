@@ -1,10 +1,10 @@
 import { ErrorMessage, Form, Formik } from "formik";
 import React from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
   useCreateSystemSettingsMutation,
-  useGetCompanyIdQuery,
   useGetSystemSettingsQuery,
 } from "../../features/api";
 import CardSkeleton from "../../skeletons/card";
@@ -13,7 +13,6 @@ import { InputBox, SelectOptionBox } from "./BrandInput";
 import InputTitle from "./InputTitle";
 import SettingCardFooter from "./SettingCardFooter";
 import SettingCardHeader from "./SettingCardHeader";
-
 // Validation schema using Yup
 const validationSchema = Yup.object().shape({
   date_format: Yup.string().required("Date format is required"),
@@ -42,7 +41,7 @@ const formFields = [
 
 const CompanySettings = () => {
   const [createSystemSetting] = useCreateSystemSettingsMutation();
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const {
     data: systemSettingData,
     isLoading,

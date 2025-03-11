@@ -4,8 +4,8 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Calendar as BigCalendar, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { useSelector } from "react-redux";
 import {
-  useGetCompanyIdQuery,
   useGetEmployeeQuery,
   useGetHolidayListQuery,
   useGetWeekendListQuery,
@@ -26,7 +26,7 @@ const localizer = dateFnsLocalizer({
 });
 
 const MyCalendar = () => {
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   const { data } = useGetEmployeeQuery();
 

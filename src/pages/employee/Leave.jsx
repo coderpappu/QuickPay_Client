@@ -4,10 +4,10 @@ import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import { TbDots } from "react-icons/tb";
+import { useSelector } from "react-redux";
 import {
   useCalculationLeaveDaysQuery,
   useGetAllEmployeeLeaveListQuery,
-  useGetCompanyIdQuery,
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import LeaveForm from "./LeaveForm";
@@ -20,7 +20,7 @@ const Leave = () => {
     setIsPopupOpen(false);
   };
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const {
     data: employeeLeave,
     isLoading,
@@ -59,45 +59,45 @@ const Leave = () => {
         {employeeLeave?.data?.map((leave, index) => (
           <tr
             key={leave?.id}
-            className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
+            className={index % 2 === 0 ? "" : "rounded-sm bg-gray-50"}
           >
-            <td className="py-2 text-sm ">{leave?.LeaveType?.name}</td>
+            <td className="py-2 text-sm">{leave?.LeaveType?.name}</td>
 
-            <td className="py-2 text-sm ">
+            <td className="py-2 text-sm">
               {/* {employee?.name} */}
               {leave?.start_date}
             </td>
-            <td className="py-2 text-sm ">
+            <td className="py-2 text-sm">
               {/* {employee?.name} */}
               {leave?.end_date}
             </td>
-            <td className="py-2 text-sm text-center">
+            <td className="py-2 text-center text-sm">
               {/* {employee?.name} */}2
             </td>
-            <td className="py-2 text-sm ">
+            <td className="py-2 text-sm">
               {/* {employee?.name} */}
               {leave?.reason}
             </td>
-            <td className="py-2 text-sm ">
+            <td className="py-2 text-sm">
               {/* {employee?.name} */}
               {leave?.paid_status}
             </td>
-            <td className="py-2 text-sm ">
+            <td className="py-2 text-sm">
               {/* {employee?.name} */}
               {leave?.note || "..."}
             </td>
-            <td className="py-2 text-sm ">
+            <td className="py-2 text-sm">
               {/* {employee?.name} */}
               Manager
             </td>
-            <td className="py-2 text-sm ">
+            <td className="py-2 text-sm">
               <div
-                className={` ${statusColorHandler(leave.status)} w-32 m-auto  px-1 py-2 text-xs font-bold rounded-full text-center `}
+                className={` ${statusColorHandler(leave.status)} m-auto w-32 rounded-full px-1 py-2 text-center text-xs font-bold`}
               >
                 {leave?.status}
               </div>
             </td>
-            <td className="py-2 text-sm flex justify-center items-center">
+            <td className="flex items-center justify-center py-2 text-sm">
               <TbDots />
             </td>
           </tr>
@@ -108,18 +108,18 @@ const Leave = () => {
 
   return (
     <div className="px-4 md:px-0">
-      <div className="flex flex-wrap justify-between items-center pb-2">
+      <div className="flex flex-wrap items-center justify-between pb-2">
         <div>
-          <h2 className="font-semibold text-lg pb-2">Leave Management</h2>
+          <h2 className="pb-2 text-lg font-semibold">Leave Management</h2>
         </div>
       </div>
 
-      <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-[250px]">
+      <div className="h-[250px] w-full rounded-md border-[1px] border-solid border-slate-200 bg-white p-5">
         <div>
           <h2 className="font-semibold">Leaves</h2>
         </div>
-        <div className="w-full h-[100px]  mt-2 flex flex-wrap justify-around ">
-          <div className="w-[100px] h-[100px] text-center">
+        <div className="mt-2 flex h-[100px] w-full flex-wrap justify-around">
+          <div className="h-[100px] w-[100px] text-center">
             <CircularProgressbar
               value={Math.round(leaveCalculation?.data?.[0]?.percentageUsed)}
               text={`${Number(leaveCalculation?.data?.[0]?.percentageUsed)}%`}
@@ -137,7 +137,7 @@ const Leave = () => {
             </div>
           </div>
 
-          <div className="w-[100px] h-[100px] text-center">
+          <div className="h-[100px] w-[100px] text-center">
             <CircularProgressbar
               value={Math.round(leaveCalculation?.data?.[1]?.percentageUsed)}
               text={`${Math.round(leaveCalculation?.data?.[1]?.percentageUsed)}%`}
@@ -154,7 +154,7 @@ const Leave = () => {
               <h2>{`${Math.round(leaveCalculation?.data?.[1]?.usedDays)} / ${Number(leaveCalculation?.data?.[1]?.totalDays)}  `}</h2>
             </div>
           </div>
-          <div className="w-[100px] h-[100px] text-center">
+          <div className="h-[100px] w-[100px] text-center">
             <CircularProgressbar
               value={Math.round(leaveCalculation?.data?.[2]?.percentageUsed)}
               text={`${Number(leaveCalculation?.data?.[2]?.percentageUsed)}%`}
@@ -171,7 +171,7 @@ const Leave = () => {
               <h2>{`${Math.round(leaveCalculation?.data?.[2]?.usedDays)} / ${Number(leaveCalculation?.data?.[2]?.totalDays)}  `}</h2>
             </div>
           </div>
-          <div className="w-[100px] h-[100px] text-center">
+          <div className="h-[100px] w-[100px] text-center">
             <CircularProgressbar
               value={progressValue}
               text={`${progressValue}%`}
@@ -188,46 +188,46 @@ const Leave = () => {
               <h2>30 / 100 </h2>
             </div>
           </div>
-          <div className="w-[200px] h-[150px] bg-[#F2F5FF] p-2 rounded-md">
+          <div className="h-[150px] w-[200px] rounded-md bg-[#F2F5FF] p-2">
             <h1>Other Leaves</h1>
           </div>
         </div>
       </div>
-      <div className="border-solid border-[1px] mt-3 border-slate-200 bg-white rounded-md p-5 w-full h-auto">
-        <div className="flex flex-wrap justify-between items-center mb-4">
+      <div className="mt-3 h-auto w-full rounded-md border-[1px] border-solid border-slate-200 bg-white p-5">
+        <div className="mb-4 flex flex-wrap items-center justify-between">
           <div>All Leave Request</div>
 
           <button
-            className="px-3 py-2 bg-[#3686FF] text-white flex justify-between items-center rounded-md"
+            className="flex items-center justify-between rounded-md bg-[#3686FF] px-3 py-2 text-white"
             onClick={() => setIsPopupOpen(true)}
           >
             {" "}
             <HiOutlinePlusSm className="mr-1" /> Apply Leave
           </button>
         </div>
-        <table className="w-full h-auto">
+        <table className="h-auto w-full">
           {/* {!isError && ( */}
-          <thead className="border-b border-slate-200 text-left mt-8">
+          <thead className="mt-8 border-b border-slate-200 text-left">
             <tr>
-              <th className="pb-2 text-base ">Leave Type</th>
-              <th className="pb-2 text-base ">From</th>
-              <th className="pb-2 text-base ">To</th>
-              <th className="pb-2 text-base ">Days</th>
-              <th className="pb-2 text-base ">Reason</th>
-              <th className="pb-2 text-base ">Paid Status</th>
-              <th className="pb-2 text-base ">Note</th>
-              <th className="pb-2 text-base ">Approved By</th>
-              <th className="pb-2 text-base text-center">Status</th>
-              <th className="pb-2 text-base ">Action</th>
+              <th className="pb-2 text-base">Leave Type</th>
+              <th className="pb-2 text-base">From</th>
+              <th className="pb-2 text-base">To</th>
+              <th className="pb-2 text-base">Days</th>
+              <th className="pb-2 text-base">Reason</th>
+              <th className="pb-2 text-base">Paid Status</th>
+              <th className="pb-2 text-base">Note</th>
+              <th className="pb-2 text-base">Approved By</th>
+              <th className="pb-2 text-center text-base">Status</th>
+              <th className="pb-2 text-base">Action</th>
             </tr>
           </thead>
           {content}
         </table>
       </div>
       {isPopupOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <div className="flex justify-between items-center pb-3 border-b border-gray-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-md rounded-lg bg-white p-6">
+            <div className="flex items-center justify-between border-b border-gray-200 pb-3">
               <h3 className="text-lg font-medium text-gray-800">
                 Add Holiday Type
               </h3>

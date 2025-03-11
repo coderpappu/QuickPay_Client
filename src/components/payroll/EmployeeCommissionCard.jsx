@@ -5,10 +5,10 @@ import { CiEdit } from "react-icons/ci";
 import { useParams } from "react-router-dom";
 import {
   useDeleteEmployeeCommissionMutation,
-  useGetCompanyIdQuery,
   useGetEmployeeCommissionListQuery,
 } from "../../features/api";
 
+import { useSelector } from "react-redux";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import CardSkeleton from "../../skeletons/card";
 import ErrorMessage from "../../utils/ErrorMessage";
@@ -31,7 +31,7 @@ const EmployeeCommissionCard = () => {
     setSelectCommissionId(id);
   };
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [deleteCommission] = useDeleteEmployeeCommissionMutation();
 
   const {

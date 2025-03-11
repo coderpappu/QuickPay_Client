@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import BrandCardWrapper from "../../components/company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../components/company/SettingCardHeader";
 
-import {
-  useGetAllEmployeeLeaveListQuery,
-  useGetCompanyIdQuery,
-} from "../../features/api";
+import { useSelector } from "react-redux";
+import { useGetAllEmployeeLeaveListQuery } from "../../features/api";
 import CardSkeleton from "../../skeletons/card";
 import { DateConverterFromUTC } from "../../utils/Converter";
 import ErrorMessage from "../../utils/ErrorMessage";
 import LeaveForm from "../employee/LeaveForm";
+
 const EmployeeLeaveApplication = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [selectAllowanceId, setSelectAllowanceId] = useState(null);
@@ -23,7 +22,7 @@ const EmployeeLeaveApplication = () => {
     setSelectAllowanceId(id);
   };
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   const {
     data: leaveApplications,

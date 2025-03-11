@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  useGetCompanyIdQuery,
-  useGetEmployeeOverTimeDetailsQuery,
-} from "../../features/api";
+import { useGetEmployeeOverTimeDetailsQuery } from "../../features/api";
 
+import { useSelector } from "react-redux";
 import CardSkeleton from "../../skeletons/card";
 import ErrorMessage from "../../utils/ErrorMessage";
 import BrandCardWrapper from "../company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../company/SettingCardHeader";
 import EmployeeOverTimeForm from "./EmployeeOverTimeForm";
-
 const EmployeeOverTimeCard = () => {
   const { id: employeeId } = useParams();
 
@@ -24,7 +21,7 @@ const EmployeeOverTimeCard = () => {
     setIsPopupOpen(true);
   };
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   const {
     data: employeeOverTimeDetails,

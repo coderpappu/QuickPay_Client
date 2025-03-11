@@ -2,10 +2,10 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import {
   useDeleteLeaveTypeMutation,
-  useGetCompanyIdQuery,
   useGetLeaveTypeListQuery,
   useSetCompanyIdMutation,
 } from "../../features/api";
@@ -24,7 +24,7 @@ const LeaveTypeList = () => {
     setIsPopupOpen(false);
   };
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [deleteLeaveType] = useDeleteLeaveTypeMutation();
   const [setCompanyId] = useSetCompanyIdMutation();
 
@@ -67,7 +67,7 @@ const LeaveTypeList = () => {
         ),
         {
           duration: Infinity,
-        }
+        },
       );
 
     confirm();
@@ -87,15 +87,15 @@ const LeaveTypeList = () => {
         {leaveTypesData?.map((type, index) => (
           <tr
             key={type?.id}
-            className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
+            className={index % 2 === 0 ? "" : "rounded-sm bg-gray-50"}
           >
-            <td className="py-2 text-sm text-center">{index + 1}</td>
-            <td className="py-2 text-sm font-semibold pl-10">{type?.name}</td>
-            <td className="py-2 text-sm text-center">{type.code}</td>
+            <td className="py-2 text-center text-sm">{index + 1}</td>
+            <td className="py-2 pl-10 text-sm font-semibold">{type?.name}</td>
+            <td className="py-2 text-center text-sm">{type.code}</td>
 
-            <td className="py-2 text-sm text-center">{type?.type}</td>
-            <td className="py-2 text-sm text-center">{type?.day}</td>
-            <td className="py-2 text-sm text-center">{type?.description}</td>
+            <td className="py-2 text-center text-sm">{type?.type}</td>
+            <td className="py-2 text-center text-sm">{type?.day}</td>
+            <td className="py-2 text-center text-sm">{type?.description}</td>
 
             <td className="py-2 text-sm">
               <Link to={`/company/leave/form/${type?.id}`}>
@@ -109,7 +109,7 @@ const LeaveTypeList = () => {
               onClick={() => handleDeleteCompany(type?.id)}
             >
               <div className="grid place-items-center">
-                <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
+                <MdOutlineDeleteOutline className="cursor-pointer text-2xl text-red-600" />
               </div>
             </td>
           </tr>
@@ -119,21 +119,21 @@ const LeaveTypeList = () => {
   }
   return (
     <div>
-      <div className="flex flex-wrap justify-between items-center pb-2">
+      <div className="flex flex-wrap items-center justify-between pb-2">
         <div>
-          <h2 className="font-semibold text-lg pb-2">Leave Type </h2>
+          <h2 className="pb-2 text-lg font-semibold">Leave Type </h2>
         </div>
       </div>
 
-      <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-auto">
-        <div className="flex flex-wrap justify-between mb-4">
-          <div className="font-medium text-base">
+      <div className="h-auto w-full rounded-md border-[1px] border-solid border-slate-200 bg-white p-5">
+        <div className="mb-4 flex flex-wrap justify-between">
+          <div className="text-base font-medium">
             {/* {companies && companies?.length} Company Available for Now */}
           </div>
           <div>
             <Link
               onClick={() => setIsPopupOpen(true)}
-              className="px-5 py-2 rounded-[3px] text-white bg-[#3686FF] transition hover:bg-[#7f39f0]"
+              className="rounded-[3px] bg-[#3686FF] px-5 py-2 text-white transition hover:bg-[#7f39f0]"
             >
               Add Leave Type
             </Link>
@@ -141,19 +141,19 @@ const LeaveTypeList = () => {
         </div>
 
         <div>
-          <table className="w-full h-auto">
+          <table className="h-auto w-full">
             {!isError && (
-              <thead className="border-b border-slate-200 text-left mt-8">
+              <thead className="mt-8 border-b border-slate-200 text-left">
                 <tr>
-                  <th className="pb-2 text-base text-center">SL</th>
-                  <th className="pb-2 text-base pl-10">Name</th>
-                  <th className="pb-2 text-base text-center">Code</th>
-                  <th className="pb-2 text-base text-center">Type</th>
-                  <th className="pb-2 text-base text-center">Day</th>
-                  <th className="pb-2 text-base text-center">Description</th>
+                  <th className="pb-2 text-center text-base">SL</th>
+                  <th className="pb-2 pl-10 text-base">Name</th>
+                  <th className="pb-2 text-center text-base">Code</th>
+                  <th className="pb-2 text-center text-base">Type</th>
+                  <th className="pb-2 text-center text-base">Day</th>
+                  <th className="pb-2 text-center text-base">Description</th>
 
-                  <th className="pb-2 text-base text-center">Update</th>
-                  <th className="pb-2 text-base text-center">Delete</th>
+                  <th className="pb-2 text-center text-base">Update</th>
+                  <th className="pb-2 text-center text-base">Delete</th>
                 </tr>
               </thead>
             )}
@@ -164,9 +164,9 @@ const LeaveTypeList = () => {
       </div>
 
       {isPopupOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <div className="flex justify-between items-center pb-3 border-b border-gray-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-md rounded-lg bg-white p-6">
+            <div className="flex items-center justify-between border-b border-gray-200 pb-3">
               <h3 className="text-lg font-medium text-gray-800">Leave Type</h3>
               <button
                 className="text-gray-500 hover:text-gray-800"

@@ -2,11 +2,11 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import React, { useRef, useState } from "react";
 import { TfiPrinter } from "react-icons/tfi";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import "../../Applicaion.css";
 import CompanyLogo from "../../assets/xceed-bangladesh-logo.png";
 import {
-  useGetCompanyIdQuery,
   useGetEmployeeDetailsQuery,
   useGetExperienceCertificateFormatQuery,
 } from "../../features/api";
@@ -15,7 +15,6 @@ import ErrorMessage from "../../utils/ErrorMessage";
 import calculateTotalHours from "../../utils/TimeCalculator";
 import formatTimeTo12Hour from "../../utils/timeConverter";
 import todayDate from "../../utils/TodayDate";
-
 function ExperienceCertificate() {
   const [letterData, setLetterData] = useState(null);
   const [date, setDate] = useState("10");
@@ -27,8 +26,8 @@ function ExperienceCertificate() {
   const headerRef = useRef();
   const componentRef = useRef();
   // Fetching company ID
-  const { data: company_id } = useGetCompanyIdQuery();
 
+  const company_id = useSelector((state) => state.company.companyId);
   const {
     data: employeeDetails,
     isLoading,

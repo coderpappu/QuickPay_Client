@@ -5,11 +5,11 @@ import { CiLocationOn } from "react-icons/ci";
 import { FiPhone } from "react-icons/fi";
 import { MdOutlineEmail } from "react-icons/md";
 import { TfiPrinter } from "react-icons/tfi";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import "../../Applicaion.css";
 import CompanyLogo from "../../assets/xceed-bangladesh-logo.png";
 import {
-  useGetCompanyIdQuery,
   useGetLeaveApplicationDetailsQuery,
   useGetLeaveApplicationFormatQuery,
 } from "../../features/api";
@@ -39,7 +39,8 @@ function Application() {
   });
 
   // Fetching company ID
-  const { data: company_id } = useGetCompanyIdQuery();
+
+  const company_id = useSelector((state) => state.company.companyId);
   const { data: applicationDetails } = useGetLeaveApplicationDetailsQuery(id);
 
   // Fetching leave application format

@@ -1,11 +1,11 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
   useApplyLoanMutation,
   useGetAppliedLoanDetailsQuery,
-  useGetCompanyIdQuery,
   useGetLoanTypeListQuery,
   useUpdateAppliedLoanMutation,
 } from "../../../../features/api";
@@ -15,9 +15,8 @@ const loanSchema = Yup.object().shape({
   amount: Yup.number().required("Amount is required"),
   installment_month: Yup.number().required("Installment Month is required"),
 });
-
 const EmployeeLoanForm = ({ selectId, setIsPopupOpen }) => {
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const { data: loanTypes } = useGetLoanTypeListQuery(companyId);
   const [applyLoan] = useApplyLoanMutation();
   const { data: loanDetails, isLoading } = useGetAppliedLoanDetailsQuery(

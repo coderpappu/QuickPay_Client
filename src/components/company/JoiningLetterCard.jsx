@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import {
   useCreateJoiningLetterFormatMutation,
-  useGetCompanyIdQuery,
   useGetJoiningLetterFormatQuery,
 } from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
@@ -14,10 +14,12 @@ const JoiningLetterCard = () => {
   const [editorState, setEditorState] = useState(null); // Store the editor's state
   const [isSaving, setIsSaving] = useState(false); // Track saving status
   const [error, setError] = useState(null); // Store potential errors
-  const { data: company_id } = useGetCompanyIdQuery();
+
+  const companyId = useSelector((state) => state.company.companyId);
+
   const [editorData, setEditorData] = useState(null); // Store the editor's state data
   const [createJoiningLetter] = useCreateJoiningLetterFormatMutation();
-  const { data } = useGetJoiningLetterFormatQuery(company_id);
+  const { data } = useGetJoiningLetterFormatQuery(companyId);
 
   // Define handleEditorData as a function that accepts editor state data
   const handleEditorData = async (data) => {

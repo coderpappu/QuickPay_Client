@@ -5,12 +5,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
   useCreateLeaveTypeMutation,
-  useGetCompanyIdQuery,
   useGetLeaveTypeDetailsQuery,
   useGetTypeListQuery,
   useUpdateLeaveTypeMutation,
 } from "../../features/api";
 
+import { useSelector } from "react-redux";
 import FormSkeleton from "../../skeletons/FormSkeleton";
 
 const LeaveTypeSchema = Yup.object().shape({
@@ -23,7 +23,7 @@ const LeaveTypeSchema = Yup.object().shape({
 const LeaveTypeForm = ({ onClose }) => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [createLeaveType] = useCreateLeaveTypeMutation();
   const [updateLeaveType] = useUpdateLeaveTypeMutation();
 

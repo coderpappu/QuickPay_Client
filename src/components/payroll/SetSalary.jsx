@@ -4,7 +4,6 @@ import { VscEye } from "react-icons/vsc";
 import BrandCardWrapper from "../../components/company/BrandCardWrapper";
 import {
   useDeleteEmployeeMutation,
-  useGetCompanyIdQuery,
   useGetEmployeesQuery,
   useSetCompanyIdMutation,
 } from "../../features/api";
@@ -16,10 +15,10 @@ import ErrorMessage from "../../utils/ErrorMessage";
 import toast from "react-hot-toast";
 
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const SetSalaryCard = () => {
-  
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [leaveTypeId, setleaveTypeId] = useState(null);
 
@@ -28,7 +27,7 @@ const SetSalaryCard = () => {
     setleaveTypeId(id);
   };
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [deleteEmployee] = useDeleteEmployeeMutation();
   const [setCompanyId] = useSetCompanyIdMutation();
 
@@ -64,7 +63,7 @@ const SetSalaryCard = () => {
         ),
         {
           duration: Infinity,
-        }
+        },
       );
 
     confirm();
@@ -83,38 +82,38 @@ const SetSalaryCard = () => {
           <>
             <div
               key={employee?.id}
-              className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
+              className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
             >
-              <div className="dark:text-white w-[5%]">
+              <div className="w-[5%] dark:text-white">
                 <h3>{++index}</h3>
               </div>
-              <div className="dark:text-white w-[15%]">
+              <div className="w-[15%] dark:text-white">
                 <Link to={`/employee/setsalary/update/${employee?.id}`}>
-                  <div className="w-[60%] px-2 py-2 hover:bg-button-bg hover:text-white transition-all duration-150 border border-dark-heading-color text-dark-heading-color rounded-md text-center">
+                  <div className="w-[60%] rounded-md border border-dark-heading-color px-2 py-2 text-center text-dark-heading-color transition-all duration-150 hover:bg-button-bg hover:text-white">
                     <h3>{employee?.employeeId}</h3>
                   </div>
                 </Link>
               </div>
 
-              <div className="dark:text-white w-[20%]">
+              <div className="w-[20%] dark:text-white">
                 <h3>{employee?.name}</h3>
               </div>
 
-              <div className="dark:text-white w-[15%]">
+              <div className="w-[15%] dark:text-white">
                 <h3>{employee?.EmployeeDepartment?.[0]?.department?.name}</h3>
               </div>
 
-              <div className="dark:text-white w-[15%]">
+              <div className="w-[15%] dark:text-white">
                 <h3>{employee?.EmployeeDesignation[0]?.designation?.name}</h3>
               </div>
 
-              <div className="dark:text-white w-[15%]">
+              <div className="w-[15%] dark:text-white">
                 <h3>{employee?.EmployeeSection?.[0]?.section?.name}</h3>
               </div>
-              <div className="dark:text-white w-[10%]">
+              <div className="w-[10%] dark:text-white">
                 <div className="flex flex-wrap justify-start gap-2">
                   {/* edit button  */}
-                  <div className="w-8 h-8 bg-green-400 rounded-sm p-2 flex justify-center items-center cursor-pointer">
+                  <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-400 p-2">
                     <Link to={`/employee/setsalary/edit`}>
                       <VscEye size={20} />
                     </Link>
@@ -131,7 +130,7 @@ const SetSalaryCard = () => {
   return (
     <>
       <BrandCardWrapper>
-        <div className="flex justify-between items-center border-b border-dark-box border-opacity-5 dark:border-dark-border-color dark:border-opacity-5 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-dark-box border-opacity-5 px-6 py-4 dark:border-dark-border-color dark:border-opacity-5">
           <div>
             <h3 className="text-base leading-6 dark:text-dark-heading-color">
               Employee List
@@ -140,7 +139,7 @@ const SetSalaryCard = () => {
           </div>
 
           <div
-            className="w-8 h-8 bg-green-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer"
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-500 p-2 text-center"
             onClick={() => handleOpen()}
           >
             <Link to="/company/employee/registration">
@@ -150,29 +149,29 @@ const SetSalaryCard = () => {
         </div>
         <div className="px-6 py-3">
           {/* header  */}
-          <div className="w-full bg-light-bg dark:bg-dark-box rounded-sm py-3 px-3 flex flex-wrap justify-between text-sm">
-            <div className="dark:text-white w-[5%]">
+          <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
+            <div className="w-[5%] dark:text-white">
               <h3>SL</h3>
             </div>
-            <div className="dark:text-white w-[15%]">
+            <div className="w-[15%] dark:text-white">
               <h3>Employee ID</h3>
             </div>
-            <div className="dark:text-white w-[20%]">
+            <div className="w-[20%] dark:text-white">
               <h3>Name</h3>
             </div>
 
-            <div className="dark:text-white w-[15%]">
+            <div className="w-[15%] dark:text-white">
               <h3>Department</h3>
             </div>
 
-            <div className="dark:text-white w-[15%]">
+            <div className="w-[15%] dark:text-white">
               <h3>Designation</h3>
             </div>
 
-            <div className="dark:text-white w-[15%]">
+            <div className="w-[15%] dark:text-white">
               <h3>Section</h3>
             </div>
-            <div className="dark:text-white w-[10%]">
+            <div className="w-[10%] dark:text-white">
               <h3>Action</h3>
             </div>
           </div>

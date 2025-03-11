@@ -3,7 +3,7 @@ import { LuListTodo } from "react-icons/lu";
 import { RxHome } from "react-icons/rx";
 import { TbCards, TbMoneybag } from "react-icons/tb";
 
-// import { LuUser2 } from "react-icons/lu";
+import { LuUsers } from "react-icons/lu";
 const adminMenuItems = [
   {
     title: "Dashboard",
@@ -24,7 +24,7 @@ const adminMenuItems = [
   },
   {
     title: "HRM system",
-    // icon: <LuUsers2 size={20} />,
+    icon: <LuUsers size={20} />,
     subMenu: [
       { title: "Employee Setup", link: "/company/employee" },
       {

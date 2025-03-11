@@ -1,15 +1,14 @@
 import { ErrorMessage, Field, Form, Formik, useFormikContext } from "formik";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import {
   useAddDeviceConfigurationMutation,
-  useGetCompanyIdQuery,
   useGetDeviceDetailsQuery,
   useUpdateDeviceConfigurationMutation,
 } from "../../../features/api";
 import FormSkeleton from "../../../skeletons/FormSkeleton";
-
 const DeviceSchema = Yup.object({
   name: Yup.string().required("Device Name is required"),
   configMethod: Yup.string()
@@ -193,10 +192,10 @@ const ConditionalFields = () => {
 const DeviceForm = ({ deviceId, setIsPopupOpen }) => {
   const navigate = useNavigate();
   const [addDevice] = useAddDeviceConfigurationMutation();
-  const { data: companyId } = useGetCompanyIdQuery();
+
   const [updateDevice] = useUpdateDeviceConfigurationMutation();
 
-  const { data: company_id } = useGetCompanyIdQuery();
+  const company_id = useSelector((state) => state.company.companyId);
 
   const { data: deviceData, isLoading: deviceLoading } =
     useGetDeviceDetailsQuery(deviceId, {

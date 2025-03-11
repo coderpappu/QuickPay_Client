@@ -1,11 +1,11 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
   useEmployeeCreateLeaveMutation,
-  useGetCompanyIdQuery,
   useGetEarnLeaveQuery,
   useGetLeaveTypeListQuery,
   useGetWeekendDetailsQuery,
@@ -29,7 +29,7 @@ const LeaveForm = ({ onClose }) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [createEmployeeLeave] = useEmployeeCreateLeaveMutation();
   const [updateWeekend] = useUpdateWeekendMutation();
 
@@ -75,14 +75,14 @@ const LeaveForm = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+      <div className="relative w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
         <button
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+          className="absolute right-3 top-3 text-gray-500 hover:text-gray-700 focus:outline-none"
           onClick={onClose}
         >
           &#x2715;
         </button>
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        <h2 className="mb-4 text-xl font-semibold text-gray-800">
           {id ? "Edit Application" : "Leave Application"}
         </h2>
         <Formik
@@ -146,7 +146,7 @@ const LeaveForm = ({ onClose }) => {
                   as="select"
                   name="leaveType_id"
                   id="type"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm"
                 >
                   <option value="">Select Type</option>
                   {allType?.map((item) => (
@@ -158,7 +158,7 @@ const LeaveForm = ({ onClose }) => {
                 <ErrorMessage
                   name="leaveType_id"
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="mt-1 text-sm text-red-500"
                 />
               </div>
 
@@ -173,12 +173,12 @@ const LeaveForm = ({ onClose }) => {
                   type="date"
                   name="start_date"
                   id="start_date"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm"
                 />
                 <ErrorMessage
                   name="start_date"
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="mt-1 text-sm text-red-500"
                 />
               </div>
 
@@ -193,12 +193,12 @@ const LeaveForm = ({ onClose }) => {
                   type="date"
                   name="end_date"
                   id="end_date"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm"
                 />
                 <ErrorMessage
                   name="end_date"
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="mt-1 text-sm text-red-500"
                 />
               </div>
 
@@ -213,12 +213,12 @@ const LeaveForm = ({ onClose }) => {
                   type="text"
                   name="reason"
                   id="description"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#3686FF] focus:border-[#3686FF] sm:text-sm"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm"
                 />
                 <ErrorMessage
                   name="reason"
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="mt-1 text-sm text-red-500"
                 />
               </div>
 
@@ -226,14 +226,14 @@ const LeaveForm = ({ onClose }) => {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="mr-4 px-4 py-2 bg-gray-300 rounded-md text-sm font-medium text-gray-800 hover:bg-gray-400"
+                  className="mr-4 rounded-md bg-gray-300 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-400"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 bg-[#3686FF] rounded-md text-sm font-medium text-white hover:bg-[#5A21B3]"
+                  className="rounded-md bg-[#3686FF] px-4 py-2 text-sm font-medium text-white hover:bg-[#5A21B3]"
                 >
                   {id ? "Update" : "Apply"}
                 </button>

@@ -3,17 +3,17 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
+import { useSelector } from "react-redux";
 import {
-    useDeleteDesignationMutation,
-    useGetCompanyIdQuery,
-    useGetDesignationsQuery,
+  useDeleteDesignationMutation,
+  useGetDesignationsQuery,
 } from "../../features/api";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import ErrorMessage from "../../utils/ErrorMessage";
 
 const DesignationList = () => {
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   const [deleteDesignation] = useDeleteDesignationMutation();
 
@@ -41,7 +41,7 @@ const DesignationList = () => {
         ),
         {
           duration: Infinity,
-        }
+        },
       );
 
     confirm();
@@ -68,15 +68,15 @@ const DesignationList = () => {
       designations?.data?.map((designation, index) => (
         <tr
           key={designation?.id}
-          className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
+          className={index % 2 === 0 ? "" : "rounded-sm bg-gray-50"}
         >
-          <td className="py-2 text-sm text-center">{++index}</td>
-          <td className="py-2 text-sm font-semibold pl-10">
+          <td className="py-2 text-center text-sm">{++index}</td>
+          <td className="py-2 pl-10 text-sm font-semibold">
             {designation?.name}
           </td>
-          <td className="py-2 text-sm text-center">{designation?.user_id}</td>
+          <td className="py-2 text-center text-sm">{designation?.user_id}</td>
 
-          <td className="py-2 text-sm ">
+          <td className="py-2 text-sm">
             <Link to={`/designation/update/${designation?.id}`}>
               <div className="grid place-items-center">
                 <TbEdit className="text-2xl text-[#3686FF]" />
@@ -84,11 +84,11 @@ const DesignationList = () => {
             </Link>
           </td>
           <td
-            className="py-2 text-sm "
+            className="py-2 text-sm"
             onClick={() => handleDeleteDesignation(designation?.id)}
           >
             <div className="grid place-items-center">
-              <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
+              <MdOutlineDeleteOutline className="cursor-pointer text-2xl text-red-600" />
             </div>
           </td>
         </tr>
@@ -99,38 +99,38 @@ const DesignationList = () => {
 
   return (
     <div>
-      <div className="flex flex-wrap justify-between items-center pb-2">
+      <div className="flex flex-wrap items-center justify-between pb-2">
         <div>
-          <h2 className="font-semibold text-lg pb-2"> Designations</h2>
+          <h2 className="pb-2 text-lg font-semibold"> Designations</h2>
         </div>
       </div>
 
-      <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-auto">
+      <div className="h-auto w-full rounded-md border-[1px] border-solid border-slate-200 bg-white p-5">
         {/* Heading And Btn */}
-        <div className="flex flex-wrap justify-between mb-4">
-          <div className="font-medium text-base ">
+        <div className="mb-4 flex flex-wrap justify-between">
+          <div className="text-base font-medium">
             {" "}
             {designations?.data?.length | 0} Designation Available for Now
           </div>
           <div>
             <Link
               to="/designation/create"
-              className="px-5 py-2 rounded-[3px] text-white bg-[#3686FF] transition hover:bg-[#7f39f0]"
+              className="rounded-[3px] bg-[#3686FF] px-5 py-2 text-white transition hover:bg-[#7f39f0]"
             >
               Add Designation
             </Link>
           </div>
         </div>
         <div>
-          <table className="w-full h-auto ">
+          <table className="h-auto w-full">
             {!isError && (
-              <thead className="border-b border-slate-200 text-left mt-8">
+              <thead className="mt-8 border-b border-slate-200 text-left">
                 <tr>
-                  <th className="pb-2 text-base text-center">SL</th>
-                  <th className="pb-2 text-base pl-10">Name</th>
-                  <th className="pb-2 text-base text-center">Created By</th>
-                  <th className="pb-2 text-base text-center">Update </th>
-                  <th className="pb-2 text-base text-center">Delete </th>
+                  <th className="pb-2 text-center text-base">SL</th>
+                  <th className="pb-2 pl-10 text-base">Name</th>
+                  <th className="pb-2 text-center text-base">Created By</th>
+                  <th className="pb-2 text-center text-base">Update </th>
+                  <th className="pb-2 text-center text-base">Delete </th>
                 </tr>
               </thead>
             )}

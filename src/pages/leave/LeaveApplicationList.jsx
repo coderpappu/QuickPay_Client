@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { PiEyeLight } from "react-icons/pi";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   useGetAllLeaveApplicationQuery,
-  useGetCompanyIdQuery,
   useUpdateLeaveApplicationMutation,
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
@@ -101,7 +101,7 @@ const LeaveApplicationList = () => {
     note: "",
   });
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   const [applicationUpdate] = useUpdateLeaveApplicationMutation();
 
@@ -151,7 +151,6 @@ const LeaveApplicationList = () => {
         return "text-gray-500";
     }
   };
-
 
   if (!isLoading && !isError) {
     content = (

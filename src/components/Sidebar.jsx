@@ -13,8 +13,6 @@ const Sidebar = () => {
 
   const companyIdFromStore = useSelector((state) => state.company.companyId);
 
-  console.log(companyIdFromStore);
-
   // Get company ID from the store
 
   const { data: userData } = useGetUserQuery();
@@ -72,6 +70,7 @@ const Sidebar = () => {
 
   const filteredMenuItems = filterMenuItemsByPermissions(currentMenuItems);
 
+  console.log(companyIdFromStore);
   // Recursive function to render nested submenus
   const renderSubMenu = (subMenus) => {
     return (

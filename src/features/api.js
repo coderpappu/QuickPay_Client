@@ -108,11 +108,10 @@ export const apiSlice = createApi({
     }),
 
     getActiveCompany: builder.query({
-      query: (companyId) => ({
+      query: () => ({
         url: "/company/activecompany",
-        params: { companyId },
       }),
-    
+
       providesTags: ["ActiveId"],
     }),
 
@@ -1675,6 +1674,13 @@ export const apiSlice = createApi({
       providesTags: ["device"],
     }),
 
+    getStartDevice: builder.query({
+      query: () => ({
+        url: `/start-device-connection`,
+      }),
+      providesTags: ["device"],
+    }),
+
     getDeviceDetails: builder.query({
       query: (deviceId) => ({
         url: `/device/get-details/${deviceId}`,
@@ -2036,6 +2042,7 @@ export const {
   useDeleteDeviceConfigureMutation,
   useGetDeviceListQuery,
   useGetDeviceDetailsQuery,
+  useGetStartDeviceQuery,
 
   useGetCompanyAttendanceQuery,
 

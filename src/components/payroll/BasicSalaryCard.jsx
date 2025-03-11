@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  useGetCompanyIdQuery,
-  useGetEmployeeBasicSalaryDetailsQuery,
-} from "../../features/api";
+import { useGetEmployeeBasicSalaryDetailsQuery } from "../../features/api";
 
+import { useSelector } from "react-redux";
 import CardSkeleton from "../../skeletons/card";
 import ErrorMessage from "../../utils/ErrorMessage";
 import BrandCardWrapper from "../company/BrandCardWrapper";
@@ -23,8 +21,7 @@ const BasicSalaryCard = () => {
   const handleOpen = (id = null) => {
     setIsPopupOpen(true);
   };
-
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   const {
     data: basicSalaryDetails,

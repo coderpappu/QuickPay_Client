@@ -1,13 +1,13 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
-    useCreateWeekendMutation,
-    useGetCompanyIdQuery,
-    useGetWeekendDetailsQuery,
-    useUpdateWeekendMutation
+  useCreateWeekendMutation,
+  useGetWeekendDetailsQuery,
+  useUpdateWeekendMutation,
 } from "../../../features/api";
 import FormSkeleton from "../../../skeletons/FormSkeleton";
 
@@ -37,7 +37,7 @@ const WeekendForm = () => {
     }
   }, [weekend]);
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   if (companyId == null) {
     navigate("/");
@@ -100,12 +100,12 @@ const WeekendForm = () => {
                   type="text"
                   name="name"
                   id="name"
-                  className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 />
                 <ErrorMessage
                   name="name"
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="mt-1 text-sm text-red-500"
                 />
               </div>
               <div className="flex-grow">
@@ -119,7 +119,7 @@ const WeekendForm = () => {
                   as="select"
                   name="status"
                   id="status"
-                  className="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 >
                   <option>Select</option>
                   <option value="ACTIVE">ACTIVE</option>
@@ -128,14 +128,14 @@ const WeekendForm = () => {
                 <ErrorMessage
                   name="status"
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="mt-1 text-sm text-red-500"
                 />
               </div>
-              <div className="flex-none mt-2">
+              <div className="mt-2 flex-none">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-[#3686FF] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="inline-flex justify-center rounded-md border border-transparent bg-[#3686FF] px-6 py-3 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
                   Add
                 </button>

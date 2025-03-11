@@ -1,10 +1,10 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { ArrowRight } from "lucide-react";
 import React from "react";
+import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
   useCreatePaymentSettingsMutation,
-  useGetCompanyIdQuery,
   useGetPaymentSettingsQuery,
 } from "../../features/api";
 import CardSkeleton from "../../skeletons/card";
@@ -19,7 +19,6 @@ import PaymentInput from "./PaymentInput";
 import RadioInput from "./RadioInput";
 import SettingCardFooter from "./SettingCardFooter";
 import SettingCardHeader from "./SettingCardHeader";
-
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({
   bankDetails: Yup.string().required("Bank details are required"),
@@ -31,7 +30,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const PaymentCard = () => {
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   const [paymentSettings] = useCreatePaymentSettingsMutation();
   const { data: paymentSettingsData, isLoading } =
@@ -65,7 +64,7 @@ const PaymentCard = () => {
               title="Payment Settings"
               subTitle="Edit your payment details"
             />
-            <div className="my-3 px-6 ">
+            <div className="my-3 px-6">
               <Accordion defaultValue={["item-1", "item-2"]}>
                 {/* Bank Transfer */}
                 <AccordionItem value="item-1">
@@ -76,19 +75,19 @@ const PaymentCard = () => {
                     Bank Transfer
                   </AccordionHeader>
                   <AccordionPanel>
-                    <h2 className="text-sm mb-2">Bank Details</h2>
+                    <h2 className="mb-2 text-sm">Bank Details</h2>
                     <Field
                       as="textarea"
                       name="bankDetails"
                       placeholder="Write here"
-                      className="p-3 w-full bg-light-bg dark:bg-dark-card border-none outline-none rounded-md"
+                      className="w-full rounded-md border-none bg-light-bg p-3 outline-none dark:bg-dark-card"
                     />
                     <ErrorMessage
                       name="bankDetails"
                       component="div"
-                      className="text-red-500 text-xs"
+                      className="text-xs text-red-500"
                     />
-                    <p className="text-xs my-2">
+                    <p className="my-2 text-xs">
                       Example: Bank: bank name. Account Number: 0000 0000
                     </p>
                   </AccordionPanel>
@@ -113,7 +112,7 @@ const PaymentCard = () => {
                         <ErrorMessage
                           name="stripeKey"
                           component="div"
-                          className="text-red-500 text-xs"
+                          className="text-xs text-red-500"
                         />
                       </div>
 
@@ -127,7 +126,7 @@ const PaymentCard = () => {
                         <ErrorMessage
                           name="stripeSecretKey"
                           component="div"
-                          className="text-red-500 text-xs"
+                          className="text-xs text-red-500"
                         />
                       </div>
                     </div>
@@ -142,7 +141,7 @@ const PaymentCard = () => {
                     Paypal
                   </AccordionHeader>
                   <AccordionPanel>
-                    <div className="flex justify-start gap-5 items-center my-5">
+                    <div className="my-5 flex items-center justify-start gap-5">
                       <RadioInput
                         title="Sandbox"
                         name="paypalMode"
@@ -160,7 +159,7 @@ const PaymentCard = () => {
                       <ErrorMessage
                         name="paypalMode"
                         component="div"
-                        className="text-red-500 text-xs"
+                        className="text-xs text-red-500"
                       />
                     </div>
                     <div className="flex w-full justify-between">
@@ -174,7 +173,7 @@ const PaymentCard = () => {
                         <ErrorMessage
                           name="paypalClientId"
                           component="div"
-                          className="text-red-500 text-xs"
+                          className="text-xs text-red-500"
                         />
                       </div>
 
@@ -188,7 +187,7 @@ const PaymentCard = () => {
                         <ErrorMessage
                           name="paypalSecretKey"
                           component="div"
-                          className="text-red-500 text-xs"
+                          className="text-xs text-red-500"
                         />
                       </div>
                     </div>

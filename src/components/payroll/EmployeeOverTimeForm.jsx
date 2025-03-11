@@ -4,12 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
   useCreateEmployeeOverTimeMutation,
-  useGetCompanyIdQuery,
   useGetEmployeeOverTimeDetailsQuery,
   useGetGradeListQuery,
 } from "../../features/api";
 
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import FormSkeleton from "../../skeletons/FormSkeleton";
 
 const employeeOverTimeSchema = Yup.object().shape({
@@ -22,7 +22,7 @@ const EmployeeOverTimeForm = ({ onClose }) => {
 
   const { id: employeeId } = useParams();
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   const [createEmployeeOverTime] = useCreateEmployeeOverTimeMutation();
 
@@ -35,7 +35,7 @@ const EmployeeOverTimeForm = ({ onClose }) => {
   } = useGetEmployeeOverTimeDetailsQuery({ employeeId, companyId });
 
   const [basicSalary, setBasicSalary] = useState(
-    basicSalaryDetails?.data?.value || ""
+    basicSalaryDetails?.data?.value || "",
   );
 
   const initialValues = {
@@ -53,14 +53,14 @@ const EmployeeOverTimeForm = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white dark:bg-dark-card rounded-lg shadow-lg w-full max-w-md p-6 relative">
+      <div className="relative w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-dark-card">
         <button
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+          className="absolute right-3 top-3 text-gray-500 hover:text-gray-700 focus:outline-none"
           onClick={onClose}
         >
           &#x2715;
         </button>
-        <h2 className="text-xl font-semibold  dark:text-dark-heading-color mb-4">
+        <h2 className="mb-4 text-xl font-semibold dark:text-dark-heading-color">
           Add over time
         </h2>
         <Formik
@@ -104,14 +104,14 @@ const EmployeeOverTimeForm = ({ onClose }) => {
                 <Field
                   as="input"
                   name="hour"
-                  className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+                  className="h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
                   placeholder="01"
                 />
 
                 <ErrorMessage
                   name="hour"
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="mt-1 text-sm text-red-500"
                 />
               </div>
 
@@ -127,12 +127,12 @@ const EmployeeOverTimeForm = ({ onClose }) => {
                   name="rate"
                   type="number"
                   placeholder="10,000"
-                  className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+                  className="h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
                 />
                 <ErrorMessage
                   name="rate"
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="mt-1 text-sm text-red-500"
                 />
               </div>
 
@@ -140,14 +140,14 @@ const EmployeeOverTimeForm = ({ onClose }) => {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="mr-4 px-4 py-2 bg-white rounded-md text-sm font-medium text-gray-800 border border-dark-border-color dark:border-opacity-10"
+                  className="mr-4 rounded-md border border-dark-border-color bg-white px-4 py-2 text-sm font-medium text-gray-800 dark:border-opacity-10"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 bg-[#3686FF] rounded-md text-sm font-medium text-white"
+                  className="rounded-md bg-[#3686FF] px-4 py-2 text-sm font-medium text-white"
                 >
                   Update
                 </button>

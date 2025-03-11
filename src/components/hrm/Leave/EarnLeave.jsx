@@ -1,17 +1,16 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   useCreateEarnLeaveMutation,
-  useGetCompanyIdQuery,
   useGetEarnLeaveQuery,
 } from "../../../features/api";
-
 const EarnLeave = () => {
   const navigate = useNavigate();
   const [isUpdate, setIsUpdate] = useState(false);
   const [workDay, setWorkDay] = useState(0);
   const [leaveDay, setLeaveDay] = useState(0);
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   const { data: earnLeaveData } = useGetEarnLeaveQuery(companyId);
 
@@ -36,16 +35,16 @@ const EarnLeave = () => {
 
   return (
     <div>
-      <div className="flex flex-wrap justify-between items-center pb-2">
+      <div className="flex flex-wrap items-center justify-between pb-2">
         <div>
-          <h2 className="font-semibold text-lg pb-2 dark:text-dark-heading-color">
+          <h2 className="pb-2 text-lg font-semibold dark:text-dark-heading-color">
             Earn Leave Configure{" "}
           </h2>
         </div>
       </div>
 
-      <div className="border-solid border-[1px] border-slate-200 dark:border-none bg-white dark:bg-dark-card rounded-md p-5 w-full h-auto">
-        <div className="w-full flex flex-wrap justify-between items-center py-3 px-4  border-b border-[#ddd] dark:border-opacity-5 text-black dark:text-white rounded-sm text-sm">
+      <div className="h-auto w-full rounded-md border-[1px] border-solid border-slate-200 bg-white p-5 dark:border-none dark:bg-dark-card">
+        <div className="flex w-full flex-wrap items-center justify-between rounded-sm border-b border-[#ddd] px-4 py-3 text-sm text-black dark:border-opacity-5 dark:text-white">
           <div className="w-[10%]">
             <h3>SL</h3>
           </div>
@@ -66,10 +65,7 @@ const EarnLeave = () => {
 
         {/* table data  */}
         <form>
-          <div
-            className="w-full flex flex-wrap justify-between items-center py-2 px-4 bg-[#fff] dark:bg-dark-box
-           text-black dark:text-light-text-color rounded-sm text-sm"
-          >
+          <div className="flex w-full flex-wrap items-center justify-between rounded-sm bg-[#fff] px-4 py-2 text-sm text-black dark:bg-dark-box dark:text-light-text-color">
             <div className="w-[10%]">
               <h3>01</h3>
             </div>
@@ -80,7 +76,7 @@ const EarnLeave = () => {
                   type="number"
                   value={workDay}
                   onChange={(e) => setWorkDay(e.target.value)}
-                  className="w-[80%] bg-blue-100 dark:bg-dark-card px-2 py-3 rounded-md outline-none"
+                  className="w-[80%] rounded-md bg-blue-100 px-2 py-3 outline-none dark:bg-dark-card"
                 />
               ) : (
                 <h3>{earnLeaveData?.data?.workday || 0}</h3>
@@ -93,7 +89,7 @@ const EarnLeave = () => {
                   type="number"
                   value={leaveDay}
                   onChange={(e) => setLeaveDay(e.target.value)}
-                  className="w-[80%] bg-blue-100 dark:bg-dark-card px-2 py-3 rounded-md outline-none"
+                  className="w-[80%] rounded-md bg-blue-100 px-2 py-3 outline-none dark:bg-dark-card"
                 />
               ) : (
                 <h3>{earnLeaveData?.data?.leaveday || 0}</h3>
@@ -106,14 +102,14 @@ const EarnLeave = () => {
             <div className="w-[10%]">
               {isUpdate ? (
                 <button
-                  className="px-4 py-2 bg-[#3686FF]  text-white rounded-sm "
+                  className="rounded-sm bg-[#3686FF] px-4 py-2 text-white"
                   onClick={updateEarnLeave}
                 >
                   Update
                 </button>
               ) : (
                 <button
-                  className="px-4 py-2 bg-[#3686FF]  text-white rounded-sm "
+                  className="rounded-sm bg-[#3686FF] px-4 py-2 text-white"
                   onClick={updateFormHandler}
                 >
                   Edit

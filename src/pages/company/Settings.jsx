@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import Button from "../../components/company/Button";
 import {
-  useGetCompanyIdQuery,
   useGetRootSettingQuery,
   useSetSettingMutation,
 } from "../../features/api";
 
 const Settings = () => {
   const [setSetting] = useSetSettingMutation();
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const { data: setting } = useGetRootSettingQuery(companyId);
 
   console.log(setting);

@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { MdOutlineCheckCircle } from "react-icons/md";
+import { useSelector } from "react-redux";
 import {
   useCreateAttendanceMutation,
-  useGetCompanyIdQuery,
   useGetEmployeeSettingQuery,
   useGetEmployeesQuery,
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import ErrorMessage from "../../utils/ErrorMessage";
+
 const ManualAttendance = () => {
   const [checkInTimes, setCheckInTimes] = useState({});
   const [checkOutTimes, setCheckOutTimes] = useState({});
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [createCheck, { isError: addError }] = useCreateAttendanceMutation();
   const { data: employeeSetting } = useGetEmployeeSettingQuery(companyId);
 

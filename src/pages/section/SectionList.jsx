@@ -1,20 +1,20 @@
 import { Link } from "react-router-dom";
 
 import {
-    useDeleteSectionMutation,
-    useGetCompanyIdQuery,
-    useGetSectionsQuery,
+  useDeleteSectionMutation,
+  useGetSectionsQuery,
 } from "../../features/api";
 
 import toast from "react-hot-toast";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import { TbEdit } from "react-icons/tb";
+import { useSelector } from "react-redux";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
 import ErrorMessage from "../../utils/ErrorMessage";
 
 const SectionList = () => {
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   const [deleteSection] = useDeleteSectionMutation();
 
@@ -42,7 +42,7 @@ const SectionList = () => {
         ),
         {
           duration: Infinity,
-        }
+        },
       );
 
     confirm();
@@ -68,13 +68,13 @@ const SectionList = () => {
     content = sections?.data?.map((section, index) => (
       <tr
         key={section.id}
-        className={index % 2 === 0 ? "" : "bg-gray-50 rounded-sm"}
+        className={index % 2 === 0 ? "" : "rounded-sm bg-gray-50"}
       >
-        <td className="py-2 text-sm text-center">{++index}</td>
-        <td className="py-2 text-sm font-semibold pl-10">{section.name}</td>
-        <td className="py-2 text-sm text-center">{section.user_id}</td>
+        <td className="py-2 text-center text-sm">{++index}</td>
+        <td className="py-2 pl-10 text-sm font-semibold">{section.name}</td>
+        <td className="py-2 text-center text-sm">{section.user_id}</td>
 
-        <td className="py-2 text-sm ">
+        <td className="py-2 text-sm">
           <Link to={`/section/update/${section.id}`}>
             <div className="grid place-items-center">
               <TbEdit className="text-2xl text-[#3686FF]" />
@@ -82,11 +82,11 @@ const SectionList = () => {
           </Link>
         </td>
         <td
-          className="py-2 text-sm "
+          className="py-2 text-sm"
           onClick={() => handleDeleteSection(section.id)}
         >
           <div className="grid place-items-center">
-            <MdOutlineDeleteOutline className="text-2xl text-red-600 cursor-pointer" />
+            <MdOutlineDeleteOutline className="cursor-pointer text-2xl text-red-600" />
           </div>
         </td>
       </tr>
@@ -94,39 +94,39 @@ const SectionList = () => {
 
   return (
     <div>
-      <div className="flex flex-wrap justify-between items-center pb-2">
+      <div className="flex flex-wrap items-center justify-between pb-2">
         <div>
-          <h2 className="font-semibold text-lg pb-2"> Sections</h2>
+          <h2 className="pb-2 text-lg font-semibold"> Sections</h2>
         </div>
       </div>
 
       {/* {content} */}
-      <div className="border-solid border-[1px] border-slate-200 bg-white rounded-md p-5 w-full h-auto">
+      <div className="h-auto w-full rounded-md border-[1px] border-solid border-slate-200 bg-white p-5">
         {/* Heading And Btn */}
-        <div className="flex flex-wrap justify-between mb-4">
-          <div className="font-medium text-base ">
+        <div className="mb-4 flex flex-wrap justify-between">
+          <div className="text-base font-medium">
             {" "}
             {sections?.data?.length | 0} Section Available for Now
           </div>
           <div>
             <Link
               to="/section/create"
-              className="px-5 py-2 rounded-[3px] text-white bg-[#3686FF] transition hover:bg-[#7f39f0]"
+              className="rounded-[3px] bg-[#3686FF] px-5 py-2 text-white transition hover:bg-[#7f39f0]"
             >
               Add Section
             </Link>
           </div>
         </div>
         <div>
-          <table className="w-full h-auto ">
+          <table className="h-auto w-full">
             {!isError && (
-              <thead className="border-b border-slate-200 text-left mb-8">
+              <thead className="mb-8 border-b border-slate-200 text-left">
                 <tr>
-                  <th className="pb-2 text-base text-center">SL</th>
-                  <th className="pb-2 text-base pl-10">Name</th>
-                  <th className="pb-2 text-base text-center">Created By</th>
-                  <th className="pb-2 text-base text-center">Update </th>
-                  <th className="pb-2 text-base text-center">Delete </th>
+                  <th className="pb-2 text-center text-base">SL</th>
+                  <th className="pb-2 pl-10 text-base">Name</th>
+                  <th className="pb-2 text-center text-base">Created By</th>
+                  <th className="pb-2 text-center text-base">Update </th>
+                  <th className="pb-2 text-center text-base">Delete </th>
                 </tr>
               </thead>
             )}

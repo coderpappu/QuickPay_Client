@@ -1,14 +1,13 @@
 import { ErrorMessage, Form, Formik } from "formik";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import {
   useCreateLoanTypeMutation,
-  useGetCompanyIdQuery,
   useGetLoanDetailsQuery,
   useUpdateLoanTypeMutation,
 } from "../../../features/api";
-
 import FormSkeleton from "../../../skeletons/FormSkeleton";
 import { InputBox } from "../../company/BrandInput";
 
@@ -20,7 +19,7 @@ const loanTypeSchema = Yup.object().shape({
 
 const LoanTypeForm = ({ loanTypeId, onClose }) => {
   const navigate = useNavigate();
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [createLoanType] = useCreateLoanTypeMutation();
   const [updateLoanType] = useUpdateLoanTypeMutation();
 

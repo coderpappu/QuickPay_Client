@@ -2,11 +2,11 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { LuEye } from "react-icons/lu";
 import { MdOutlineDeleteOutline } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   useDeleteAttendanceMutation,
   useGetAttendancesQuery,
-  useGetCompanyIdQuery,
 } from "../../features/api";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import ListSkeleton from "../../skeletons/ListSkeleton";
@@ -15,8 +15,7 @@ import ErrorMessage from "../../utils/ErrorMessage";
 import formatTimeTo12Hour from "../../utils/timeConverter";
 
 const AttendanceList = () => {
-  
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [deleteAttendance] = useDeleteAttendanceMutation();
 
   // date pick

@@ -1,20 +1,19 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
 import {
   useCreateNocLetterFormatMutation,
-  useGetCompanyIdQuery,
   useGetNocLetterFormatQuery,
 } from "../../features/api";
 import BrandCardWrapper from "./BrandCardWrapper";
 import SettingCardHeader from "./SettingCardHeader";
 import TextBoxLetter from "./TextBoxLetter";
 import TextEditor from "./TextEditor";
-
 const NocCard = () => {
   const [editorState, setEditorState] = useState(null); // Store the editor's state
   const [isSaving, setIsSaving] = useState(false); // Track saving status
   const [error, setError] = useState(null); // Store potential errors
-  const { data: company_id } = useGetCompanyIdQuery();
+  const company_id = useSelector((state) => state.company.companyId);
 
   const [editorData, setEditorData] = useState(null); // Store the editor's state data
   const [createNocLetter] = useCreateNocLetterFormatMutation();

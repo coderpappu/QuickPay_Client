@@ -1,25 +1,19 @@
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useGetCompanyIdQuery } from "../features/api";
 
 const CompanyPrivateRoute = () => {
-  const { data: companyId, isLoading, isError } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    if (!isLoading) {
-      if (isError || !companyId) {
-        navigate("/company/list", { state: { from: location } }); // Redirect to the company list if no valid company ID
-      }
+    if (!companyId) {
+      navigate("/company/list", { state: { from: location } }); // Redirect to the company list if no valid company ID
     }
-  }, [isLoading, isError, companyId, navigate, location]);
+  }, [companyId, navigate, location]);
 
-  if (isLoading) {
-    return "Loading...";
-  }
-
-  if (isError || !companyId) {
+  if (!companyId) {
     return null; // Prevent rendering of Outlet
   }
 

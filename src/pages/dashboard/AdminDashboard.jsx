@@ -9,6 +9,7 @@ import {
   useGetAttendancesQuery,
   useGetEmployeesQuery,
   useGetShiftListQuery,
+  useGetStartDeviceQuery,
 } from "../../features/api";
 import { setCompanyId } from "../../features/companySlice";
 import DatePicker from "../../utils/DatePicker";
@@ -19,6 +20,8 @@ const AdminDashboard = () => {
 
   const { data: activeCompanyId, refetch: refetchActiveCompany } =
     useGetActiveCompanyQuery();
+
+  const { data } = useGetStartDeviceQuery();
 
   const companyId = activeCompanyId?.data?.company_id;
 

@@ -1,16 +1,15 @@
 import { ErrorMessage, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import {
   useCreateDeductionTypeMutation,
-  useGetCompanyIdQuery,
   useGetDeductionTypeDetailsQuery,
   useGetTypeListQuery,
   useUpdateDeductionTypeMutation,
 } from "../../../features/api";
-
 import FormSkeleton from "../../../skeletons/FormSkeleton";
 import { InputBox } from "../../company/BrandInput";
 const deductionTypeSchema = Yup.object().shape({
@@ -20,7 +19,7 @@ const deductionTypeSchema = Yup.object().shape({
 const DeductionTypeForm = ({ typeId, onClose }) => {
   const navigate = useNavigate();
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [createDeductionType] = useCreateDeductionTypeMutation();
   const [updateDeductionType] = useUpdateDeductionTypeMutation();
 

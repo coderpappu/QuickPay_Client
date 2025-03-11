@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import {
   useBulkEmployeePaymentMutation,
   useDeleteSalarySheetMutation,
   useGeneratedEmployeeSalaryBulkMutation,
-  useGetCompanyIdQuery,
   useGetEmployeesQuery,
   useGetGeneratedSalarySheetQuery,
   useUpdateSalarySheetMutation,
@@ -49,7 +49,7 @@ const PaySlipCard = () => {
     await updateSalarySheet({ employeeId, generate_date, status: "Paid" });
   };
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const {
     data: employeeList,
     isLoading,

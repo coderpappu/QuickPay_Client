@@ -1,9 +1,9 @@
 import { Field, Form, Formik } from "formik";
 import React from "react";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
 import {
   useCreateNotificationSettingMutation,
-  useGetCompanyIdQuery,
   useGetNotificationSettingQuery,
 } from "../../features/api";
 import CardSkeleton from "../../skeletons/card";
@@ -11,9 +11,8 @@ import BrandCardWrapper from "./BrandCardWrapper";
 import SettingCardFooter from "./SettingCardFooter";
 import SettingCardHeader from "./SettingCardHeader";
 import SwitchCard from "./SwitchCard";
-
 const NotificationCard = () => {
-  const { data: company_id } = useGetCompanyIdQuery();
+  const company_id = useSelector((state) => state.company.companyId);
   const [createNotification] = useCreateNotificationSettingMutation();
   const {
     data: notificationSettings,
@@ -64,7 +63,7 @@ const NotificationCard = () => {
             />
 
             <div className="px-6 py-3">
-              <div className="flex justify-between items-center my-2">
+              <div className="my-2 flex items-center justify-between">
                 <div className="w-[32%]">
                   <Field
                     name="newUser"
@@ -88,7 +87,7 @@ const NotificationCard = () => {
                 </div>
               </div>
 
-              <div className="flex justify-between items-center my-2">
+              <div className="my-2 flex items-center justify-between">
                 <div className="w-[32%]">
                   <Field
                     name="leaveActionSent"
@@ -112,7 +111,7 @@ const NotificationCard = () => {
                 </div>
               </div>
 
-              <div className="flex justify-between items-center my-2">
+              <div className="my-2 flex items-center justify-between">
                 <div className="w-[32%]">
                   <Field
                     name="terminationSent"

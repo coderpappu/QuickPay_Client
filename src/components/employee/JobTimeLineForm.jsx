@@ -1,22 +1,21 @@
 import { Form, Formik } from "formik";
 import React from "react";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import * as Yup from "yup";
 import {
   useCreateJobTimeLineMutation,
-  useGetCompanyIdQuery,
   useGetJobTimeLineDetailsQuery,
   useUpdateJobTimelineMutation,
 } from "../../features/api";
 import FormSkeleton from "../../skeletons/FormSkeleton";
 import { InputBox } from "../company/BrandInput";
 import InputTitle from "../company/InputTitle";
-
 const JobTimeLineForm = ({ onClose, jobId }) => {
   const id = useParams().id;
 
-  const { data: company_id } = useGetCompanyIdQuery();
+  const company_id = useSelector((state) => state.company.companyId);
   const [createJobTimeLine] = useCreateJobTimeLineMutation();
   const [updateJobTimeLine] = useUpdateJobTimelineMutation();
 

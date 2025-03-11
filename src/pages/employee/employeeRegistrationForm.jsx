@@ -6,13 +6,13 @@ import Typography from "@mui/material/Typography";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as React from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
   useCreateNewEmployeeMutation,
   useGetBranchListQuery,
   useGetCompanyDetailsQuery,
-  useGetCompanyIdQuery,
   useGetDepartmentsQuery,
   useGetDesignationsQuery,
   useGetEmployeeDetailsQuery,
@@ -37,7 +37,7 @@ const steps = [
 
 const EmployeeRegistrationForm = () => {
   const { id } = useParams();
-  const { data: CompanyId } = useGetCompanyIdQuery();
+
   const navigate = useNavigate();
   const [step, setStep] = useState(1); // State to track current step
   const { data: departments } = useGetDepartmentsQuery(CompanyId);
@@ -49,9 +49,7 @@ const EmployeeRegistrationForm = () => {
   const [createEmployee] = useCreateNewEmployeeMutation();
   const [updateEmployee] = useUpdateEmployeeMutation();
 
-  const { data: companyId, isLoading: isCompanyIdLoading } =
-    useGetCompanyIdQuery();
-
+  const companyId = useSelector((state) => state.company.companyId);
   const { data: companyData } = useGetCompanyDetailsQuery(companyId);
 
   const [editModeUploader, setEditModeUploader] = useState(false);

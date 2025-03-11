@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
 import { Switch } from "antd";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import {
   useCreateWeekendMutation,
   useDeleteWeekendMutation,
-  useGetCompanyIdQuery,
   useGetWeekendListQuery,
 } from "../../../features/api";
 
@@ -31,7 +31,7 @@ const WeekdaysTable = () => {
 
   const [createWeekend] = useCreateWeekendMutation();
   const [deleteWeekend] = useDeleteWeekendMutation();
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const {
     data: weekendList,
     isLoading,
@@ -90,23 +90,23 @@ const WeekdaysTable = () => {
 
   return (
     <div className="flex justify-center p-6">
-      <div className="w-full max-w-4xl bg-white border border-gray-300 rounded-lg">
+      <div className="w-full max-w-4xl rounded-lg border border-gray-300 bg-white">
         <div className="p-6">
-          <h2 className="text-2xl font-semibold mb-4 text-center">
+          <h2 className="mb-4 text-center text-2xl font-semibold">
             Select Weekend
           </h2>
-          <table className="w-full bg-white border border-gray-200 rounded-lg">
+          <table className="w-full rounded-lg border border-gray-200 bg-white">
             <thead className="bg-gray-200 text-gray-700">
               <tr>
-                <th className="py-3 px-6 border-b text-left">Day</th>
-                <th className="py-3 px-6 border-b">Weekend</th>
+                <th className="border-b px-6 py-3 text-left">Day</th>
+                <th className="border-b px-6 py-3">Weekend</th>
               </tr>
             </thead>
             <tbody>
               {daysOfWeek.map(({ name, key }) => (
                 <tr key={key} className="hover:bg-gray-50">
-                  <td className="py-3 px-6 border-b text-left">{name}</td>
-                  <td className="py-3 px-6 border-b text-left">
+                  <td className="border-b px-6 py-3 text-left">{name}</td>
+                  <td className="border-b px-6 py-3 text-left">
                     <Switch
                       checked={weekends[key]}
                       onChange={() => handleToggle(key)}

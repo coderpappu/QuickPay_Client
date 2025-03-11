@@ -4,7 +4,6 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import {
   useDeleteShiftMutation,
-  useGetCompanyIdQuery,
   useGetShiftListQuery,
 } from "../../../features/api";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
@@ -12,10 +11,10 @@ import ErrorMessage from "../../../utils/ErrorMessage";
 import BrandCardWrapper from "../../company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../company/SettingCardHeader";
 
+import { useSelector } from "react-redux";
 import CardSkeleton from "../../../skeletons/card";
 import formatTimeTo12Hour from "../../../utils/timeConverter";
 import ShiftForm from "./ShiftForm";
-
 const ShiftCard = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [selectShiftId, setSelectShiftId] = useState(null);
@@ -29,7 +28,7 @@ const ShiftCard = () => {
     setSelectShiftId(id);
   };
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [deleteShift] = useDeleteShiftMutation();
 
   const {
@@ -54,7 +53,7 @@ const ShiftCard = () => {
                     } else {
                       toast.success("Shift deleted successfully");
                     }
-                  }
+                  },
                 );
               } catch (error) {
                 toast.error(error.message || "Failed to delete shift");
@@ -66,7 +65,7 @@ const ShiftCard = () => {
         ),
         {
           duration: Infinity,
-        }
+        },
       );
 
     confirm();
@@ -81,30 +80,30 @@ const ShiftCard = () => {
     content = shiftList?.data?.map((shift) => (
       <div
         key={shift?.id}
-        className="w-full flex flex-wrap justify-between items-center text-[13px] px-3 py-3 border-t border-dark-border-color dark:border-opacity-10"
+        className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
       >
-        <div className="dark:text-white w-[20%]">
+        <div className="w-[20%] dark:text-white">
           <h3>{shift?.name}</h3>
         </div>
-        <div className="dark:text-white w-[20%]">
+        <div className="w-[20%] dark:text-white">
           <h3>{formatTimeTo12Hour(shift?.start_time)}</h3>
         </div>
-        <div className="dark:text-white w-[20%]">
+        <div className="w-[20%] dark:text-white">
           <h3>{formatTimeTo12Hour(shift?.end_time)}</h3>
         </div>
-        <div className="dark:text-white w-[20%]">
+        <div className="w-[20%] dark:text-white">
           <h3>{formatTimeTo12Hour(shift?.late_time_count)}</h3>
         </div>
 
-        <div className="dark:text-white w-[15%]">
+        <div className="w-[15%] dark:text-white">
           <div className="flex flex-wrap justify-start gap-2">
             {/* edit button  */}
-            <div className="w-8 h-8 bg-indigo-600 rounded-sm p-2 flex justify-center items-center cursor-pointer">
+            <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-indigo-600 p-2">
               <CiEdit size={20} onClick={() => handleOpen(shift?.id)} />
             </div>
 
             {/* delete button  */}
-            <div className="w-8 h-8 bg-red-500 text-center flex justify-center items-center rounded-sm p-2 cursor-pointer">
+            <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center">
               <AiOutlineDelete
                 size={20}
                 onClick={() => handleDeleteShift(shift?.id)}
@@ -125,24 +124,24 @@ const ShiftCard = () => {
         />
         <div className="px-6 py-3">
           {/* header  */}
-          <div className="w-full bg-light-bg dark:bg-dark-box rounded-sm py-3 px-3 flex flex-wrap justify-between text-sm">
-            <div className="dark:text-white w-[20%]">
+          <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
+            <div className="w-[20%] dark:text-white">
               <h3>Name</h3>
             </div>
 
-            <div className="dark:text-white w-[20%]">
+            <div className="w-[20%] dark:text-white">
               <h3>Type</h3>
             </div>
 
-            <div className="dark:text-white w-[20%]">
+            <div className="w-[20%] dark:text-white">
               <h3>Basic Percentage</h3>
             </div>
 
-            <div className="dark:text-white w-[20%]">
+            <div className="w-[20%] dark:text-white">
               <h3>Limit Per Month</h3>
             </div>
 
-            <div className="dark:text-white w-[15%]">
+            <div className="w-[15%] dark:text-white">
               <h3>Action</h3>
             </div>
           </div>
@@ -151,9 +150,9 @@ const ShiftCard = () => {
           {content}
         </div>
         {isPopupOpen && (
-          <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-            <div className="bg-white dark:bg-dark-card  rounded-lg p-6 w-full max-w-md">
-              <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-dark-border-color dark:border-opacity-5">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="w-full max-w-md rounded-lg bg-white p-6 dark:bg-dark-card">
+              <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-dark-border-color dark:border-opacity-5">
                 <h3 className="text-lg font-medium text-gray-800 dark:text-white">
                   Shift
                 </h3>

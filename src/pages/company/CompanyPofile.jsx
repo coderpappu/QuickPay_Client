@@ -11,13 +11,13 @@ import {
 } from "react-icons/io5";
 import { LiaFaxSolid } from "react-icons/lia";
 import { PiAddressBookThin } from "react-icons/pi";
+import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import Button from "../../components/company/Button";
 import ProfileSection from "../../components/company/ProfileSection";
 import {
   useGetbrandQuery,
   useGetCompanyDetailsQuery,
-  useGetCompanyIdQuery,
   useGetEmailSettingQuery,
 } from "../../features/api";
 import ProfileSkeleton from "../../skeletons/ProfileSkeleton";
@@ -41,7 +41,7 @@ const CompanyPofile = () => {
   };
 
   const { data, isLoading, isError, error } = useGetCompanyDetailsQuery(id);
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const { data: brandDetails } = useGetbrandQuery(companyId);
   const { data: emailData } = useGetEmailSettingQuery(companyId);
 

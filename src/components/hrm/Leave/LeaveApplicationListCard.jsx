@@ -5,24 +5,23 @@ import { PiEyeLight } from "react-icons/pi";
 import {
   useDeleteApplicationMutation,
   useGetAllLeaveApplicationQuery,
-  useGetCompanyIdQuery,
 } from "../../../features/api";
 import BrandCardWrapper from "../../company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../company/SettingCardHeader";
 
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import CardSkeleton from "../../../skeletons/card";
 import { DateConverterFromUTC } from "../../../utils/Converter";
 import ErrorMessage from "../../../utils/ErrorMessage";
 import LeaveApplicationForm from "./LeaveApplicationForm";
-
 const LeaveApplicationListCard = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [selectId, setSelectId] = useState(null);
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [deleteLeaveApplication] = useDeleteApplicationMutation();
 
   const handleOpen = (id) => {

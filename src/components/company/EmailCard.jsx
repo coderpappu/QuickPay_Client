@@ -84,7 +84,7 @@ const formFields = [
 ];
 
 const EmailCard = () => {
-  const companyId = useSelector((state) => state.company.companyId);
+  const company_id = useSelector((state) => state.company.companyId);
 
   const [createEmailSettings] = useCreateEmailSettingMutation();
   const {

@@ -1,15 +1,14 @@
 import { ErrorMessage, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import {
   useCreateGradeMutation,
-  useGetCompanyIdQuery,
   useGetGradeDetailsQuery,
   useUpdateGradeMutation,
 } from "../../../features/api";
-
 import FormSkeleton from "../../../skeletons/FormSkeleton";
 import { InputBox } from "../../company/BrandInput";
 
@@ -22,7 +21,7 @@ const gradeSchema = Yup.object().shape({
 const GradeForm = ({ gradeId, onClose }) => {
   const navigate = useNavigate();
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [createGrade] = useCreateGradeMutation();
   const [updateGrade] = useUpdateGradeMutation();
 

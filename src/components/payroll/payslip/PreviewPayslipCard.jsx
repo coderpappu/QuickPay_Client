@@ -1,12 +1,12 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import {
   useGetbrandQuery,
-  useGetCompanyIdQuery,
   useGetEmployeeSalarySheetQuery,
 } from "../../../features/api";
 
 const SalarySheet = ({ slipPreview }) => {
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const { data: brandDetails } = useGetbrandQuery(companyId);
 
   const { data: getEmployeeSalary } = useGetEmployeeSalarySheetQuery({

@@ -3,11 +3,11 @@ import toast from "react-hot-toast";
 
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
+import { useSelector } from "react-redux";
 import BrandCardWrapper from "../../components/company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../components/company/SettingCardHeader";
 import {
   useDeleteModuleMutation,
-  useGetCompanyIdQuery,
   useGetModuleListQuery,
 } from "../../features/api";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
@@ -43,7 +43,7 @@ const PermissionCard = () => {
     setHierarchy(structuredData);
   }, [moduleList]);
 
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   //   const [deleteAllowanceType] = useDeleteAllowanceTypeMutation();
 

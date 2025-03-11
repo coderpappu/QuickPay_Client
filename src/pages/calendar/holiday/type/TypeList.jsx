@@ -4,10 +4,10 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import {
   useDeleteTypeMutation,
-  useGetCompanyIdQuery,
   useGetTypeListQuery,
 } from "../../../../features/api";
 
+import { useSelector } from "react-redux";
 import BrandCardWrapper from "../../../../components/company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../../../components/company/SettingCardHeader";
 import ConfirmDialog from "../../../../helpers/ConfirmDialog";
@@ -17,7 +17,7 @@ import TypeForm from "./TypeForm";
 
 const TypeList = () => {
   const navigate = useNavigate();
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [deleteType] = useDeleteTypeMutation();
 
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility

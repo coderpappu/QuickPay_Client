@@ -5,20 +5,19 @@ import { CiEdit } from "react-icons/ci";
 import {
   useDeleteAppliedLoanMutation,
   useGetApplyLoanListQuery,
-  useGetCompanyIdQuery,
 } from "../../../../features/api";
 
+import { useSelector } from "react-redux";
 import ConfirmDialog from "../../../../helpers/ConfirmDialog";
 import CardSkeleton from "../../../../skeletons/card";
 import ErrorMessage from "../../../../utils/ErrorMessage";
 import BrandCardWrapper from "../../../company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../../company/SettingCardHeader";
 import LoanApplicationForm from "./EmployeeLoanForm";
-
 const EmployeeLoanList = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectId, setSelectId] = useState(null);
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [deleteLoan] = useDeleteAppliedLoanMutation();
 
   const handleOpen = (id) => {

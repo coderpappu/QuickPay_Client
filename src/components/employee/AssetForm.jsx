@@ -1,23 +1,22 @@
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
   useGetAllDocsTypeListQuery,
-  useGetCompanyIdQuery,
   useGetEmployeeAssetQuery,
   useGetEmployeeDetailsQuery,
   useUploadImageMutation,
 } from "../../features/api";
 import { modifyPayload } from "../../utils/modifyPayload";
-
 const AssetForm = ({ mode, setMode }) => {
   const [employeeData, setEmployeeData] = useState();
   const [imagePreviews, setImagePreviews] = useState({});
 
   const { id } = useParams();
   const { data: employeeAsset } = useGetEmployeeAssetQuery(id);
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [uploadImage] = useUploadImageMutation();
   const { data: employeeDetails } = useGetEmployeeDetailsQuery(id);
   const { data: docsList } = useGetAllDocsTypeListQuery(companyId);
@@ -81,7 +80,7 @@ const AssetForm = ({ mode, setMode }) => {
                 toast.error(`Upload error for document ID ${docId}`);
               }
             }
-          }
+          },
         );
 
         try {
@@ -97,12 +96,12 @@ const AssetForm = ({ mode, setMode }) => {
     >
       {({ setFieldValue, isSubmitting }) => (
         <Form>
-          <div className="flex flex-wrap justify-start items-center gap-3">
+          <div className="flex flex-wrap items-center justify-start gap-3">
             {docsList?.data?.map((doc) => (
               <div key={doc.id}>
                 <label
                   htmlFor={`file-${doc.id}`}
-                  className="block text-base my-2 font-medium dark:text-dark-text-color"
+                  className="my-2 block text-base font-medium dark:text-dark-text-color"
                 >
                   {doc?.name}
                 </label>
@@ -110,22 +109,22 @@ const AssetForm = ({ mode, setMode }) => {
                 {/* Check if there is an existing asset for this document type */}
                 {imagePreviews[doc.id] ? (
                   // Show preview if an asset exists
-                  <div className="flex justify-center ">
+                  <div className="flex justify-center">
                     <img
                       src={imagePreviews[doc.id]}
                       alt="Uploaded Preview"
-                      className="w-[300px] h-64  object-cover object-center"
+                      className="h-64 w-[300px] object-cover object-center"
                     />
                   </div>
                 ) : (
                   // Show upload box if no asset exists
                   <label
                     htmlFor={`dropzone-file-${doc.id}`}
-                    className="flex flex-col items-center justify-center w-[300px] h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                    className="flex h-64 w-[300px] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                   >
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <div className="flex flex-col items-center justify-center pb-6 pt-5">
                       <svg
-                        className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                        className="mb-4 h-8 w-8 text-gray-500 dark:text-gray-400"
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -165,7 +164,7 @@ const AssetForm = ({ mode, setMode }) => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mt-4 px-5 py-2 bg-blue-600 text-white rounded-md"
+              className="mt-4 rounded-md bg-blue-600 px-5 py-2 text-white"
             >
               Save
             </button>

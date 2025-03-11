@@ -6,7 +6,6 @@ import BrandCardWrapper from "../../components/company/BrandCardWrapper";
 
 import {
   useDeleteEmployeeMutation,
-  useGetCompanyIdQuery,
   useGetEmployeesQuery,
   useSetCompanyIdMutation,
 } from "../../features/api";
@@ -18,18 +17,18 @@ import ErrorMessage from "../../utils/ErrorMessage";
 import toast from "react-hot-toast";
 
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
 const LeaveCard = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [leaveTypeId, setleaveTypeId] = useState(null);
+  const companyId = useSelector((state) => state.company.companyId);
 
   const handleOpen = (id) => {
     setIsPopupOpen(true);
     setleaveTypeId(id);
   };
 
-  const { data: companyId } = useGetCompanyIdQuery();
   const [deleteEmployee] = useDeleteEmployeeMutation();
   const [setCompanyId] = useSetCompanyIdMutation();
 

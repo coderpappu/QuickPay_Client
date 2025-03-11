@@ -1,24 +1,18 @@
 import { Form, Formik } from "formik";
 import React from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import InputField from "../../../components/user/InputField";
 import ShiftValidate from "../../../components/validationSchmea/shiftValidation";
 import {
   useAddShiftMutation,
-  useGetCompanyIdQuery,
   useUpdateShiftMutation,
 } from "../../../features/api";
-
 const ShiftForm = ({ shiftData }) => {
   const [shiftAdd, { data, isLoading, isError, error }] = useAddShiftMutation();
   const [updateShift, { data: updataData }] = useUpdateShiftMutation();
-  const {
-    data: companyId,
-    isLoading: idLoading,
-    isError: idError,
-  } = useGetCompanyIdQuery();
-
+  const companyId = useSelector((state) => state.company.companyId);
   const navigate = useNavigate();
 
   const handleUpdate = async (values, { setSubmitting }) => {

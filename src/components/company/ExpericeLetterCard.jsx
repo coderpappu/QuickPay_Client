@@ -13,7 +13,7 @@ const ExperienceCertificate = () => {
   const [editorState, setEditorState] = useState(null); // Store the editor's state
   const [isSaving, setIsSaving] = useState(false); // Track saving status
   const [error, setError] = useState(null); // Store potential errors
-  const companyId = useSelector((state) => state.company.companyId);
+  const company_id = useSelector((state) => state.company.companyId);
 
   const [editorData, setEditorData] = useState(null); // Store the editor's state data
   const [createExperienceCertificate] =

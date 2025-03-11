@@ -5,12 +5,12 @@ import * as Yup from "yup";
 import {
   useCreateEmployeeeDeductionMutation,
   useGetAllowanceTypeListQuery,
-  useGetCompanyIdQuery,
   useGetDeductionTypeListQuery,
   useGetEmployeeDeductionDetailsQuery,
   useUpdateEmployeeAllowanceMutation,
 } from "../../features/api";
 
+import { useSelector } from "react-redux";
 import FormSkeleton from "../../skeletons/FormSkeleton";
 import { InputBox, SelectOptionBox } from "../company/BrandInput";
 
@@ -23,7 +23,7 @@ const deductionSchema = Yup.object().shape({
 const EmployeeDeductionForm = ({ deductionId, onClose }) => {
   const navigate = useNavigate();
   const { id: employee_id } = useParams();
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
 
   const [createEmployeeDeduction] = useCreateEmployeeeDeductionMutation();
   const { data: allowanceType } = useGetAllowanceTypeListQuery(companyId);
@@ -56,14 +56,14 @@ const EmployeeDeductionForm = ({ deductionId, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white dark:bg-dark-card rounded-lg shadow-lg w-full max-w-md p-6 relative">
+      <div className="relative w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-dark-card">
         <button
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+          className="absolute right-3 top-3 text-gray-500 hover:text-gray-700 focus:outline-none"
           onClick={onClose}
         >
           &#x2715;
         </button>
-        <h2 className="text-xl font-semibold  dark:text-dark-heading-color mb-4">
+        <h2 className="mb-4 text-xl font-semibold dark:text-dark-heading-color">
           {deductionId ? "Edit Deduction" : "Add Deduction"}
         </h2>
         <Formik
@@ -129,7 +129,7 @@ const EmployeeDeductionForm = ({ deductionId, onClose }) => {
                 <Field
                   as="select"
                   name="nameId"
-                  className="w-full px-2 py-1 border-dark-box border border-opacity-5 dark:bg-dark-box rounded-md h-10 text-sm focus:outline-none focus:border-button-bg focus:border dark:text-dark-text-color"
+                  className="h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
                 >
                   {types?.data?.map((option, index) => (
                     <option key={index} value={option?.id} name="nameId">
@@ -141,7 +141,7 @@ const EmployeeDeductionForm = ({ deductionId, onClose }) => {
                 <ErrorMessage
                   name="nameId"
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="mt-1 text-sm text-red-500"
                 />
               </div>
 
@@ -158,7 +158,7 @@ const EmployeeDeductionForm = ({ deductionId, onClose }) => {
                 <ErrorMessage
                   name="type"
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="mt-1 text-sm text-red-500"
                 />
               </div>
               <div className="mb-4">
@@ -181,21 +181,21 @@ const EmployeeDeductionForm = ({ deductionId, onClose }) => {
                 <ErrorMessage
                   name="value"
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="mt-1 text-sm text-red-500"
                 />
               </div>
               <div className="flex justify-end">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="mr-4 px-4 py-2 bg-white rounded-md text-sm font-medium text-gray-800 border border-dark-border-color dark:border-opacity-10 "
+                  className="mr-4 rounded-md border border-dark-border-color bg-white px-4 py-2 text-sm font-medium text-gray-800 dark:border-opacity-10"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 bg-[#3686FF] rounded-md text-sm font-medium text-white "
+                  className="rounded-md bg-[#3686FF] px-4 py-2 text-sm font-medium text-white"
                 >
                   {deductionId ? "Update" : "Add"}
                 </button>

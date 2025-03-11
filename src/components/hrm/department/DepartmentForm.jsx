@@ -1,11 +1,10 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
-
 import {
   useCreateDepartmentMutation,
-  useGetCompanyIdQuery,
   useGetDepartmentDetailsQuery,
   useUpdateDepartmentMutation,
 } from "../../../features/api";
@@ -25,8 +24,7 @@ const DepartmentForm = ({ departmentId, setIsPopupOpen }) => {
 
   const [updateDept] = useUpdateDepartmentMutation();
 
-  const { data: company_id } = useGetCompanyIdQuery();
-
+  const company_id = useSelector((state) => state.company.companyId);
   const {
     data: departmentData,
     isLoading: departmentLoading,

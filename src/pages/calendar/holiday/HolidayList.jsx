@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import BrandCardWrapper from "../../../components/company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../../components/company/SettingCardHeader";
 import {
   useDeleteHolidayMutation,
-  useGetCompanyIdQuery,
   useGetHolidayListQuery,
 } from "../../../features/api";
 
@@ -16,7 +16,7 @@ import HolidayFormPopup from "./HolidayForm";
 const HolidayList = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [selectedHolidayId, setSelectedHolidayId] = useState(null);
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const onClose = () => {
     setIsPopupOpen(false);
   };

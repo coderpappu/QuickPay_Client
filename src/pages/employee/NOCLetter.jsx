@@ -2,11 +2,11 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import React, { useRef } from "react";
 import { TfiPrinter } from "react-icons/tfi";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import "../../Applicaion.css";
 import CompanyLogo from "../../assets/xceed-bangladesh-logo.png";
 import {
-  useGetCompanyIdQuery,
   useGetEmployeeDetailsQuery,
   useGetNocLetterFormatQuery,
 } from "../../features/api";
@@ -19,8 +19,8 @@ function NOCLetter() {
   let { id } = useParams();
   const headerRef = useRef();
   // Fetching company ID
-  const { data: company_id } = useGetCompanyIdQuery();
 
+  const company_id = useSelector((state) => state.company.companyId);
   const {
     data: employeeDetails,
     isLoading,

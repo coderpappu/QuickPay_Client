@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import {
-  useGetCompanyIdQuery,
   useGetOfferLetterFormatQuery,
   useOfferLetterFormatMutation,
 } from "../../features/api";
@@ -9,7 +9,6 @@ import BrandCardWrapper from "./BrandCardWrapper";
 import SettingCardHeader from "./SettingCardHeader";
 import TextBoxLetter from "./TextBoxLetter";
 import TextEditor from "./TextEditor";
-
 const convertToInitialJSON = (data) => {
   // Ensure the data structure matches initialJSON
   if (!data || typeof data !== "object") {
@@ -41,13 +40,11 @@ const OfferLetterCard = () => {
   const [editorState, setEditorState] = useState(null); // Store the editor's state
   const [isSaving, setIsSaving] = useState(false); // Track saving status
   const [error, setError] = useState(null); // Store potential errors
-  const { data: company_id } = useGetCompanyIdQuery();
+  const company_id = useSelector((state) => state.company.companyId);
   const [editorData, setEditorData] = useState(null); // Store the editor's state data
   const [createOfferLetterFormat] = useOfferLetterFormatMutation();
 
   const { data, isLoading } = useGetOfferLetterFormatQuery(company_id);
-
-  console.log(data);
 
   if (isLoading) return "Loading...";
 

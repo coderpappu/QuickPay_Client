@@ -3,11 +3,11 @@ import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import { MdOutlineCancel } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
   useDeleteEmployeeAssetMutation,
   useGetAllDocsTypeListQuery,
-  useGetCompanyIdQuery,
   useGetEmployeeAssetQuery,
   useGetEmployeeDetailsQuery,
   useUploadImageMutation,
@@ -23,7 +23,7 @@ const AssetCard = () => {
   const [selectedImageUrl, setSelectedImageUrl] = useState("");
 
   const { id } = useParams();
-  const { data: companyId } = useGetCompanyIdQuery();
+  const companyId = useSelector((state) => state.company.companyId);
   const [uploadImage] = useUploadImageMutation();
   const { data: employeeAsset } = useGetEmployeeAssetQuery(id);
   const { data: employeeDetails } = useGetEmployeeDetailsQuery(id);
@@ -80,23 +80,23 @@ const AssetCard = () => {
   };
 
   return (
-    <div className="w-full mt-5 mb-2 rounded-md flex flex-wrap justify-between">
-      <div className="h-auto relative p-4 bg-white dark:bg-dark-card rounded-md">
-        <h1 className="text-xl font-medium mb-4 dark:text-dark-heading-color">
+    <div className="mb-2 mt-5 flex w-full flex-wrap justify-between rounded-md">
+      <div className="relative h-auto rounded-md bg-white p-4 dark:bg-dark-card">
+        <h1 className="mb-4 text-xl font-medium dark:text-dark-heading-color">
           Assets
         </h1>
         {mode ? (
           <AssetForm mode={mode} setMode={setMode} />
         ) : (
           <div>
-            <div className="flex gap-2 my-4">
+            <div className="my-4 flex gap-2">
               <h2 className="text-xs font-medium dark:text-dark-text-color">
                 These files are you need to upload -{" "}
               </h2>
               {docsList?.data?.map((doc) => (
                 <h2
                   key={doc?.id}
-                  className="text-xs font-medium dark:text-dark-text-color flex"
+                  className="flex text-xs font-medium dark:text-dark-text-color"
                 >
                   {doc?.status === "IS_REQUIRED" && (
                     <span className="text-red-600">*</span>
@@ -105,15 +105,15 @@ const AssetCard = () => {
                 </h2>
               ))}
             </div>
-            <div className="flex flex-wrap justify-start items-center gap-3">
+            <div className="flex flex-wrap items-center justify-start gap-3">
               {employeeAsset?.map((asset) => (
-                <div className="w-[170px] h-[181px]" key={asset?.id}>
-                  <div className="w-[140px] flex flex-wrap justify-between items-center">
+                <div className="h-[181px] w-[170px]" key={asset?.id}>
+                  <div className="flex w-[140px] flex-wrap items-center justify-between">
                     <h2 className="my-2 dark:text-dark-text-color">
                       {asset?.asset?.documentType?.name}
                     </h2>
                     <AiOutlineDelete
-                      className="text-red-600 cursor-pointer"
+                      className="cursor-pointer text-red-600"
                       onClick={() => handleDeleteAsset(asset?.asset?.id)}
                     />
                   </div>
@@ -121,7 +121,7 @@ const AssetCard = () => {
                   <img
                     src={asset?.imageUrl}
                     alt=""
-                    className="w-[140px] h-[140px] cursor-pointer"
+                    className="h-[140px] w-[140px] cursor-pointer"
                     onClick={() => openModal(asset.imageUrl)} // Open modal with image URL
                   />
                 </div>
@@ -140,14 +140,14 @@ const AssetCard = () => {
         {/* Toggle mode button */}
         {mode ? (
           <div
-            className="absolute right-1 top-2 w-[40px] cursor-pointer h-[40px] flex flex-col justify-center align-middle items-center rounded-full bg-[#85858512] mr-2"
+            className="absolute right-1 top-2 mr-2 flex h-[40px] w-[40px] cursor-pointer flex-col items-center justify-center rounded-full bg-[#85858512] align-middle"
             onClick={() => handleEdit()}
           >
-            <MdOutlineCancel className="text-red-600 text-xl" />
+            <MdOutlineCancel className="text-xl text-red-600" />
           </div>
         ) : (
           <div
-            className="absolute right-1 top-2 w-[40px] cursor-pointer h-[40px] flex flex-col justify-center align-middle items-center rounded-full bg-[#85858512] mr-2"
+            className="absolute right-1 top-2 mr-2 flex h-[40px] w-[40px] cursor-pointer flex-col items-center justify-center rounded-full bg-[#85858512] align-middle"
             onClick={() => handleEdit()}
           >
             <FiEdit className="text-blue-600" />
