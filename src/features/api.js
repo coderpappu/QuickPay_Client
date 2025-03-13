@@ -1022,6 +1022,25 @@ export const apiSlice = createApi({
       providesTags: ["employee_overtime"],
     }),
 
+    createEmployeeOverTimeEnable: builder.mutation({
+      query: (credentials) => ({
+        url: "/setsalary/overtime/employee-enable",
+        method: "POST",
+        body: credentials,
+      }),
+
+      invalidatesTags: ["employee_overtime_enable", "employee"],
+    }),
+
+    getEmployeeOvertimeStatus: builder.query({
+      query: ({ employeeId, companyId }) => ({
+        url: `/setsalary/overtime/employee-status`,
+        params: { employeeId, companyId },
+      }),
+
+      providesTags: ["employee_overtime_enable"],
+    }),
+
     // employee Create
     createEmployeeAllowance: builder.mutation({
       query: (credentials) => ({
@@ -2019,6 +2038,9 @@ export const {
   // employee over time
   useCreateEmployeeOverTimeMutation,
   useGetEmployeeOverTimeDetailsQuery,
+
+  useCreateEmployeeOverTimeEnableMutation,
+  useGetEmployeeOvertimeStatusQuery,
 
   // bonus end point
   useCreateBonusTypeMutation,

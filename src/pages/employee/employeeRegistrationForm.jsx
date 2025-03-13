@@ -37,6 +37,7 @@ const steps = [
 
 const EmployeeRegistrationForm = () => {
   const { id } = useParams();
+  const CompanyId = useSelector((state) => state.company.companyId);
 
   const navigate = useNavigate();
   const [step, setStep] = useState(1); // State to track current step
@@ -49,8 +50,7 @@ const EmployeeRegistrationForm = () => {
   const [createEmployee] = useCreateNewEmployeeMutation();
   const [updateEmployee] = useUpdateEmployeeMutation();
 
-  const companyId = useSelector((state) => state.company.companyId);
-  const { data: companyData } = useGetCompanyDetailsQuery(companyId);
+  const { data: companyData } = useGetCompanyDetailsQuery(CompanyId);
 
   const [editModeUploader, setEditModeUploader] = useState(false);
 
