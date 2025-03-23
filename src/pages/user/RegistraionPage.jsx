@@ -1,14 +1,12 @@
 import React from "react";
-import { useState } from "react";
 
 import RegistrationImg from "../../assets/registration.png";
 
 import toast, { Toaster } from "react-hot-toast";
-import RegistrationForm from "../../components/RegistrationForm";
-import Logo from "../../components/Logo";
-import api from "../../utils/api";
 import { useNavigate } from "react-router-dom";
+import Logo from "../../components/Logo";
 import { useRegisterUserMutation } from "../../features/api";
+import RegistrationForm from "./RegistrationForm";
 
 const RegistraionPage = () => {
   const navigate = useNavigate();
@@ -19,7 +17,7 @@ const RegistraionPage = () => {
     last_name,
     email,
     phone,
-    password
+    password,
   ) => {
     try {
       const registerResponse = await register({
@@ -36,16 +34,16 @@ const RegistraionPage = () => {
     }
   };
   return (
-    <div className="w-full h-screen bg-[#FCFCFC]">
+    <div className="h-screen">
       <div className="xl:wrapper-container">
         <Logo />
-        <div className="flex flex-wrap bg-[#FCFCFC] justify-around">
+        <div className="mt-24 flex flex-wrap justify-around rounded-md bg-[#FCFCFC] py-4 shadow-sm">
           {/* image side  */}
-          <div className="w-[80%] sm:w-[50%] md:w-[50%] mt-10  h-screen ">
+          <div className="mt-10 h-auto w-[80%] sm:w-[50%] md:w-[50%]">
             <img
               src={RegistrationImg}
               alt="login_image"
-              className="w-full h-auto xl:w-[600px]  "
+              className="h-auto w-full xl:w-[600px]"
               // xl:ml-[20%]
             />
           </div>

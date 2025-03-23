@@ -21,17 +21,29 @@ const AdminDashboard = () => {
   const { data: activeCompanyId, refetch: refetchActiveCompany } =
     useGetActiveCompanyQuery();
 
-  const { data } = useGetStartDeviceQuery();
-
   const companyId = activeCompanyId?.data?.company_id;
 
-  const { data: employees } = useGetEmployeesQuery(companyId);
-  const { data: shifts } = useGetShiftListQuery(companyId);
-
-  const { data: attendances } = useGetAttendancesQuery({
-    companyId,
-    date: DatePicker(),
+  const { data } = useGetStartDeviceQuery({
+    skip: !companyId,
   });
+
+  const { data: employees } = useGetEmployeesQuery(companyId, {
+    skip: !companyId,
+  });
+
+  const { data: shifts } = useGetShiftListQuery({
+    skip: !companyId,
+  });
+
+  const { data: attendances } = useGetAttendancesQuery(
+    {
+      companyId,
+      date: DatePicker(),
+    },
+    {
+      skip: !companyId,
+    },
+  );
 
   // Effect to set company ID from local storage on component mount
 

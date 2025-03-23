@@ -1,9 +1,9 @@
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { ErrorMessage, Form, Formik } from "formik";
 import React, { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { Link } from "react-router-dom";
-
+import { InputBox } from "../../components/company/BrandInput";
 const RegistrationForm = ({ registerHandler }) => {
   const [password, setPassword] = useState("");
   const [type, setType] = useState("password");
@@ -20,15 +20,16 @@ const RegistrationForm = ({ registerHandler }) => {
   };
 
   return (
-    <div className="w-full md:w-[50%]  h-full pt-6 xl:pt-10 px-3 sm:px-10 md:px-5">
-      <p className="absolute right-8 lg:right-3 xl:right-16 2xl:right-[15%] 2xl:text-md text-[#a8a8a8]">
+    <div className="h-full w-full px-3 pt-6 sm:px-10 md:w-[50%] md:px-5 xl:pt-10">
+      <p className="2xl:text-md text-[#a8a8a8]">
         Do you have an account?{" "}
         <Link to="/login" className="text-[#61638A]">
           Sign In Now
         </Link>
       </p>
-      <h2 className="text-2xl font-semibold pt-16 mb-6">
-        Account <label className="text-[#3686FF] font-bold">Register</label>{" "}
+      <h2 className="mb-6 pt-16 text-2xl font-semibold">
+        Account{" "}
+        <label className="font-bold text-[#3686FF]">Register</label>{" "}
       </h2>
       <div className="py-4 md:w-full lg:w-[400px]">
         <Formik
@@ -65,9 +66,9 @@ const RegistrationForm = ({ registerHandler }) => {
             }
 
             if (!values.phone) {
-              errors.last_name = "Required";
+              errors.phone = "Required";
             } else if (values.phone.length < 10) {
-              errors.last_name = "phone number at least 11 characters";
+              errors.phone = "phone number at least 11 characters";
             }
 
             // password
@@ -84,7 +85,7 @@ const RegistrationForm = ({ registerHandler }) => {
               values.last_name,
               values.email,
               values.phone,
-              values.password
+              values.password,
             );
             setTimeout(() => {
               setSubmitting(false);
@@ -96,12 +97,7 @@ const RegistrationForm = ({ registerHandler }) => {
               <label htmlFor="" className="text-md text-[#797979]">
                 First Name
               </label>
-              <Field
-                type="text"
-                name="first_name"
-                placeholder="Pappu"
-                className="w-[100%] h-12 border-1 border-[#3686FF]	rounded-[5px] mt-1 mb-3 px-1"
-              />
+              <InputBox type="text" name="first_name" placeholder="Pappu" />
               <ErrorMessage
                 name="first_name"
                 component="div"
@@ -111,12 +107,7 @@ const RegistrationForm = ({ registerHandler }) => {
               <label htmlFor="" className="text-md text-[#797979]">
                 Last Name
               </label>
-              <Field
-                type="text"
-                name="last_name"
-                placeholder="Dey"
-                className="w-[100%] h-12 border-1 border-[#3686FF]	rounded-[5px] mt-1 mb-3 px-1"
-              />
+              <InputBox type="text" name="last_name" placeholder="Dey" />
               <ErrorMessage
                 name="last_name"
                 component="div"
@@ -126,11 +117,10 @@ const RegistrationForm = ({ registerHandler }) => {
               <label htmlFor="" className="text-md text-[#797979]">
                 Email Address
               </label>
-              <Field
+              <InputBox
                 type="email"
                 name="email"
                 placeholder="coder@gmail.com"
-                className="w-[100%] h-12 border-1 border-[#3686FF]	rounded-[5px] mt-1 mb-3 px-1"
               />
               <ErrorMessage
                 name="email"
@@ -141,12 +131,7 @@ const RegistrationForm = ({ registerHandler }) => {
               <label htmlFor="" className="text-md text-[#797979]">
                 Phone
               </label>
-              <Field
-                type="text"
-                name="phone"
-                placeholder="0152536362"
-                className="w-[100%] h-12 border-1 border-[#3686FF]	rounded-[5px] mt-1 mb-3 px-1"
-              />
+              <InputBox type="text" name="phone" placeholder="0152536362" />
               <ErrorMessage
                 name="phone"
                 component="div"
@@ -157,15 +142,14 @@ const RegistrationForm = ({ registerHandler }) => {
                 Password
               </label>
               <div className="mb-4 flex">
-                <Field
+                <InputBox
                   type={type}
                   name="password"
                   autoComplete="current-password"
-                  className="w-[100%] h-12 border-1 border-[#3686FF]	rounded-[5px] mt-1 mb-3 px-1"
                   placeholder="12345678"
                 />
                 <span
-                  className="flex justify-around items-center"
+                  className="flex items-center justify-around"
                   onClick={handleToggle}
                 >
                   {type !== "password" ? (
@@ -182,7 +166,7 @@ const RegistrationForm = ({ registerHandler }) => {
               />
 
               <button
-                className="px-10 py-2 lg:px-16 lg:py-3 bg-[#61638A] rounded-md text-white mt-4"
+                className="mt-4 rounded-md bg-[#61638A] px-10 py-2 text-white lg:px-16 lg:py-3"
                 type="submit"
                 disabled={isSubmitting}
               >

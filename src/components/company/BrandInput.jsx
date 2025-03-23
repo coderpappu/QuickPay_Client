@@ -7,7 +7,7 @@ const BrandInput = ({ title, placeText, type = "text" }) => {
       <input
         type={type}
         placeholder={placeText}
-        className="bg-light-input h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
+        className="h-10 w-full rounded-md border border-dark-box border-opacity-5 bg-light-input px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
       />
     </>
   );
@@ -32,7 +32,7 @@ const InputBox = ({ name, type = "text", placeholder, ...props }) => {
         name={name}
         type={type}
         placeholder={placeholder || ""}
-        className="bg-light-input h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
+        className="h-10 w-full rounded-md border border-dark-box border-opacity-5 bg-light-input px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
         {...props} // Pass any additional props to the Field component
       />
       {/* <ErrorMessage
@@ -49,7 +49,7 @@ const SelectOptionBox = ({ values, name }) => {
     <Field
       as="select"
       name={name || "ok"}
-      className="bg-light-input h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
+      className="h-10 w-full rounded-md border border-dark-box border-opacity-5 bg-light-input px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
     >
       {/* <option value="">Select Option</option> */}
       {values.map((option, index) => (
