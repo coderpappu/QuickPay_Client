@@ -4,8 +4,11 @@ import DashImg from "../../assets/dashboard-demo.png";
 import XceedLogo from "../../assets/xceed-bangladesh-logo.png";
 import LoginForm from "../../components/LoginForm";
 import { useLoginUserMutation } from "../../features/api";
+
 const LoginPage = () => {
+
   const navigate = useNavigate();
+  
   const [login, { error, isLoading }] = useLoginUserMutation();
 
   const handleLogin = async (email, password) => {

@@ -919,14 +919,14 @@ export const apiSlice = createApi({
       providesTags: ["employee_deduction"],
     }),
 
-    // updateEmployeeAllowance: builder.mutation({
-    //   query: ({ id, ...credentials }) => ({
-    //     url: `/setsalary/allowance/employee/update/${id}`,
-    //     method: "PUT",
-    //     body: credentials,
-    //   }),
-    //   invalidatesTags: ["employee_allowance"],
-    // }),
+    updateEmployeeDeduction: builder.mutation({
+      query: ({ id, ...credentials }) => ({
+        url: `/setsalary/deduction/employee/update/${id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["employee_deduction"],
+    }),
 
     deleteDeductionType: builder.mutation({
       query: (typeId) => ({
@@ -1923,6 +1923,7 @@ export const {
   useGetDeductionTypeDetailsQuery,
   useUpdateDeductionTypeMutation,
   useDeleteEmployeeDeductionMutation,
+  useUpdateEmployeeDeductionMutation,
   useDeleteDeductionTypeMutation,
   useGetEmployeeDeductionDetailsQuery,
   useCreateBasicSalaryMutation,

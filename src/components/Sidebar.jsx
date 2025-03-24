@@ -70,7 +70,6 @@ const Sidebar = () => {
 
   const filteredMenuItems = filterMenuItemsByPermissions(currentMenuItems);
 
-  console.log(companyIdFromStore);
   // Recursive function to render nested submenus
   const renderSubMenu = (subMenus) => {
     return (

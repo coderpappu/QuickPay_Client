@@ -131,6 +131,9 @@ const EmployeeAllowanceForm = ({ allowanceId, onClose }) => {
                   name="nameId"
                   className="h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
                 >
+                  <option value="" disabled>
+                    Select a allowance{" "}
+                  </option>
                   {types?.data?.map((option, index) => (
                     <option key={index} value={option?.id} name="nameId">
                       {option?.name}

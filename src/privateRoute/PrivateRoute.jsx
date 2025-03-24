@@ -6,7 +6,10 @@ import HomeSkeleton from "../skeletons/HomeSkeleton";
 
 const PrivateRoute = () => {
   const { data, isLoading, isSuccess, isError } = useGetUserQuery();
+
   const { data: employeeData } = useGetEmployeeQuery();
+
+  console.log(data, employeeData);
 
   const navigate = useNavigate();
 

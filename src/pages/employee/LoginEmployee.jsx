@@ -10,7 +10,9 @@ import {
 
 const LoginEmployee = () => {
   const navigate = useNavigate();
+
   const [login, { error, isLoading }] = useLoginEmployeeMutation();
+
   const [setCompanyId] = useSetCompanyIdMutation();
 
   const handleLogin = async (email, password) => {
@@ -30,17 +32,17 @@ const LoginEmployee = () => {
     }
   };
   return (
-    <div className="w-full h-screen bg-[#FCFCFC]">
+    <div className="h-screen w-full bg-[#FCFCFC]">
       <div className="xl:wrapper-container">
         {/* company logo */}
         <Logo />
-        <div className="w-full flex flex-wrap justify-around">
+        <div className="flex w-full flex-wrap justify-around">
           {/* image side  */}
-          <div className="w-[80%] sm:w-[50%] md:w-[50%]  h-screen">
+          <div className="h-screen w-[80%] sm:w-[50%] md:w-[50%]">
             <img
               src={LoginImg}
               alt="login_image"
-              className="w-full h-auto xl:w-[600px]"
+              className="h-auto w-full xl:w-[600px]"
             />
           </div>
           {/* Login Form  */}

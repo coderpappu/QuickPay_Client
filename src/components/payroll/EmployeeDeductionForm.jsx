@@ -7,7 +7,7 @@ import {
   useGetAllowanceTypeListQuery,
   useGetDeductionTypeListQuery,
   useGetEmployeeDeductionDetailsQuery,
-  useUpdateEmployeeAllowanceMutation,
+  useUpdateEmployeeDeductionMutation,
 } from "../../features/api";
 
 import { useSelector } from "react-redux";
@@ -22,12 +22,14 @@ const deductionSchema = Yup.object().shape({
 
 const EmployeeDeductionForm = ({ deductionId, onClose }) => {
   const navigate = useNavigate();
+
   const { id: employee_id } = useParams();
+
   const companyId = useSelector((state) => state.company.companyId);
 
   const [createEmployeeDeduction] = useCreateEmployeeeDeductionMutation();
   const { data: allowanceType } = useGetAllowanceTypeListQuery(companyId);
-  const [updateEmployeeAllowance] = useUpdateEmployeeAllowanceMutation();
+  const [updateEmployeeDeduction] = useUpdateEmployeeDeductionMutation();
 
   const {
     data: types,
@@ -37,13 +39,13 @@ const EmployeeDeductionForm = ({ deductionId, onClose }) => {
     skip: !companyId,
   });
 
-  const { data: allowanceDetails, isLoading: isAllowanceLoading } =
+  const { data: deductionDetails, isLoading: isAllowanceLoading } =
     useGetEmployeeDeductionDetailsQuery(deductionId);
 
   const initialValues = {
-    nameId: allowanceDetails?.data?.DeductionType?.id || "", // Use ID instead of name
-    type: allowanceDetails?.data?.type || "",
-    value: allowanceDetails?.data?.value || "",
+    nameId: deductionDetails?.data?.DeductionType?.id || "", // Use ID instead of name
+    type: deductionDetails?.data?.type || "",
+    value: deductionDetails?.data?.value || "",
   };
 
   if (companyId == null) {
@@ -92,7 +94,7 @@ const EmployeeDeductionForm = ({ deductionId, onClose }) => {
                   }
                 });
               } else {
-                await updateEmployeeAllowance({
+                await updateEmployeeDeduction({
                   id: deductionId,
                   nameId,
                   type,
@@ -103,7 +105,7 @@ const EmployeeDeductionForm = ({ deductionId, onClose }) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Allowance updated successfully");
+                    toast.success("Deduction updated successfully");
                     navigate(`/employee/setsalary/update/${employee_id}`);
                     onClose();
                   }
@@ -131,6 +133,9 @@ const EmployeeDeductionForm = ({ deductionId, onClose }) => {
                   name="nameId"
                   className="h-10 w-full rounded-md border border-dark-box border-opacity-5 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
                 >
+                  <option value="" disabled>
+                    Select a deduction{" "}
+                  </option>
                   {types?.data?.map((option, index) => (
                     <option key={index} value={option?.id} name="nameId">
                       {option?.name}
@@ -150,7 +155,7 @@ const EmployeeDeductionForm = ({ deductionId, onClose }) => {
                   htmlFor="type"
                   className="block text-sm font-medium dark:text-dark-text-color"
                 >
-                  Allowance Type
+                  Deduction Type
                 </label>
 
                 <SelectOptionBox values={["PERCENTAGE", "FIXED"]} name="type" />

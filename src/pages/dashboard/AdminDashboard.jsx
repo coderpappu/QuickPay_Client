@@ -23,6 +23,13 @@ const AdminDashboard = () => {
 
   const companyId = activeCompanyId?.data?.company_id;
 
+  useEffect(() => {
+    if (companyId) {
+      dispatch(setCompanyId(companyId)); // Dispatch action to set company ID in the store
+    }
+  }, [companyId, dispatch]);
+
+  // Only make other requests if companyId is available
   const { data } = useGetStartDeviceQuery({
     skip: !companyId,
   });
@@ -44,14 +51,6 @@ const AdminDashboard = () => {
       skip: !companyId,
     },
   );
-
-  // Effect to set company ID from local storage on component mount
-
-  useEffect(() => {
-    if (companyId) {
-      dispatch(setCompanyId(companyId)); // Dispatch action to set company ID in the store
-    }
-  }, [companyId, dispatch]);
 
   // company data
   let totalEmployees = employees?.data.length || 0;

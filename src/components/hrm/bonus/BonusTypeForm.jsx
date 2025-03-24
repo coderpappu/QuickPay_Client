@@ -50,7 +50,7 @@ const BonusTypeForm = ({ bonusTypeId, onClose }) => {
           &#x2715;
         </button>
         <h2 className="mb-4 text-xl font-semibold dark:text-dark-heading-color">
-          {bonusTypeId ? "Edit Docs Type" : "Add Docs Type"}
+          {bonusTypeId ? "Edit Bonus Type" : "Add Bonus Type"}
         </h2>
         <Formik
           enableReinitialize
