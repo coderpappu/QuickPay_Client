@@ -24,6 +24,8 @@ const EmployeeLeaveApplication = () => {
 
   const companyId = useSelector((state) => state.company.companyId);
 
+  console.log(companyId);
+
   const {
     data: leaveApplications,
     isLoading,

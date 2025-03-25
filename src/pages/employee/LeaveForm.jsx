@@ -30,6 +30,7 @@ const LeaveForm = ({ onClose }) => {
   const { id } = useParams();
 
   const companyId = useSelector((state) => state.company.companyId);
+
   const [createEmployeeLeave] = useEmployeeCreateLeaveMutation();
   const [updateWeekend] = useUpdateWeekendMutation();
 
@@ -43,6 +44,8 @@ const LeaveForm = ({ onClose }) => {
 
   const { data: earnLeave, isLoading: earnLeaveLoding } =
     useGetEarnLeaveQuery(companyId);
+
+  console.log(earnLeave);
 
   const [initialValues, setInitialValues] = useState({
     leaveType_id: "",
@@ -69,8 +72,14 @@ const LeaveForm = ({ onClose }) => {
     return <FormSkeleton />;
   }
   let allType;
+
   if (!isLoading && !earnLeaveLoding) {
-    allType = types?.data?.concat(earnLeave?.data);
+    if (earnLeave?.data == null) {
+      console.log(types?.data);
+      allType = types?.data;
+    } else {
+      allType = types?.data?.concat(earnLeave?.data);
+    }
   }
 
   return (

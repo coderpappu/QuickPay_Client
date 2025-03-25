@@ -42,15 +42,19 @@ const Sidebar = () => {
   ) {
     currentMenuItems = adminMenuItems;
   } else {
+    console.log(employeeMenuItems);
     currentMenuItems = employeeMenuItems;
   }
 
   // Filter menu items based on user permissions
   const filterMenuItemsByPermissions = (menuItems) => {
     if (userData?.data?.type === "SUPER_ADMIN") {
-      return menuItems; // Show full admin menu for super admin
+      return menuItems;
     }
 
+    if (userData?.data?.employeeId) {
+      return menuItems;
+    }
     if (!userPermissions) {
       return []; // Return an empty array if userPermissions is not yet loaded
     }
@@ -69,7 +73,7 @@ const Sidebar = () => {
   };
 
   const filteredMenuItems = filterMenuItemsByPermissions(currentMenuItems);
-
+  console.log(filteredMenuItems);
   // Recursive function to render nested submenus
   const renderSubMenu = (subMenus) => {
     return (

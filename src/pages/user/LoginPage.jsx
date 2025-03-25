@@ -16,6 +16,7 @@ const LoginPage = () => {
       let { data } = await login({ email, password }).unwrap();
 
       localStorage.setItem("token", data?.accessToken);
+      
       navigate("/");
     } catch (error) {
       toast.error(error.data.message);

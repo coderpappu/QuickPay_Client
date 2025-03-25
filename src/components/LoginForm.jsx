@@ -21,7 +21,8 @@ const LoginForm = ({ handleLogin }) => {
   return (
     <div className="bg-blue h-full w-full px-3 pt-6 sm:px-10 md:w-[50%] md:px-5 xl:pt-10">
       <h2 className="mb-6 pt-16 text-2xl font-semibold">
-        Sign in to <label className="font-bold text-[#4153EF]">Admin</label>{" "}
+        Sign in to{" "}
+        <label className="font-bold text-[#4153EF]">Admin</label>{" "}
       </h2>
 
       <div className="py-4 md:w-full lg:w-[400px]">

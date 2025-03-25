@@ -10,6 +10,7 @@ import {
   useGetEmployeesQuery,
   useGetShiftListQuery,
   useGetStartDeviceQuery,
+  useGetUserQuery,
 } from "../../features/api";
 import { setCompanyId } from "../../features/companySlice";
 import DatePicker from "../../utils/DatePicker";
@@ -21,11 +22,18 @@ const AdminDashboard = () => {
   const { data: activeCompanyId, refetch: refetchActiveCompany } =
     useGetActiveCompanyQuery();
 
-  const companyId = activeCompanyId?.data?.company_id;
+  const { data: userData } = useGetUserQuery();
+  let companyId;
+
+  if (userData.data.employeeId) {
+    companyId = userData?.data?.company_id;
+  } else {
+    companyId = activeCompanyId?.data?.company_id;
+  }
 
   useEffect(() => {
     if (companyId) {
-      dispatch(setCompanyId(companyId)); // Dispatch action to set company ID in the store
+      dispatch(setCompanyId(companyId));
     }
   }, [companyId, dispatch]);
 

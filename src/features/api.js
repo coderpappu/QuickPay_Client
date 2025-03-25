@@ -577,7 +577,7 @@ export const apiSlice = createApi({
         body: credentials,
       }),
 
-      invalidatesTags: ["leaveType"],
+      invalidatesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
 
     createEarnLeave: builder.mutation({
@@ -586,7 +586,7 @@ export const apiSlice = createApi({
         method: "POST",
         body: credentials,
       }),
-      invalidatesTags: ["earnLeave"],
+      invalidatesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
 
     employeeCreateLeave: builder.mutation({
@@ -596,7 +596,7 @@ export const apiSlice = createApi({
         body: credentials,
       }),
 
-      invalidatesTags: ["leaveApplication"],
+      invalidatesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
 
     getLeaveTypeList: builder.query({
@@ -604,7 +604,7 @@ export const apiSlice = createApi({
         url: `/leave/type/list/`,
         params: { companyId },
       }),
-      providesTags: ["leaveType"],
+      providesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
 
     getAllEmployeeLeaveList: builder.query({
@@ -612,7 +612,7 @@ export const apiSlice = createApi({
         url: `/leave/list`,
         params: { companyId },
       }),
-      providesTags: ["leaveApplication"],
+      providesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
 
     getAllLeaveApplication: builder.query({
@@ -620,7 +620,7 @@ export const apiSlice = createApi({
         url: `/leave/application/list`,
         params: { companyId },
       }),
-      providesTags: ["leaveApplication"],
+      providesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
 
     getAllEmployeeApplication: builder.query({
@@ -628,7 +628,7 @@ export const apiSlice = createApi({
         url: `/leave/application/employee/list`,
         params: { companyId },
       }),
-      providesTags: ["leaveApplication"],
+      providesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
 
     getEarnLeave: builder.query({
@@ -636,7 +636,7 @@ export const apiSlice = createApi({
         url: `/leave/earnleave`,
         params: { companyId },
       }),
-      providesTags: ["earnLeave"],
+      providesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
 
     calculationLeaveDays: builder.query({
@@ -644,7 +644,7 @@ export const apiSlice = createApi({
         url: `/leave/calculateleavedays`,
         params: { year, company_id },
       }),
-      providesTags: ["leaveApplication"],
+      providesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
 
     updateLeaveType: builder.mutation({
@@ -653,7 +653,7 @@ export const apiSlice = createApi({
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["leaveType"],
+      invalidatesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
     updateLeaveApplication: builder.mutation({
       query: ({ id, ...credentials }) => ({
@@ -661,17 +661,17 @@ export const apiSlice = createApi({
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["leaveApplication"],
+      invalidatesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
 
     getLeaveTypeDetails: builder.query({
       query: (id) => `/leave/type/details/${id}`,
-      providesTags: ["leaveType"],
+      providesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
 
     getLeaveApplicationDetails: builder.query({
       query: (id) => `/leave/application/details/${id}`,
-      providesTags: ["leaveApplication"],
+      providesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
 
     deleteLeaveType: builder.mutation({
@@ -680,7 +680,7 @@ export const apiSlice = createApi({
         method: "DELETE",
         params: { id },
       }),
-      invalidatesTags: ["leaveType"],
+      invalidatesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
 
     deleteApplication: builder.mutation({
@@ -689,7 +689,7 @@ export const apiSlice = createApi({
         method: "DELETE",
         params: { applicationId },
       }),
-      invalidatesTags: ["leaveApplication"],
+      invalidatesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
     // payroll
 
