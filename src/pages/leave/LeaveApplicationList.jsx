@@ -9,9 +9,8 @@ import {
   useUpdateLeaveApplicationMutation,
 } from "../../features/api";
 import ListSkeleton from "../../skeletons/ListSkeleton";
-import DatePicker from "../../utils/DatePicker";
+import DatePicker, { convertToTimeZone } from "../../utils/DatePicker";
 import ErrorMessage from "../../utils/ErrorMessage";
-
 // Modal Component
 // eslint-disable-next-line react/prop-types
 const Modal = ({ isOpen, onClose, onSave, leaveData, setLeaveData }) => {
@@ -163,8 +162,12 @@ const LeaveApplicationList = () => {
             <td className="py-2 text-sm">{++index}</td>
             <td className="py-2 text-sm">{leave?.LeaveType?.name}</td>
             <td className="py-2 text-sm">{DatePicker(leave?.created_at)}</td>
-            <td className="py-2 text-sm">{DatePicker(leave?.start_date)}</td>
-            <td className="py-2 text-sm">{DatePicker(leave?.end_date)}</td>
+            <td className="py-2 text-sm">
+              {convertToTimeZone(leave?.start_date)}
+            </td>
+            <td className="py-2 text-sm">
+              {convertToTimeZone(leave?.end_date)}
+            </td>
             <td className="py-2 text-sm">{leave?.leaveDuration}</td>
             <td className="py-2 text-sm">{leave?.reason}</td>
             <td className="py-2 text-sm">{leave?.paid_status}</td>
@@ -205,7 +208,7 @@ const LeaveApplicationList = () => {
     <>
       <div>
         <h2 className="pb-2 text-lg font-semibold dark:text-dark-heading-color">
-          Employee Leave Applications
+          Employee Leave
         </h2>
       </div>
       <div className="mt-3 h-auto w-full rounded-md border-[1px] border-solid border-slate-200 bg-white p-5 dark:border-none dark:bg-dark-card">

@@ -36,7 +36,7 @@ const BiometricAttendnaces = () => {
           <h3>{++index}</h3>
         </div>
         <div className="w-[10%] dark:text-white">
-          <h3>{attendance?.employee_name || "Unknown"}</h3>
+          <h3>{attendance?.name || "Unknown"}</h3>
         </div>
         <div className="w-[10%] dark:text-white">
           <h3>{attendance?.deviceUserId}</h3>

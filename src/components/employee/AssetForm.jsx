@@ -24,7 +24,7 @@ const AssetForm = ({ mode, setMode }) => {
   // Set employee data on load
   useEffect(() => {
     if (employeeDetails?.data) {
-      setEmployeeData(employeeDetails?.data?.[0]);
+      setEmployeeData(employeeDetails?.data);
     }
   }, [employeeDetails]);
 
@@ -56,6 +56,8 @@ const AssetForm = ({ mode, setMode }) => {
     }
   };
 
+  console.log(employeeDetails?.data);
+  console.log(employeeData);
   return (
     <Formik
       enableReinitialize
@@ -67,7 +69,7 @@ const AssetForm = ({ mode, setMode }) => {
               const formData = modifyPayload({
                 employee_id: employeeData?.id,
                 documentType_id: docId,
-                company_id: employeeData?.company?.id,
+                company_id: employeeData?.company_id,
                 companyName: employeeData?.company?.company_name,
                 employeeId: employeeData?.employeeId,
                 file: file,

@@ -10,7 +10,8 @@ import { HrmSetupCardHeader } from "../company/SettingCardHeader";
 
 const EmployeeOverTimeSettingCard = () => {
   const { id: employeeId } = useParams();
-  const companyId = useSelector((state) => state.company.companyId);
+
+  const companyId = useSelector((state) => state?.company?.companyId);
 
   const [enableOvertime] = useCreateEmployeeOverTimeEnableMutation();
   const { data: employeeOvertimeStatus } = useGetEmployeeOvertimeStatusQuery({
@@ -18,13 +19,11 @@ const EmployeeOverTimeSettingCard = () => {
     companyId,
   });
 
-  console.log(employeeOvertimeStatus);
-
   const [isOvertimeEnabled, setIsOvertimeEnabled] = useState(false);
 
   useEffect(() => {
     if (employeeOvertimeStatus?.data) {
-      setIsOvertimeEnabled(employeeOvertimeStatus.data.status);
+      setIsOvertimeEnabled(employeeOvertimeStatus.data[0].status);
     }
   }, [employeeOvertimeStatus]);
 
@@ -35,23 +34,18 @@ const EmployeeOverTimeSettingCard = () => {
       employee_id: employeeId,
     }).unwrap();
 
-    console.log(enable);
-
     setIsOvertimeEnabled(!isOvertimeEnabled);
   };
 
   return (
     <BrandCardWrapper>
-      <HrmSetupCardHeader title="Employee Overtime Setting" />
+      <HrmSetupCardHeader title="Employee Overtime Setting" inputBox={false} />
       <div className="px-6 py-3">
         <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
-          <div className="w-full dark:text-white">
-            <h3>Employee Overtime Setting</h3>
-            {employeeOvertimeStatus?.message && (
-              <p>{employeeOvertimeStatus.message}</p>
-            )}
+          <div className="dark:text-white">
+            <h3>Status </h3>
           </div>
-          <div className="flex w-full justify-end dark:text-white">
+          <div className="flex justify-end dark:text-white">
             <label className="flex cursor-pointer items-center space-x-3">
               <span>Enable Overtime</span>
               <div

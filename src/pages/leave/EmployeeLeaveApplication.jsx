@@ -5,7 +5,7 @@ import { HrmSetupCardHeader } from "../../components/company/SettingCardHeader";
 import { useSelector } from "react-redux";
 import { useGetAllEmployeeLeaveListQuery } from "../../features/api";
 import CardSkeleton from "../../skeletons/card";
-import { DateConverterFromUTC } from "../../utils/Converter";
+import { convertToTimeZone } from "../../utils/DatePicker";
 import ErrorMessage from "../../utils/ErrorMessage";
 import LeaveForm from "../employee/LeaveForm";
 
@@ -63,14 +63,14 @@ const EmployeeLeaveApplication = () => {
         </div>
 
         <div className="w-[14%] dark:text-white">
-          <h3>{DateConverterFromUTC(application?.start_date)}</h3>
+          <h3>{convertToTimeZone(application?.start_date)}</h3>
         </div>
 
         <div className="w-[14%] dark:text-white">
-          <h3>{DateConverterFromUTC(application?.end_date)}</h3>
+          <h3>{convertToTimeZone(application?.end_date)}</h3>
         </div>
         <div className="w-[14%] dark:text-white">
-          <h3>{DateConverterFromUTC(application?.created_at)}</h3>
+          <h3>{convertToTimeZone(application?.created_at)}</h3>
         </div>
         <div className="w-[14%] dark:text-white">
           <h3>{application?.reason}</h3>

@@ -7,6 +7,7 @@ export const apiSlice = createApi({
 
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:3000/api",
+    // baseUrl: "https://hrm.webbyidea.com/api",
 
     prepareHeaders: (headers, { getState }) => {
       const token = localStorage.getItem("token");

@@ -12,7 +12,12 @@ const SettingCardHeader = ({ title, subTitle }) => {
   );
 };
 
-const HrmSetupCardHeader = ({ title, handleOpen, isPopupOpen }) => {
+const HrmSetupCardHeader = ({
+  title,
+  handleOpen,
+  isPopupOpen,
+  inputBox = true,
+}) => {
   return (
     <div className="flex items-center justify-between border-b border-dark-box border-opacity-5 px-6 py-4 dark:border-dark-border-color dark:border-opacity-5">
       <div>
@@ -22,7 +27,7 @@ const HrmSetupCardHeader = ({ title, handleOpen, isPopupOpen }) => {
       </div>
 
       <div
-        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-500 p-2 text-center"
+        className={`h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-500 p-2 text-center ${inputBox ? "flex" : "hidden"}`}
         onClick={() => handleOpen()}
       >
         <IoAdd color="#fff" />
