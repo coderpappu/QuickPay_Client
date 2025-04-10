@@ -1,13 +1,20 @@
 import { AiOutlineSetting } from "react-icons/ai";
-import { LuListTodo } from "react-icons/lu";
 import { RxHome } from "react-icons/rx";
 import { TbCards, TbMoneybag } from "react-icons/tb";
 
-import { LuUsers } from "react-icons/lu";
+import { BiArchive, BiCircleThreeQuarter } from "react-icons/bi";
+import { BsCheck2Circle, BsClockHistory } from "react-icons/bs";
+import { GoPeople } from "react-icons/go";
+import { HiOutlineClipboard } from "react-icons/hi";
+import { HiOutlineShieldCheck } from "react-icons/hi2";
+import { LuUserRoundCog } from "react-icons/lu";
+import { MdModelTraining, MdOutlinePolicy } from "react-icons/md";
+import { RiCalendarScheduleLine, RiSpeedUpLine } from "react-icons/ri";
+import { TbPigMoney } from "react-icons/tb";
 const adminMenuItems = [
   {
     title: "Dashboard",
-    icon: <RxHome size={20} />,
+    icon: <RxHome size={18} />,
     subMenu: [
       { title: "Overview", link: "/editor" },
       { title: "Reports", link: "company/settings" },
@@ -19,96 +26,105 @@ const adminMenuItems = [
   },
   {
     title: "Manage Company",
-    icon: <TbCards size={20} />,
+    icon: <TbCards size={18} />,
     link: "/company/list",
   },
-  {
-    title: "HRM system",
-    icon: <LuUsers size={20} />,
-    subMenu: [
-      { title: "Employee Setup", link: "/company/employee" },
-      {
-        title: "Payroll Setup",
-        subMenu: [
-          { title: "Set Salary", link: "/employee/setsalary" },
-          { title: "Payslip", link: "/employee/payslip" },
-        ],
-      },
-      {
-        title: "Leave Management",
-        subMenu: [
-          { title: "Leave Application", link: "/company/leave/application" },
-        ],
-      },
-      {
-        title: "Attendance ",
-        subMenu: [
-          { title: "Attendance List", link: "/employee/attendences" },
-          { title: "Manual Attendance ", link: "/employee/attendence" },
-          { title: "Biometric", link: "/employee/bio/attendences" },
-        ],
-      },
-      {
-        title: "Holiday Management",
-        subMenu: [
-          { title: "Holiday Add", link: "holiday" },
-          { title: "Calendar", link: "/company/calendar" },
-        ],
-      },
 
-      {
-        title: "Loan Management",
-        subMenu: [{ title: "Loan Application", link: "/admin/employee/loan" }],
-      },
-      {
-        title: "Performance Setup",
-        subMenu: [
-          { title: "Indficator", link: "/profile-settings" },
-          { title: "Appraisal", link: "/account-settings" },
-          { title: "Gaol Tracking ", link: "/account-settings" },
-        ],
-      },
-      {
-        title: "Training Setup",
-        subMenu: [
-          { title: "Training List", link: "/profile-settings" },
-          { title: "Trainer", link: "/account-settings" },
-        ],
-      },
-      {
-        title: "HR Admin Setup",
-        subMenu: [
-          { title: "Award", link: "/profile-settings" },
-          { title: "Transfer", link: "/account-settings" },
-          { title: "Resignation", link: "/account-settings" },
-          { title: "Trip", link: "/account-settings" },
-          { title: "Complaints", link: "/account-settings" },
-          { title: "Warning", link: "/account-settings" },
-          { title: "Termination", link: "/account-settings" },
-          { title: "Annoucement", link: "/account-settings" },
-          { title: "Holiday", link: "/account-settings" },
-        ],
-      },
-      {
-        title: "Meeting",
-        icon: <LuListTodo size={20} />,
-        link: "/company/list",
-      },
-      {
-        title: "Company Policy",
-        icon: <LuListTodo size={20} />,
-        link: "/company/list",
-      },
-      {
-        title: "HRM Setup",
-        icon: <LuListTodo size={20} />,
-        link: "/hrm-setup",
-      },
+  {
+    icon: <GoPeople size={18} />,
+    title: "Employee Setup",
+    link: "/company/employee",
+  },
+  {
+    icon: <BiCircleThreeQuarter size={18} />,
+    title: "Payroll Setup",
+    subMenu: [
+      { title: "Set Salary", link: "/employee/setsalary" },
+      { title: "Payslip", link: "/employee/payslip" },
     ],
   },
   {
+    icon: <BsCheck2Circle size={18} />,
+    title: "Leave Management",
+    subMenu: [
+      { title: "Leave Application", link: "/company/leave/application" },
+    ],
+  },
+  {
+    icon: <BsClockHistory size={18} />,
+    title: "Attendance ",
+    subMenu: [
+      { title: "Attendance List", link: "/employee/attendences" },
+      { title: "Manual Attendance ", link: "/employee/attendence" },
+      { title: "Biometric", link: "/employee/bio/attendences" },
+    ],
+  },
+  {
+    icon: <RiCalendarScheduleLine size={18} />,
+    title: "Holiday Management",
+    subMenu: [
+      { title: "Holiday Add", link: "holiday" },
+      { title: "Calendar", link: "/company/calendar" },
+    ],
+  },
+
+  {
+    icon: <TbPigMoney size={18} />,
+    title: "Loan Management",
+    subMenu: [{ title: "Loan Application", link: "/admin/employee/loan" }],
+  },
+  {
+    icon: <RiSpeedUpLine size={18} />,
+    title: "Performance Setup",
+    subMenu: [
+      { title: "Indficator", link: "/profile-settings" },
+      { title: "Appraisal", link: "/account-settings" },
+      { title: "Gaol Tracking ", link: "/account-settings" },
+    ],
+  },
+  {
+    icon: <MdModelTraining size={18} />,
+    title: "Training Setup",
+    subMenu: [
+      { title: "Training List", link: "/profile-settings" },
+      { title: "Trainer", link: "/account-settings" },
+    ],
+  },
+  {
+    icon: <HiOutlineShieldCheck size={18} />,
+    title: "HR Admin Setup",
+    subMenu: [
+      { title: "Award", link: "/profile-settings" },
+      { title: "Transfer", link: "/account-settings" },
+      { title: "Resignation", link: "/account-settings" },
+      { title: "Trip", link: "/account-settings" },
+      { title: "Complaints", link: "/account-settings" },
+      { title: "Warning", link: "/account-settings" },
+      { title: "Termination", link: "/account-settings" },
+      { title: "Annoucement", link: "/account-settings" },
+      { title: "Holiday", link: "/account-settings" },
+    ],
+  },
+  {
+    icon: <HiOutlineClipboard size={18} />,
+    title: "Meeting",
+
+    link: "/company/list",
+  },
+  {
+    title: "Company Policy",
+    icon: <MdOutlinePolicy size={18} />,
+    link: "/company/list",
+  },
+  {
+    title: "HRM Setup",
+    icon: <BiArchive size={18} />,
+    link: "/hrm-setup",
+  },
+
+  {
     title: "Banking system",
-    icon: <TbMoneybag size={20} />,
+    icon: <TbMoneybag size={18} />,
     subMenu: [
       { title: "Account", link: "/add-product" },
       { title: "Transfer", link: "/manage-products" },
@@ -116,7 +132,7 @@ const adminMenuItems = [
   },
   {
     title: "User Management",
-    // icon: <LuUser2 size={19} />,
+    icon: <LuUserRoundCog size={18} />,
     subMenu: [
       { title: "User", link: "/users" },
       { title: "Role", link: "/manage-products" },
@@ -125,7 +141,7 @@ const adminMenuItems = [
 
   {
     title: "Settings",
-    icon: <AiOutlineSetting size={20} />,
+    icon: <AiOutlineSetting size={18} />,
     subMenu: [
       {
         title: "System Settings",
@@ -150,7 +166,7 @@ const adminMenuItems = [
 const employeeMenuItems = [
   {
     title: "Dashboard",
-    icon: <RxHome size={20} />,
+    icon: <RxHome size={18} />,
     subMenu: [
       { title: "Overview", link: "/" },
       { title: "Reports", link: "/company/loan/type" },
@@ -159,7 +175,7 @@ const employeeMenuItems = [
   },
   {
     title: "Leave Management",
-    icon: <TbCards size={20} />,
+    icon: <TbCards size={18} />,
     subMenu: [
       { title: "Apply Leave", link: "/employee/leave/application" },
       { title: "Reports", link: "/employee/leave/form" },
@@ -167,7 +183,7 @@ const employeeMenuItems = [
   },
   {
     title: "Loan Management",
-    icon: <TbCards size={20} />,
+    icon: <TbCards size={18} />,
 
     subMenu: [
       { title: "Apply Loan", link: "/employee/loan/apply" },
@@ -176,7 +192,7 @@ const employeeMenuItems = [
   },
   {
     title: "Attendance",
-    icon: <TbCards size={20} />,
+    icon: <TbCards size={18} />,
 
     subMenu: [
       { title: "sheet", link: "/" },
@@ -185,7 +201,7 @@ const employeeMenuItems = [
   },
   {
     title: "Holiday",
-    icon: <TbCards size={20} />,
+    icon: <TbCards size={18} />,
     link: "/",
   },
 ];

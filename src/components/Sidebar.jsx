@@ -73,11 +73,11 @@ const Sidebar = () => {
   };
 
   const filteredMenuItems = filterMenuItemsByPermissions(currentMenuItems);
-  console.log(filteredMenuItems);
+
   // Recursive function to render nested submenus
   const renderSubMenu = (subMenus) => {
     return (
-      <ul className="mt-2 space-y-2 pl-5">
+      <ul className="mt-2 pl-5">
         {subMenus?.map((sub, subIndex) => (
           <li key={subIndex}>
             {sub.subMenu ? (
@@ -85,7 +85,7 @@ const Sidebar = () => {
                 {/* Handle nested submenu */}
                 <button
                   onClick={() => handleSubMenuClick(subIndex)}
-                  className="flex w-full items-center justify-between py-2 pl-3 pr-4"
+                  className="flex w-full items-center justify-between pl-3 pr-4"
                 >
                   <div className="flex items-center gap-1">
                     <PiDotDuotone color="#3686FF" size={20} />
@@ -103,7 +103,7 @@ const Sidebar = () => {
                 <PiDotDuotone color="#3686FF" size={20} />
                 <Link
                   to={sub.link}
-                  className="block py-2 pr-4 hover:text-white"
+                  className="block py-[10px] pr-4 hover:text-white"
                 >
                   <span>{sub.title}</span>
                 </Link>
@@ -116,19 +116,19 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="flex w-64 flex-shrink-0 flex-col text-white shadow-inner xl:w-64 2xl:w-[284px]">
-      <div className="font-poppins text-[15px] text-[#d5d5d5] lg:px-4 xl:px-4">
+    <div className="flex h-svh w-64 flex-shrink-0 flex-col text-white shadow-inner xl:w-64 2xl:w-[284px]">
+      <div className="overflow-y-auto font-poppins text-[14px] text-[#d5d5d5] lg:px-4 xl:px-4">
         <Logo />
 
-        <ul className="mt-4">
+        <ul className="mt-16">
           {companyIdFromStore == null ? (
             <li>
               <Link
                 to="/company/list"
-                className="mb-2 flex w-full cursor-pointer items-center rounded-[3px] px-4 py-3 transition-all hover:bg-[#3686FF] hover:text-white"
+                className="mb-2 flex w-full cursor-pointer items-center rounded-[3px] px-4 py-[10px] transition-all hover:bg-[#3686FF] hover:text-white"
               >
                 <span className="flex items-center">
-                  <TbCards size={20} />
+                  <TbCards size={18} />
 
                   <span className="ml-2">Manage Company</span>
                 </span>
@@ -141,7 +141,7 @@ const Sidebar = () => {
                   // Handle nested menus
                   <button
                     onClick={() => handleMenuClick(menuIndex)}
-                    className={`mb-2 flex w-full cursor-pointer items-center justify-between rounded-[3px] px-4 py-3 transition-all hover:bg-[#3686FF] hover:text-white ${
+                    className={`my-0 flex w-full cursor-pointer items-center justify-between rounded-[3px] px-4 py-[10px] transition-all hover:bg-[#3686FF] hover:text-white ${
                       activeMenu === menuIndex && "bg-[#3686FF] text-white"
                     }`}
                   >
@@ -157,7 +157,7 @@ const Sidebar = () => {
                   // Handle single-level menus
                   <Link
                     to={menu.link}
-                    className={`mb-2 flex w-full cursor-pointer items-center rounded-[3px] px-4 py-3 transition-all hover:bg-[#3686FF] hover:text-white ${
+                    className={`flex w-full cursor-pointer items-center rounded-[3px] px-4 py-[10px] transition-all hover:bg-[#3686FF] hover:text-white ${
                       activeMenu === menuIndex && "bg-[#3686FF] text-white"
                     }`}
                   >
