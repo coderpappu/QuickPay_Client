@@ -55,6 +55,7 @@ const PaySlipCard = () => {
     isLoading,
     error,
   } = useGetEmployeesQuery(companyId);
+
   const [generateBulkSalary, { data }] =
     useGeneratedEmployeeSalaryBulkMutation();
 
@@ -72,9 +73,9 @@ const PaySlipCard = () => {
     setIsPopupOpen(false);
   };
 
-  const handleOpen = (employeeId, companyId, month, year) => {
+  const handleOpen = (employeeId, deviceId, companyId, month, year) => {
     setIsPopupOpen(true);
-    setSlipPreview({ employeeId, companyId, month, year });
+    setSlipPreview({ employeeId, deviceId, companyId, month, year });
   };
 
   const {
@@ -105,7 +106,10 @@ const PaySlipCard = () => {
       return;
     }
 
-    const employeeIds = employeeList.data.map((employee) => employee.id);
+    const employeeIds = employeeList.data.map((employee) => ({
+      employeeId: employee.id,
+      deviceId: employee.deviceUserId,
+    }));
 
     try {
       // Call the mutation to generate bulk salary
@@ -179,7 +183,13 @@ const PaySlipCard = () => {
             <button
               className="mx-2 rounded-md bg-yellow-500 px-4 py-2"
               onClick={() =>
-                handleOpen(sheet?.Employee?.id, companyId, month, year)
+                handleOpen(
+                  sheet?.Employee?.id,
+                  sheet?.Employee?.deviceUserId,
+                  companyId,
+                  month,
+                  year,
+                )
               }
             >
               Payslip

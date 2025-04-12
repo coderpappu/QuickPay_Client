@@ -1625,9 +1625,9 @@ export const apiSlice = createApi({
     }),
 
     getEmployeeSalarySheet: builder.query({
-      query: ({ employeeId, companyId, month, year }) => ({
+      query: ({ employeeId, deviceId, companyId, month, year }) => ({
         url: `/salarysetting/getemployeesalary`,
-        params: { employeeId, companyId, month, year },
+        params: { employeeId, deviceId, companyId, month, year },
       }),
       providesTags: ["employeesalarysheet"],
     }),
