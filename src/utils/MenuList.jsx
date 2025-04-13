@@ -1,6 +1,6 @@
 import { AiOutlineSetting } from "react-icons/ai";
 import { RxHome } from "react-icons/rx";
-import { TbCards, TbMoneybag } from "react-icons/tb";
+import { TbCards } from "react-icons/tb";
 
 import { BiArchive, BiCircleThreeQuarter } from "react-icons/bi";
 import { BsCheck2Circle, BsClockHistory } from "react-icons/bs";
@@ -122,14 +122,14 @@ const adminMenuItems = [
     link: "/hrm-setup",
   },
 
-  {
-    title: "Banking system",
-    icon: <TbMoneybag size={18} />,
-    subMenu: [
-      { title: "Account", link: "/add-product" },
-      { title: "Transfer", link: "/manage-products" },
-    ],
-  },
+  // {
+  //   title: "Banking system",
+  //   icon: <TbMoneybag size={18} />,
+  //   subMenu: [
+  //     { title: "Account", link: "/add-product" },
+  //     { title: "Transfer", link: "/manage-products" },
+  //   ],
+  // },
   {
     title: "User Management",
     icon: <LuUserRoundCog size={18} />,

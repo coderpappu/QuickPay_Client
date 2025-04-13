@@ -27,7 +27,10 @@ const SalarySheet = ({ slipPreview }) => {
   const rightside = [
     ...(getEmployeeSalary?.data?.generatedSalary?.deduction_salary_sheet || []),
     ...(getEmployeeSalary?.data?.generatedSalary?.loan || []),
+    { LateSalary: getEmployeeSalary?.data?.lateDaySalary } || [],
   ];
+
+  console.log(rightside);
 
   return (
     <div className="mx-auto max-w-5xl rounded-md bg-white p-6 shadow-md dark:bg-dark-box">
@@ -62,8 +65,11 @@ const SalarySheet = ({ slipPreview }) => {
             {employeeData?.EmployeeShift?.[0]?.shift?.name}
           </p>
           <p>
-            <strong>O.T Hours : </strong>{" "}
-            {Math.round(getEmployeeSalary?.data?.totalOvertimeHours)}
+            <strong>O.T Hours : </strong> {leftside[4]?.hour || 0}
+          </p>
+          <p>
+            <strong>Late Day : </strong>{" "}
+            {getEmployeeSalary?.data?.totalLateDay || 0}
           </p>
 
           <p>
@@ -136,11 +142,17 @@ const SalarySheet = ({ slipPreview }) => {
                 {rightData && (
                   <>
                     <div className="border-r border-dark-card p-2">
-                      {rightData.EmployeeDeduction?.DeductionType?.name ||
-                        rightData.name ||
-                        ""}
+                      {rightData.EmployeeDeduction?.DeductionType?.name
+                        ? rightData.EmployeeDeduction?.DeductionType?.name
+                        : rightData?.LateSalary
+                          ? "Late Salary"
+                          : rightData.name || ""}
                     </div>
-                    <div className="p-2">{rightData.amount || ""}</div>
+                    <div className="p-2">
+                      {rightData.amount
+                        ? rightData.amount
+                        : rightData?.LateSalary || ""}
+                    </div>
                   </>
                 )}
               </div>
@@ -150,7 +162,7 @@ const SalarySheet = ({ slipPreview }) => {
         <div className="grid grid-cols-4 font-bold">
           <div className="border-r border-dark-card p-2">Total Earning</div>
           <div className="border-r border-dark-card p-2">
-            {Math.round(getEmployeeSalary?.data?.totalAllowance)}
+            {Math.round(getEmployeeSalary?.data?.totalEarning)}
           </div>
           <div className="border-r border-dark-card p-2">Total Deduction</div>
           <div className="p-2">
