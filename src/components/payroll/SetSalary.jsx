@@ -114,7 +114,7 @@ const SetSalaryCard = () => {
                 <div className="flex flex-wrap justify-start gap-2">
                   {/* edit button  */}
                   <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-400 p-2">
-                    <Link to={`/employee/setsalary/edit`}>
+                    <Link to={`/employee/setsalary/update/${employee?.id}`}>
                       <VscEye size={20} />
                     </Link>
                   </div>
@@ -172,7 +172,7 @@ const SetSalaryCard = () => {
               <h3>Section</h3>
             </div>
             <div className="w-[10%] dark:text-white">
-              <h3>Action</h3>
+              <h3>View</h3>
             </div>
           </div>
 

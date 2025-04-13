@@ -42,7 +42,6 @@ const Sidebar = () => {
   ) {
     currentMenuItems = adminMenuItems;
   } else {
-    console.log(employeeMenuItems);
     currentMenuItems = employeeMenuItems;
   }
 

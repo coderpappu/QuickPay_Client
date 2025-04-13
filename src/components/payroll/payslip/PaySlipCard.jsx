@@ -162,19 +162,19 @@ const PaySlipCard = () => {
           </div>
           <div className="w-[10%] dark:text-white">
             <h3>
-              {Math.round(sheet?.overtime_salary_sheet?.[0]?.overtime_salary)}
+              {Math.round(sheet?.overtime_salary_sheet?.[0]?.overtime_salary) ||
+                "00"}
             </h3>
           </div>
           <div className="w-[10%] dark:text-white">
-            <h3>{sheet?.allowance_salary_sheet?.[0]?.amount}</h3>
+            <h3>{sheet?.allowance_salary_sheet?.[0]?.amount || "00"}</h3>
           </div>
           <div className="w-[10%] dark:text-white">
-            <h3>{sheet?.deduction_salary_sheet?.[0]?.amount}</h3>
+            <h3>{sheet?.deduction_salary_sheet?.[0]?.amount || "00"}</h3>
           </div>
           <div className="w-[7%] text-center dark:text-white">
             <button
               className={`w-24 border px-4 py-2 ${sheet?.status !== "Unpaid" ? "border-green-400 text-green-400" : "border-yellow-400 text-yellow-400"} mx-2 rounded-md`}
-              onClick={() => handleOpen(sheet)}
             >
               {sheet?.status}{" "}
             </button>
