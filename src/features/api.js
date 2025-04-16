@@ -1186,6 +1186,7 @@ export const apiSlice = createApi({
       }),
       providesTags: ["Section"],
     }),
+
     setSetting: builder.mutation({
       query: (credentials) => ({
         url: "/setting/employeesettingcreate",
@@ -1553,7 +1554,7 @@ export const apiSlice = createApi({
         method: "POST",
         body: credentials,
       }),
-      invalidatesTags: ["bonus_type"],
+      invalidatesTags: ["bonus"],
     }),
 
     getBonusTypeList: builder.query({
@@ -1561,7 +1562,7 @@ export const apiSlice = createApi({
         url: `/bonus/type/list`,
         params: { companyId },
       }),
-      providesTags: ["bonus_type"],
+      providesTags: ["bonus"],
     }),
 
     deleteBonusType: builder.mutation({
@@ -1570,7 +1571,7 @@ export const apiSlice = createApi({
         method: "DELETE",
         params: { bonusTypeId },
       }),
-      invalidatesTags: ["bonus_type"],
+      invalidatesTags: ["bonus"],
     }),
 
     updateBonusType: builder.mutation({
@@ -1579,7 +1580,7 @@ export const apiSlice = createApi({
         method: "PUT",
         body: credentials,
       }),
-      invalidatesTags: ["bonus_type"],
+      invalidatesTags: ["bonus"],
     }),
 
     getBonusTypeDetails: builder.query({
@@ -1587,7 +1588,7 @@ export const apiSlice = createApi({
         url: `/bonus/type/details`,
         params: { bonusTypeId },
       }),
-      providesTags: ["bonus_type"],
+      providesTags: ["bonus"],
     }),
 
     // promotion
@@ -1780,6 +1781,51 @@ export const apiSlice = createApi({
         url: `/userpermission/get/module/${userId}`,
       }),
       providesTags: ["userPermission"],
+    }),
+
+    // employee bonus
+    createEmployeeBonus: builder.mutation({
+      query: (credentials) => ({
+        url: "/salarysetting/bonus/employee/create",
+        method: "POST",
+        body: credentials,
+      }),
+
+      invalidatesTags: ["bonus"],
+    }),
+
+    getEmployeeBonus: builder.query({
+      query: ({ employeeId, companyId }) => ({
+        url: `/salarysetting/bonus/employee/list`,
+        params: { employeeId, companyId },
+      }),
+      providesTags: ["employee_bonus"],
+    }),
+
+    getEmployeeBonusDetails: builder.query({
+      query: (id) => ({
+        url: `/setsalary/bonus/employee/details`,
+        params: { id },
+      }),
+      providesTags: ["bonus"],
+    }),
+
+    updateEmployeeBonus: builder.mutation({
+      query: ({ id, ...credentials }) => ({
+        url: `/setsalary/bonus/employee/update/${id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["bonus"],
+    }),
+
+    deleteEmployeeBonus: builder.mutation({
+      query: (EmployeeBonusId) => ({
+        url: `/setsalary/bonus/employee/delete`,
+        method: "DELETE",
+        params: { EmployeeBonusId },
+      }),
+      invalidatesTags: ["bonus"],
     }),
   }),
 });
@@ -2084,4 +2130,11 @@ export const {
   useCreateUserPermissionMutation,
   useGetUserPermissionQuery,
   useGetUserPerModuleQuery,
+
+  // employee Bonus
+  useCreateEmployeeBonusMutation,
+  useGetEmployeeBonusQuery,
+  useGetEmployeeBonusDetailsQuery,
+  useUpdateEmployeeBonusMutation,
+  useDeleteEmployeeMutation,
 } = apiSlice;
