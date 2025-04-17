@@ -3,18 +3,18 @@ import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { useParams } from "react-router-dom";
-import {
-  useDeleteEmployeeCommissionMutation,
-  useGetEmployeeCommissionListQuery,
-} from "../../features/api";
 
 import { useSelector } from "react-redux";
+import {
+  useDeleteEmployeeBonusMutation,
+  useGetEmployeeBonusQuery,
+} from "../../features/api";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import CardSkeleton from "../../skeletons/card";
 import ErrorMessage from "../../utils/ErrorMessage";
 import BrandCardWrapper from "../company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../company/SettingCardHeader";
-import EmployeeCommissionForm from "./EmployeeCommissionForm";
+import EmployeeBonusForm from "./EmployeeBonusForm";
 
 const EmployeeBonusCard = () => {
   const { id: employeeId } = useParams();
@@ -32,15 +32,17 @@ const EmployeeBonusCard = () => {
   };
 
   const companyId = useSelector((state) => state.company.companyId);
-  const [deleteBonus] = useDeleteEmployeeCommissionMutation();
+
+  const [deleteBonus] = useDeleteEmployeeBonusMutation();
 
   const {
     data: employeeCommissionList,
     isLoading,
     isError,
     error,
-  } = useGetEmployeeCommissionListQuery({ employeeId, companyId });
+  } = useGetEmployeeBonusQuery({ employeeId, companyId });
 
+  console.log(employeeCommissionList);
   const handleDeleteBonus = async (id) => {
     const confirm = () =>
       toast(
@@ -85,7 +87,7 @@ const EmployeeBonusCard = () => {
         className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
       >
         <div className="w-[20%] dark:text-white">
-          <h3>{commission?.title} </h3>
+          <h3>{commission?.BonusType?.title} </h3>
         </div>
         <div className="w-[20%] dark:text-white">
           <h3>{commission?.type}</h3>
@@ -160,10 +162,7 @@ const EmployeeBonusCard = () => {
                 </button>
               </div>
               <div className="mt-4">
-                <EmployeeCommissionForm
-                  commissionId={selectBonusId}
-                  onClose={onClose}
-                />
+                <EmployeeBonusForm bonusId={selectBonusId} onClose={onClose} />
               </div>
             </div>
           </div>

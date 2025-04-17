@@ -1786,7 +1786,7 @@ export const apiSlice = createApi({
     // employee bonus
     createEmployeeBonus: builder.mutation({
       query: (credentials) => ({
-        url: "/salarysetting/bonus/employee/create",
+        url: "/setsalary/bonus/employee/create",
         method: "POST",
         body: credentials,
       }),
@@ -1796,10 +1796,10 @@ export const apiSlice = createApi({
 
     getEmployeeBonus: builder.query({
       query: ({ employeeId, companyId }) => ({
-        url: `/salarysetting/bonus/employee/list`,
+        url: `/setsalary/bonus/employee/list`,
         params: { employeeId, companyId },
       }),
-      providesTags: ["employee_bonus"],
+      providesTags: ["bonus"],
     }),
 
     getEmployeeBonusDetails: builder.query({
@@ -1812,7 +1812,7 @@ export const apiSlice = createApi({
 
     updateEmployeeBonus: builder.mutation({
       query: ({ id, ...credentials }) => ({
-        url: `/setsalary/bonus/employee/update/${id}`,
+        url: `/setsalary/bonus/employee/${id}`,
         method: "PUT",
         body: credentials,
       }),
@@ -2136,5 +2136,5 @@ export const {
   useGetEmployeeBonusQuery,
   useGetEmployeeBonusDetailsQuery,
   useUpdateEmployeeBonusMutation,
-  useDeleteEmployeeMutation,
+  useDeleteEmployeeBonusMutation,
 } = apiSlice;

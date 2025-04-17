@@ -51,7 +51,7 @@ const SelectOptionBox = ({ values, name }) => {
       name={name || "ok"}
       className="h-10 w-full rounded-md border border-dark-box border-opacity-5 bg-light-input px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
     >
-      {/* <option value="">Select Option</option> */}
+      <option value="">Select Option</option>
       {values.map((option, index) => (
         <option key={index} value={option} name={option}>
           {option}
