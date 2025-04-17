@@ -42,7 +42,7 @@ const EmployeeBonusCard = () => {
     error,
   } = useGetEmployeeBonusQuery({ employeeId, companyId });
 
-  console.log(employeeCommissionList);
+  
   const handleDeleteBonus = async (id) => {
     const confirm = () =>
       toast(

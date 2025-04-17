@@ -13,8 +13,6 @@ const CompanySettingCard = () => {
   const companyId = useSelector((state) => state.company.companyId);
   const { data: setting, isLoading } = useGetRootSettingQuery(companyId);
 
-  console.log(setting);
-
   const [selected, setSelected] = useState("1");
 
   const [overtime, setOvertime] = useState({

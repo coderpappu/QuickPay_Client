@@ -120,65 +120,63 @@ const CompanyList = () => {
     content = (
       <>
         {companyData?.data?.map((company, index) => (
-          <>
-            <div
-              key={company?.id}
-              className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
-            >
-              <div className="w-[5%] dark:text-white">
-                <h3>{++index}</h3>
-              </div>
+          <div
+            key={company?.id}
+            className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
+          >
+            <div className="w-[5%] dark:text-white">
+              <h3>{++index}</h3>
+            </div>
 
-              <div className="w-[15%] dark:text-white">
-                <h3>{company?.company_name}</h3>
-              </div>
+            <div className="w-[15%] dark:text-white">
+              <h3>{company?.company_name}</h3>
+            </div>
 
-              <div className="w-[13%] dark:text-white">
-                <h3>{company?.phone_number}</h3>
-              </div>
-              <div className="w-[13%] dark:text-white">
-                <h3>{company?.company_registration_no}</h3>
-              </div>
-              <div className="w-[13%] dark:text-white">
-                <h3>{company?.country}</h3>
-              </div>
-              <div className="w-[13%] dark:text-white">
-                <h3>{company?.city}</h3>
-              </div>
-              <div className="w-[10%] dark:text-white">
-                <button
-                  className={`w-28 rounded px-3 py-1 text-sm font-bold text-white ${companyId === company.id ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"}`}
-                  onClick={() => handleToggleActive(company.id)}
+            <div className="w-[13%] dark:text-white">
+              <h3>{company?.phone_number}</h3>
+            </div>
+            <div className="w-[13%] dark:text-white">
+              <h3>{company?.company_registration_no}</h3>
+            </div>
+            <div className="w-[13%] dark:text-white">
+              <h3>{company?.country}</h3>
+            </div>
+            <div className="w-[13%] dark:text-white">
+              <h3>{company?.city}</h3>
+            </div>
+            <div className="w-[10%] dark:text-white">
+              <button
+                className={`w-28 rounded px-3 py-1 text-sm font-bold text-white ${companyId === company.id ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"}`}
+                onClick={() => handleToggleActive(company.id)}
+              >
+                {companyId === company.id ? "Deactivate" : "Activate"}
+              </button>
+            </div>
+            <div className="w-[10%] dark:text-white">
+              <div className="flex flex-wrap justify-start gap-2">
+                {/* edit button  */}
+                <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-orange-400 p-2">
+                  <Link to={`/company/details/${company.id}`}>
+                    <VscEye size={20} />
+                  </Link>
+                </div>
+
+                <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-400 p-2">
+                  <Link to={`/company/update/${company.id}`}>
+                    <CiEdit size={20} />
+                  </Link>
+                </div>
+
+                {/* delete button  */}
+                <div
+                  onClick={() => handleDeleteCompany(company?.id)}
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center"
                 >
-                  {companyId === company.id ? "Deactivate" : "Activate"}
-                </button>
-              </div>
-              <div className="w-[10%] dark:text-white">
-                <div className="flex flex-wrap justify-start gap-2">
-                  {/* edit button  */}
-                  <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-orange-400 p-2">
-                    <Link to={`/company/details/${company.id}`}>
-                      <VscEye size={20} />
-                    </Link>
-                  </div>
-
-                  <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-400 p-2">
-                    <Link to={`/company/update/${company.id}`}>
-                      <CiEdit size={20} />
-                    </Link>
-                  </div>
-
-                  {/* delete button  */}
-                  <div
-                    onClick={() => handleDeleteCompany(company?.id)}
-                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center"
-                  >
-                    <AiOutlineDelete size={20} />
-                  </div>
+                  <AiOutlineDelete size={20} />
                 </div>
               </div>
             </div>
-          </>
+          </div>
         ))}
       </>
     );

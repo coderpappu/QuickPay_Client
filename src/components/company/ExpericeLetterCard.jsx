@@ -22,7 +22,6 @@ const ExperienceCertificate = () => {
   const { data: emperienceData } =
     useGetExperienceCertificateFormatQuery(company_id);
 
-  console.log(emperienceData);
   // Define handleEditorData as a function that accepts editor state data
   const handleEditorData = async (data) => {
     // Set the received data from the editor

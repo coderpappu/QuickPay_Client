@@ -80,57 +80,55 @@ const LeaveCard = () => {
     content = (
       <>
         {employees?.map((employee, index) => (
-          <>
-            <div
-              key={employee?.id}
-              className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
-            >
-              <div className="w-[5%] dark:text-white">
-                <h3>{++index}</h3>
-              </div>
-              <div className="w-[15%] dark:text-white">
-                <Link to={`/company/employee/details/${employee?.id}`}>
-                  <div className="w-[60%] rounded-md border border-dark-heading-color px-2 py-2 text-center text-dark-heading-color transition-all duration-150 hover:bg-button-bg hover:text-white">
-                    <h3>{employee?.employeeId}</h3>
-                  </div>
-                </Link>
-              </div>
+          <div
+            key={employee?.id}
+            className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
+          >
+            <div className="w-[5%] dark:text-white">
+              <h3>{++index}</h3>
+            </div>
+            <div className="w-[15%] dark:text-white">
+              <Link to={`/company/employee/details/${employee?.id}`}>
+                <div className="w-[60%] rounded-md border border-dark-heading-color px-2 py-2 text-center text-dark-heading-color transition-all duration-150 hover:bg-button-bg hover:text-white">
+                  <h3>{employee?.employeeId}</h3>
+                </div>
+              </Link>
+            </div>
 
-              <div className="w-[20%] dark:text-white">
-                <h3>{employee?.name}</h3>
-              </div>
+            <div className="w-[20%] dark:text-white">
+              <h3>{employee?.name}</h3>
+            </div>
 
-              <div className="w-[15%] dark:text-white">
-                <h3>{employee?.EmployeeDepartment?.[0]?.department?.name}</h3>
-              </div>
+            <div className="w-[15%] dark:text-white">
+              <h3>{employee?.EmployeeDepartment?.[0]?.department?.name}</h3>
+            </div>
 
-              <div className="w-[15%] dark:text-white">
-                <h3>{employee?.EmployeeDesignation[0]?.designation?.name}</h3>
-              </div>
+            <div className="w-[15%] dark:text-white">
+              <h3>{employee?.EmployeeDesignation[0]?.designation?.name}</h3>
+            </div>
 
-              <div className="w-[15%] dark:text-white">
-                <h3>{employee?.EmployeeSection?.[0]?.section?.name}</h3>
-              </div>
-              <div className="w-[10%] dark:text-white">
-                <div className="flex flex-wrap justify-start gap-2">
-                  {/* edit button  */}
-                  <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-400 p-2">
-                    <Link to={`/company/employee/update/${employee?.id}`}>
-                      <CiEdit size={20} />
-                    </Link>
-                  </div>
+            <div className="w-[15%] dark:text-white">
+              <h3>{employee?.EmployeeSection?.[0]?.section?.name}</h3>
+            </div>
+            <div className="w-[10%] dark:text-white">
+              <div className="flex flex-wrap justify-start gap-2">
+                {/* edit button  */}
+                <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-400 p-2">
+                  <Link to={`/company/employee/update/${employee?.id}`}>
+                    <CiEdit size={20} />
+                  </Link>
+                </div>
 
-                  {/* delete button  */}
-                  <div
-                    onClick={() => handleDeleteEmployee(employee?.id)}
-                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center"
-                  >
-                    <AiOutlineDelete size={20} />
-                  </div>
+                {/* delete button  */}
+                <div
+                  onClick={() => handleDeleteEmployee(employee?.id)}
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center"
+                >
+                  <AiOutlineDelete size={20} />
                 </div>
               </div>
             </div>
-          </>
+          </div>
         ))}
       </>
     );

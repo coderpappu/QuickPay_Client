@@ -82,56 +82,54 @@ const Users = () => {
     content = (
       <>
         {users?.map((user, index) => (
-          <>
-            <div
-              key={user.id}
-              className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
-            >
-              <div className="w-[5%] dark:text-white">
-                <h3>{++index}</h3>
-              </div>
-              <div className="w-[15%] dark:text-white">
-                <Link to={`/user/profile/${user?.id}`}>
-                  <div className="w-[60%] rounded-md border border-dark-heading-color px-2 py-2 text-center text-dark-heading-color transition-all duration-150 hover:bg-button-bg hover:text-white">
-                    <h3>{user?.first_name + " " + user?.last_name}</h3>
-                  </div>
-                </Link>
-              </div>
+          <div
+            key={user.id}
+            className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
+          >
+            <div className="w-[5%] dark:text-white">
+              <h3>{++index}</h3>
+            </div>
+            <div className="w-[15%] dark:text-white">
+              <Link to={`/user/profile/${user?.id}`}>
+                <div className="w-[60%] rounded-md border border-dark-heading-color px-2 py-2 text-center text-dark-heading-color transition-all duration-150 hover:bg-button-bg hover:text-white">
+                  <h3>{user?.first_name + " " + user?.last_name}</h3>
+                </div>
+              </Link>
+            </div>
 
-              <div className="w-[15%] dark:text-white">
-                <h3>{user?.email}</h3>
-              </div>
-              <div className="w-[15%] dark:text-white">
-                <h3>{user?.phone}</h3>
-              </div>
-              <div className="w-[15%] dark:text-white">
-                <h3>{user?.type}</h3>
-              </div>
-              <div className="w-[10%] dark:text-white">
-                <h3>{user?.status}</h3>
-              </div>
+            <div className="w-[15%] dark:text-white">
+              <h3>{user?.email}</h3>
+            </div>
+            <div className="w-[15%] dark:text-white">
+              <h3>{user?.phone}</h3>
+            </div>
+            <div className="w-[15%] dark:text-white">
+              <h3>{user?.type}</h3>
+            </div>
+            <div className="w-[10%] dark:text-white">
+              <h3>{user?.status}</h3>
+            </div>
 
-              <div className="w-[10%] dark:text-white">
-                <div className="flex flex-wrap justify-start gap-2">
-                  {/* edit button  */}
-                  <div
-                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-400 p-2"
-                    onClick={() => handleEditOpen(user)}
-                  >
-                    <CiEdit size={20} />
-                  </div>
+            <div className="w-[10%] dark:text-white">
+              <div className="flex flex-wrap justify-start gap-2">
+                {/* edit button  */}
+                <div
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-400 p-2"
+                  onClick={() => handleEditOpen(user)}
+                >
+                  <CiEdit size={20} />
+                </div>
 
-                  {/* delete button  */}
-                  <div
-                    onClick={() => handleUserDelete(user?.id)}
-                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center"
-                  >
-                    <AiOutlineDelete size={20} />
-                  </div>
+                {/* delete button  */}
+                <div
+                  onClick={() => handleUserDelete(user?.id)}
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center"
+                >
+                  <AiOutlineDelete size={20} />
                 </div>
               </div>
             </div>
-          </>
+          </div>
         ))}
       </>
     );

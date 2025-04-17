@@ -9,8 +9,6 @@ const PrivateRoute = () => {
 
   const { data: employeeData } = useGetEmployeeQuery();
 
-  console.log(data, employeeData);
-
   const navigate = useNavigate();
 
   let content = null;
