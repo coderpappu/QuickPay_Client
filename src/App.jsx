@@ -50,6 +50,7 @@ import AdminEmployeeLoanForm from "./components/hrm/loan/Employee_Loan/Admin/Emp
 import AdminEmployeeLoanList from "./components/hrm/loan/Employee_Loan/Admin/EmployeeLoanList";
 import EmployeeLoanList from "./components/hrm/loan/Employee_Loan/EmployeeLoanList";
 
+import BonusSlipCard from "./components/payroll/payslip/BonusSlip";
 import PaySlipCard from "./components/payroll/payslip/PaySlipCard";
 import BiometricAttendnaces from "./pages/attendnace/BiometricAttendnaces";
 import EditorComponent from "./pages/editor-test/EditorComponent";
@@ -210,6 +211,7 @@ function App() {
 
               {/* payslip  */}
               <Route path="/employee/payslip" element={<PaySlipCard />} />
+              <Route path="/employee/bonus-slip" element={<BonusSlipCard />} />
 
               {/* loader test route  */}
               <Route path="/loader/" element={<ProfileSkeleton />} />

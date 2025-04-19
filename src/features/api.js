@@ -36,6 +36,7 @@ export const apiSlice = createApi({
     "leaveType",
     "leaveApplication",
     "earnLeave",
+    "bonus_slip",
   ],
 
   endpoints: (builder) => ({
@@ -1827,6 +1828,32 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["bonus"],
     }),
+
+    //---- bonus slip ----
+    createBonusSlip: builder.mutation({
+      query: (credentials) => ({
+        url: "/bonus/slip/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["bonus_slip"],
+    }),
+    getBonusSlip: builder.query({
+      query: (companyId) => ({
+        url: `/bonus/slip/list`,
+        params: { companyId },
+      }),
+      providesTags: ["bonus_slip"],
+    }),
+
+    deleteBonusSlip: builder.mutation({
+      query: (slip_id) => ({
+        url: `/bonus/slip/delete`,
+        method: "DELETE",
+        params: { slip_id },
+      }),
+      invalidatesTags: ["bonus_slip"],
+    }),
   }),
 });
 
@@ -2137,4 +2164,10 @@ export const {
   useGetEmployeeBonusDetailsQuery,
   useUpdateEmployeeBonusMutation,
   useDeleteEmployeeBonusMutation,
+
+  // bonus slip
+
+  useCreateBonusSlipMutation,
+  useGetBonusSlipQuery,
+  useDeleteBonusSlipMutation,
 } = apiSlice;

@@ -41,6 +41,7 @@ const adminMenuItems = [
     subMenu: [
       { title: "Set Salary", link: "/employee/setsalary" },
       { title: "Payslip", link: "/employee/payslip" },
+      { title: "Bonus Slip", link: "/employee/bonus-slip" },
     ],
   },
   {
