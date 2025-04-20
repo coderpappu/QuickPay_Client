@@ -142,8 +142,13 @@ const PaySlipCard = () => {
   let content;
 
   if (isLoading) return <ListSkeleton />;
-  if (!employeeList || !employeeList.data || employeeList.data.length === 0)
-    content = <ErrorMessage message={error?.data?.message} />;
+
+  if (
+    !employeeSalarySheet ||
+    !employeeSalarySheet.data ||
+    employeeSalarySheet?.data.length === 0
+  )
+    content = <ErrorMessage message="No salary sheet found!" />;
 
   if (isSheetLoding && !isSheetError) return <ListSkeleton />;
 

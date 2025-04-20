@@ -1839,9 +1839,9 @@ export const apiSlice = createApi({
       invalidatesTags: ["bonus_slip"],
     }),
     getBonusSlip: builder.query({
-      query: (companyId) => ({
+      query: ({ companyId, month, year }) => ({
         url: `/bonus/slip/list`,
-        params: { companyId },
+        params: { companyId, month, year },
       }),
       providesTags: ["bonus_slip"],
     }),
@@ -1851,6 +1851,24 @@ export const apiSlice = createApi({
         url: `/bonus/slip/delete`,
         method: "DELETE",
         params: { slip_id },
+      }),
+      invalidatesTags: ["bonus_slip"],
+    }),
+
+    updateBonusSlip: builder.mutation({
+      query: ({ employeeId, ...credentials }) => ({
+        url: `/bonus/slip/update/${employeeId}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["bonus_slip"],
+    }),
+
+    updateBonusBulk: builder.mutation({
+      query: (credentials) => ({
+        url: `/bonus/slip/update/bulk`,
+        method: "PUT",
+        body: credentials,
       }),
       invalidatesTags: ["bonus_slip"],
     }),
@@ -2170,4 +2188,6 @@ export const {
   useCreateBonusSlipMutation,
   useGetBonusSlipQuery,
   useDeleteBonusSlipMutation,
+  useUpdateBonusSlipMutation,
+  useUpdateBonusBulkMutation,
 } = apiSlice;

@@ -3,23 +3,33 @@ import { CSVLink } from "react-csv";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import {
-  useBulkEmployeePaymentMutation,
   useCreateBonusSlipMutation,
   useDeleteBonusSlipMutation,
   useGetBonusSlipQuery,
   useGetBonusTypeListQuery,
   useGetDepartmentsQuery,
   useGetEmployeesQuery,
-  useUpdateSalarySheetMutation,
+  useUpdateBonusBulkMutation,
+  useUpdateBonusSlipMutation,
 } from "../../../features/api";
 import ListSkeleton from "../../../skeletons/ListSkeleton";
 import ErrorMessage from "../../../utils/ErrorMessage";
 import BrandCardWrapper from "../../company/BrandCardWrapper";
 
 const BonusSlipCard = () => {
-  const [updateSalarySheet] = useUpdateSalarySheetMutation();
+  const [month, setMonth] = useState("");
+  const [bonusType, setBonusType] = useState("");
+  const [dept, setDeptChange] = useState("All");
+  const [year, setYear] = useState("");
+
+  const [slipPreview, setSlipPreview] = useState("");
+  const [csvData, setCsvData] = useState([]);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const [updateBonusSlip] = useUpdateBonusSlipMutation();
+
   const [deleteBonusSlip] = useDeleteBonusSlipMutation();
-  const [bulkEmployeePayment] = useBulkEmployeePaymentMutation();
+  const [bulkEmployeePayment] = useUpdateBonusBulkMutation();
 
   const companyId = useSelector((state) => state.company.companyId);
 
@@ -34,20 +44,11 @@ const BonusSlipCard = () => {
     isLoading: isLoadingBonusSlip,
     isError: isErrorBonusSlip,
     error: slipError,
-  } = useGetBonusSlipQuery(companyId);
+  } = useGetBonusSlipQuery({ companyId, month, year });
 
   const [generateBonusSlip, { data }] = useCreateBonusSlipMutation();
   const { data: bonusTypes } = useGetBonusTypeListQuery(companyId);
   const { data: deptList } = useGetDepartmentsQuery(companyId);
-
-  const [month, setMonth] = useState("");
-  const [bonusType, setBonusType] = useState("");
-  const [dept, setDeptChange] = useState("All");
-  const [year, setYear] = useState("");
-
-  const [slipPreview, setSlipPreview] = useState("");
-  const [csvData, setCsvData] = useState([]);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const handleDeleteBonusSlip = async (slip_id) => {
     try {
@@ -60,16 +61,18 @@ const BonusSlipCard = () => {
 
   const handleBulkPayment = async () => {
     const generate_date = `${String(month).padStart(2, "0")}-${year}`;
+
     try {
       await bulkEmployeePayment({ generate_date, status: "Paid" }).unwrap();
       toast.success("Bulk payment processed successfully.");
     } catch (error) {
+      console.log(error);
       toast.error("There was an error processing");
     }
   };
 
-  const handleUpdateSalarySheet = async (employeeId, generate_date) => {
-    await updateSalarySheet({ employeeId, generate_date, status: "Paid" });
+  const handleUpdateBonusSlip = async (employeeId, generate_date) => {
+    await updateBonusSlip({ employeeId, generate_date, status: "Paid" });
   };
 
   useEffect(() => {
@@ -172,7 +175,7 @@ const BonusSlipCard = () => {
   if (isLoading) return <ListSkeleton />;
 
   if (!bonusSlip || !bonusSlip.data || bonusSlip.data.length === 0)
-    content = <ErrorMessage message={error?.data?.message} />;
+    content = <ErrorMessage message="No bound slip found!" />;
 
   if (isLoadingBonusSlip && !isErrorBonusSlip) return <ListSkeleton />;
 
@@ -222,10 +225,7 @@ const BonusSlipCard = () => {
             <button
               className="mx-2 rounded-md bg-purple-700 px-4 py-2"
               onClick={() =>
-                handleUpdateSalarySheet(
-                  sheet?.Employee?.id,
-                  sheet?.generate_date,
-                )
+                handleUpdateBonusSlip(sheet?.Employee?.id, sheet?.generate_date)
               }
             >
               Click To Paid
