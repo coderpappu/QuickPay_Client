@@ -15,6 +15,7 @@ import {
 import ListSkeleton from "../../../skeletons/ListSkeleton";
 import ErrorMessage from "../../../utils/ErrorMessage";
 import BrandCardWrapper from "../../company/BrandCardWrapper";
+import PreviewBonusSlip from "./PreviewBonusSlip";
 
 const BonusSlipCard = () => {
   const [month, setMonth] = useState("");
@@ -89,9 +90,10 @@ const BonusSlipCard = () => {
     setIsPopupOpen(false);
   };
 
-  const handleOpen = (employeeId, deviceId, companyId, month, year) => {
+  const handleOpen = (data) => {
     setIsPopupOpen(true);
-    setSlipPreview({ employeeId, deviceId, companyId, month, year });
+
+    setSlipPreview(data);
   };
 
   // Handle month change
@@ -157,15 +159,14 @@ const BonusSlipCard = () => {
 
   // Handle export to CSV
   const handleExport = () => {
-    const csvData = employeeSalarySheet?.data?.map((sheet) => ({
-      EmployeeId: sheet?.Employee?.employeeId,
-      Name: sheet?.Employee?.name,
-      OverTime: Math.round(sheet?.overtime_salary_sheet?.[0]?.overtime_salary),
-      Allowance: sheet?.allowance_salary_sheet?.[0]?.amount,
-      Deduction: sheet?.deduction_salary_sheet?.[0]?.amount,
-      Commission: sheet?.commission_salary_sheet?.[0]?.amount,
-      NetSalary: sheet?.net_salary,
-      Status: sheet?.status,
+    const csvData = bonusSlip?.data?.map((slip) => ({
+      Name: slip?.Employee?.name,
+      EmployeeID: slip?.Employee?.EmployeeID,
+      Bonus_Name: slip?.BonusType?.title,
+      Amount: slip?.amount,
+      Status: slip?.status,
+      Bonus_Type: slip?.type,
+      Payment_Date: slip?.payment_date,
     }));
     setCsvData(csvData);
   };
@@ -211,13 +212,19 @@ const BonusSlipCard = () => {
             <button
               className="mx-2 rounded-md bg-yellow-500 px-4 py-2"
               onClick={() =>
-                handleOpen(
-                  sheet?.Employee?.id,
-                  sheet?.Employee?.deviceUserId,
+                handleOpen({
+                  employee_id: sheet?.Employee?.id,
+                  employeeId: sheet?.Employee?.employeeId,
+                  name: sheet?.Employee?.name,
+                  payment_date: sheet?.payment_date,
+                  bonus_name: sheet?.BonusType?.title,
+                  amount: sheet?.amount,
+                  date: sheet?.generate_date,
+                  status: sheet?.status,
                   companyId,
                   month,
                   year,
-                )
+                })
               }
             >
               Payslip
@@ -409,7 +416,7 @@ const BonusSlipCard = () => {
           <div className="w-full max-w-5xl rounded-lg bg-white p-6 dark:bg-dark-card">
             <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-dark-border-color dark:border-opacity-5">
               <h3 className="text-lg font-medium text-gray-800 dark:text-white">
-                Payslip
+                Bonus Slip
               </h3>
               <button
                 className="text-gray-500 hover:text-gray-800"

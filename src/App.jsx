@@ -62,6 +62,7 @@ import PermissionCard from "./pages/permission/PermissionCard";
 import SectionList from "./pages/section/SectionList";
 import SectionSettings from "./pages/section/SectionSettings";
 import LoginPage from "./pages/user/LoginPage";
+import MainUserProfile from "./pages/user/MainUserProfile";
 import ProfileUpdate from "./pages/user/ProfileUpdate";
 import RegistraionPage from "./pages/user/RegistraionPage";
 import Users from "./pages/user/UserList";
@@ -92,7 +93,7 @@ function App() {
             />
             <Route index element={<Home />} />
             <Route path="company/list" element={<CompanyList />} />
-            <Route path="profile" element={<Profile />} />
+            <Route path="profile" element={<MainUserProfile />} />
             <Route path="profile/:id" element={<ProfileUpdate />} />
             <Route path="company/create" element={<CompanySettings />} />
             <Route path="company/update/:id" element={<CompanySettings />} />

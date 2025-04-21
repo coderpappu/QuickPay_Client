@@ -127,6 +127,7 @@ function ExperienceCertificate() {
 
   // Function to handle PDF download
   const handleDownloadPDF = async () => {
+    
     const input = componentRef.current;
     const pdf = new jsPDF("p", "mm", "a4");
     const pageWidth = pdf.internal.pageSize.getWidth();
