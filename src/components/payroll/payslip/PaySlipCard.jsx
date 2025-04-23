@@ -13,18 +13,22 @@ import {
 import ListSkeleton from "../../../skeletons/ListSkeleton";
 import ErrorMessage from "../../../utils/ErrorMessage";
 import BrandCardWrapper from "../../company/BrandCardWrapper";
+import EditPanel from "../EditPanel";
 import PreviewPayslipCard from "./PreviewPayslipCard";
 
 const PaySlipCard = () => {
   const [updateSalarySheet] = useUpdateSalarySheetMutation();
   const [deleteSalarySheet] = useDeleteSalarySheetMutation();
   const [bulkEmployeePayment] = useBulkEmployeePaymentMutation();
+
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
 
   const [slipPreview, setSlipPreview] = useState("");
+  const [editSheet, setEditSheet] = useState("");
   const [csvData, setCsvData] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isEditPopup, setIsEditPopup] = useState(false);
 
   const handleDeleteSalarySheet = async (employeeId, generate_date) => {
     try {
@@ -50,6 +54,7 @@ const PaySlipCard = () => {
   };
 
   const companyId = useSelector((state) => state.company.companyId);
+
   const {
     data: employeeList,
     isLoading,
@@ -76,6 +81,11 @@ const PaySlipCard = () => {
   const handleOpen = (employeeId, deviceId, companyId, month, year) => {
     setIsPopupOpen(true);
     setSlipPreview({ employeeId, deviceId, companyId, month, year });
+  };
+
+  const handleEditOpen = (employeeId, gen_date) => {
+    setIsEditPopup(true);
+    setEditSheet({ employeeId, gen_date });
   };
 
   const {
@@ -139,6 +149,7 @@ const PaySlipCard = () => {
     }));
     setCsvData(csvData);
   };
+
   let content;
 
   if (isLoading) return <ListSkeleton />;
@@ -210,7 +221,15 @@ const PaySlipCard = () => {
             >
               Click To Paid
             </button>
-            <button className="mx-2 rounded-md bg-blue-500 px-4 py-2">
+            <button
+              className="mx-2 rounded-md bg-blue-500 px-4 py-2"
+              onClick={() =>
+                handleEditOpen(
+                  sheet?.Employee?.employeeId,
+                  sheet?.generate_date,
+                )
+              }
+            >
               Edit
             </button>
             <button
@@ -371,15 +390,38 @@ const PaySlipCard = () => {
               <h3 className="text-lg font-medium text-gray-800 dark:text-white">
                 Payslip
               </h3>
+
               <button
                 className="text-gray-500 hover:text-gray-800"
-                onClick={() => setIsPopupOpen(false)} // Close popup
+                onClick={() => setIsPopupOpen(false)}
               >
                 &times;
               </button>
             </div>
             <div className="mt-4">
               <PreviewPayslipCard slipPreview={slipPreview} onClose={onClose} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isEditPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-full max-w-3xl rounded-lg bg-white p-6 dark:bg-dark-card">
+            <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-dark-border-color dark:border-opacity-5">
+              <h3 className="text-lg font-medium text-gray-800 dark:text-white">
+                Edit Employee salary
+              </h3>
+
+              <button
+                className="text-gray-500 hover:text-gray-800"
+                onClick={() => setIsEditPopup(false)}
+              >
+                &times;
+              </button>
+            </div>
+            <div className="mt-4">
+              <EditPanel editSheet={editSheet} onClose={onClose} />
             </div>
           </div>
         </div>

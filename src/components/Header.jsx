@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CiBellOn, CiDark, CiLight } from "react-icons/ci";
 import { FiUser } from "react-icons/fi";
 import { IoIosPower } from "react-icons/io";
@@ -11,13 +11,13 @@ import { useGetbrandQuery, useGetUserQuery } from "../features/api";
 
 const Header = ({ darkModeHandler, darkMode }) => {
   const [show, setShow] = useState(false);
+  const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
   const { data: userData, isLoading, isError } = useGetUserQuery();
 
   const companyId = useSelector((state) => state.company.companyId);
 
-  
   const { data: brandDetails } = useGetbrandQuery(companyId);
 
   const handleToggle = () => {
@@ -38,6 +38,20 @@ const Header = ({ darkModeHandler, darkMode }) => {
       }
     }, [checkToken]);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShow(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="w-full bg-[#fff] py-2 xl:px-6 dark:bg-dark-card">
       <div className="flex flex-wrap items-center justify-between lg:wrapper-container xl:w-full">
@@ -72,7 +86,7 @@ const Header = ({ darkModeHandler, darkMode }) => {
           <div className="mr-2 flex h-[40px] w-[40px] flex-col items-center rounded-md bg-[#e9e9e961] dark:bg-dark-box">
             <IoChatbubbleOutline className="m-auto text-2xl text-[#0E1A34] dark:text-white" />
           </div>
-          <div className="relative">
+          <div className="relative" ref={dropdownRef}>
             {/* profile here  */}
 
             <div className="flex flex-wrap items-center">
