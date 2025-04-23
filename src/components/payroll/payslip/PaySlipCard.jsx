@@ -83,9 +83,9 @@ const PaySlipCard = () => {
     setSlipPreview({ employeeId, deviceId, companyId, month, year });
   };
 
-  const handleEditOpen = (employeeId, gen_date) => {
+  const handleEditOpen = (employeeId, id, gen_date, basic_salary) => {
     setIsEditPopup(true);
-    setEditSheet({ employeeId, gen_date });
+    setEditSheet({ employeeId, id, gen_date, basic_salary });
   };
 
   const {
@@ -226,7 +226,9 @@ const PaySlipCard = () => {
               onClick={() =>
                 handleEditOpen(
                   sheet?.Employee?.employeeId,
+                  sheet?.Employee?.id,
                   sheet?.generate_date,
+                  sheet?.basic_salary,
                 )
               }
             >

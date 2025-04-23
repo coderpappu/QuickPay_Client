@@ -19,8 +19,7 @@ const SalarySheet = ({ slipPreview }) => {
     { basic: getEmployeeSalary?.data?.generatedSalary?.basic_salary } || [],
     ...(getEmployeeSalary?.data?.generatedSalary?.allowance_salary_sheet || []),
     ...(getEmployeeSalary?.data?.generatedSalary?.overtime_salary_sheet || []),
-    ...(getEmployeeSalary?.data?.generatedSalary?.commission_salary_sheet ||
-      []),
+    ...(getEmployeeSalary?.data?.totalCommission || []),
     ...(getEmployeeSalary?.data?.generatedSalary?.other || []),
   ];
 
@@ -123,7 +122,9 @@ const SalarySheet = ({ slipPreview }) => {
                             ? "Overtime Salary"
                             : leftData.hour_rate
                               ? "Hourly Rate"
-                              : leftData.name || ""}
+                              : leftData.total_com
+                                ? "Commission"
+                                : leftData.name || ""}
                     </div>
 
                     <div className="border-r border-dark-card p-2">
@@ -131,7 +132,7 @@ const SalarySheet = ({ slipPreview }) => {
                         leftData.amount ||
                         (leftData.overtime_salary
                           ? Number(leftData.overtime_salary)
-                          : "0") ||
+                          : leftData.total_com) ||
                         leftData.name ||
                         ""}
                     </div>

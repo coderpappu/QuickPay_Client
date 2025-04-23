@@ -1,9 +1,10 @@
 import { ErrorMessage, Form, Formik } from "formik";
 import React from "react";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 import * as Yup from "yup";
+import { useCreateEmployeeCommissionMutation } from "../../features/api";
 import { InputBox, SelectOptionBox } from "../company/BrandInput";
-
 const commissionSchema = Yup.object().shape({
   totalSale: Yup.number().required("Total Sale is required"),
   commissionType: Yup.string().required("Commission type is required"),
@@ -11,18 +12,32 @@ const commissionSchema = Yup.object().shape({
 });
 
 const EditPanel = ({ editSheet }) => {
+  const [generateCommission] = useCreateEmployeeCommissionMutation();
+  const companyId = useSelector((state) => state.company.companyId);
+
+  //   employee basic salary
+  //   editSheet?.basic_salary
+
   const initialValues = {
     totalSale: editSheet?.totalSale || "",
     commissionType: editSheet?.commissionType || "PERCENTAGE",
     amount: editSheet?.amount || "",
+    companyId,
+    employee_id: editSheet?.id,
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {
+    let total_com = values.amount;
+
+    if (values.commissionType === "PERCENTAGE") {
+      total_com = (values?.totalSale * values.amount) / 100;
+    }
+
     try {
-      console.log("Submitted commission values:", values);
-      // Add API logic here
+      await generateCommission({ ...values, total_com });
       toast.success("Commission saved successfully!");
     } catch (error) {
+      console.log(error);
       toast.error("Failed to save commission.");
     } finally {
       setSubmitting(false);
