@@ -29,7 +29,6 @@ const SalarySheet = ({ slipPreview }) => {
     { LateSalary: getEmployeeSalary?.data?.lateDaySalary } || [],
   ];
 
-  console.log(rightside);
 
   return (
     <div className="mx-auto max-w-5xl rounded-md bg-white p-6 shadow-md dark:bg-dark-box">

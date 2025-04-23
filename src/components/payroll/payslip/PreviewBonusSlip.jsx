@@ -9,7 +9,6 @@ import {
 import { DateConverterFromUTC } from "../../../utils/Converter";
 
 const PreviewBonusSlip = ({ slipPreview }) => {
-  
   const companyId = useSelector((state) => state.company.companyId);
 
   const componentRef = useRef();
@@ -22,8 +21,6 @@ const PreviewBonusSlip = ({ slipPreview }) => {
 
   const handleDownloadPDF = async () => {
     const input = componentRef.current;
-
-    console.log(input);
 
     const pdf = new jsPDF("p", "mm", "a4");
     const pageWidth = pdf.internal.pageSize.getWidth();

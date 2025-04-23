@@ -3,7 +3,11 @@ import React from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
-import { useCreateEmployeeCommissionMutation } from "../../features/api";
+import {
+  useCreateEmployeeCommissionMutation,
+  useGetEmployeeCommissionListQuery,
+  useUpdateEmployeeCommissionMutation,
+} from "../../features/api";
 import { InputBox, SelectOptionBox } from "../company/BrandInput";
 const commissionSchema = Yup.object().shape({
   totalSale: Yup.number().required("Total Sale is required"),
@@ -13,17 +17,26 @@ const commissionSchema = Yup.object().shape({
 
 const EditPanel = ({ editSheet }) => {
   const [generateCommission] = useCreateEmployeeCommissionMutation();
+
+  const employee_id = editSheet?.id;
   const companyId = useSelector((state) => state.company.companyId);
+
+  const { data: employeeCommission } = useGetEmployeeCommissionListQuery({
+    employeeId: employee_id,
+    companyId,
+  });
+
+  const [updateCommission] = useUpdateEmployeeCommissionMutation();
 
   //   employee basic salary
   //   editSheet?.basic_salary
 
   const initialValues = {
-    totalSale: editSheet?.totalSale || "",
-    commissionType: editSheet?.commissionType || "PERCENTAGE",
-    amount: editSheet?.amount || "",
+    totalSale: employeeCommission?.data?.[0]?.total_sale || "",
+    commissionType: employeeCommission?.data?.[0]?.type || "PERCENTAGE",
+    amount: employeeCommission?.data?.[0]?.value || "",
     companyId,
-    employee_id: editSheet?.id,
+    employee_id,
   };
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -34,8 +47,20 @@ const EditPanel = ({ editSheet }) => {
     }
 
     try {
-      await generateCommission({ ...values, total_com });
-      toast.success("Commission saved successfully!");
+      if (employeeCommission?.data) {
+        await updateCommission({
+          id: employeeCommission?.data[0]?.id,
+          totalSale,
+          commissionType,
+          amount,
+          total_com: employeeCommission?.data?.[0]?.total_com,
+          employee_id,
+          company_id: companyId,
+        }).unwrap();
+      } else {
+        await generateCommission({ ...values, total_com });
+        toast.success("Commission saved successfully!");
+      }
     } catch (error) {
       console.log(error);
       toast.error("Failed to save commission.");
