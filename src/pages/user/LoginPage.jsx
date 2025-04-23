@@ -1,14 +1,16 @@
 import toast, { Toaster } from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import DashImg from "../../assets/dashboard-demo.png";
 import XceedLogo from "../../assets/xceed-bangladesh-logo.png";
 import LoginForm from "../../components/LoginForm";
 import { useLoginUserMutation } from "../../features/api";
+import { setUser } from "../../features/user/userSlice";
 
 const LoginPage = () => {
-
   const navigate = useNavigate();
-  
+  const dispatch = useDispatch();
+
   const [login, { error, isLoading }] = useLoginUserMutation();
 
   const handleLogin = async (email, password) => {
@@ -16,7 +18,8 @@ const LoginPage = () => {
       let { data } = await login({ email, password }).unwrap();
 
       localStorage.setItem("token", data?.accessToken);
-      
+      dispatch(setUser(data?.user));
+
       navigate("/");
     } catch (error) {
       toast.error(error.data.message);

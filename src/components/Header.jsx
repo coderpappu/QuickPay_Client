@@ -12,8 +12,12 @@ import { useGetbrandQuery, useGetUserQuery } from "../features/api";
 const Header = ({ darkModeHandler, darkMode }) => {
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
+
   const { data: userData, isLoading, isError } = useGetUserQuery();
+
   const companyId = useSelector((state) => state.company.companyId);
+
+  
   const { data: brandDetails } = useGetbrandQuery(companyId);
 
   const handleToggle = () => {

@@ -1,48 +1,34 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+
 import ProfileImg from "../../assets/profile-placeholder.png";
 import Button from "../../components/company/Button";
-import { useGetUserDetailsQuery } from "../../features/api";
 
 import ProfileSkeleton from "../../skeletons/ProfileSkeleton";
 import PasswordChange from "./PasswordChange";
 
+import { useGetUserQuery } from "../../features/api";
+
 const MainUserProfile = () => {
   const id = useParams()?.id;
 
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-  const companyId = useSelector((state) => state.company.companyId);
-
-  const onClose = () => {
-    setIsPopupOpen(false);
-  };
-
-  const handleOpen = (id = null) => {
-    setIsPopupOpen(true);
-  };
-
-  const { data: userData, isLoading, isError } = useGetUserDetailsQuery(id);
+  const { data: userData2, isLoading, isError } = useGetUserQuery();
 
   const [selected, setSelected] = useState("1");
-  // handle function for button state
+
   const handleSelect = (id) => {
     setSelected(id);
   };
 
-  let content;
-
   if (isLoading && !isError) return <ProfileSkeleton />;
 
-  if (!isLoading && isError) content = <p>Error fetching data</p>;
+  if (!isLoading && isError) return <p>Error fetching data</p>;
 
-  let userDetails = userData?.data;
+  const userDetails = userData2?.data;
 
   return (
     <div>
       <h2 className="dark:text-dark-heading-color"> User / Profile</h2>
-      <div className="flex flex-wrap justify-end gap-2"></div>
       <div className="mb-1 mt-5 flex w-full flex-wrap justify-between rounded-md bg-white p-5 dark:bg-dark-card">
         <div className="flex w-[50%] flex-wrap items-center justify-between">
           <div className="mr-4 w-[20%]">
@@ -65,10 +51,8 @@ const MainUserProfile = () => {
 
             <h3 className="mt-2 text-[15px] font-semibold text-[#3c3c3c] dark:text-dark-text-color">
               Phone : {userDetails?.phone}
-              {/* {city + ", " + country} */}
             </h3>
             <h3 className="text-[15px] font-medium text-[#686767] dark:text-dark-text-color">
-              {/* {`Website : ${website_url}`} */}
               Email : {userDetails?.email}
             </h3>
           </div>
