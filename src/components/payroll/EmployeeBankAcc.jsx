@@ -1,8 +1,12 @@
 import { BanIcon as BankIcon, PencilIcon, TrashIcon } from "lucide-react";
 import React, { useState } from "react";
-
+import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
-import { useGetEmployeeAccQuery } from "../../features/api";
+import {
+  useDeleteBankAccMutation,
+  useGetEmployeeAccQuery,
+} from "../../features/api";
+import ConfirmDialog from "../../helpers/ConfirmDialog";
 import BrandCardWrapper from "../company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../company/SettingCardHeader";
 import BankAccountForm from "./EmployeeBankForm";
@@ -19,7 +23,10 @@ const BankAccountCard = () => {
     data: employeeBankAcc,
     isError,
     isLoading,
+    error,
   } = useGetEmployeeAccQuery(employee_id);
+
+  const [deleteBankAcc] = useDeleteBankAccMutation();
 
   const onClose = () => {
     setIsPopupOpen(false);
@@ -35,10 +42,35 @@ const BankAccountCard = () => {
     setIsPopupOpen(true);
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you want to delete this bank account?")) {
-      setBankAccounts(bankAccounts.filter((account) => account.id !== id));
-    }
+  const handleDelete = async (id) => {
+    const confirm = () =>
+      toast(
+        (t) => (
+          <ConfirmDialog
+            onConfirm={async () => {
+              toast.dismiss(t.id);
+              try {
+                deleteBankAcc(id).then((res) => {
+                  if (res.error != null) {
+                    toast.error(res.error.data.message);
+                  } else {
+                    toast.success("Employee bank account deleted successfully");
+                  }
+                });
+              } catch (error) {
+                toast.error(error.message || "Failed to delete bonus");
+              }
+            }}
+            onCancel={() => toast.dismiss(t.id)}
+            title="Bank Account"
+          />
+        ),
+        {
+          duration: Infinity,
+        },
+      );
+
+    confirm();
   };
 
   let content;
@@ -54,7 +86,7 @@ const BankAccountCard = () => {
   if (!isLoading && isError) {
     content = (
       <div className="w-full p-4 text-center text-red-500">
-        {error?.message ||
+        {error?.data?.message ||
           "An error occurred while fetching bank account data."}
       </div>
     );

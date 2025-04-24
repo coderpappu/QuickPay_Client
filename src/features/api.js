@@ -1915,6 +1915,15 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["bank_acc_em"],
     }),
+
+    deleteBankAcc: builder.mutation({
+      query: (id) => ({
+        url: `/bank/acc-delete/${id}`,
+        method: "DELETE",
+        params: { id },
+      }),
+      invalidatesTags: ["bank_acc_em"],
+    }),
   }),
 });
 
@@ -2240,4 +2249,5 @@ export const {
   useGetBankAccDetailsQuery,
   useUpdateBankAccMutation,
   useGetEmployeeAccQuery,
+  useDeleteBankAccMutation,
 } = apiSlice;

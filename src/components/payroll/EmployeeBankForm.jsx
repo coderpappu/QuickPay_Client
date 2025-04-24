@@ -3,7 +3,10 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import * as Yup from "yup";
-import { useCreateEmployeeBankAccMutation } from "../../features/api";
+import {
+  useCreateEmployeeBankAccMutation,
+  useUpdateBankAccMutation,
+} from "../../features/api";
 import { InputBox, SelectOptionBox } from "../company/BrandInput";
 
 // Define initial validation schema
@@ -21,6 +24,8 @@ const validationSchema = Yup.object().shape({
 
 const BankAccountForm = ({ onClose, initialData }) => {
   const [createBankAcc] = useCreateEmployeeBankAccMutation();
+  const [updateBankAcc] = useUpdateBankAccMutation();
+
   const company_id = useSelector((state) => state.company.companyId);
   const { id: employee_id } = useParams();
 
@@ -51,8 +56,17 @@ const BankAccountForm = ({ onClose, initialData }) => {
   // Form submission handler
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      await createBankAcc({ ...values, company_id, employee_id });
-      toast.success("Bank Account submitted successfully");
+      if (!initialData) {
+        await createBankAcc({ ...values, company_id, employee_id }).unwrap();
+        toast.success("Bank Account created successfully");
+      }
+      await updateBankAcc({
+        ...values,
+        company_id,
+        employee_id,
+        acc_id: initialData?.id,
+      }).unwrap();
+      toast.success("Bank Account updated successfully");
       onClose();
     } catch (error) {
       toast.error("An error occurred while submitting the form.");
