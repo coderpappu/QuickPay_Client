@@ -1872,6 +1872,49 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["bonus_slip"],
     }),
+
+    // bank account setup ---
+    createEmployeeBankAcc: builder.mutation({
+      query: (credentials) => ({
+        url: "/bank/acc-create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["bank_acc_em"],
+    }),
+
+    getBankAccList: builder.query({
+      query: ({ companyId }) => ({
+        url: `/bank/acc-list`,
+        params: { companyId },
+      }),
+      providesTags: ["bank_acc_em"],
+    }),
+
+    getEmployeeAcc: builder.query({
+      query: ({ employee_id }) => ({
+        url: `/bank/acc-employee`,
+        params: { employee_id },
+      }),
+      providesTags: ["bank_acc_em"],
+    }),
+
+    getBankAccDetails: builder.query({
+      query: (id) => ({
+        url: `/bank/account/${id}`,
+        params: { id },
+      }),
+      providesTags: ["bonus"],
+    }),
+
+    updateBankAcc: builder.mutation({
+      query: ({ acc_id, ...credentials }) => ({
+        url: `/bank/acc-update/${acc_id}`,
+        method: "PUT",
+        body: credentials,
+      }),
+      invalidatesTags: ["bank_acc_em"],
+    }),
   }),
 });
 
@@ -2190,4 +2233,11 @@ export const {
   useDeleteBonusSlipMutation,
   useUpdateBonusSlipMutation,
   useUpdateBonusBulkMutation,
+
+  // bank account details
+  useCreateEmployeeBankAccMutation,
+  useGetBankAccListQuery,
+  useGetBankAccDetailsQuery,
+  useUpdateBankAccMutation,
+  useGetEmployeeAccQuery,
 } = apiSlice;

@@ -1,29 +1,25 @@
 import { BanIcon as BankIcon, PencilIcon, TrashIcon } from "lucide-react";
 import React, { useState } from "react";
 
+import { useParams } from "react-router-dom";
+import { useGetEmployeeAccQuery } from "../../features/api";
 import BrandCardWrapper from "../company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../company/SettingCardHeader";
 import BankAccountForm from "./EmployeeBankForm";
 // Mock data - replace with actual API integration
-const mockBankAccounts = [
-  {
-    id: 1,
-    branchName: "Gulshan Branch",
-    routingNumber: "160274589",
-    accountNumber: "1005789456123",
-    accountName: "Mohammad Rahman",
-    bankName: "Dutch-Bangla Bank Ltd.",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Dutch-bangla-bank-ltd.svg/1200px-Dutch-bangla-bank-ltd.svg.png",
-    isActive: true,
-  },
-];
+const mockBankAccounts = [];
 
 const BankAccountCard = () => {
+  const { id: employee_id } = useParams();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [bankAccounts, setBankAccounts] = useState(mockBankAccounts);
+
   const [selectedAccount, setSelectedAccount] = useState(null);
+
+  const {
+    data: employeeBankAcc,
+    isError,
+    isLoading,
+  } = useGetEmployeeAccQuery(employee_id);
 
   const onClose = () => {
     setIsPopupOpen(false);
@@ -45,10 +41,6 @@ const BankAccountCard = () => {
     }
   };
 
-  // Replace with your actual loading and error states
-  const isLoading = loading;
-  const isError = !!error;
-
   let content;
 
   if (isLoading && !isError) {
@@ -68,32 +60,32 @@ const BankAccountCard = () => {
     );
   }
 
-  if (!isLoading && !isError && bankAccounts?.length > 0) {
-    content = bankAccounts.map((bankAccount) => (
+  if (!isLoading && !isError && employeeBankAcc?.data.length > 0) {
+    content = employeeBankAcc?.data?.map((bankAccount) => (
       <div
         key={bankAccount.id}
         className="group relative mb-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
       >
         <div className="flex items-start space-x-4">
-          <div className="flex-shrink-0">
+          {/* <div className="flex-shrink-0">
             <div className="h-12 w-12 overflow-hidden rounded-lg">
               <img
-                src={bankAccount.logo}
-                alt={bankAccount.bankName}
+                src={bankAccount?.logo}
+                alt={bankAccount?.bank_acc_no}
                 className="h-full w-full object-cover"
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="flex-grow">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {bankAccount.bankName}
-                {bankAccount.isActive && (
+                {bankAccount?.bank_name}
+                {/* {bankAccount.isActive && (
                   <span className="ml-2 inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900 dark:text-green-100">
                     Active
                   </span>
-                )}
+                )} */}
               </h3>
               <div className="flex items-center space-x-2 opacity-0 transition-opacity group-hover:opacity-100">
                 <button
@@ -117,7 +109,7 @@ const BankAccountCard = () => {
                   Branch
                 </p>
                 <p className="mt-1 text-sm text-gray-900 dark:text-white">
-                  {bankAccount.branchName}
+                  {bankAccount?.branch_name}
                 </p>
               </div>
 
@@ -126,7 +118,7 @@ const BankAccountCard = () => {
                   Account Name
                 </p>
                 <p className="mt-1 text-sm text-gray-900 dark:text-white">
-                  {bankAccount.accountName}
+                  {bankAccount?.employee?.name}
                 </p>
               </div>
 
@@ -135,7 +127,7 @@ const BankAccountCard = () => {
                   Account Number
                 </p>
                 <p className="mt-1 font-mono text-sm text-gray-900 dark:text-white">
-                  {bankAccount.accountNumber}
+                  {bankAccount.bank_acc_no}
                 </p>
               </div>
 
@@ -144,7 +136,7 @@ const BankAccountCard = () => {
                   Routing Number
                 </p>
                 <p className="mt-1 font-mono text-sm text-gray-900 dark:text-white">
-                  {bankAccount.routingNumber}
+                  {bankAccount.routing_no}
                 </p>
               </div>
             </div>
@@ -155,7 +147,7 @@ const BankAccountCard = () => {
   } else if (
     !isLoading &&
     !isError &&
-    (!bankAccounts || bankAccounts.length === 0)
+    (!employeeBankAcc || employeeBankAcc?.data.length === 0)
   ) {
     content = (
       <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-8 text-center dark:border-gray-700">
