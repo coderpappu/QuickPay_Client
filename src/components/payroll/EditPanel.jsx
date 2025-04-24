@@ -9,6 +9,7 @@ import {
   useUpdateEmployeeCommissionMutation,
 } from "../../features/api";
 import { InputBox, SelectOptionBox } from "../company/BrandInput";
+
 const commissionSchema = Yup.object().shape({
   totalSale: Yup.number().required("Total Sale is required"),
   commissionType: Yup.string().required("Commission type is required"),
@@ -50,13 +51,13 @@ const EditPanel = ({ editSheet }) => {
       if (employeeCommission?.data) {
         await updateCommission({
           id: employeeCommission?.data[0]?.id,
-          totalSale,
-          commissionType,
-          amount,
-          total_com: employeeCommission?.data?.[0]?.total_com,
           employee_id,
           company_id: companyId,
+          ...values,
+          total_com,
         }).unwrap();
+
+        toast.success("Commission updated successfully!");
       } else {
         await generateCommission({ ...values, total_com });
         toast.success("Commission saved successfully!");
