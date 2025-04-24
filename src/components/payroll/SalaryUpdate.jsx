@@ -2,8 +2,8 @@ import React from "react";
 
 import BasicSalaryCard from "./BasicSalaryCard";
 import EmployeeAllowanceCard from "./EmployeeAllowanceCard";
+import BankAccountCard from "./EmployeeBankAcc";
 import EmployeeBonusCard from "./EmployeeBonusCard";
-import EmployeeCommissionCard from "./EmployeeCommissionCard";
 import EmployeeDeductionCard from "./EmployeeDeductionCard";
 import EmployeeOverTimeCard from "./EmployeeOverTimeCard";
 import EmployeeOverTimeSettingCard from "./EmployeeOvertimeSwitch";
@@ -11,12 +11,12 @@ import EmployeeOverTimeSettingCard from "./EmployeeOvertimeSwitch";
 const SalaryUpdate = () => {
   return (
     <div>
-      <div className="flex flex-wrap gap-2 space-y-3">
+      <div className="flex flex-wrap gap-2">
         <div className="w-[49%]">
           <BasicSalaryCard />
         </div>
         <div className="w-[49%]">
-          <EmployeeCommissionCard />
+          <EmployeeBonusCard />
         </div>
 
         <div className="w-[49%]">
@@ -25,15 +25,16 @@ const SalaryUpdate = () => {
         <div className="w-[49%]">
           <EmployeeAllowanceCard />
         </div>
-        <div className="w-[49%]">
-          <EmployeeBonusCard />
-        </div>
 
         <div className="w-[49%]">
           <EmployeeOverTimeCard />
         </div>
         <div className="w-[49%]">
           <EmployeeOverTimeSettingCard />
+        </div>
+
+        <div className="w-[100%]">
+          <BankAccountCard />
         </div>
       </div>
     </div>
