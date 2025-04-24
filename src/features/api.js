@@ -1631,7 +1631,7 @@ export const apiSlice = createApi({
         url: `/salarysetting/getemployeesalary`,
         params: { employeeId, deviceId, companyId, month, year },
       }),
-      providesTags: ["employeesalarysheet"],
+      providesTags: ["employeesalarysheet", "employee_Commission"],
     }),
 
     bulkEmployeePayment: builder.mutation({

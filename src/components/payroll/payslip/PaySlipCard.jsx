@@ -78,6 +78,10 @@ const PaySlipCard = () => {
     setIsPopupOpen(false);
   };
 
+  const onEditClose = () => {
+    setIsEditPopup(false);
+  };
+
   const handleOpen = (employeeId, deviceId, companyId, month, year) => {
     setIsPopupOpen(true);
     setSlipPreview({ employeeId, deviceId, companyId, month, year });
@@ -195,7 +199,7 @@ const PaySlipCard = () => {
               {sheet?.status}{" "}
             </button>
           </div>
-          <div className="w-[30%] dark:text-white">
+          <div className="w-[35%] dark:text-white">
             <button
               className="mx-2 rounded-md bg-yellow-500 px-4 py-2"
               onClick={() =>
@@ -232,7 +236,7 @@ const PaySlipCard = () => {
                 )
               }
             >
-              Edit
+              Commission
             </button>
             <button
               className="mx-2 rounded-md bg-green-500 px-4 py-2"
@@ -375,7 +379,7 @@ const PaySlipCard = () => {
               <div className="w-[7%] text-center dark:text-white">
                 <h3>Status </h3>
               </div>
-              <div className="w-[30%] dark:text-white">
+              <div className="w-[35%] dark:text-white">
                 <h3>Action </h3>
               </div>
             </div>
@@ -412,7 +416,7 @@ const PaySlipCard = () => {
           <div className="w-full max-w-3xl rounded-lg bg-white p-6 dark:bg-dark-card">
             <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-dark-border-color dark:border-opacity-5">
               <h3 className="text-lg font-medium text-gray-800 dark:text-white">
-                Edit Employee salary
+                Add Commission
               </h3>
 
               <button
@@ -423,7 +427,7 @@ const PaySlipCard = () => {
               </button>
             </div>
             <div className="mt-4">
-              <EditPanel editSheet={editSheet} onClose={onClose} />
+              <EditPanel editSheet={editSheet} onEditClose={onEditClose} />
             </div>
           </div>
         </div>

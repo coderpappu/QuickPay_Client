@@ -5,9 +5,11 @@ import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
   useCreateEmployeeCommissionMutation,
+  useDeleteEmployeeCommissionMutation,
   useGetEmployeeCommissionListQuery,
   useUpdateEmployeeCommissionMutation,
 } from "../../features/api";
+import ConfirmDialog from "../../helpers/ConfirmDialog";
 import { InputBox, SelectOptionBox } from "../company/BrandInput";
 
 const commissionSchema = Yup.object().shape({
@@ -16,7 +18,7 @@ const commissionSchema = Yup.object().shape({
   amount: Yup.number().required("Amount is required"),
 });
 
-const EditPanel = ({ editSheet }) => {
+const EditPanel = ({ editSheet, onEditClose }) => {
   const [generateCommission] = useCreateEmployeeCommissionMutation();
 
   const employee_id = editSheet?.id;
@@ -29,8 +31,7 @@ const EditPanel = ({ editSheet }) => {
 
   const [updateCommission] = useUpdateEmployeeCommissionMutation();
 
-  //   employee basic salary
-  //   editSheet?.basic_salary
+  const [deleteCommission] = useDeleteEmployeeCommissionMutation();
 
   const initialValues = {
     totalSale: employeeCommission?.data?.[0]?.total_sale || "",
@@ -58,16 +59,48 @@ const EditPanel = ({ editSheet }) => {
         }).unwrap();
 
         toast.success("Commission updated successfully!");
+        onEditClose();
       } else {
         await generateCommission({ ...values, total_com });
         toast.success("Commission saved successfully!");
+        onEditClose();
       }
     } catch (error) {
-      console.log(error);
       toast.error("Failed to save commission.");
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleDeleteCommission = async (id) => {
+    const confirm = () =>
+      toast(
+        (t) => (
+          <ConfirmDialog
+            onConfirm={async () => {
+              toast.dismiss(t.id);
+              try {
+                deleteCommission(id).then((res) => {
+                  if (res.error != null) {
+                    toast.error(res.error.data.message);
+                  } else {
+                    toast.success("Employee Commission deleted successfully");
+                  }
+                });
+              } catch (error) {
+                toast.error(error.message || "Failed to delete Commission");
+              }
+            }}
+            onCancel={() => toast.dismiss(t.id)}
+            title="Commission"
+          />
+        ),
+        {
+          duration: Infinity,
+        },
+      );
+    onEditClose();
+    confirm();
   };
 
   return (
@@ -131,13 +164,23 @@ const EditPanel = ({ editSheet }) => {
               </div>
 
               {/* Submit Button */}
-              <div className="flex justify-end">
+              <div className="flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleDeleteCommission(employeeCommission?.data[0]?.id)
+                  }
+                  disabled={!employeeCommission?.data[0]?.id}
+                  className="rounded-sm bg-red-500 px-4 py-2 text-sm text-white hover:bg-red-600 disabled:cursor-not-allowed disabled:bg-red-300"
+                >
+                  Delete
+                </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
+                  className="rounded-sm bg-green-500 px-4 py-2 text-sm text-white hover:bg-green-600"
                 >
-                  Save Commission
+                  Save
                 </button>
               </div>
             </Form>
