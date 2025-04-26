@@ -55,23 +55,30 @@ const BankAccountForm = ({ onClose, initialData }) => {
 
   // Form submission handler
   const handleSubmit = async (values, { setSubmitting }) => {
-    try {
-      if (!initialData) {
+    if (!initialData) {
+      try {
         await createBankAcc({ ...values, company_id, employee_id }).unwrap();
         toast.success("Bank Account created successfully");
+        onClose();
+      } catch (error) {
+        toast.error("An error occurred while submitting the form.");
+      } finally {
+        setSubmitting(false);
       }
-      await updateBankAcc({
-        ...values,
-        company_id,
-        employee_id,
-        acc_id: initialData?.id,
-      }).unwrap();
-      toast.success("Bank Account updated successfully");
-      onClose();
-    } catch (error) {
-      toast.error("An error occurred while submitting the form.");
-    } finally {
-      setSubmitting(false);
+    }
+    if (initialData) {
+      try {
+        await updateBankAcc({
+          ...values,
+          company_id,
+          employee_id,
+          acc_id: initialData?.id,
+        }).unwrap();
+        toast.success("Bank Account updated successfully");
+        onClose();
+      } catch (error) {
+        toast.error("An error occurred while submitting the form.");
+      }
     }
   };
 

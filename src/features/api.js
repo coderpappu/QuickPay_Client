@@ -1892,7 +1892,7 @@ export const apiSlice = createApi({
     }),
 
     getEmployeeAcc: builder.query({
-      query: ({ employee_id }) => ({
+      query: (employee_id) => ({
         url: `/bank/acc-employee`,
         params: { employee_id },
       }),
@@ -1900,9 +1900,9 @@ export const apiSlice = createApi({
     }),
 
     getBankAccDetails: builder.query({
-      query: (id) => ({
-        url: `/bank/account/${id}`,
-        params: { id },
+      query: (employee_id) => ({
+        url: `/bank/account/${employee_id}`,
+        params: { employee_id },
       }),
       providesTags: ["bonus"],
     }),
