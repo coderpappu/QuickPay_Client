@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { CSVLink } from "react-csv";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import * as XLSX from "xlsx";
 import {
   useBulkEmployeePaymentMutation,
   useDeleteSalarySheetMutation,
@@ -26,7 +26,6 @@ const PaySlipCard = () => {
 
   const [slipPreview, setSlipPreview] = useState("");
   const [editSheet, setEditSheet] = useState("");
-  const [csvData, setCsvData] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isEditPopup, setIsEditPopup] = useState(false);
 
@@ -65,11 +64,8 @@ const PaySlipCard = () => {
     useGeneratedEmployeeSalaryBulkMutation();
 
   useEffect(() => {
-    // Get the current month and year
     const currentMonth = String(new Date().getMonth() + 1).padStart(2, "0");
     const currentYear = String(new Date().getFullYear());
-
-    // Set them as default values
     setMonth(currentMonth);
     setYear(currentYear);
   }, []);
@@ -103,17 +99,14 @@ const PaySlipCard = () => {
     year,
   });
 
-  // Handle month change
   const handleMonthChange = (event) => {
     setMonth(event.target.value);
   };
 
-  // Handle year change
   const handleYearChange = (event) => {
     setYear(event.target.value);
   };
 
-  // Handle generate salary button click
   const handleGenerateSalary = async () => {
     if (!month || !year) {
       alert("Please select both month and year.");
@@ -126,7 +119,6 @@ const PaySlipCard = () => {
     }));
 
     try {
-      // Call the mutation to generate bulk salary
       await generateBulkSalary({
         employeeIds,
         month,
@@ -139,120 +131,130 @@ const PaySlipCard = () => {
     }
   };
 
-  // Handle export to CSV
-  const handleExport = () => {
-    const csvData = employeeSalarySheet?.data?.map((sheet) => ({
-      EmployeeId: sheet?.Employee?.employeeId,
+  const handleExportToExcel = () => {
+    if (!employeeSalarySheet?.data?.length) {
+      toast.error("No data to export");
+      return;
+    }
+
+    const excelData = employeeSalarySheet.data.map((sheet) => ({
+      "Employee ID": sheet?.Employee?.employeeId,
       Name: sheet?.Employee?.name,
-      OverTime: Math.round(sheet?.overtime_salary_sheet?.[0]?.overtime_salary),
-      Allowance: sheet?.allowance_salary_sheet?.[0]?.amount,
-      Deduction: sheet?.deduction_salary_sheet?.[0]?.amount,
-      Commission: sheet?.commission_salary_sheet?.[0]?.amount,
-      NetSalary: sheet?.net_salary,
+      "Bank Name": sheet?.Employee?.EmployeeBankAcc[0]?.bank_name || "",
+      "Bank Branch": sheet?.Employee?.EmployeeBankAcc[0]?.branch_name || "",
+      "Account No": sheet?.Employee?.EmployeeBankAcc[0]?.bank_acc_no || "",
+      "Routing No": sheet?.Employee?.EmployeeBankAcc[0]?.routing_no || "",
+      // "Basic Salary": sheet?.basic_salary || 0,
+      // Overtime:
+      //   Math.round(sheet?.overtime_salary_sheet?.[0]?.overtime_salary) || 0,
+      // Allowance: sheet?.allowance_salary_sheet?.[0]?.amount || 0,
+      // Deduction: sheet?.deduction_salary_sheet?.[0]?.amount || 0,
+      "Net Salary": sheet?.netSalary || 0,
       Status: sheet?.status,
     }));
-    setCsvData(csvData);
+
+    const ws = XLSX.utils.json_to_sheet(excelData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Salary Sheet");
+
+    // Generate file name with month and year
+    const fileName = `salary_sheet_${month}_${year}.xlsx`;
+
+    // Save the file
+    XLSX.writeFile(wb, fileName);
   };
 
   let content;
 
   if (isLoading) return <ListSkeleton />;
 
-  if (
-    !employeeSalarySheet ||
-    !employeeSalarySheet.data ||
-    employeeSalarySheet?.data.length === 0
-  )
+  if (!employeeSalarySheet?.data?.length) {
     content = <ErrorMessage message="No salary sheet found!" />;
+  }
 
   if (isSheetLoding && !isSheetError) return <ListSkeleton />;
 
   if (isSheetError) return <ErrorMessage message={sheetError?.data?.message} />;
 
-  if (employeeSalarySheet?.data.length !== 0)
-    content = employeeSalarySheet?.data?.map((sheet) => (
-      <>
-        {" "}
-        <div className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10">
-          <div className="w-[10%] dark:text-white">
-            <h3>{sheet?.Employee?.employeeId}</h3>
-          </div>
-          <div className="w-[10%] dark:text-white">
-            <h3>{sheet?.Employee?.name}</h3>
-          </div>
-          <div className="w-[10%] dark:text-white">
-            <h3>
-              {Math.round(sheet?.overtime_salary_sheet?.[0]?.overtime_salary) ||
-                "00"}
-            </h3>
-          </div>
-          <div className="w-[10%] dark:text-white">
-            <h3>{sheet?.allowance_salary_sheet?.[0]?.amount || "00"}</h3>
-          </div>
-          <div className="w-[10%] dark:text-white">
-            <h3>{sheet?.deduction_salary_sheet?.[0]?.amount || "00"}</h3>
-          </div>
-          <div className="w-[7%] text-center dark:text-white">
-            <button
-              className={`w-24 border px-4 py-2 ${sheet?.status !== "Unpaid" ? "border-green-400 text-green-400" : "border-yellow-400 text-yellow-400"} mx-2 rounded-md`}
-            >
-              {sheet?.status}{" "}
-            </button>
-          </div>
-          <div className="w-[35%] dark:text-white">
-            <button
-              className="mx-2 rounded-md bg-yellow-500 px-4 py-2"
-              onClick={() =>
-                handleOpen(
-                  sheet?.Employee?.id,
-                  sheet?.Employee?.deviceUserId,
-                  companyId,
-                  month,
-                  year,
-                )
-              }
-            >
-              Payslip
-            </button>
-            <button
-              className="mx-2 rounded-md bg-purple-700 px-4 py-2"
-              onClick={() =>
-                handleUpdateSalarySheet(
-                  sheet?.Employee?.id,
-                  sheet?.generate_date,
-                )
-              }
-            >
-              Click To Paid
-            </button>
-            <button
-              className="mx-2 rounded-md bg-blue-500 px-4 py-2"
-              onClick={() =>
-                handleEditOpen(
-                  sheet?.Employee?.employeeId,
-                  sheet?.Employee?.id,
-                  sheet?.generate_date,
-                  sheet?.basic_salary,
-                )
-              }
-            >
-              Commission
-            </button>
-            <button
-              className="mx-2 rounded-md bg-green-500 px-4 py-2"
-              onClick={() =>
-                handleDeleteSalarySheet(
-                  sheet?.Employee?.id,
-                  sheet?.generate_date,
-                )
-              }
-            >
-              Delete
-            </button>
-          </div>
+  if (employeeSalarySheet?.data?.length) {
+    content = employeeSalarySheet.data.map((sheet) => (
+      <div
+        key={sheet.Employee.id}
+        className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
+      >
+        <div className="w-[10%] dark:text-white">
+          <h3>{sheet?.Employee?.employeeId}</h3>
         </div>
-      </>
+        <div className="w-[10%] dark:text-white">
+          <h3>{sheet?.Employee?.name}</h3>
+        </div>
+        <div className="w-[10%] dark:text-white">
+          <h3>
+            {Math.round(sheet?.overtime_salary_sheet?.[0]?.overtime_salary) ||
+              "00"}
+          </h3>
+        </div>
+        <div className="w-[10%] dark:text-white">
+          <h3>{sheet?.allowance_salary_sheet?.[0]?.amount || "00"}</h3>
+        </div>
+        <div className="w-[10%] dark:text-white">
+          <h3>{sheet?.deduction_salary_sheet?.[0]?.amount || "00"}</h3>
+        </div>
+        <div className="w-[7%] text-center dark:text-white">
+          <button
+            className={`w-24 border px-4 py-2 ${sheet?.status !== "Unpaid" ? "border-green-400 text-green-400" : "border-yellow-400 text-yellow-400"} mx-2 rounded-md`}
+          >
+            {sheet?.status}
+          </button>
+        </div>
+        <div className="w-[35%] dark:text-white">
+          <button
+            className="mx-2 rounded-md bg-yellow-500 px-4 py-2"
+            onClick={() =>
+              handleOpen(
+                sheet?.Employee?.id,
+                sheet?.Employee?.deviceUserId,
+                companyId,
+                month,
+                year,
+              )
+            }
+          >
+            Payslip
+          </button>
+          <button
+            className="mx-2 rounded-md bg-purple-700 px-4 py-2"
+            onClick={() =>
+              handleUpdateSalarySheet(sheet?.Employee?.id, sheet?.generate_date)
+            }
+          >
+            Pay
+          </button>
+          <button
+            className="mx-2 rounded-md bg-blue-500 px-4 py-2"
+            onClick={() =>
+              handleEditOpen(
+                sheet?.Employee?.employeeId,
+                sheet?.Employee?.id,
+                sheet?.generate_date,
+                sheet?.basic_salary,
+              )
+            }
+          >
+            Commission
+          </button>
+          <button
+            className="mx-2 rounded-md bg-green-500 px-4 py-2"
+            onClick={() =>
+              handleDeleteSalarySheet(sheet?.Employee?.id, sheet?.generate_date)
+            }
+          >
+            Delete
+          </button>
+        </div>
+      </div>
     ));
+  }
 
   return (
     <div>
@@ -338,14 +340,12 @@ const PaySlipCard = () => {
                 <option value="2025">2025</option>
               </select>
 
-              <CSVLink
-                data={csvData}
-                filename={`salary_sheet_${month}_${year}.csv`}
+              <button
+                onClick={handleExportToExcel}
                 className="rounded-md bg-blue-500 px-3 py-3 text-white"
-                onClick={handleExport}
               >
                 Export
-              </CSVLink>
+              </button>
 
               <button
                 className="rounded-md bg-blue-500 px-3 py-3 text-white"
@@ -356,20 +356,16 @@ const PaySlipCard = () => {
             </div>
           </div>
           <div className="px-6 py-3">
-            {/* header  */}
             <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
               <div className="w-[10%] dark:text-white">
                 <h3>Employee Id</h3>
               </div>
-
               <div className="w-[10%] dark:text-white">
                 <h3>Name</h3>
               </div>
-
               <div className="w-[10%] dark:text-white">
                 <h3>OverTime</h3>
               </div>
-
               <div className="w-[10%] dark:text-white">
                 <h3>Allowance</h3>
               </div>
@@ -377,18 +373,18 @@ const PaySlipCard = () => {
                 <h3>Deduction</h3>
               </div>
               <div className="w-[7%] text-center dark:text-white">
-                <h3>Status </h3>
+                <h3>Status</h3>
               </div>
               <div className="w-[35%] dark:text-white">
-                <h3>Action </h3>
+                <h3>Action</h3>
               </div>
             </div>
 
-            {/* body  */}
             {content}
           </div>
         </BrandCardWrapper>
       </div>
+
       {isPopupOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-full max-w-5xl rounded-lg bg-white p-6 dark:bg-dark-card">
@@ -396,7 +392,6 @@ const PaySlipCard = () => {
               <h3 className="text-lg font-medium text-gray-800 dark:text-white">
                 Payslip
               </h3>
-
               <button
                 className="text-gray-500 hover:text-gray-800"
                 onClick={() => setIsPopupOpen(false)}
@@ -418,7 +413,6 @@ const PaySlipCard = () => {
               <h3 className="text-lg font-medium text-gray-800 dark:text-white">
                 Add Commission
               </h3>
-
               <button
                 className="text-gray-500 hover:text-gray-800"
                 onClick={() => setIsEditPopup(false)}
