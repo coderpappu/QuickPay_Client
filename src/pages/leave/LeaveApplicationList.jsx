@@ -1,109 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { PiEyeLight } from "react-icons/pi";
+import BrandCardWrapper from "../../components/company/BrandCardWrapper";
+import { HrmSetupCardHeader } from "../../components/company/SettingCardHeader";
+import {
+  useDeleteApplicationMutation,
+  useGetAllLeaveApplicationQuery,
+} from "../../features/api";
+
+import { useState } from "react";
+import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-  useGetAllLeaveApplicationQuery,
-  useUpdateLeaveApplicationMutation,
-} from "../../features/api";
-import ListSkeleton from "../../skeletons/ListSkeleton";
-import DatePicker, { convertToTimeZone } from "../../utils/DatePicker";
+import LeaveApplicationForm from "../../components/hrm/Leave/LeaveApplicationForm";
+import ConfirmDialog from "../../helpers/ConfirmDialog";
+import CardSkeleton from "../../skeletons/card";
+import { DateConverterFromUTC } from "../../utils/Converter";
 import ErrorMessage from "../../utils/ErrorMessage";
-// Modal Component
-// eslint-disable-next-line react/prop-types
-const Modal = ({ isOpen, onClose, onSave, leaveData, setLeaveData }) => {
-  if (!isOpen) return null;
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setLeaveData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="w-96 rounded-md bg-white p-5 dark:bg-dark-card">
-        <h3 className="mb-4 text-xl font-semibold dark:text-dark-heading-color">
-          Edit Leave Application
-        </h3>
-        <form>
-          <div className="mb-4">
-            <label className="block text-sm font-medium dark:text-light-bg">
-              Status
-            </label>
-            <select
-              name="status"
-              value={leaveData.status}
-              onChange={handleChange}
-              className="mt-2 h-10 w-full rounded-md border border-dark-box border-opacity-5 p-2 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
-            >
-              <option value="PENDING">PENDING</option>
-              <option value="APPROVED">APPROVED</option>
-              <option value="REJECTED">REJECTED</option>
-            </select>
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium dark:text-light-bg">
-              Paid Status
-            </label>
-            <select
-              name="paid_status"
-              value={leaveData.paid_status}
-              onChange={handleChange}
-              className="mt-2 h-10 w-full rounded-md border border-dark-box border-opacity-5 p-2 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
-            >
-              <option value="PAID">PAID</option>
-              <option value="UNPAID">UNPAID</option>
-            </select>
-          </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium dark:text-light-bg">
-              Note
-            </label>
-            <textarea
-              name="note"
-              value={leaveData.note}
-              onChange={handleChange}
-              className="mt-2 h-10 w-full rounded-md border border-dark-box border-opacity-5 p-2 px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
-            />
-          </div>
-          <div className="flex justify-end">
-            <button
-              type="button"
-              className="mr-2 rounded-md bg-gray-200 px-4 py-2"
-              onClick={onClose}
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              className="rounded-md bg-[#3686FF] px-4 py-2 text-white"
-              onClick={onSave}
-            >
-              Save
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-};
-
-const LeaveApplicationList = () => {
-  const [editRow, setEditRow] = useState(null); // Row being edited
-  const [modalOpen, setModalOpen] = useState(false); // Modal visibility
-
-  const [leaveData, setLeaveData] = useState({
-    status: "",
-    paid_status: "",
-    note: "",
-  });
-
+const LeaveApplicationListCard = () => {
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
+  const [selectId, setSelectId] = useState(null);
   const companyId = useSelector((state) => state.company.companyId);
+  const [deleteLeaveApplication] = useDeleteApplicationMutation();
 
-  const [applicationUpdate] = useUpdateLeaveApplicationMutation();
-
+  const handleOpen = (id) => {
+    setIsPopupOpen(true);
+    setSelectId(id);
+  };
   const {
     data: leaveApplicationList,
     isLoading,
@@ -113,30 +37,9 @@ const LeaveApplicationList = () => {
 
   let content;
 
-  if (isLoading && !isError) content = <ListSkeleton />;
+  if (isLoading && !isError) return <CardSkeleton />;
   if (!isLoading && isError)
     content = <ErrorMessage message={error?.data?.message} />;
-
-  const openModal = (leave) => {
-    setLeaveData({
-      status: leave.status,
-      paid_status: leave.paid_status,
-      note: leave.note || "",
-    });
-    setEditRow(leave.id);
-    setModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setModalOpen(false);
-    setEditRow(null);
-  };
-
-  const saveLeaveData = async () => {
-    await applicationUpdate({ id: editRow, ...leaveData });
-    setModalOpen(false);
-    setEditRow(null);
-  };
 
   const statusColorHandler = (status) => {
     switch (status) {
@@ -151,54 +54,111 @@ const LeaveApplicationList = () => {
     }
   };
 
+  const handleDeleteApplication = async (applicationId) => {
+    const confirm = () =>
+      toast(
+        (t) => (
+          <ConfirmDialog
+            title="application"
+            onConfirm={async () => {
+              toast.dismiss(t.applicationId);
+              try {
+                await deleteLeaveApplication(applicationId).then((res) => {
+                  if (res.error != null) {
+                    toast.error(res.error.data.message);
+                  } else {
+                    toast.success("Application deleted successfully");
+                  }
+                });
+              } catch (error) {
+                toast.error(error.message || "Failed to delete company");
+              }
+            }}
+            onCancel={() => toast.dismiss(t.applicationId)}
+          />
+        ),
+        {
+          duration: Infinity,
+        },
+      );
+
+    confirm();
+  };
+
   if (!isLoading && !isError) {
     content = (
       <>
-        {leaveApplicationList?.data?.map((leave, index) => (
-          <tr
-            key={leave?.id}
-            className={index % 2 === 0 ? "" : "rounded-sm bg-gray-50"}
+        {leaveApplicationList?.data?.map((application, index) => (
+          <div
+            key={application?.id}
+            className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
           >
-            <td className="py-2 text-sm">{++index}</td>
-            <td className="py-2 text-sm">{leave?.LeaveType?.name}</td>
-            <td className="py-2 text-sm">{DatePicker(leave?.created_at)}</td>
-            <td className="py-2 text-sm">
-              {convertToTimeZone(leave?.start_date)}
-            </td>
-            <td className="py-2 text-sm">
-              {convertToTimeZone(leave?.end_date)}
-            </td>
-            <td className="py-2 text-sm">{leave?.leaveDuration}</td>
-            <td className="py-2 text-sm">{leave?.reason}</td>
-            <td className="py-2 text-sm">{leave?.paid_status}</td>
-            <td className="py-2 text-sm">{leave?.note || "..."}</td>
-            <td className="py-2 text-sm">Manager</td>
-            <td className="flex-wrap items-center justify-center py-2 text-sm">
+            <div className="w-[3%] dark:text-white">
+              <h3>{++index}</h3>
+            </div>
+
+            <div className="w-[8%] dark:text-white">
+              <h3>{application.LeaveType?.name}</h3>
+            </div>
+
+            <div className="w-[7%] dark:text-white">
+              <h3>{DateConverterFromUTC(application?.created_at)}</h3>
+            </div>
+
+            <div className="w-[7%] dark:text-white">
+              <h3>{DateConverterFromUTC(application?.start_date)}</h3>
+            </div>
+
+            <div className="w-[7%] dark:text-white">
+              <h3>{DateConverterFromUTC(application?.end_date)}</h3>
+            </div>
+            <div className="w-[5%] dark:text-white">
+              <h3>{application?.leaveDuration}</h3>
+            </div>
+            <div className="w-[8%] dark:text-white">
+              <h3>{application?.reason}</h3>
+            </div>
+
+            <div className="w-[7%] dark:text-white">
+              <h3>{application?.paid_status}</h3>
+            </div>
+            <div className="w-[10%] dark:text-white">
+              <h3>{application?.note || "..."}</h3>
+            </div>
+            <div className="w-[8%] dark:text-white">
+              <h3>Manager</h3>
+            </div>
+            <div className="w-[8%] dark:text-white">
               <div
-                className={` ${statusColorHandler(leave.status)} m-auto w-32 rounded-full px-1 py-2 text-center text-xs font-bold text-gray-700`}
+                className={` ${statusColorHandler(application?.status)} w-32 rounded-full px-1 py-2 text-center text-xs font-bold text-gray-700`}
               >
-                {leave?.status}
+                {application?.status}
               </div>
-            </td>
-            <td className="flex items-center justify-center gap-2 py-2 text-center text-sm">
+            </div>
+
+            <div className="fex flex w-[10%] flex-wrap gap-2 space-x-2 text-white">
               <div>
-                <Link to={`/leave/application/${leave?.id}`}>
-                  <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-600 p-2 text-white">
-                    <PiEyeLight size={20} onClick={() => openModal(leave)} />
+                <Link to={`/leave/application/${application?.id}`}>
+                  <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-600 p-2">
+                    <PiEyeLight size={20} />
                   </div>
                 </Link>
               </div>
-              <div>
-                <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-indigo-600 p-2 text-white">
-                  <CiEdit size={20} onClick={() => openModal(leave)} />
-                </div>
+
+              {/* edit button  */}
+              <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-indigo-700 p-2">
+                <CiEdit size={20} onClick={() => handleOpen(application?.id)} />
               </div>
 
-              <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center text-white">
-                <AiOutlineDelete size={20} />
+              {/* delete button  */}
+              <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-red-500 p-2 text-center">
+                <AiOutlineDelete
+                  size={20}
+                  onClick={() => handleDeleteApplication(application?.id)}
+                />
               </div>
-            </td>
-          </tr>
+            </div>
+          </div>
         ))}
       </>
     );
@@ -206,46 +166,86 @@ const LeaveApplicationList = () => {
 
   return (
     <>
-      <div>
-        <h2 className="pb-2 text-lg font-semibold dark:text-dark-heading-color">
-          Employee Leave
-        </h2>
-      </div>
-      <div className="mt-3 h-auto w-full rounded-md border-[1px] border-solid border-slate-200 bg-white p-5 dark:border-none dark:bg-dark-card">
-        <div className="mb-4 flex flex-wrap items-center justify-between">
-          {/* <div className="dark:text-light-bg"></div> */}
-        </div>
-        <table className="h-auto w-full">
-          <thead className="mt-8 border-b border-slate-200 text-left dark:border-dark-border-color dark:border-opacity-10 dark:text-white">
-            <tr>
-              <th className="w-[3%] pb-2 text-[14px]">SL</th>
-              <th className="w-[10%] pb-2 text-[14px]">Leave Type</th>
-              <th className="w-[10%] pb-2 text-[14px]">Applied on</th>
-              <th className="w-[10%] pb-2 text-[14px]">Start Date</th>
-              <th className="w-[10%] pb-2 text-[14px]">End Date</th>
-              <th className="w-[5%] pb-2 text-[14px]">Days</th>
-              <th className="w-[10%] pb-2 text-[14px]">Reason</th>
-              <th className="w-[10%] pb-2 text-[14px]">Paid Status</th>
-              <th className="w-[10%] pb-2 text-[14px]">Note</th>
-              <th className="w-[8%] pb-2 text-[14px]">Approved By</th>
-              <th className="w-[10%] pb-2 text-center text-[14px]">Status</th>
-              <th className="w-[10%] pb-2 text-center text-[14px]">Action</th>
-            </tr>
-          </thead>
-          <tbody>{content}</tbody>
-        </table>
-
-        {/* Modal Popup for editing */}
-        <Modal
-          isOpen={modalOpen}
-          onClose={closeModal}
-          onSave={saveLeaveData}
-          leaveData={leaveData}
-          setLeaveData={setLeaveData}
+      <BrandCardWrapper>
+        <HrmSetupCardHeader
+          title="Leave Applications"
+          handleOpen={handleOpen}
         />
-      </div>
+        <div className="px-6 py-3">
+          {/* header  */}
+          <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
+            <div className="w-[3%] dark:text-white">
+              <h3>SL</h3>
+            </div>
+
+            <div className="w-[8%] dark:text-white">
+              <h3>Leave Type</h3>
+            </div>
+
+            <div className="w-[7%] dark:text-white">
+              <h3>Applied on</h3>
+            </div>
+
+            <div className="w-[7%] dark:text-white">
+              <h3>Start Date</h3>
+            </div>
+
+            <div className="w-[7%] dark:text-white">
+              <h3>End Date</h3>
+            </div>
+            <div className="w-[5%] dark:text-white">
+              <h3>Days</h3>
+            </div>
+            <div className="w-[8%] dark:text-white">
+              <h3>Reason</h3>
+            </div>
+
+            <div className="w-[7%] dark:text-white">
+              <h3>Paid Status</h3>
+            </div>
+            <div className="w-[10%] dark:text-white">
+              <h3>Note</h3>
+            </div>
+            <div className="w-[8%] dark:text-white">
+              <h3>Approved By</h3>
+            </div>
+            <div className="w-[8%] dark:text-white">
+              <h3>Status</h3>
+            </div>
+            <div className="w-[10%] dark:text-white">
+              <h3>Action</h3>
+            </div>
+          </div>
+
+          {/* body  */}
+          {content}
+        </div>
+        {isPopupOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="w-full max-w-4xl rounded-lg bg-white p-6 dark:bg-dark-card">
+              <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-dark-border-color dark:border-opacity-5">
+                <h3 className="text-lg font-medium text-gray-800 dark:text-white">
+                  Leave Application
+                </h3>
+                <button
+                  className="text-gray-500 hover:text-gray-800"
+                  onClick={() => setIsPopupOpen(false)} // Close popup
+                >
+                  &times;
+                </button>
+              </div>
+              <div className="mt-4">
+                <LeaveApplicationForm
+                  selectId={selectId}
+                  setIsPopupOpen={setIsPopupOpen}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </BrandCardWrapper>
     </>
   );
 };
 
-export default LeaveApplicationList;
+export default LeaveApplicationListCard;

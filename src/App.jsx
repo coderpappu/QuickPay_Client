@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import DepartmentForm from "./../src/components/hrm/department/DepartmentForm";
 import "./App.css";
 import CompanySettings from "./components/company/CompanySettings";
-import LeaveApplicationListCard from "./components/hrm/Leave/LeaveApplicationListCard";
+
 import SalaryUpdate from "./components/payroll/SalaryUpdate";
 import SetSalaryCard from "./components/payroll/SetSalary";
 import Layout from "./Layout";
@@ -54,6 +54,7 @@ import BonusSlipCard from "./components/payroll/payslip/BonusSlip";
 import PaySlipCard from "./components/payroll/payslip/PaySlipCard";
 import BiometricAttendnaces from "./pages/attendnace/BiometricAttendnaces";
 import EditorComponent from "./pages/editor-test/EditorComponent";
+import LeaveApplicationListCard from "./pages/leave/LeaveApplicationList";
 import GradeForm from "./pages/payroll/grade/gradeForm";
 import GradeList from "./pages/payroll/grade/gradeList";
 import LoanTypeForm from "./pages/payroll/Loan/LoanType/LoanTypeForm";

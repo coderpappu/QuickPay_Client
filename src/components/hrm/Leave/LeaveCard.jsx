@@ -16,7 +16,10 @@ import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import CardSkeleton from "../../../skeletons/card";
 import ErrorMessage from "../../../utils/ErrorMessage";
 import LeaveTypeForm from "./LeaveTypeForm";
+
+
 const LeaveCard = () => {
+  
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [leaveTypeId, setleaveTypeId] = useState(null);
   const handleOpen = (id) => {

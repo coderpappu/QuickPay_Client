@@ -11,6 +11,8 @@ import {
 
 import { useSelector } from "react-redux";
 import FormSkeleton from "../../../skeletons/FormSkeleton";
+
+
 const LeaveTypeSchema = Yup.object().shape({
   name: Yup.string().required("Name is required"),
   code: Yup.string().required("Code is required"),
@@ -234,6 +236,7 @@ const LeaveTypeForm = ({ leaveTypeId, setIsPopupOpen }) => {
               </div>
 
               <div className="flex justify-end">
+                
                 <button
                   type="button"
                   onClick={() => setIsPopupOpen(false)}
@@ -241,6 +244,8 @@ const LeaveTypeForm = ({ leaveTypeId, setIsPopupOpen }) => {
                 >
                   Cancel
                 </button>
+
+
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -248,6 +253,9 @@ const LeaveTypeForm = ({ leaveTypeId, setIsPopupOpen }) => {
                 >
                   {leaveTypeId ? "Update" : "Add"}
                 </button>
+
+
+
               </div>
             </Form>
           )}
