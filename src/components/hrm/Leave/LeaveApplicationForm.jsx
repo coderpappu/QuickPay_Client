@@ -1,12 +1,20 @@
+import { Field, Form, Formik } from "formik";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
   useGetLeaveApplicationDetailsQuery,
+  useGetLeaveTypeListQuery,
   useUpdateLeaveApplicationMutation,
 } from "../../../features/api";
 
 const applicationSchema = Yup.object().shape({
+  leaveType_id: Yup.string().required("Leave type is required"),
+  start_date: Yup.date().required("Start date is required"),
+  end_date: Yup.date()
+    .required("End date is required")
+    .min(Yup.ref("start_date"), "End date cannot be before start date"),
+  reason: Yup.string().required("Purpose is required"),
   status: Yup.string().required("Status is required"),
   paid_status: Yup.string().required("Paid Status is required"),
   note: Yup.string().required("Note is required"),
@@ -14,13 +22,23 @@ const applicationSchema = Yup.object().shape({
 
 const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
   const companyId = useSelector((state) => state.company.companyId);
+
   const { data: leaveApplicationDetails } = useGetLeaveApplicationDetailsQuery(
     selectId,
     { skip: !selectId },
   );
-  const [applicationUpdate] = useUpdateLeaveApplicationMutation();
+
+  const { data: leaveType } = useGetLeaveTypeListQuery(companyId);
+
+  const [applicationUpdate, { isLoading }] =
+    useUpdateLeaveApplicationMutation();
 
   const [initialValues, setInitialValues] = useState({
+    leaveType_id: "",
+    leaveDuration: "",
+    start_date: "",
+    end_date: "",
+    reason: "",
     status: "",
     paid_status: "",
     note: "",
@@ -28,13 +46,36 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
 
   useEffect(() => {
     if (leaveApplicationDetails?.data) {
+      const app = leaveApplicationDetails.data;
       setInitialValues({
-        status: leaveApplicationDetails?.data?.status,
-        paid_status: leaveApplicationDetails?.data?.paid_status,
-        note: leaveApplicationDetails?.data?.note,
+        leaveType_id: app.leaveType_id || "",
+        leaveDuration: app.leaveDuration || "",
+        start_date: app.start_date?.split("T")[0] || "",
+        end_date: app.end_date?.split("T")[0] || "",
+        reason: app.reason || "",
+        status: app.status || "",
+        paid_status: app.paid_status || "",
+        note: app.note || "",
       });
     }
   }, [leaveApplicationDetails]);
+
+  // Function to calculate days between two dates
+  const calculateLeaveDuration = (startDate, endDate) => {
+    if (!startDate || !endDate) return 0;
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Check if dates are valid
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) return 0;
+
+    // Calculate difference in days
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // Adding 1 to include both start and end date
+
+    return diffDays > 0 ? diffDays : 0;
+  };
 
   return (
     <div className="bg-light-card mx-auto w-full space-y-6 rounded-lg p-6 shadow-md dark:bg-dark-card">
@@ -47,20 +88,24 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
           <div className="dark:bg-dark-muted h-16 w-16 rounded-full bg-gray-300"></div>
           <div>
             <h3 className="text-light-text font-semibold dark:text-dark-text-color">
-              Syed Labib Anjum
+              {leaveApplicationDetails?.data?.Employee?.name}
             </h3>
             <p className="text-light-subtext dark:text-dark-subtext text-sm">
-              10000
+              {leaveApplicationDetails?.data?.Employee?.employeeId}
             </p>
             <p className="text-light-subtext dark:text-dark-subtext text-sm">
-              Sr. Executive, Business Development
+              {
+                leaveApplicationDetails?.data?.Employee?.EmployeeDesignation[0]
+                  ?.designation?.name
+              }
             </p>
           </div>
         </div>
 
         <div className="text-light-text grid grid-cols-2 gap-x-12 gap-y-1 text-sm dark:text-dark-text-color">
           <p>
-            <strong>Join Date:</strong> 01-04-2024
+            <strong>Join Date:</strong>{" "}
+            {leaveApplicationDetails?.data?.Employee?.joining_date}
           </p>
           <p>
             <strong>Job Status:</strong>{" "}
@@ -68,14 +113,18 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
               htmlFor=""
               className="ml-1 rounded-full bg-green-600 bg-opacity-55 px-2 py-1 text-xs text-white"
             >
-              Confirmed
+              {leaveApplicationDetails?.data?.Employee?.job_status}
             </label>
           </p>
           <p>
             <strong>Branch:</strong> Tiger KOI
           </p>
           <p>
-            <strong>Department:</strong> Sales
+            <strong>Department:</strong>{" "}
+            {
+              leaveApplicationDetails?.data?.Employee?.EmployeeDepartment[0]
+                ?.department?.name
+            }
           </p>
         </div>
       </div>
@@ -102,150 +151,264 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
-        <div>
-          <label className="text-light-text mb-1 block text-sm font-medium dark:text-dark-text-color">
-            Leave Type *
-          </label>
-          <select className="w-full rounded border border-dark-box border-opacity-5 bg-light-input px-3 py-2 dark:bg-dark-box dark:text-dark-text-color">
-            <option>Marriage Leave</option>
-          </select>
-        </div>
-        <div>
-          <label className="text-light-text mb-1 block text-sm font-medium dark:text-dark-text-color">
-            Day Count
-          </label>
-          <input
-            type="number"
-            defaultValue={1}
-            className="w-full rounded border border-dark-box border-opacity-5 bg-light-input px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
-          />
-        </div>
-        <div className="flex items-center gap-4 pt-6">
-          <label className="text-light-text flex items-center dark:text-dark-text-color">
-            <input type="checkbox" className="mr-2" />
-            Foreign Leave Y/N
-          </label>
+      <Formik
+        enableReinitialize
+        initialValues={initialValues}
+        validationSchema={applicationSchema}
+        onSubmit={(values) => {
+          applicationUpdate({ id: selectId, data: values });
+          setIsPopupOpen(false);
+        }}
+      >
+        {({ values, errors, touched, setFieldValue }) => (
+          <Form>
+            <div className="grid grid-cols-3 gap-6">
+              <div>
+                <label className="text-light-text mb-1 block text-sm font-medium dark:text-dark-text-color">
+                  Leave Type *
+                </label>
+                <Field
+                  as="select"
+                  name="leaveType_id"
+                  className="w-full rounded border border-dark-box border-opacity-5 bg-light-input px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
+                >
+                  <option value="">Select Leave</option>
+                  {leaveType?.data?.map((leave) => (
+                    <option key={leave.id} value={leave.id}>
+                      {leave.name}
+                    </option>
+                  ))}
+                </Field>
+                {errors.leaveType_id && touched.leaveType_id && (
+                  <div className="mt-1 text-xs text-red-500">
+                    {errors.leaveType_id}
+                  </div>
+                )}
+              </div>
+              <div>
+                <label className="text-light-text mb-1 block text-sm font-medium dark:text-dark-text-color">
+                  Day Count
+                </label>
 
-          <label className="text-light-text flex items-center dark:text-dark-text-color">
-            <input type="checkbox" className="mr-2" />
-            Include Extra Work Dates
-          </label>
-        </div>
+                <Field
+                  type="number"
+                  name="leaveDuration"
+                  disabled={true}
+                  className="w-full rounded border border-dark-box border-opacity-5 bg-light-input px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
+                  readOnly
+                />
+                {errors.leaveDuration && touched.leaveDuration && (
+                  <div className="mt-1 text-xs text-red-500">
+                    {errors.leaveDuration}
+                  </div>
+                )}
+              </div>
+              <div className="flex items-center gap-4 pt-6">
+                <label className="text-light-text flex items-center dark:text-dark-text-color">
+                  <input type="checkbox" className="mr-2" />
+                  Foreign Leave Y/N
+                </label>
 
-        <div>
-          <label className="text-light-text mb-1 block text-sm font-medium dark:text-dark-text-color">
-            Start Date *
-          </label>
-          <input
-            type="date"
-            defaultValue="2025-05-22"
-            className="w-full rounded border border-dark-box border-opacity-5 bg-light-input px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
-          />
-        </div>
-        <div>
-          <label className="text-light-text mb-1 block text-sm font-medium dark:text-dark-text-color">
-            End Date *
-          </label>
-          <input
-            type="date"
-            defaultValue="2025-05-22"
-            className="w-full rounded border border-dark-box border-opacity-5 bg-light-input px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
-          />
-        </div>
-      </div>
+                <label className="text-light-text flex items-center dark:text-dark-text-color">
+                  <input type="checkbox" className="mr-2" />
+                  Include Extra Work Dates
+                </label>
+              </div>
 
-      <div className="grid grid-cols-2 gap-6">
-        <div>
-          <label className="text-light-text mb-1 block text-sm font-medium dark:text-dark-text-color">
-            Purpose *
-          </label>
-          <textarea
-            rows="3"
-            defaultValue="I will go to my village"
-            className="w-full rounded border border-dark-box border-opacity-5 bg-light-input px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
-          />
-        </div>
-        <div>
-          <label className="text-light-text mb-1 block text-sm font-medium dark:text-dark-text-color">
-            Current Approver
-          </label>
-          <div className="mt-1 flex items-center gap-3 rounded border bg-light-input p-3 dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-box">
-            <div className="dark:bg-dark-muted h-10 w-10 rounded-full bg-gray-300"></div>
-            <div className="text-light-text text-sm dark:text-dark-text-color">
-              <p className="font-medium">Rajib Saha</p>
-              <p className="text-light-subtext dark:text-dark-subtext text-xs">
-                0376
-              </p>
-              <p className="text-light-subtext dark:text-dark-subtext text-xs">
-                Vivasoft Ltd Banani
-              </p>
+              <div>
+                <label className="text-light-text mb-1 block text-sm font-medium dark:text-dark-text-color">
+                  Start Date *
+                </label>
+
+                <Field
+                  type="date"
+                  name="start_date"
+                  className="w-full rounded border border-dark-box border-opacity-5 bg-light-input px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
+                  onChange={(e) => {
+                    const newStartDate = e.target.value;
+                    setFieldValue("start_date", newStartDate);
+
+                    // Calculate new duration
+                    if (values.end_date) {
+                      const duration = calculateLeaveDuration(
+                        newStartDate,
+                        values.end_date,
+                      );
+                      setFieldValue("leaveDuration", duration);
+                    }
+                  }}
+                />
+                {errors.start_date && touched.start_date && (
+                  <div className="mt-1 text-xs text-red-500">
+                    {errors.start_date}
+                  </div>
+                )}
+              </div>
+              <div>
+                <label className="text-light-text mb-1 block text-sm font-medium dark:text-dark-text-color">
+                  End Date *
+                </label>
+                <Field
+                  type="date"
+                  name="end_date"
+                  className="w-full rounded border border-dark-box border-opacity-5 bg-light-input px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
+                  onChange={(e) => {
+                    const newEndDate = e.target.value;
+                    setFieldValue("end_date", newEndDate);
+
+                    // Calculate new duration
+                    if (values.start_date) {
+                      const duration = calculateLeaveDuration(
+                        values.start_date,
+                        newEndDate,
+                      );
+                      setFieldValue("leaveDuration", duration);
+                    }
+                  }}
+                />
+                {errors.end_date && touched.end_date && (
+                  <div className="mt-1 text-xs text-red-500">
+                    {errors.end_date}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <div>
-        <h3 className="text-light-text mb-2 text-sm font-semibold dark:text-dark-text-color">
-          APPROVAL HISTORY
-        </h3>
-        <div className="overflow-x-auto rounded border border-dark-bg border-opacity-0 dark:border-dark-border-color dark:border-opacity-5">
-          <table className="text-light-text min-w-full text-left text-sm dark:text-dark-text-color">
-            <thead className="bg-light-input dark:bg-dark-box">
-              <tr>
-                <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                  Approver Code
-                </th>
-                <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                  Approver Name
-                </th>
-                <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                  Status
-                </th>
-                <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                  Operation Date
-                </th>
-                <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                  Comment
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                  0376
-                </td>
-                <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                  Rajib Saha
-                </td>
-                <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                  Under Processing
-                </td>
-                <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                  27-04-2025
-                </td>
-                <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                  —
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+            <div className="mt-2 grid grid-cols-2 gap-6">
+              <div>
+                <label className="text-light-text mb-1 block text-sm font-medium dark:text-dark-text-color">
+                  Note *
+                </label>
+                <Field
+                  as="textarea"
+                  name="note"
+                  rows="3"
+                  className="w-full rounded border border-dark-box border-opacity-5 bg-light-input px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
+                />
+                {errors.reason && touched.reason && (
+                  <div className="mt-1 text-xs text-red-500">
+                    {errors.reason}
+                  </div>
+                )}
+              </div>
+              <div>
+                <label className="text-light-text mb-1 block text-sm font-medium dark:text-dark-text-color">
+                  Current Approver
+                </label>
+                <div className="mt-1 flex items-center gap-3 rounded border bg-light-input p-3 dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-box">
+                  <div className="dark:bg-dark-muted h-10 w-10 rounded-full bg-gray-300"></div>
+                  <div className="text-light-text text-sm dark:text-dark-text-color">
+                    <p className="font-medium">Rajib Saha</p>
+                    <p className="text-light-subtext dark:text-dark-subtext text-xs">
+                      0376
+                    </p>
+                    <p className="text-light-subtext dark:text-dark-subtext text-xs">
+                      Vivasoft Ltd Banani
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-      <div className="flex items-center justify-between pt-4">
-        <p className="text-light-subtext dark:text-dark-subtext text-sm">
-          Apply Date: <strong>27-04-2025</strong>
-        </p>
-        <div className="space-x-3">
-          <button className="rounded bg-red-600 px-4 py-2 text-white">
-            Reject
-          </button>
-          <button className="rounded bg-green-600 px-4 py-2 text-white">
-            Approve
-          </button>
-        </div>
-      </div>
+            <div className="mt-6">
+              <h3 className="text-light-text mb-2 text-sm font-semibold dark:text-dark-text-color">
+                APPROVAL HISTORY
+              </h3>
+              <div className="overflow-x-auto rounded border border-dark-bg border-opacity-0 dark:border-dark-border-color dark:border-opacity-5">
+                <table className="text-light-text min-w-full text-left text-sm dark:text-dark-text-color">
+                  <thead className="bg-light-input dark:bg-dark-box">
+                    <tr>
+                      <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                        Approver Code
+                      </th>
+                      <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                        Approver Name
+                      </th>
+                      <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                        Status
+                      </th>
+                      <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                        Operation Date
+                      </th>
+                      <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                        Comment
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                        0376
+                      </td>
+                      <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                        Rajib Saha
+                      </td>
+                      <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                        Under Processing
+                      </td>
+                      <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                        27-04-2025
+                      </td>
+                      <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                        —
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-4">
+              <p className="text-light-subtext dark:text-dark-subtext text-sm">
+                Apply Date: <strong>27-04-2025</strong>
+              </p>
+              <div className="space-x-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFieldValue("status", "REJECTED");
+                    setFieldValue(
+                      "paid_status",
+                      values.paid_status || "UNPAID",
+                    );
+                    setTimeout(() => {
+                      document.querySelector("form").dispatchEvent(
+                        new Event("submit", {
+                          cancelable: true,
+                          bubbles: true,
+                        }),
+                      );
+                    }, 100);
+                  }}
+                  className="rounded bg-red-600 px-4 py-2 text-white transition-all hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 disabled:opacity-70"
+                  disabled={isLoading}
+                >
+                  Reject
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFieldValue("status", "APPROVED");
+                    setFieldValue("paid_status", values.paid_status || "PAID");
+                    setTimeout(() => {
+                      document.querySelector("form").dispatchEvent(
+                        new Event("submit", {
+                          cancelable: true,
+                          bubbles: true,
+                        }),
+                      );
+                    }, 100);
+                  }}
+                  className="rounded bg-green-600 px-4 py-2 text-white transition-all hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 disabled:opacity-70"
+                  disabled={isLoading}
+                >
+                  Approve
+                </button>
+              </div>
+            </div>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };
