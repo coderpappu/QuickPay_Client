@@ -126,6 +126,7 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
             <input type="checkbox" className="mr-2" />
             Foreign Leave Y/N
           </label>
+
           <label className="text-light-text flex items-center dark:text-dark-text-color">
             <input type="checkbox" className="mr-2" />
             Include Extra Work Dates
