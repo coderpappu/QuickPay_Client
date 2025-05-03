@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import {
   useGetLeaveApplicationDetailsQuery,
   useGetLeaveTypeListQuery,
+  useGetUserQuery,
   useUpdateLeaveApplicationMutation,
 } from "../../../features/api";
 
@@ -22,6 +23,10 @@ const applicationSchema = Yup.object().shape({
 
 const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
   const companyId = useSelector((state) => state.company.companyId);
+
+  const { data: userDetails } = useGetUserQuery();
+
+  console.log(userDetails);
 
   const { data: leaveApplicationDetails } = useGetLeaveApplicationDetailsQuery(
     selectId,
@@ -273,7 +278,21 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
                 )}
               </div>
             </div>
-
+            <div>
+              <label className="text-light-text mb-1 block text-sm font-medium dark:text-dark-text-color">
+                Reason
+              </label>
+              <Field
+                as="textarea"
+                name="reason"
+                disabled={true}
+                rows="3"
+                className="w-full rounded border border-dark-box border-opacity-5 bg-light-input px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
+              />
+              {errors.reason && touched.reason && (
+                <div className="mt-1 text-xs text-red-500">{errors.reason}</div>
+              )}
+            </div>
             <div className="mt-2 grid grid-cols-2 gap-6">
               <div>
                 <label className="text-light-text mb-1 block text-sm font-medium dark:text-dark-text-color">
@@ -298,12 +317,14 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
                 <div className="mt-1 flex items-center gap-3 rounded border bg-light-input p-3 dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-box">
                   <div className="dark:bg-dark-muted h-10 w-10 rounded-full bg-gray-300"></div>
                   <div className="text-light-text text-sm dark:text-dark-text-color">
-                    <p className="font-medium">Rajib Saha</p>
-                    <p className="text-light-subtext dark:text-dark-subtext text-xs">
-                      0376
+                    <p className="font-medium">
+                      {userDetails?.data?.first_name +
+                        " " +
+                        userDetails?.data?.last_name}
                     </p>
+
                     <p className="text-light-subtext dark:text-dark-subtext text-xs">
-                      Vivasoft Ltd Banani
+                      {userDetails?.data?.email}
                     </p>
                   </div>
                 </div>
