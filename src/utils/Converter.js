@@ -8,13 +8,14 @@ export const TimeConverterFromUTC = (data) => {
     minute: "numeric",
     second: "numeric",
     hour12: true,
-    timeZone: "UTC", // Ensure the time is treated as UTC
+    timeZone: "UTC",
   };
 
   const formattedTime = date.toLocaleTimeString("en-US", options);
 
   return formattedTime;
 };
+
 export const DateConverterFromUTC = (data) => {
   // Parse the date string to a Date object
   const date = new Date(data);

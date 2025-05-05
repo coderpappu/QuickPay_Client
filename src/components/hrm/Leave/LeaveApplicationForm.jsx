@@ -202,12 +202,14 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
                   className="w-full rounded border border-dark-box border-opacity-5 bg-light-input px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
                   readOnly
                 />
+
                 {errors.leaveDuration && touched.leaveDuration && (
                   <div className="mt-1 text-xs text-red-500">
                     {errors.leaveDuration}
                   </div>
                 )}
               </div>
+
               <div className="flex items-center gap-4 pt-6">
                 <label className="text-light-text flex items-center dark:text-dark-text-color">
                   <input type="checkbox" className="mr-2" />

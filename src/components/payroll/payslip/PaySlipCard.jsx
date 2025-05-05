@@ -144,11 +144,11 @@ const PaySlipCard = () => {
       "Bank Branch": sheet?.Employee?.EmployeeBankAcc[0]?.branch_name || "",
       "Account No": sheet?.Employee?.EmployeeBankAcc[0]?.bank_acc_no || "",
       "Routing No": sheet?.Employee?.EmployeeBankAcc[0]?.routing_no || "",
-      // "Basic Salary": sheet?.basic_salary || 0,
-      // Overtime:
-      //   Math.round(sheet?.overtime_salary_sheet?.[0]?.overtime_salary) || 0,
-      // Allowance: sheet?.allowance_salary_sheet?.[0]?.amount || 0,
-      // Deduction: sheet?.deduction_salary_sheet?.[0]?.amount || 0,
+      "Basic Salary": sheet?.basic_salary || 0,
+      Overtime:
+        Math.round(sheet?.overtime_salary_sheet?.[0]?.overtime_salary) || 0,
+      Allowance: sheet?.allowance_salary_sheet?.[0]?.amount || 0,
+      Deduction: sheet?.deduction_salary_sheet?.[0]?.amount || 0,
       "Net Salary": sheet?.netSalary || 0,
       Status: sheet?.status,
     }));
