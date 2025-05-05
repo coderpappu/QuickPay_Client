@@ -168,6 +168,7 @@ const Sidebar = () => {
                 )}
 
                 {/* Render submenu if active */}
+
                 {activeMenu === menuIndex &&
                   menu.subMenu &&
                   renderSubMenu(menu.subMenu)}

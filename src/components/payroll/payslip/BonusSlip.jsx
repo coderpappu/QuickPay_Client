@@ -411,6 +411,7 @@ const BonusSlipCard = () => {
           </div>
         </BrandCardWrapper>
       </div>
+      
       {isPopupOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-full max-w-5xl rounded-lg bg-white p-6 dark:bg-dark-card">

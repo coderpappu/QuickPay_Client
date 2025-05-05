@@ -60,6 +60,8 @@ import GradeList from "./pages/payroll/grade/gradeList";
 import LoanTypeForm from "./pages/payroll/Loan/LoanType/LoanTypeForm";
 import LoanTypeList from "./pages/payroll/Loan/LoanType/LoanTypeList";
 import PermissionCard from "./pages/permission/PermissionCard";
+import AttendnaceReport from "./pages/report/AttendnaceReport";
+import SalaryReport from "./pages/report/SalaryReport";
 import SectionList from "./pages/section/SectionList";
 import SectionSettings from "./pages/section/SectionSettings";
 import LoginPage from "./pages/user/LoginPage";
@@ -80,6 +82,7 @@ function App() {
         <Route path="/" element={<PrivateRoute />}>
           <Route path="/" element={<Layout />}>
             {/* employee dashboard route  */}
+
             <Route path="/users" element={<Users />} />
             <Route path="/user/profile/:id" element={<UserProfile />} />
             <Route path="employee/profile" element={<EmployeeProfile />} />
@@ -214,6 +217,10 @@ function App() {
               {/* payslip  */}
               <Route path="/employee/payslip" element={<PaySlipCard />} />
               <Route path="/employee/bonus-slip" element={<BonusSlipCard />} />
+
+              {/* reports  */}
+              <Route path="/report/attendnace" element={<AttendnaceReport />} />
+              <Route path="/report/salary" element={<SalaryReport />} />
 
               {/* loader test route  */}
               <Route path="/loader/" element={<ProfileSkeleton />} />

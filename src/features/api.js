@@ -1924,6 +1924,16 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["bank_acc_em"],
     }),
+
+    // report
+    getAttendanceReport: builder.query({
+      query: ({ companyId, selectedDate }) => ({
+        url: `/device/reports/attendance`,
+        params: { date: selectedDate, companyId },
+        responseHandler: (response) => response.blob(),
+      }),
+      providesTags: ["attendace_report"],
+    }),
   }),
 });
 
@@ -2250,4 +2260,8 @@ export const {
   useUpdateBankAccMutation,
   useGetEmployeeAccQuery,
   useDeleteBankAccMutation,
+
+  // report
+  // useGetAttendanceReportQuery,
+  useLazyGetAttendanceReportQuery,
 } = apiSlice;

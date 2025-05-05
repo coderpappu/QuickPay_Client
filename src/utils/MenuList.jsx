@@ -11,6 +11,7 @@ import { LuUserRoundCog } from "react-icons/lu";
 import { MdModelTraining, MdOutlinePolicy } from "react-icons/md";
 import { RiCalendarScheduleLine, RiSpeedUpLine } from "react-icons/ri";
 import { TbPigMoney } from "react-icons/tb";
+
 const adminMenuItems = [
   {
     title: "Dashboard",
@@ -58,6 +59,14 @@ const adminMenuItems = [
       { title: "Attendance List", link: "/employee/attendences" },
       { title: "Manual Attendance ", link: "/employee/attendence" },
       { title: "Biometric", link: "/employee/bio/attendences" },
+    ],
+  },
+  {
+    icon: <BsClockHistory size={18} />,
+    title: "Reports",
+    subMenu: [
+      { title: "Attendnace Report", link: "/report/attendnace" },
+      { title: "Salary Report", link: "/report/salary" },
     ],
   },
   {
