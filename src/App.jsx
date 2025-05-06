@@ -60,7 +60,8 @@ import GradeList from "./pages/payroll/grade/gradeList";
 import LoanTypeForm from "./pages/payroll/Loan/LoanType/LoanTypeForm";
 import LoanTypeList from "./pages/payroll/Loan/LoanType/LoanTypeList";
 import PermissionCard from "./pages/permission/PermissionCard";
-import AttendnaceReport from "./pages/report/AttendnaceReport";
+import DailyAttendnaceReport from "./pages/report/DailyAttendanceReport";
+import MonthlyAttendnaceReport from "./pages/report/MonthLyAttendnaceReport";
 import SalaryReport from "./pages/report/SalaryReport";
 import SectionList from "./pages/section/SectionList";
 import SectionSettings from "./pages/section/SectionSettings";
@@ -219,7 +220,14 @@ function App() {
               <Route path="/employee/bonus-slip" element={<BonusSlipCard />} />
 
               {/* reports  */}
-              <Route path="/report/attendnace" element={<AttendnaceReport />} />
+              <Route
+                path="/report/month/attendnace"
+                element={<MonthlyAttendnaceReport />}
+              />
+              <Route
+                path="/report/daily/attendnace"
+                element={<DailyAttendnaceReport />}
+              />
               <Route path="/report/salary" element={<SalaryReport />} />
 
               {/* loader test route  */}

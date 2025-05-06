@@ -65,7 +65,8 @@ const adminMenuItems = [
     icon: <BsClockHistory size={18} />,
     title: "Reports",
     subMenu: [
-      { title: "Attendnace Report", link: "/report/attendnace" },
+      { title: "Monthly Att Report", link: "/report/month/attendnace" },
+      { title: "Daily Att Report", link: "/report/daily/attendnace" },
       { title: "Salary Report", link: "/report/salary" },
     ],
   },
