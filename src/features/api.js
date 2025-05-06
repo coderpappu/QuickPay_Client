@@ -1926,9 +1926,18 @@ export const apiSlice = createApi({
     }),
 
     // report
-    getAttendanceReport: builder.query({
+    getMonthlyAttendanceReport: builder.query({
       query: ({ companyId, selectedDate }) => ({
-        url: `/device/reports/attendance`,
+        url: `/device/reports/monthly-report`,
+        params: { date: selectedDate, companyId },
+        responseHandler: (response) => response.blob(),
+      }),
+      providesTags: ["attendace_report"],
+    }),
+
+    getDailyAttendanceReport: builder.query({
+      query: ({ companyId, selectedDate }) => ({
+        url: `/device/reports/daily-report`,
         params: { date: selectedDate, companyId },
         responseHandler: (response) => response.blob(),
       }),
@@ -2263,5 +2272,6 @@ export const {
 
   // report
   // useGetAttendanceReportQuery,
-  useLazyGetAttendanceReportQuery,
+  useLazyGetMonthlyAttendanceReportQuery,
+  useLazyGetDailyAttendanceReportQuery,
 } = apiSlice;
