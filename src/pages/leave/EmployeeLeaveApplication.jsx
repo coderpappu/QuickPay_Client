@@ -3,7 +3,10 @@ import BrandCardWrapper from "../../components/company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../components/company/SettingCardHeader";
 
 import { useSelector } from "react-redux";
-import { useGetAllEmployeeLeaveListQuery } from "../../features/api";
+import {
+  useGetAllEmployeeLeaveListQuery,
+  useGetUserQuery,
+} from "../../features/api";
 import CardSkeleton from "../../skeletons/card";
 import { convertToTimeZone } from "../../utils/DatePicker";
 import ErrorMessage from "../../utils/ErrorMessage";
@@ -12,6 +15,12 @@ import LeaveForm from "../employee/LeaveForm";
 const EmployeeLeaveApplication = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [selectAllowanceId, setSelectAllowanceId] = useState(null);
+
+  const { data: employee } = useGetUserQuery();
+
+  console.log(employee?.data?.id);
+
+  const employeeId = employee?.data?.id;
 
   const onClose = () => {
     setIsPopupOpen(false);
@@ -29,7 +38,7 @@ const EmployeeLeaveApplication = () => {
     isLoading,
     isError,
     error,
-  } = useGetAllEmployeeLeaveListQuery(companyId);
+  } = useGetAllEmployeeLeaveListQuery({ companyId, employeeId });
 
   const statusColorHandler = (status) => {
     switch (status) {

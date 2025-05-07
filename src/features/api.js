@@ -610,8 +610,8 @@ export const apiSlice = createApi({
     }),
 
     getAllEmployeeLeaveList: builder.query({
-      query: (companyId) => ({
-        url: `/leave/list`,
+      query: ({ companyId, employeeId }) => ({
+        url: `/leave/list/${employeeId}`,
         params: { companyId },
       }),
       providesTags: ["leaveType", "earnLeave", "leaveApplication"],
