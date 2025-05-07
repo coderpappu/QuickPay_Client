@@ -4,8 +4,8 @@ import { IoArrowUpOutline } from "react-icons/io5";
 
 const StatusCard = ({ title, count, percentage, icon: Icon, color }) => {
   return (
-    <div className="w-[235px] h-[100px] bg-[#d6deff] dark:bg-dark-card dark:border dark:border-dark-border-color dark:border-opacity-5 py-3 px-3 mr-3 rounded-md flex flex-wrap items-center justify-between">
-      <div className=" h-[80px] flex flex-col justify-between ">
+    <div className="mr-3 flex h-[100px] w-[235px] flex-wrap items-center justify-between rounded-md bg-[#d6deff] px-3 py-3 dark:border dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-card">
+      <div className="flex h-[80px] flex-col justify-between">
         <h2 className="text-[#6c28d997] dark:text-dark-heading-color">
           {title}
         </h2>
@@ -13,13 +13,13 @@ const StatusCard = ({ title, count, percentage, icon: Icon, color }) => {
           <h2 className="text-3xl font-semibold text-[#5d22bc] dark:text-dark-heading-color">
             {count}
           </h2>
-          <div className="w-[50px] h-[23px] rounded-xl bg-[#6c28d92e] dark:bg-dark-box  ml-2 text-center text-sm text-[#6c28d997] dark:text-dark-heading-color flex-wrap grid grid-flow-col place-items-center px-1">
+          <div className="ml-2 grid h-[23px] w-[50px] grid-flow-col flex-wrap place-items-center rounded-xl bg-[#6c28d92e] px-1 text-center text-sm text-[#6c28d997] dark:bg-dark-box dark:text-dark-heading-color">
             <IoArrowUpOutline className="text-sm" />
             {percentage}%
           </div>
         </div>
       </div>
-      <div className="w-[60px] h-[60px] bg-[#6c28d92e] rounded-full flex flex-row justify-center items-center">
+      <div className="flex h-[60px] w-[60px] flex-row items-center justify-center rounded-full bg-[#6c28d92e]">
         {/* logo  */}
         <Icon className={`text-[35px] text-[#ff5e00]`} />
       </div>

@@ -178,11 +178,7 @@ const employeeMenuItems = [
   {
     title: "Dashboard",
     icon: <RxHome size={18} />,
-    subMenu: [
-      { title: "Overview", link: "/" },
-      { title: "Reports", link: "/company/loan/type" },
-      { title: "Reports", link: "section/create" },
-    ],
+    subMenu: [{ title: "Overview", link: "/" }],
   },
   {
     title: "Leave Management",

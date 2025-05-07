@@ -25,7 +25,7 @@ const MainUserProfile = () => {
   if (!isLoading && isError) return <p>Error fetching data</p>;
 
   const userDetails = userData2?.data;
-
+  console.log(userDetails);
   return (
     <div>
       <h2 className="dark:text-dark-heading-color"> User / Profile</h2>
@@ -40,7 +40,9 @@ const MainUserProfile = () => {
           </div>
           <div className="w-[75%]">
             <h1 className="font-poppins text-2xl font-semibold dark:text-dark-text-color">
-              {userDetails?.first_name + " " + userDetails?.last_name}
+              {userDetails?.employeeId
+                ? userDetails?.name
+                : userDetails?.first_name + " " + userDetails?.last_name}
             </h1>
             <h3 className="text-[15px] font-medium text-[#686767] dark:text-dark-text-color">
               {userDetails?.type}

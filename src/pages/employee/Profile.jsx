@@ -18,7 +18,9 @@ import PromotionForm from "../../components/employee/PromotionForm";
 import ProfileSkeleton from "../../skeletons/ProfileSkeleton";
 const Profile = () => {
   const id = useParams()?.id;
+
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
   const onClose = () => {
     setIsPopupOpen(false);
   };

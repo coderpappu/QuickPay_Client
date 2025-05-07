@@ -5,10 +5,11 @@ import { TbCards } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
-
 import { useGetUserPerModuleQuery, useGetUserQuery } from "../features/api";
 import { adminMenuItems, employeeMenuItems } from "../utils/MenuList";
+
 const Sidebar = () => {
+
   const dispatch = useDispatch();
 
   const companyIdFromStore = useSelector((state) => state.company.companyId);
@@ -81,7 +82,7 @@ const Sidebar = () => {
           <li key={subIndex}>
             {sub.subMenu ? (
               <>
-                {/* Handle nested submenu */}
+                  {/* Handle nested submenu */}
                 <button
                   onClick={() => handleSubMenuClick(subIndex)}
                   className="flex w-full items-center justify-between pl-3 pr-4"
