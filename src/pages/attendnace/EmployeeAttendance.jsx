@@ -1,6 +1,9 @@
 import { CalendarDays, Search } from "lucide-react";
 import React, { useState } from "react";
-import { useGetEmployeeAttendancesQuery } from "../../features/api";
+import {
+  useGetEmployeeAttendancesQuery,
+  useGetUserQuery,
+} from "../../features/api";
 import { TimeConverterFromUTC } from "../../utils/Converter";
 
 function EmployeeAttendance() {
@@ -8,14 +11,13 @@ function EmployeeAttendance() {
   const [selectedMonth, setSelectedMonth] = useState(today.getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(today.getFullYear());
   const [searchTerm, setSearchTerm] = useState("");
+  const { data: userDetails } = useGetUserQuery();
 
   const { data, isLoading, isError, error } = useGetEmployeeAttendancesQuery({
-    employeeId: "3700f54c-7c86-4a1a-8470-d6d6a9b31e45",
+    employeeId: userDetails?.data?.id,
     month: selectedMonth,
     year: selectedYear,
   });
-
-  console.log(data);
 
   const months = [
     "January",
@@ -32,16 +34,15 @@ function EmployeeAttendance() {
     "December",
   ];
 
-  // Filter data based on search
   const filteredData =
     searchTerm && data?.data?.data
       ? data?.data?.data?.filter((record) => record.date.includes(searchTerm))
       : data?.data?.data || [];
 
   return (
-    <div className="overflow-hidden rounded-lg bg-white shadow-md">
+    <div className="overflow-hidden rounded-lg bg-white shadow-md dark:bg-dark-box dark:text-white">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white">
+      <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white dark:from-dark-box dark:to-dark-box">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center">
             <CalendarDays className="mr-2" size={24} />
@@ -50,29 +51,42 @@ function EmployeeAttendance() {
 
           <div className="flex flex-col gap-3 md:flex-row">
             {/* Month/Year Picker */}
-            <div className="flex items-center rounded-lg bg-white/10 p-2">
+            <div className="flex items-center rounded-lg bg-white/10 p-2 dark:bg-dark-border-color/30">
               <select
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(Number(e.target.value))}
                 className="border-none bg-transparent text-white outline-none"
               >
-                {months.map((month, index) => (
-                  <option
-                    key={index + 1}
-                    value={index + 1}
-                    className="text-gray-800"
-                  >
-                    {month}
-                  </option>
-                ))}
+                {months.map((month, index) => {
+                  const isFutureMonth =
+                    selectedYear > today.getFullYear() ||
+                    (selectedYear === today.getFullYear() &&
+                      index + 1 > today.getMonth() + 1);
+
+                  return (
+                    <option
+                      key={index + 1}
+                      value={index + 1}
+                      className="text-gray-800"
+                      disabled={isFutureMonth}
+                    >
+                      {month}
+                    </option>
+                  );
+                })}
               </select>
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(Number(e.target.value))}
                 className="ml-2 border-none bg-transparent text-white outline-none"
               >
-                {[2023, 2024, 2025].map((year) => (
-                  <option key={year} value={year} className="text-gray-800">
+                {[2022, 2023, 2024, 2025, 2026, 2027].map((year) => (
+                  <option
+                    key={year}
+                    value={year}
+                    className="text-gray-800"
+                    disabled={year > today.getFullYear()}
+                  >
                     {year}
                   </option>
                 ))}
@@ -90,7 +104,7 @@ function EmployeeAttendance() {
                 placeholder="Search by date..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full rounded-lg bg-white/10 py-2 pl-10 pr-4 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50"
+                className="w-full rounded-lg bg-white/10 py-2 pl-10 pr-4 text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/50 dark:bg-dark-border-color/30"
               />
             </div>
           </div>
@@ -101,36 +115,43 @@ function EmployeeAttendance() {
       <div className="p-6">
         {/* Summary Cards */}
         <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
-          <div className="rounded-lg bg-green-50 p-4">
-            <div className="mb-1 text-sm text-green-600">Present Days</div>
-            <div className="text-2xl font-bold text-gray-800">
+          <div className="rounded-lg bg-green-50 p-4 dark:bg-dark-card dark:text-green-400">
+            <div className="mb-1 text-sm text-green-600 dark:text-green-400">
+              Present Days
+            </div>
+            <div className="text-2xl font-bold text-gray-800 dark:text-white">
               {data?.data?.summary?.totalPresent}
             </div>
           </div>
-          <div className="rounded-lg bg-amber-50 p-4">
-            <div className="mb-1 text-sm text-amber-600">Late Days</div>
-            <div className="text-2xl font-bold text-gray-800">
+          <div className="rounded-lg bg-amber-50 p-4 dark:bg-dark-card dark:text-amber-400">
+            <div className="mb-1 text-sm text-amber-600 dark:text-amber-400">
+              Late Days
+            </div>
+            <div className="text-2xl font-bold text-gray-800 dark:text-white">
               {data?.data?.summary?.totalLateDays}
             </div>
           </div>
-          <div className="rounded-lg bg-red-50 p-4">
-            <div className="mb-1 text-sm text-red-600">Over Time</div>
-            <div className="text-2xl font-bold text-gray-800">
+          <div className="rounded-lg bg-red-50 p-4 dark:bg-dark-card dark:text-red-400">
+            <div className="mb-1 text-sm text-red-600 dark:text-red-400">
+              Over Time
+            </div>
+            <div className="text-2xl font-bold text-gray-800 dark:text-white">
               {data?.data?.summary?.totalOvertimeDays}
             </div>
           </div>
-          <div className="rounded-lg bg-red-100 p-4">
-            <div className="mb-1 text-sm text-red-600">Absent Days</div>
-            <div className="text-2xl font-bold text-gray-800">
-              {data?.data?.summary?.workingDays -
-                data?.data?.summary?.totalPresent}
+          <div className="rounded-lg bg-red-100 p-4 dark:bg-dark-card dark:text-red-300">
+            <div className="mb-1 text-sm text-red-600 dark:text-red-300">
+              Absent Days
+            </div>
+            <div className="text-2xl font-bold text-gray-800 dark:text-white">
+              {data?.data?.summary?.totalAbsent}
             </div>
           </div>
         </div>
 
         {/* Error State */}
         {isError && (
-          <div className="mb-4 rounded-lg bg-red-50 p-4 text-red-600">
+          <div className="mb-4 rounded-lg bg-red-50 p-4 text-red-600 dark:bg-red-800 dark:text-white">
             {error?.message || "Error loading attendance data"}
           </div>
         )}
@@ -141,7 +162,7 @@ function EmployeeAttendance() {
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="h-24 animate-pulse rounded-lg bg-gray-100"
+                className="h-24 animate-pulse rounded-lg bg-gray-100 dark:bg-dark-border-color/20"
               ></div>
             ))}
           </div>
@@ -150,43 +171,52 @@ function EmployeeAttendance() {
             {filteredData.map((record, index) => (
               <div
                 key={index}
-                className="rounded-lg border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md"
+                className="rounded-lg border border-gray-200 bg-white p-4 transition-shadow hover:shadow-md dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-box"
               >
-                <div className="mb-3 flex items-center justify-between"></div>
-
                 <div className="grid grid-cols-2 gap-4 md:grid-cols-6">
-                  <div className="">
-                    <div className="text-sm text-gray-500">Date</div>
-
+                  <div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                      Date
+                    </div>
                     <span className="font-medium">{record.date}</span>
                   </div>
                   <div>
-                    <div className="text-sm text-gray-500">Check In</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                      Check In
+                    </div>
                     <div className="font-medium">
                       {TimeConverterFromUTC(record.check_in) || "—"}
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm text-gray-500">Check Out</div>
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                      Check Out
+                    </div>
                     <div className="font-medium">
                       {TimeConverterFromUTC(record.check_out) || "—"}
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm text-gray-500">Late</div>
-                    <div className="font-medium text-amber-600">
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                      Late
+                    </div>
+                    <div className="font-medium text-amber-600 dark:text-amber-400">
                       {record.late || "—"}
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm text-gray-500">Overtime</div>
-                    <div className="font-medium text-green-600">
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                      Overtime
+                    </div>
+                    <div className="font-medium text-green-600 dark:text-green-400">
                       {record.overtime || "—"}
                     </div>
                   </div>
                   <div>
-                    <div className="text-sm text-gray-500">Working hour</div>
-                    <div className="font-medium text-green-600">
+                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                      Working hour
+                    </div>
+                    <div className="font-medium text-green-600 dark:text-green-400">
                       {record.working_hour || "—"}
                     </div>
                   </div>
