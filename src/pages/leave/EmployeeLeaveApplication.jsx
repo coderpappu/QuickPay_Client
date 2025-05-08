@@ -4,7 +4,7 @@ import { HrmSetupCardHeader } from "../../components/company/SettingCardHeader";
 
 import { useSelector } from "react-redux";
 import {
-  useGetAllEmployeeLeaveListQuery,
+  useGetEmployeeLeaveListQuery,
   useGetUserQuery,
 } from "../../features/api";
 import CardSkeleton from "../../skeletons/card";
@@ -38,7 +38,7 @@ const EmployeeLeaveApplication = () => {
     isLoading,
     isError,
     error,
-  } = useGetAllEmployeeLeaveListQuery({ companyId, employeeId });
+  } = useGetEmployeeLeaveListQuery({ companyId, employeeId });
 
   const statusColorHandler = (status) => {
     switch (status) {

@@ -307,6 +307,14 @@ export const apiSlice = createApi({
       invalidatesTags: ["Attendance"],
     }),
 
+    getEmployeeAttendances: builder.query({
+      query: ({ employeeId, month, year }) => ({
+        url: "/device/reports/employee-attendance",
+        params: { employeeId, month, year },
+      }),
+      providesTags: ["Attendance"],
+    }),
+
     // branch related endpoint
 
     createBranch: builder.mutation({
@@ -609,9 +617,9 @@ export const apiSlice = createApi({
       providesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
 
-    getAllEmployeeLeaveList: builder.query({
+    getEmployeeLeaveList: builder.query({
       query: ({ companyId, employeeId }) => ({
-        url: `/leave/list/${employeeId}`,
+        url: `/leave/application/list/${employeeId}`,
         params: { companyId },
       }),
       providesTags: ["leaveType", "earnLeave", "leaveApplication"],
@@ -622,6 +630,7 @@ export const apiSlice = createApi({
         url: `/leave/application/list`,
         params: { companyId },
       }),
+
       providesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),
 
@@ -2016,6 +2025,7 @@ export const {
   useCreateAttendanceMutation,
   useGetAttendancesQuery,
   useDeleteAttendanceMutation,
+  useGetEmployeeAttendancesQuery,
 
   // weekend related endpoints
   useCreateWeekendMutation,
@@ -2042,7 +2052,7 @@ export const {
   useDeleteLeaveTypeMutation,
   useEmployeeCreateLeaveMutation,
   useGetAllEmployeeApplicationQuery,
-  useGetAllEmployeeLeaveListQuery,
+  useGetEmployeeLeaveListQuery,
   useGetAllLeaveApplicationQuery,
   useUpdateLeaveApplicationMutation,
   useCalculationLeaveDaysQuery,

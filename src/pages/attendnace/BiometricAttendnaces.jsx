@@ -35,7 +35,7 @@ const BiometricAttendnaces = () => {
         <div className="w-[5%] dark:text-white">
           <h3>{++index}</h3>
         </div>
-        <div className="w-[10%] dark:text-white">
+        <div className="w-[15%] dark:text-white">
           <h3>{attendance?.name || "Unknown"}</h3>
         </div>
         <div className="w-[10%] dark:text-white">
@@ -84,7 +84,7 @@ const BiometricAttendnaces = () => {
             <div className="w-[5%] dark:text-white">
               <h3>SL</h3>
             </div>
-            <div className="w-[10%] dark:text-white">
+            <div className="w-[15%] dark:text-white">
               <h3>Name</h3>
             </div>
             <div className="w-[10%] dark:text-white">

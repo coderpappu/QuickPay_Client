@@ -32,7 +32,6 @@ import EmployeeProfile from "./pages/employee/EmployeeProfile";
 import EmployeeRegistration from "./pages/employee/employeeRegistrationForm";
 import ExperienceApplication from "./pages/employee/ExperienceCertificate";
 import JoiningLetter from "./pages/employee/JoiningLetter";
-import Leave from "./pages/employee/Leave";
 import LeaveForm from "./pages/employee/LeaveForm";
 import LoginEmployee from "./pages/employee/LoginEmployee";
 import NOCLetter from "./pages/employee/NOCLetter";
@@ -53,6 +52,7 @@ import EmployeeLoanList from "./components/hrm/loan/Employee_Loan/EmployeeLoanLi
 import BonusSlipCard from "./components/payroll/payslip/BonusSlip";
 import PaySlipCard from "./components/payroll/payslip/PaySlipCard";
 import BiometricAttendnaces from "./pages/attendnace/BiometricAttendnaces";
+import EmployeeMonthlyAttendance from "./pages/attendnace/EmployeeAttendance";
 import EditorComponent from "./pages/editor-test/EditorComponent";
 import LeaveApplicationListCard from "./pages/leave/LeaveApplicationList";
 import GradeForm from "./pages/payroll/grade/gradeForm";
@@ -151,11 +151,15 @@ function App() {
               />
               <Route path="employee/attendences" element={<AttendanceList />} />
               <Route
+                path="employee/attendence/overview"
+                element={<EmployeeMonthlyAttendance />}
+              />
+              <Route
                 path="employee/bio/attendences"
                 element={<BiometricAttendnaces />}
               />
               <Route path="company/calendar" element={<Calendar />} />
-              <Route path="employee/leave" element={<Leave />} />
+              {/* <Route path="employee/leave" element={<Leave />} /> */}
               <Route path="company/leave" element={<LeaveSettings />} />
               <Route path="company/leave/type" element={<LeaveTypeList />} />
               <Route path="company/leave/earnleave" element={<EarnLeave />} />
@@ -224,6 +228,7 @@ function App() {
                 path="/report/month/attendnace"
                 element={<MonthlyAttendnaceReport />}
               />
+
               <Route
                 path="/report/daily/attendnace"
                 element={<DailyAttendnaceReport />}

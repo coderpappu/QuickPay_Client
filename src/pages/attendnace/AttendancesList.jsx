@@ -15,7 +15,6 @@ import ErrorMessage from "../../utils/ErrorMessage";
 import formatTimeTo12Hour from "../../utils/timeConverter";
 
 const AttendanceList = () => {
-  
   const companyId = useSelector((state) => state.company.companyId);
 
   const [deleteAttendance] = useDeleteAttendanceMutation();
