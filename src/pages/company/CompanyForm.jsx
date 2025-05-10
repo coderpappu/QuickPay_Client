@@ -27,7 +27,7 @@ const SignupSchema = Yup.object().shape({
     .length(11, "Phone Number must be exactly 11 characters"),
   mobile_number: Yup.string().length(
     11,
-    "Mobile Number must be exactly 11 characters"
+    "Mobile Number must be exactly 11 characters",
   ),
   fax: Yup.string().notRequired(),
   website_url: Yup.string().url("Invalid URL"),
@@ -141,7 +141,7 @@ const CompanyForm = () => {
     >
       {({ isSubmitting, setFieldValue }) => (
         <Form>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {[
               { label: "Company Name", name: "company_name", type: "text" },
               { label: "Address", name: "address", type: "text" },
@@ -175,15 +175,14 @@ const CompanyForm = () => {
                   type={field.type}
                   name={field.name}
                   id={field.name}
-                  className="mt-1 block w-full px-3 py-2 border dark:border-[1px] dark:border-opacity-20 border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-dark-box"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm dark:border-[1px] dark:border-opacity-20 dark:bg-dark-box"
                 />
 
                 <ErrorMessage
                   name={field.name}
                   component="div"
-                  className="text-red-500 text-sm mt-1"
+                  className="mt-1 text-sm text-red-500"
                 />
-                  
               </div>
             ))}
             <div>
@@ -195,7 +194,7 @@ const CompanyForm = () => {
                     alt="Company Logo"
                   />
                   <button
-                    className="text-red-500 hover:text-red-700 ml-2"
+                    className="ml-2 text-red-500 hover:text-red-700"
                     type="button"
                     onClick={() => handleDeleteLogo(setFieldValue)}
                   >
@@ -209,7 +208,7 @@ const CompanyForm = () => {
                   onChange={(event) => {
                     setFieldValue("logo", event.currentTarget.files[0]);
                   }}
-                  className="block w-full mt-2"
+                  className="mt-2 block w-full"
                 />
               )}
             </div>
@@ -218,7 +217,7 @@ const CompanyForm = () => {
             <button
               type="submit"
               disabled={isSubmitting || !canSubmit}
-              className={` w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${!canSubmit && "bg-[#a582dc]"} bg-[#3686FF] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 `}
+              className={`inline-flex w-full justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white shadow-sm ${!canSubmit && "bg-[#a582dc]"} bg-[#3686FF] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
             >
               Submit
             </button>

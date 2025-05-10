@@ -1,4 +1,5 @@
-import { format, isValid, parse } from "date-fns";
+import { isValid, parse } from "date-fns";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import {
   AlertCircle,
   Calendar,
@@ -7,68 +8,57 @@ import {
   Send,
 } from "lucide-react";
 import React, { useState } from "react";
+import * as Yup from "yup";
 
-const ReconciliationForm = ({ selectedDate, onDateChange }) => {
+const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
   const [activeTab, setActiveTab] = useState("in");
-  const [inTime, setInTime] = useState("09:00");
-  const [outTime, setOutTime] = useState("17:00");
-  const [remarks, setRemarks] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [errors, setErrors] = useState({});
 
-  const validateForm = () => {
-    const newErrors = {};
+  const initialValues = {
+    inTime: "09:00",
+    outTime: "17:00",
+    remarks: "",
+  };
 
-    if ((activeTab === "in" || activeTab === "both") && !inTime) {
-      newErrors.inTime = "In time is required";
-    }
+  const validationSchema = Yup.object().shape({
+    inTime: Yup.string().when("activeTab", {
+      is: (val) => val === "in" || val === "both",
+      then: Yup.string().required("In time is required"),
+    }),
+    outTime: Yup.string().when("activeTab", {
+      is: (val) => val === "out" || val === "both",
+      then: Yup.string().required("Out time is required"),
+    }),
+    remarks: Yup.string(),
+  });
 
-    if ((activeTab === "out" || activeTab === "both") && !outTime) {
-      newErrors.outTime = "Out time is required";
-    }
-
-    if (activeTab === "both" && inTime && outTime) {
-      const inTimeDate = parse(inTime, "HH:mm", new Date());
-      const outTimeDate = parse(outTime, "HH:mm", new Date());
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    // Custom validation for inTime and outTime
+    if (activeTab === "both" && values.inTime && values.outTime) {
+      const inTimeDate = parse(values.inTime, "HH:mm", new Date());
+      const outTimeDate = parse(values.outTime, "HH:mm", new Date());
 
       if (
         isValid(inTimeDate) &&
         isValid(outTimeDate) &&
         inTimeDate >= outTimeDate
       ) {
-        newErrors.outTime = "Out time must be after in time";
+        alert("Out time must be after in time");
+        setSubmitting(false);
+        return;
       }
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+    // Simulate form submission
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setSubmitted(true);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+    setTimeout(() => {
+      setSubmitted(false);
+      resetForm();
+    }, 2000);
 
-    setIsSubmitting(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setSubmitted(true);
-
-      setTimeout(() => {
-        setSubmitted(false);
-        if (activeTab === "in") setInTime("09:00");
-        else if (activeTab === "out") setOutTime("17:00");
-        else {
-          setInTime("09:00");
-          setOutTime("17:00");
-        }
-        setRemarks("");
-      }, 2000);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    setSubmitting(false);
   };
 
   const TabButton = ({ tab, label }) => (
@@ -79,34 +69,47 @@ const ReconciliationForm = ({ selectedDate, onDateChange }) => {
           ? "bg-light-bg text-gray-800 dark:bg-dark-box dark:text-white"
           : "text-gray-600 hover:bg-light-bg/50 dark:text-dark-text-color dark:hover:bg-dark-box/50"
       }`}
-      onClick={() => {
-        setActiveTab(tab);
-        setErrors({});
-      }}
+      onClick={() => setActiveTab(tab)}
     >
       {label}
     </button>
   );
 
-  const FormField = ({ label, error, icon: Icon, children }) => (
+  const FormField = ({ label, name, type = "text", icon: Icon, component }) => (
     <div className="mb-6">
-      <div className="mb-2 flex items-center gap-2 font-medium text-gray-700 dark:text-dark-text-color">
-        <Icon size={18} className="shrink-0" />
+      <div className="mb-2 flex items-center font-medium text-gray-700 dark:text-dark-text-color">
+        <Icon size={16} className="mr-2" />
         <span>{label}</span>
       </div>
-      {children}
-      {error && (
-        <div className="mt-2 flex items-center text-sm text-red-600 dark:text-red-400">
-          <AlertCircle size={14} className="mr-1" />
-          {error}
+      <div className="relative">
+        <Field
+          name={name}
+          type={type}
+          as={component}
+          className="w-full rounded-sm border-none bg-light-bg px-4 py-3 text-gray-700 outline-none dark:bg-dark-box dark:text-white"
+        />
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+          <Icon size={18} className="text-gray-400 dark:text-gray-500" />
         </div>
-      )}
+      </div>
+      <ErrorMessage
+        name={name}
+        component="div"
+        className="mt-2 flex items-center text-sm text-red-600 dark:text-red-400"
+      >
+        {(msg) => (
+          <>
+            <AlertCircle size={14} className="mr-1" />
+            {msg}
+          </>
+        )}
+      </ErrorMessage>
     </div>
   );
 
   return (
-    <div className="m-auto w-[60%] overflow-hidden rounded-lg bg-white shadow-md dark:border dark:border-dark-border-color dark:border-opacity-10 dark:bg-dark-card">
-      <div className="border-b dark:border-dark-border-color dark:border-opacity-10">
+    <div className="m-auto w-[60%] overflow-hidden rounded-lg bg-white shadow-md dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-card">
+      <div className="border-b border-dark-box border-opacity-5 dark:border-dark-border-color dark:border-opacity-5">
         <div className="flex">
           <TabButton tab="in" label="In Time" />
           <TabButton tab="out" label="Out Time" />
@@ -114,108 +117,93 @@ const ReconciliationForm = ({ selectedDate, onDateChange }) => {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-6">
-        {submitted && (
-          <div className="mb-6 flex items-center rounded border border-green-200 bg-green-50 px-4 py-3 text-green-700 dark:border-green-800/30 dark:bg-green-900/20 dark:text-green-400">
-            <div className="mr-2 rounded-full bg-green-100 p-1 dark:bg-green-800/30">
-              ✓
-            </div>
-            <span>Attendance reconciliation successfully submitted!</span>
-          </div>
-        )}
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ isSubmitting, setFieldValue }) => (
+          <Form className="p-6">
+            {submitted && (
+              <div className="mb-6 flex items-center rounded border border-green-200 bg-green-50 px-4 py-3 text-green-700 dark:border-green-800/30 dark:bg-green-900/20 dark:text-green-400">
+                <div className="mr-2 rounded-full bg-green-100 p-1 dark:bg-green-800/30">
+                  ✓
+                </div>
+                <span>Attendance reconciliation successfully submitted!</span>
+              </div>
+            )}
 
-        {/* Selected Date */}
-        <FormField label="Selected Date" icon={Calendar}>
-          <div className="relative">
-            <input
-              type="date"
-              value={
-                selectedDate ? format(new Date(selectedDate), "yyyy-MM-dd") : ""
-              }
-              onChange={(e) => {
-                if (onDateChange) onDateChange(e.target.value);
-              }}
-              className="w-full rounded-sm border-none bg-light-bg px-4 py-3 text-gray-700 outline-none dark:bg-dark-box dark:text-white"
+            {/* Date field */}
+            <div className="mb-6">
+              <div className="mb-2 flex items-center font-medium text-gray-700 dark:text-dark-text-color">
+                <Calendar size={16} className="mr-2" />
+                <span>Selected Date</span>
+              </div>
+              <div className="relative">
+                <input
+                  type="date"
+                  value={selectedDate || ""}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  className="w-full rounded-sm border-none bg-light-bg px-4 py-3 text-gray-700 outline-none dark:bg-dark-box dark:text-white"
+                />
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                  <Calendar
+                    size={18}
+                    className="text-gray-400 dark:text-gray-500"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {(activeTab === "in" || activeTab === "both") && (
+              <FormField
+                label="In Time"
+                name="inTime"
+                type="time"
+                icon={Clock}
+              />
+            )}
+
+            {(activeTab === "out" || activeTab === "both") && (
+              <FormField
+                label="Out Time"
+                name="outTime"
+                type="time"
+                icon={Clock}
+              />
+            )}
+
+            <FormField
+              label="Remarks"
+              name="remarks"
+              icon={MessageSquare}
+              component="textarea"
             />
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-              <Calendar
-                size={18}
-                className="text-gray-400 dark:text-gray-500"
-              />
-            </div>
-          </div>
-        </FormField>
 
-        {(activeTab === "in" || activeTab === "both") && (
-          <FormField label="In Time" icon={Clock} error={errors.inTime}>
-            <div className="relative">
-              <input
-                type="time"
-                value={inTime}
-                onChange={(e) => setInTime(e.target.value)}
-                className={`w-full rounded-sm border-none bg-light-bg px-4 py-3 ${
-                  errors.inTime ? "ring-2 ring-red-500" : ""
-                } text-gray-700 outline-none dark:bg-dark-box dark:text-white`}
-              />
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                <Clock size={18} className="text-gray-400 dark:text-gray-500" />
-              </div>
-            </div>
-          </FormField>
+            <button
+              type="submit"
+              className={`flex w-full items-center justify-center rounded-sm bg-light-bg px-6 py-3 font-medium text-gray-700 transition-all duration-300 dark:bg-dark-box dark:text-white ${
+                isSubmitting
+                  ? "cursor-not-allowed opacity-70"
+                  : "hover:bg-light-bg/80 dark:hover:bg-dark-box/80"
+              }`}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <div className="mr-2 h-5 w-5 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <Send size={18} className="mr-2" />
+                  Submit
+                </>
+              )}
+            </button>
+          </Form>
         )}
-
-        {(activeTab === "out" || activeTab === "both") && (
-          <FormField label="Out Time" icon={Clock} error={errors.outTime}>
-            <div className="relative">
-              <input
-                type="time"
-                value={outTime}
-                onChange={(e) => setOutTime(e.target.value)}
-                className={`w-full rounded-sm border-none bg-light-bg px-4 py-3 ${
-                  errors.outTime ? "ring-2 ring-red-500" : ""
-                } text-gray-700 outline-none dark:bg-dark-box dark:text-white`}
-              />
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                <Clock size={18} className="text-gray-400 dark:text-gray-500" />
-              </div>
-            </div>
-          </FormField>
-        )}
-
-        {/* Remarks */}
-        <FormField label="Remarks" icon={MessageSquare}>
-          <textarea
-            value={remarks}
-            onChange={(e) => setRemarks(e.target.value)}
-            rows={4}
-            className="w-full rounded-sm border-none bg-light-bg px-4 py-3 text-gray-700 outline-none dark:bg-dark-box dark:text-white"
-            placeholder="Add any additional information or explanation here..."
-          />
-        </FormField>
-
-        {/* Submit Button */}
-        <button
-          type="submit"
-          className={`flex w-full items-center justify-center rounded-sm bg-light-bg px-6 py-3 font-medium text-gray-700 transition-all duration-300 dark:bg-dark-box dark:text-white ${
-            isSubmitting
-              ? "cursor-not-allowed opacity-70"
-              : "hover:bg-light-bg/80 dark:hover:bg-dark-box/80"
-          }`}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? (
-            <>
-              <div className="mr-2 h-5 w-5 animate-spin rounded-full border-2 border-current border-t-transparent" />
-              Processing...
-            </>
-          ) : (
-            <>
-              <Send size={18} className="mr-2" />
-              Submit
-            </>
-          )}
-        </button>
-      </form>
+      </Formik>
     </div>
   );
 };
