@@ -315,6 +315,56 @@ export const apiSlice = createApi({
       providesTags: ["Attendance"],
     }),
 
+    // attendance reconcilition
+    createAttendanceReconcilition: builder.mutation({
+      query: (credentials) => ({
+        url: "/reconcilition/create",
+        method: "POST",
+        body: credentials,
+      }),
+      invalidatesTags: ["Attendance", "Reconciliation"],
+    }),
+
+    getReconciliationApplications: builder.query({
+      query: () => ({
+        url: "/reconcilition/all-application",
+      }),
+      providesTags: ["Reconciliation"],
+    }),
+
+    getReconciliationById: builder.query({
+      query: (id) => ({
+        url: `/reconcilition/application/${id}`,
+      }),
+      providesTags: (result, error, id) => [{ type: "Reconciliation", id }],
+    }),
+
+    deleteReconciliation: builder.mutation({
+      query: (id) => ({
+        url: `/reconcilition/application/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Reconciliation"],
+    }),
+
+    getEmployeeReconciliations: builder.query({
+      query: () => ({
+        url: "/reconcilition/my-applications",
+      }),
+      providesTags: ["Reconciliation"],
+    }),
+    updateReconciliationApplication: builder.mutation({
+      query: ({ id, payload }) => ({
+        url: `/reconciliation/${id}`,
+        method: "PATCH",
+        body: payload,
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        "Reconciliation",
+        { type: "Reconciliation", id },
+      ],
+    }),
+
     // branch related endpoint
 
     createBranch: builder.mutation({
@@ -2026,6 +2076,14 @@ export const {
   useGetAttendancesQuery,
   useDeleteAttendanceMutation,
   useGetEmployeeAttendancesQuery,
+
+  // reconciliation
+  useCreateAttendanceReconcilitionMutation,
+  useGetReconciliationApplicationsQuery,
+  useGetReconciliationByIdQuery,
+  useDeleteReconciliationMutation,
+  useGetEmployeeReconciliationsQuery,
+  useUpdateReconciliationApplicationMutation,
 
   // weekend related endpoints
   useCreateWeekendMutation,
