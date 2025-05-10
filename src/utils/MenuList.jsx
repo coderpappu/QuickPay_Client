@@ -202,8 +202,8 @@ const employeeMenuItems = [
     icon: <TbCards size={18} />,
 
     subMenu: [
-      { title: "sheet", link: "/employee/attendence/overview" },
-      { title: "Reports", link: "/company/loan/type" },
+      { title: "Report", link: "/employee/attendence/overview" },
+      { title: "Reconciliation", link: "/reconciliation/application" },
     ],
   },
   {
