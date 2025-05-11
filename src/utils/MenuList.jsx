@@ -59,6 +59,7 @@ const adminMenuItems = [
       { title: "Attendance List", link: "/employee/attendences" },
       { title: "Manual Attendance ", link: "/employee/attendence" },
       { title: "Biometric", link: "/employee/bio/attendences" },
+      { title: "Reconciliation", link: "/reconciliation/application/list" },
     ],
   },
   {

@@ -9,8 +9,17 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import * as Yup from "yup";
+import {
+  useCreateAttendanceReconcilitionMutation,
+  useGetUserQuery,
+} from "../../features/api";
 
 const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
+  const [createReconciliatio, { isLoading, isError }] =
+    useCreateAttendanceReconcilitionMutation();
+
+  const { data: userData } = useGetUserQuery();
+
   const [activeTab, setActiveTab] = useState("in");
   const [submitted, setSubmitted] = useState(false);
 
@@ -22,7 +31,7 @@ const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
   const initialValues = {
     inTime: "09:00",
     outTime: "17:00",
-    remarks: "",
+    reason: "", // Change 'remarks' to 'reason' to match the database
   };
 
   const validationSchema = Yup.object().shape({
@@ -34,7 +43,7 @@ const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
       is: (val) => val === "out" || val === "both",
       then: Yup.string().required("Out time is required"),
     }),
-    remarks: Yup.string(),
+    reason: Yup.string(),
   });
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -53,6 +62,19 @@ const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
         return;
       }
     }
+
+    console.log(values);
+
+    // Adjust the data sent to the backend based on the active tab
+    const dataToSubmit = {
+      date: selectedDateState,
+      employeeId: userData?.data?.id,
+      approvedCheckIn: activeTab === "in" ? values.inTime : undefined,
+      approvedCheckOut: activeTab === "out" ? values.outTime : undefined,
+      reason: values?.reason,
+    };
+
+    await createReconciliatio(dataToSubmit);
 
     // Simulate form submission
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -93,9 +115,6 @@ const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
           as={component}
           className="w-full rounded-sm border-none bg-light-bg px-4 py-3 text-gray-700 outline-none dark:bg-dark-box dark:text-white"
         />
-        {/* <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-          <Icon size={18} className="text-gray-400 dark:text-gray-500" />
-        </div> */}
       </div>
       <ErrorMessage
         name={name}
@@ -179,8 +198,8 @@ const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
             )}
 
             <FormField
-              label="Remarks"
-              name="remarks"
+              label="Reason" // Changed to "Reason"
+              name="reason" // Changed to "reason"
               icon={MessageSquare}
               component="textarea"
             />

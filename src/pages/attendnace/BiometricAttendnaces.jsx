@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import BrandCardWrapper from "../../components/company/BrandCardWrapper";
 import { useGetCompanyAttendanceQuery } from "../../features/api";
 import CardSkeleton from "../../skeletons/card";

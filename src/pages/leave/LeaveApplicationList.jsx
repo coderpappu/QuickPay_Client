@@ -1,4 +1,3 @@
-import React from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
 import { PiEyeLight } from "react-icons/pi";
