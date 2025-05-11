@@ -7,12 +7,17 @@ import {
   MessageSquare,
   Send,
 } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import * as Yup from "yup";
 
 const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
   const [activeTab, setActiveTab] = useState("in");
   const [submitted, setSubmitted] = useState(false);
+
+  // Default the selected date if not provided
+  const [selectedDateState, setSelectedDateState] = useState(
+    selectedDate || new Date().toISOString().split("T")[0],
+  );
 
   const initialValues = {
     inTime: "09:00",
@@ -88,9 +93,9 @@ const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
           as={component}
           className="w-full rounded-sm border-none bg-light-bg px-4 py-3 text-gray-700 outline-none dark:bg-dark-box dark:text-white"
         />
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+        {/* <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
           <Icon size={18} className="text-gray-400 dark:text-gray-500" />
-        </div>
+        </div> */}
       </div>
       <ErrorMessage
         name={name}
@@ -107,6 +112,12 @@ const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
     </div>
   );
 
+  const handleDateChange = (e) => {
+    const date = e.target.value;
+    setSelectedDateState(date);
+    setSelectedDate(date); // Propagate to parent
+  };
+
   return (
     <div className="m-auto w-[60%] overflow-hidden rounded-lg bg-white shadow-md dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-card">
       <div className="border-b border-dark-box border-opacity-5 dark:border-dark-border-color dark:border-opacity-5">
@@ -122,7 +133,7 @@ const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ isSubmitting, setFieldValue }) => (
+        {({ isSubmitting }) => (
           <Form className="p-6">
             {submitted && (
               <div className="mb-6 flex items-center rounded border border-green-200 bg-green-50 px-4 py-3 text-green-700 dark:border-green-800/30 dark:bg-green-900/20 dark:text-green-400">
@@ -142,16 +153,10 @@ const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
               <div className="relative">
                 <input
                   type="date"
-                  value={selectedDate || ""}
-                  onChange={(e) => setSelectedDate(e.target.value)}
+                  value={selectedDateState}
+                  onChange={handleDateChange}
                   className="w-full rounded-sm border-none bg-light-bg px-4 py-3 text-gray-700 outline-none dark:bg-dark-box dark:text-white"
                 />
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                  <Calendar
-                    size={18}
-                    className="text-gray-400 dark:text-gray-500"
-                  />
-                </div>
               </div>
             </div>
 
