@@ -1,12 +1,21 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useGetReconciliationByIdQuery } from "../../features/api";
-const ReconciliationView = ({ selectId, onApprove, onReject }) => {
+import {
+  useGetReconciliationByIdQuery,
+  useUpdateReconciliationApplicationMutation,
+} from "../../features/api";
+
+import toast from "react-hot-toast";
+
+const ReconciliationView = ({ selectId, setIsPopupOpen }) => {
   const companyId = useSelector((state) => state.company.companyId);
 
   const { data: reconciliationData } = useGetReconciliationByIdQuery(selectId, {
     skip: !selectId,
   });
+
+  // update end point
+  const [updateReconciliation] = useUpdateReconciliationApplicationMutation();
 
   //   console.log(TimeConverterFromUTC(reconciliationData?.data?.approvedCheckIn));
 
@@ -33,6 +42,22 @@ const ReconciliationView = ({ selectId, onApprove, onReject }) => {
     }
   }, [reconciliationData]);
 
+  // Update handler for Approve/Reject
+  const handleUpdate = async (status) => {
+    try {
+      const payload = {
+        id: selectId,
+        status,
+      };
+
+      await updateReconciliation(payload).unwrap();
+      toast.success("Reconciliation application updated.");
+      setIsPopupOpen(false);
+    } catch (error) {
+      toast.error("Failed to update reconciliation.");
+    }
+  };
+
   const employee = reconciliationData?.data?.employee;
 
   return (
@@ -42,6 +67,7 @@ const ReconciliationView = ({ selectId, onApprove, onReject }) => {
       </h2>
 
       {/* Employee Info */}
+
       <div className="flex items-start justify-between rounded-md border bg-light-input p-4 dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-box">
         <div className="flex items-center gap-4">
           <div className="dark:bg-dark-muted h-16 w-16 rounded-full bg-gray-300"></div>
@@ -57,7 +83,6 @@ const ReconciliationView = ({ selectId, onApprove, onReject }) => {
             </p>
           </div>
         </div>
-
         <div className="text-light-text grid grid-cols-2 gap-y-1 text-sm dark:text-dark-text-color">
           <p>
             <strong>Join Date:</strong> {employee?.joining_date}
@@ -80,6 +105,7 @@ const ReconciliationView = ({ selectId, onApprove, onReject }) => {
       </div>
 
       {/* Form View */}
+
       <div className="grid grid-cols-3 gap-6">
         <div>
           <label className="text-sm font-medium dark:text-dark-text-color">
@@ -158,14 +184,14 @@ const ReconciliationView = ({ selectId, onApprove, onReject }) => {
 
       <div className="flex justify-end gap-4">
         <button
-          onClick={onReject}
+          onClick={() => handleUpdate("REJECTED")}
           className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
         >
           Reject
         </button>
 
         <button
-          onClick={onApprove}
+          onClick={() => handleUpdate("APPROVED")}
           className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
         >
           Approve

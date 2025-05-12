@@ -355,11 +355,12 @@ export const apiSlice = createApi({
     }),
 
     updateReconciliationApplication: builder.mutation({
-      query: ({ id, payload }) => ({
-        url: `/reconciliation/update/${id}`,
-        method: "PATCH",
+      query: ({ id, ...payload }) => ({
+        url: `/reconcilition/update/${id}`,
+        method: "PUT",
         body: payload,
       }),
+
       invalidatesTags: (result, error, { id }) => [
         "Reconciliation",
         { type: "Reconciliation", id },
