@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useGetReconciliationByIdQuery } from "../../features/api";
-import { TimeConverterFromUTC } from "../../utils/Converter";
 const ReconciliationView = ({ selectId, onApprove, onReject }) => {
   const companyId = useSelector((state) => state.company.companyId);
 
@@ -25,12 +24,8 @@ const ReconciliationView = ({ selectId, onApprove, onReject }) => {
       const data = reconciliationData.data;
       setInitialData({
         date: data.date?.split("T")[0] || "",
-        in_time: data.approvedCheckIn
-          ? TimeConverterFromUTC(data.approvedCheckIn)
-          : "N/A",
-        out_time: data.approvedCheckOut
-          ? TimeConverterFromUTC(data.approvedCheckOut)
-          : "N/A",
+        in_time: data.approvedCheckIn ? data.approvedCheckIn : "N/A",
+        out_time: data.approvedCheckOut ? data.approvedCheckOut : "N/A",
         reason: data.reason || "",
         note: data.note || "",
         status: data.status || "",
@@ -88,6 +83,32 @@ const ReconciliationView = ({ selectId, onApprove, onReject }) => {
       <div className="grid grid-cols-3 gap-6">
         <div>
           <label className="text-sm font-medium dark:text-dark-text-color">
+            Check In
+          </label>
+          <input
+            type="text"
+            value={reconciliationData?.data?.checkIn}
+            disabled
+            className="w-full rounded bg-gray-100 px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
+          />
+        </div>
+
+        <div>
+          <label className="text-sm font-medium dark:text-dark-text-color">
+            Check Out
+          </label>
+          <input
+            type="text"
+            value={reconciliationData?.data?.checkOut}
+            disabled
+            className="w-full rounded bg-gray-100 px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
+          />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-6">
+        <div>
+          <label className="text-sm font-medium dark:text-dark-text-color">
             Date
           </label>
           <input
@@ -135,7 +156,6 @@ const ReconciliationView = ({ selectId, onApprove, onReject }) => {
         />
       </div>
 
-      {/* Action Buttons */}
       <div className="flex justify-end gap-4">
         <button
           onClick={onReject}
@@ -143,6 +163,7 @@ const ReconciliationView = ({ selectId, onApprove, onReject }) => {
         >
           Reject
         </button>
+
         <button
           onClick={onApprove}
           className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
