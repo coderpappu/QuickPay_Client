@@ -204,7 +204,7 @@ const employeeMenuItems = [
 
     subMenu: [
       { title: "Report", link: "/employee/attendence/overview" },
-      { title: "Reconciliation", link: "/reconciliation/application" },
+      { title: "Reconciliation", link: "/reconciliation/employee/application" },
     ],
   },
   {

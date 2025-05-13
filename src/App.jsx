@@ -53,7 +53,7 @@ import BonusSlipCard from "./components/payroll/payslip/BonusSlip";
 import PaySlipCard from "./components/payroll/payslip/PaySlipCard";
 import BiometricAttendnaces from "./pages/attendnace/BiometricAttendnaces";
 import EmployeeMonthlyAttendance from "./pages/attendnace/EmployeeAttendance";
-import ReconciliationApplication from "./pages/attendnace/ReconciliationApplication";
+import EmployeeReconciliationAppListCard from "./pages/attendnace/EmployeeReconciliationList";
 import ReconciliationApplicationListCard from "./pages/attendnace/ReconciliationAppList";
 import EditorComponent from "./pages/editor-test/EditorComponent";
 import LeaveApplicationListCard from "./pages/leave/LeaveApplicationList";
@@ -236,8 +236,8 @@ function App() {
                 element={<DailyAttendnaceReport />}
               />
               <Route
-                path="/reconciliation/application"
-                element={<ReconciliationApplication />}
+                path="/reconciliation/employee/application"
+                element={<EmployeeReconciliationAppListCard />}
               />
 
               <Route

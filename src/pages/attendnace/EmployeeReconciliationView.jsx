@@ -6,9 +6,7 @@ import {
   useUpdateReconciliationApplicationMutation,
 } from "../../features/api";
 
-import toast from "react-hot-toast";
-
-const ReconciliationView = ({ selectId, setIsPopupOpen }) => {
+const EmployeeReconciliationView = ({ selectId, setIsPopupOpen }) => {
   const companyId = useSelector((state) => state.company.companyId);
 
   const { data: reconciliationData } = useGetReconciliationByIdQuery(selectId, {
@@ -16,8 +14,6 @@ const ReconciliationView = ({ selectId, setIsPopupOpen }) => {
   });
 
   const { data: user } = useGetUserQuery();
-
-  
 
   const [updateReconciliation] = useUpdateReconciliationApplicationMutation();
 
@@ -44,30 +40,10 @@ const ReconciliationView = ({ selectId, setIsPopupOpen }) => {
     }
   }, [reconciliationData]);
 
-  // Update handler for Approve/Reject
-  const handleUpdate = async (status) => {
-    try {
-      const payload = {
-        id: selectId,
-        status,
-      };
-
-      await updateReconciliation(payload).unwrap();
-      toast.success("Reconciliation application updated.");
-      setIsPopupOpen(false);
-    } catch (error) {
-      toast.error("Failed to update reconciliation.");
-    }
-  };
-
   const employee = reconciliationData?.data?.employee;
 
   return (
     <div className="bg-light-card mx-auto w-full space-y-6 rounded-lg p-6 shadow-md dark:bg-dark-card">
-      <h2 className="text-light-text text-xl font-semibold dark:text-dark-text-color">
-        Reconciliation Application
-      </h2>
-
       {/* Employee Info */}
 
       <div className="flex items-start justify-between rounded-md border bg-light-input p-4 dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-box">
@@ -183,24 +159,8 @@ const ReconciliationView = ({ selectId, setIsPopupOpen }) => {
           className="w-full rounded bg-gray-100 px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
         />
       </div>
-
-      <div className="flex justify-end gap-4">
-        <button
-          onClick={() => handleUpdate("REJECTED")}
-          className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
-        >
-          Reject
-        </button>
-
-        <button
-          onClick={() => handleUpdate("APPROVED")}
-          className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
-        >
-          Approve
-        </button>
-      </div>
     </div>
   );
 };
 
-export default ReconciliationView;
+export default EmployeeReconciliationView;

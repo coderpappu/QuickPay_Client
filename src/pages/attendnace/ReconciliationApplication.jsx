@@ -138,7 +138,7 @@ const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
   };
 
   return (
-    <div className="m-auto w-[60%] overflow-hidden rounded-lg bg-white shadow-md dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-card">
+    <div className="m-auto overflow-hidden rounded-lg bg-white shadow-md dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-card">
       <div className="border-b border-dark-box border-opacity-5 dark:border-dark-border-color dark:border-opacity-5">
         <div className="flex">
           <TabButton tab="in" label="In Time" />
