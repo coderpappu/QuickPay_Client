@@ -1,14 +1,14 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import BrandCardWrapper from "../../components/company/BrandCardWrapper";
 import { useGetCompanyAttendanceQuery } from "../../features/api";
 import CardSkeleton from "../../skeletons/card";
 import { TimeConverterFromUTC } from "../../utils/Converter";
 import DatePicker from "../../utils/DatePicker";
 import ErrorMessage from "../../utils/ErrorMessage";
-
 const BiometricAttendnaces = () => {
   const [date, setDate] = useState(DatePicker);
-
+  const companyId = useSelector((state) => state.company.companyId);
   const handleDateChange = (e) => {
     setDate(e.target.value);
   };
@@ -18,7 +18,7 @@ const BiometricAttendnaces = () => {
     isLoading,
     isError,
     error,
-  } = useGetCompanyAttendanceQuery(date);
+  } = useGetCompanyAttendanceQuery({ date, companyId });
 
   let content;
 

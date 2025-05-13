@@ -1772,9 +1772,9 @@ export const apiSlice = createApi({
     }),
 
     getCompanyAttendance: builder.query({
-      query: (date) => ({
+      query: ({ date, companyId }) => ({
         url: `/device/get-attendance`,
-        params: { date },
+        params: { date, companyId },
       }),
       providesTags: ["device"],
     }),
