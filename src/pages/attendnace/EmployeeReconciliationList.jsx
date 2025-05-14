@@ -182,7 +182,7 @@ const EmployeeReconciliationAppListCard = () => {
         {isPopupOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="w-full max-w-4xl rounded-lg bg-white p-6 dark:bg-dark-card">
-              <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-dark-border-color">
+              <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-dark-border-color dark:border-opacity-10">
                 <h3 className="text-lg font-medium text-gray-800 dark:text-white">
                   Reconciliation Form
                 </h3>

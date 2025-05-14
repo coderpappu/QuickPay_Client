@@ -3,89 +3,133 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import {
   AlertCircle,
   Calendar,
+  CheckCircle,
   Clock,
   MessageSquare,
   Send,
+  XCircle,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import {
   useCreateAttendanceReconcilitionMutation,
   useGetUserQuery,
 } from "../../features/api";
 
-const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
-  const [createReconciliatio, { isLoading, isError }] =
-    useCreateAttendanceReconcilitionMutation();
-
+import { toast } from "react-hot-toast";
+const ReconciliationForm = ({ selectedDate, setIsPopupOpen }) => {
+  const [createReconciliation] = useCreateAttendanceReconcilitionMutation();
   const { data: userData } = useGetUserQuery();
 
   const [activeTab, setActiveTab] = useState("in");
-  const [submitted, setSubmitted] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState({
+    submitted: false,
+    success: false,
+    message: "",
+  });
 
-  // Default the selected date if not provided
   const [selectedDateState, setSelectedDateState] = useState(
     selectedDate || new Date().toISOString().split("T")[0],
   );
 
+  // Reset submission status when changing tabs or dates
+  useEffect(() => {
+    if (submissionStatus.submitted) {
+      setSubmissionStatus({
+        submitted: false,
+        success: false,
+        message: "",
+      });
+    }
+  }, [activeTab, selectedDateState]);
+
+  // Reset submission status after 3 seconds
+  useEffect(() => {
+    let timer;
+    if (submissionStatus.submitted) {
+      timer = setTimeout(() => {
+        setSubmissionStatus({
+          submitted: false,
+          success: false,
+          message: "",
+        });
+      }, 3000);
+    }
+    return () => clearTimeout(timer);
+  }, [submissionStatus.submitted]);
+
   const initialValues = {
     inTime: "09:00",
     outTime: "17:00",
-    reason: "", // Change 'remarks' to 'reason' to match the database
+    reason: "",
   };
 
   const validationSchema = Yup.object().shape({
-    inTime: Yup.string().when("activeTab", {
-      is: (val) => val === "in" || val === "both",
-      then: Yup.string().required("In time is required"),
-    }),
-    outTime: Yup.string().when("activeTab", {
-      is: (val) => val === "out" || val === "both",
-      then: Yup.string().required("Out time is required"),
-    }),
-    reason: Yup.string(),
+    // inTime: Yup.string().when("$activeTab", {
+    //   is: (activeTab) => activeTab === "in" || activeTab === "both",
+    //   then: Yup.string().required("In time is required"),
+    //   otherwise: Yup.string(),
+    // }),
+    // outTime: Yup.string().when("$activeTab", {
+    //   is: (activeTab) => activeTab === "out" || activeTab === "both",
+    //   then: Yup.string().required("Out time is required"),
+    //   otherwise: Yup.string(),
+    // }),
+    reason: Yup.string().required("Please provide a reason for reconciliation"),
   });
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    // Custom validation for inTime and outTime
-    if (activeTab === "both" && values.inTime && values.outTime) {
-      const inTimeDate = parse(values.inTime, "HH:mm", new Date());
-      const outTimeDate = parse(values.outTime, "HH:mm", new Date());
+    try {
+      // Time validation for "both" tab
+      if (activeTab === "both" && values.inTime && values.outTime) {
+        const inTime = parse(values.inTime, "HH:mm", new Date());
+        const outTime = parse(values.outTime, "HH:mm", new Date());
 
-      if (
-        isValid(inTimeDate) &&
-        isValid(outTimeDate) &&
-        inTimeDate >= outTimeDate
-      ) {
-        alert("Out time must be after in time");
-        setSubmitting(false);
-        return;
+        if (!isValid(inTime) || !isValid(outTime)) {
+          setSubmissionStatus({
+            submitted: true,
+            success: false,
+            message: "Invalid time format",
+          });
+          setSubmitting(false);
+          return;
+        }
+
+        if (inTime >= outTime) {
+          setSubmissionStatus({
+            submitted: true,
+            success: false,
+            message: "Out time must be after in time",
+          });
+          setSubmitting(false);
+          return;
+        }
       }
-    }
 
-    console.log(values);
+      const dataToSubmit = {
+        date: selectedDateState,
+        employeeId: userData?.data?.id,
+        approvedCheckIn:
+          activeTab === "in" || activeTab === "both"
+            ? values.inTime
+            : undefined,
+        approvedCheckOut:
+          activeTab === "out" || activeTab === "both"
+            ? values.outTime
+            : undefined,
+        reason: values.reason,
+      };
 
-    // Adjust the data sent to the backend based on the active tab
-    const dataToSubmit = {
-      date: selectedDateState,
-      employeeId: userData?.data?.id,
-      approvedCheckIn: activeTab === "in" ? values.inTime : undefined,
-      approvedCheckOut: activeTab === "out" ? values.outTime : undefined,
-      reason: values?.reason,
-    };
+      const response = await createReconciliation(dataToSubmit).unwrap();
 
-    await createReconciliatio(dataToSubmit);
-
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setSubmitted(true);
-
-    setTimeout(() => {
-      setSubmitted(false);
+      setIsPopupOpen(false);
+      toast.success("Attendance reconciliation successfully submitted!");
       resetForm();
-    }, 2000);
-
-    setSubmitting(false);
+    } catch (error) {
+      toast.error("Failed to submit reconciliation. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const TabButton = ({ tab, label }) => (
@@ -113,7 +157,7 @@ const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
           name={name}
           type={type}
           as={component}
-          className="w-full rounded-sm border-none bg-light-bg px-4 py-3 text-gray-700 outline-none dark:bg-dark-box dark:text-white"
+          className="w-full rounded-sm border-none bg-light-bg px-4 py-3 text-gray-700 outline-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 dark:bg-dark-box dark:text-white dark:ring-gray-700"
         />
       </div>
       <ErrorMessage
@@ -134,11 +178,11 @@ const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
   const handleDateChange = (e) => {
     const date = e.target.value;
     setSelectedDateState(date);
-    setSelectedDate(date); // Propagate to parent
+    setSelectedDate(date);
   };
 
   return (
-    <div className="m-auto overflow-hidden rounded-lg bg-white shadow-md dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-card">
+    <div className="overflow-hidden rounded-lg bg-white shadow-md dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-card">
       <div className="border-b border-dark-box border-opacity-5 dark:border-dark-border-color dark:border-opacity-5">
         <div className="flex">
           <TabButton tab="in" label="In Time" />
@@ -151,19 +195,40 @@ const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
+        validateOnBlur={true}
+        validateOnChange={false}
+        validateOnMount={false}
+        enableReinitialize
+        context={{ activeTab }}
       >
         {({ isSubmitting }) => (
           <Form className="p-6">
-            {submitted && (
-              <div className="mb-6 flex items-center rounded border border-green-200 bg-green-50 px-4 py-3 text-green-700 dark:border-green-800/30 dark:bg-green-900/20 dark:text-green-400">
-                <div className="mr-2 rounded-full bg-green-100 p-1 dark:bg-green-800/30">
-                  ✓
+            {submissionStatus.submitted && (
+              <div
+                className={`mb-6 flex items-center rounded border px-4 py-3 ${
+                  submissionStatus.success
+                    ? "border-green-200 bg-green-50 text-green-700 dark:border-green-800/30 dark:bg-green-900/20 dark:text-green-400"
+                    : "border-red-200 bg-red-50 text-red-700 dark:border-red-800/30 dark:bg-red-900/20 dark:text-red-400"
+                }`}
+              >
+                <div
+                  className={`mr-2 rounded-full p-1 ${
+                    submissionStatus.success
+                      ? "bg-green-100 dark:bg-green-800/30"
+                      : "bg-red-100 dark:bg-red-800/30"
+                  }`}
+                >
+                  {submissionStatus.success ? (
+                    <CheckCircle size={16} />
+                  ) : (
+                    <XCircle size={16} />
+                  )}
                 </div>
-                <span>Attendance reconciliation successfully submitted!</span>
+                <span>{submissionStatus.message}</span>
               </div>
             )}
 
-            {/* Date field */}
+            {/* Date Field */}
             <div className="mb-6">
               <div className="mb-2 flex items-center font-medium text-gray-700 dark:text-dark-text-color">
                 <Calendar size={16} className="mr-2" />
@@ -174,7 +239,7 @@ const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
                   type="date"
                   value={selectedDateState}
                   onChange={handleDateChange}
-                  className="w-full rounded-sm border-none bg-light-bg px-4 py-3 text-gray-700 outline-none dark:bg-dark-box dark:text-white"
+                  className="w-full rounded-sm border-none bg-light-bg px-4 py-3 text-gray-700 outline-none ring-1 ring-gray-200 focus:ring-2 focus:ring-blue-500 dark:bg-dark-box dark:text-white dark:ring-gray-700"
                 />
               </div>
             </div>
@@ -198,18 +263,18 @@ const ReconciliationForm = ({ selectedDate, setSelectedDate }) => {
             )}
 
             <FormField
-              label="Reason" // Changed to "Reason"
-              name="reason" // Changed to "reason"
+              label="Reason"
+              name="reason"
               icon={MessageSquare}
               component="textarea"
             />
 
             <button
               type="submit"
-              className={`flex w-full items-center justify-center rounded-sm bg-light-bg px-6 py-3 font-medium text-gray-700 transition-all duration-300 dark:bg-dark-box dark:text-white ${
+              className={`flex w-full items-center justify-center rounded-sm bg-blue-600 px-6 py-3 font-medium text-white transition-all duration-300 ${
                 isSubmitting
                   ? "cursor-not-allowed opacity-70"
-                  : "hover:bg-light-bg/80 dark:hover:bg-dark-box/80"
+                  : "hover:bg-blue-700 active:bg-blue-800"
               }`}
               disabled={isSubmitting}
             >
