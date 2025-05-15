@@ -9,6 +9,7 @@ import {
   Send,
   XCircle,
 } from "lucide-react";
+
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import {
@@ -17,6 +18,7 @@ import {
 } from "../../features/api";
 
 import { toast } from "react-hot-toast";
+
 const ReconciliationForm = ({ selectedDate, setIsPopupOpen }) => {
   const [createReconciliation] = useCreateAttendanceReconcilitionMutation();
   const { data: userData } = useGetUserQuery();
@@ -118,6 +120,7 @@ const ReconciliationForm = ({ selectedDate, setIsPopupOpen }) => {
             ? values.outTime
             : undefined,
         reason: values.reason,
+        companyId: userData?.data?.company_id,
       };
 
       const response = await createReconciliation(dataToSubmit).unwrap();

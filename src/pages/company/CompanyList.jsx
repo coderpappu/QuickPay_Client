@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
@@ -187,7 +187,7 @@ const CompanyList = () => {
         <div className="flex items-center justify-between border-b border-dark-box border-opacity-5 px-6 py-4 dark:border-dark-border-color dark:border-opacity-5">
           <div>
             <h3 className="text-base leading-6 dark:text-dark-heading-color">
-              Company List
+              Company Lists
             </h3>
             {/* <p className="text-xs text-light-text-color">{subTitle}</p> */}
           </div>
