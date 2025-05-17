@@ -28,17 +28,17 @@ const TaskDetail = ({
   const [comment, setComment] = useState("");
 
   const handleStatusUpdate = (status) => {
-    onStatusUpdate(task.id, status);
+    onStatusUpdate(task?.id, status);
   };
 
   const handleProgressUpdate = (progress) => {
-    onProgressUpdate(task.id, progress);
+    onProgressUpdate(task?.id, progress);
   };
 
   const handleAddComment = (e) => {
     e.preventDefault();
     if (comment.trim()) {
-      onAddComment(task.id, comment);
+      onAddComment(task?.id, comment);
       setComment("");
     }
   };
@@ -54,7 +54,7 @@ const TaskDetail = ({
             <ArrowLeft size={20} />
           </button>
           <h2 className="flex-1 text-xl font-medium text-gray-900 dark:text-dark-text-color">
-            {task.title}
+            {task?.title}
           </h2>
           <button
             onClick={() => onEdit(task)}
@@ -73,17 +73,17 @@ const TaskDetail = ({
             </h3>
             <div className="mb-4 flex flex-wrap gap-2">
               <span
-                className={`rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(task.status)}`}
+                className={`rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(task?.status)}`}
               >
-                {getStatusLabel(task.status)}
+                {getStatusLabel(task?.status)}
               </span>
               <span
-                className={`rounded-full px-2 py-1 text-xs font-medium ${getPriorityColor(task.priority)}`}
+                className={`rounded-full px-2 py-1 text-xs font-medium ${getPriorityColor(task?.priority)}`}
               >
-                {getPriorityLabel(task.priority)}
+                {getPriorityLabel(task?.priority)}
               </span>
-              {task.tags &&
-                task.tags.map((tag, index) => (
+              {task?.tags &&
+                task?.tags.map((tag, index) => (
                   <span
                     key={index}
                     className="rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-300"
@@ -95,7 +95,7 @@ const TaskDetail = ({
 
             <div className="mb-4 rounded-md bg-gray-50 p-4 dark:bg-gray-800">
               <p className="whitespace-pre-line text-gray-700 dark:text-gray-300">
-                {task.description}
+                {task?.description}
               </p>
             </div>
 
@@ -107,7 +107,7 @@ const TaskDetail = ({
                     Assigned to
                   </p>
                   <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    {task.assignedTo.name}
+                    {task?.assignedTo?.name}
                   </p>
                 </div>
               </div>
@@ -119,7 +119,7 @@ const TaskDetail = ({
                     Assigned by
                   </p>
                   <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    {task.assignedBy.name}
+                    {task?.assignedBy?.name}
                   </p>
                 </div>
               </div>
@@ -131,9 +131,9 @@ const TaskDetail = ({
                     Due date
                   </p>
                   <p
-                    className={`text-sm font-medium ${getDueStatusColor(task.dueDate)}`}
+                    className={`text-sm font-medium ${getDueStatusColor(task?.dueDate)}`}
                   >
-                    {formatDate(task.dueDate)}
+                    {formatDate(task?.dueDate)}
                   </p>
                 </div>
               </div>
@@ -145,7 +145,7 @@ const TaskDetail = ({
                     Created on
                   </p>
                   <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    {formatDate(task.createdAt)}
+                    {formatDate(task?.createdAt)}
                   </p>
                 </div>
               </div>
@@ -194,16 +194,16 @@ const TaskDetail = ({
                 </form>
               </div>
 
-              {task.comments && task.comments.length > 0 ? (
+              {task?.comments && task?.comments.length > 0 ? (
                 <div className="space-y-4">
-                  {task.comments.map((comment) => (
+                  {task?.comments.map((comment) => (
                     <div
                       key={comment.id}
                       className="rounded-md bg-gray-50 p-4 dark:bg-gray-800"
                     >
                       <div className="mb-2 flex items-center">
                         <div className="mr-2 flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-xs dark:bg-gray-700">
-                          {comment.author.avatar ? (
+                          {/* {comment.author.avatar ? (
                             <img
                               src={comment.author.avatar}
                               alt={comment.author.name}
@@ -211,7 +211,7 @@ const TaskDetail = ({
                             />
                           ) : (
                             comment.author.name.charAt(0).toUpperCase()
-                          )}
+                          )} */}
                         </div>
                         <div className="flex-1">
                           <span className="text-sm font-medium text-gray-900 dark:text-dark-text-color">
@@ -246,13 +246,13 @@ const TaskDetail = ({
                 Activity
               </h3>
 
-              {task.activities && task.activities.length > 0 ? (
+              {task?.activities && task?.activities.length > 0 ? (
                 <div className="rounded-md bg-gray-50 p-4 dark:bg-gray-800">
                   <ul className="space-y-3">
-                    {task.activities.map((activity) => (
+                    {task?.activities.map((activity) => (
                       <li key={activity.id} className="flex items-start">
                         <div className="mr-2 flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-xs dark:bg-gray-700">
-                          {activity.user.avatar ? (
+                          {/* {activity.user.avatar ? (
                             <img
                               src={activity.user.avatar}
                               alt={activity.user.name}
@@ -260,7 +260,7 @@ const TaskDetail = ({
                             />
                           ) : (
                             activity.user.name.charAt(0).toUpperCase()
-                          )}
+                          )} */}
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center">
@@ -309,7 +309,7 @@ const TaskDetail = ({
                   Created
                 </h4>
                 <p className="text-sm text-gray-900 dark:text-dark-text-color">
-                  {formatDate(task.createdAt)}
+                  {formatDate(task?.createdAt)}
                 </p>
               </div>
 
@@ -318,17 +318,17 @@ const TaskDetail = ({
                   Last Updated
                 </h4>
                 <p className="text-sm text-gray-900 dark:text-dark-text-color">
-                  {formatDate(task.updatedAt)}
+                  {formatDate(task?.updatedAt)}
                 </p>
               </div>
 
-              {task.tags && task.tags.length > 0 && (
+              {task?.tags && task?.tags.length > 0 && (
                 <div>
                   <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400">
                     Tags
                   </h4>
                   <div className="mt-1 flex flex-wrap gap-1">
-                    {task.tags.map((tag, index) => (
+                    {task?.tags.map((tag, index) => (
                       <span
                         key={index}
                         className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-700 dark:bg-gray-700 dark:text-gray-300"

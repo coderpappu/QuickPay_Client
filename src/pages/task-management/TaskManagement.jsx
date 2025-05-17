@@ -6,10 +6,9 @@ import TaskDetail from "../../components/task-management/task-management/TaskDet
 import TaskFilter from "../../components/task-management/task-management/TaskFilter";
 import TaskForm from "../../components/task-management/task-management/TaskForm";
 import TaskList from "../../components/task-management/task-management/TaskList";
-import { useCreateTaskMutation } from "../../features/api";
+import { useCreateTaskMutation, useGetMyTasksQuery } from "../../features/api";
 import {
   currentUser,
-  tasks as mockTasks,
   priorityOptions,
   statusOptions,
   users,
@@ -31,6 +30,10 @@ const generateId = () => {
 
 function TaskManagement() {
   const [createTask] = useCreateTaskMutation();
+  const { data, isLoading } = useGetMyTasksQuery();
+
+  console.log(data);
+
   // State
   const [tasks, setTasks] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -43,10 +46,11 @@ function TaskManagement() {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedPriority, setSelectedPriority] = useState("");
 
-  // Initialize tasks from mock data
   useEffect(() => {
-    setTasks([...mockTasks]);
+    setTasks(data?.data || []);
   }, []);
+
+  console.log(tasks);
 
   // Toggle dark mode
   const toggleDarkMode = () => {
@@ -127,7 +131,6 @@ function TaskManagement() {
       //   ],
       // };
 
-      console.log(values);
       await createTask(values);
       setTasks([...tasks, newTask]);
     }
@@ -140,9 +143,9 @@ function TaskManagement() {
       if (task.id === taskId) {
         // Auto-update progress based on status
         let progress = task.progress;
-        if (status === "completed") progress = 100;
-        else if (status === "not_started") progress = 0;
-        else if (status === "in_progress" && task.progress === 0) progress = 10;
+        if (status === "COMPLETED") progress = 100;
+        else if (status === "NOT_STARTED") progress = 0;
+        else if (status === "IN_PROGRESS" && task.progress === 0) progress = 10;
 
         // Add activity record
         const newActivity = {
@@ -179,9 +182,9 @@ function TaskManagement() {
       if (task.id === taskId) {
         // Auto-update status based on progress
         let status = task.status;
-        if (progress === 100) status = "completed";
-        else if (progress > 0 && task.status === "not_started")
-          status = "in_progress";
+        if (progress === 100) status = "COMPLETED";
+        else if (progress > 0 && task.status === "NOT_STARTED")
+          status = "IN_PROGRESS";
 
         // Add activity record
         const newActivity = {

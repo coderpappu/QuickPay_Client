@@ -2020,7 +2020,7 @@ export const apiSlice = createApi({
     // Get Current User's Tasks
     getMyTasks: builder.query({
       query: () => ({
-        url: "/my-tasks",
+        url: "/task/my-tasks",
       }),
       providesTags: ["Task"],
     }),
@@ -2028,7 +2028,7 @@ export const apiSlice = createApi({
     // Get Single Task
     getTaskById: builder.query({
       query: (id) => ({
-        url: `/${id}`,
+        url: `/task/${id}`,
         method: "GET",
       }),
       providesTags: (result, error, arg) => [{ type: "Task", id: arg }],
@@ -2037,7 +2037,7 @@ export const apiSlice = createApi({
     // Update Task
     updateTask: builder.mutation({
       query: ({ id, ...patch }) => ({
-        url: `/${id}`,
+        url: `/task/${id}`,
         method: "PUT",
         body: patch,
       }),
@@ -2050,7 +2050,7 @@ export const apiSlice = createApi({
     // Delete Task
     deleteTask: builder.mutation({
       query: (id) => ({
-        url: `/${id}`,
+        url: `/task/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Task"],

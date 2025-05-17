@@ -3,6 +3,7 @@ import { useState } from "react";
 import { getStatusColor, getStatusLabel } from "../../../utils/taskUtils.js";
 
 const TaskProgress = ({ task, onProgressUpdate, onStatusUpdate }) => {
+  console.log(task, onProgressUpdate);
   const [progress, setProgress] = useState(task.progress);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -16,7 +17,7 @@ const TaskProgress = ({ task, onProgressUpdate, onStatusUpdate }) => {
     setIsEditing(false);
   };
 
-  const statusOptions = ["not_started", "in_progress", "review", "completed"];
+  const statusOptions = ["NOT_STARTED", "IN_PROGRESS", "REVIEW", "COMPLETED"];
 
   return (
     <div className="mb-4 rounded-md border border-dark-box border-opacity-5 bg-white p-4 shadow-sm dark:bg-dark-box">

@@ -9,7 +9,6 @@ import { useGetUserPerModuleQuery, useGetUserQuery } from "../features/api";
 import { adminMenuItems, employeeMenuItems } from "../utils/MenuList";
 
 const Sidebar = () => {
-
   const dispatch = useDispatch();
 
   const companyIdFromStore = useSelector((state) => state.company.companyId);
@@ -82,7 +81,7 @@ const Sidebar = () => {
           <li key={subIndex}>
             {sub.subMenu ? (
               <>
-                  {/* Handle nested submenu */}
+                {/* Handle nested submenu */}
                 <button
                   onClick={() => handleSubMenuClick(subIndex)}
                   className="flex w-full items-center justify-between pl-3 pr-4"

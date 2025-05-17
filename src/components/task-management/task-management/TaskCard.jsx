@@ -36,18 +36,18 @@ const TaskCard = ({ task, onClick }) => {
         <div className="mt-4 flex items-center justify-between">
           <div className="flex items-center">
             <div className="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-xs dark:bg-gray-700">
-              {task.assignedToId?.avatar ? (
+              {task.assignedToId?.image ? (
                 <img
-                  src={task.assignedToId?.avatar}
-                  alt={task.assignedToId?.name}
+                  src={task.assignedTo?.image}
+                  alt={task.assignedTo?.name}
                   className="h-full w-full object-cover"
                 />
               ) : (
-                task.assignedToId?.name.charAt(0).toUpperCase()
+                task.assignedTo?.name.charAt(0).toUpperCase()
               )}
             </div>
             <span className="ml-2 text-xs text-gray-600 dark:text-gray-400">
-              {task.assignedToId?.name}
+              {task.assignedTo?.name}
             </span>
           </div>
 
