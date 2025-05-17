@@ -12,6 +12,7 @@ const TaskFilter = ({
   onSearchChange,
   onClearFilters
 }) => {
+  
   return (
     <div className="bg-white dark:bg-dark-box border border-dark-box border-opacity-5 rounded-md shadow-sm p-4 mb-4">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">

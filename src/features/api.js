@@ -2010,7 +2010,7 @@ export const apiSlice = createApi({
     // Create Task
     createTask: builder.mutation({
       query: (taskData) => ({
-        url: "/",
+        url: "/task/",
         method: "POST",
         body: taskData,
       }),
@@ -2395,7 +2395,6 @@ export const {
   // useGetAttendanceReportQuery,
   useLazyGetMonthlyAttendanceReportQuery,
   useLazyGetDailyAttendanceReportQuery,
-
   useCreateTaskMutation,
   useGetMyTasksQuery,
   useGetTaskByIdQuery,

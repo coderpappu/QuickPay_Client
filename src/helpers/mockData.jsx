@@ -54,8 +54,8 @@ export const tasks = [
     status: "in_progress",
     priority: "high",
     progress: 65,
-    assignedTo: users[1], // Sarah
-    assignedBy: users[3], // Emily
+    assignedToIdId: users[1], // Sarah
+    assignedByIdId: users[3], // Emily
     dueDate: new Date(new Date().getTime() + 5 * 24 * 60 * 60 * 1000), // 5 days from now
     createdAt: new Date(new Date().getTime() - 10 * 24 * 60 * 60 * 1000), // 10 days ago
     updatedAt: new Date(new Date().getTime() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
@@ -99,8 +99,8 @@ export const tasks = [
     status: "review",
     priority: "urgent",
     progress: 90,
-    assignedTo: users[2], // Michael
-    assignedBy: users[3], // Emily
+    assignedToId: users[2], // Michael
+    assignedById: users[3], // Emily
     dueDate: new Date(new Date().getTime() + 1 * 24 * 60 * 60 * 1000), // 1 day from now
     createdAt: new Date(new Date().getTime() - 15 * 24 * 60 * 60 * 1000), // 15 days ago
     updatedAt: new Date(new Date().getTime() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
@@ -138,8 +138,8 @@ export const tasks = [
     status: "not_started",
     priority: "medium",
     progress: 0,
-    assignedTo: users[4], // David
-    assignedBy: users[3], // Emily
+    assignedToId: users[4], // David
+    assignedById: users[3], // Emily
     dueDate: new Date(new Date().getTime() + 10 * 24 * 60 * 60 * 1000), // 10 days from now
     createdAt: new Date(new Date().getTime() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
     updatedAt: new Date(new Date().getTime() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
@@ -163,8 +163,8 @@ export const tasks = [
     status: "completed",
     priority: "high",
     progress: 100,
-    assignedTo: users[0], // John
-    assignedBy: users[3], // Emily
+    assignedToId: users[0], // John
+    assignedById: users[3], // Emily
     dueDate: new Date(new Date().getTime() - 5 * 24 * 60 * 60 * 1000), // 5 days ago (past due but completed)
     createdAt: new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
     updatedAt: new Date(new Date().getTime() - 6 * 24 * 60 * 60 * 1000), // 6 days ago
@@ -214,8 +214,8 @@ export const tasks = [
     status: "in_progress",
     priority: "low",
     progress: 30,
-    assignedTo: users[3], // Emily (assigned to self)
-    assignedBy: users[3], // Emily
+    assignedToId: users[3], // Emily (assigned to self)
+    assignedById: users[3], // Emily
     dueDate: new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000), // 14 days from now
     createdAt: new Date(new Date().getTime() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
     updatedAt: new Date(new Date().getTime() - 3 * 24 * 60 * 60 * 1000), // 3 days ago

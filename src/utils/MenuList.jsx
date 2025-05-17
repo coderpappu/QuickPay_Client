@@ -188,6 +188,7 @@ const employeeMenuItems = [
     subMenu: [
       { title: "Apply Leave", link: "/employee/leave/application" },
       { title: "Reports", link: "/employee/leave/form" },
+      { title: "Task Manage ", link: "/task-manager" },
     ],
   },
   {

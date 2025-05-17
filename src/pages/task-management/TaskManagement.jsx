@@ -6,6 +6,7 @@ import TaskDetail from "../../components/task-management/task-management/TaskDet
 import TaskFilter from "../../components/task-management/task-management/TaskFilter";
 import TaskForm from "../../components/task-management/task-management/TaskForm";
 import TaskList from "../../components/task-management/task-management/TaskList";
+import { useCreateTaskMutation } from "../../features/api";
 import {
   currentUser,
   tasks as mockTasks,
@@ -29,6 +30,7 @@ const generateId = () => {
 };
 
 function TaskManagement() {
+  const [createTask] = useCreateTaskMutation();
   // State
   const [tasks, setTasks] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -88,16 +90,16 @@ function TaskManagement() {
   const initialTaskValues = {
     title: "",
     description: "",
-    status: "not_started",
+    status: "NOT_STARTED",
     priority: "",
     progress: 0,
-    assignedTo: "",
+    assignedToId: "70831846-eb58-4f1b-96f5-20ef44162b81",
     dueDate: new Date().toISOString().split("T")[0],
     tags: [],
   };
 
   // Handler for form submission
-  const handleFormSubmit = (values) => {
+  const handleFormSubmit = async (values) => {
     if (isEditing) {
       // Update existing task
       const updatedTasks = tasks.map((task) =>
@@ -109,26 +111,24 @@ function TaskManagement() {
       setSelectedTask({ ...selectedTask, ...values, updatedAt: new Date() });
     } else {
       // Create new task
-      const newTask = {
-        id: generateId(),
-        ...values,
-        progress: 0,
-        status: "not_started",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        assignedBy: currentUser,
-        tags: [],
-        comments: [],
-        activities: [
-          {
-            id: generateId(),
-            description: "Task created",
-            user: currentUser,
-            timestamp: new Date(),
-            type: "created",
-          },
-        ],
-      };
+      // const newTask = {
+      //   ...values,
+      //   progress: 0,
+      //   status: "not_started",
+      //   comments: [],
+      //   activities: [
+      //     {
+      //       id: generateId(),
+      //       description: "Task created",
+      //       user: currentUser,
+      //       timestamp: new Date(),
+      //       type: "created",
+      //     },
+      //   ],
+      // };
+
+      console.log(values);
+      await createTask(values);
       setTasks([...tasks, newTask]);
     }
     setIsFormOpen(false);
