@@ -92,6 +92,7 @@ const adminMenuItems = [
       { title: "Indficator", link: "/profile-settings" },
       { title: "Appraisal", link: "/account-settings" },
       { title: "Gaol Tracking ", link: "/account-settings" },
+      { title: "Task Manage ", link: "/task-manager" },
     ],
   },
   {

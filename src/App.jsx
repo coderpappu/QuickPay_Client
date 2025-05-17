@@ -67,6 +67,7 @@ import MonthlyAttendnaceReport from "./pages/report/MonthLyAttendnaceReport";
 import SalaryReport from "./pages/report/SalaryReport";
 import SectionList from "./pages/section/SectionList";
 import SectionSettings from "./pages/section/SectionSettings";
+import TaskManagement from "./pages/task-management/TaskManagement";
 import LoginPage from "./pages/user/LoginPage";
 import MainUserProfile from "./pages/user/MainUserProfile";
 import ProfileUpdate from "./pages/user/ProfileUpdate";
@@ -252,6 +253,10 @@ function App() {
 
               {/* Permission  */}
               <Route path="/permission-manager" element={<PermissionCard />} />
+
+              {/* task manager  */}
+
+              <Route path="/task-manager" element={<TaskManagement />} />
             </Route>
           </Route>
         </Route>

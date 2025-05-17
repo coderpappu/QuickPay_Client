@@ -2004,6 +2004,57 @@ export const apiSlice = createApi({
       }),
       providesTags: ["attendace_report"],
     }),
+
+    // task manager endpoint
+
+    // Create Task
+    createTask: builder.mutation({
+      query: (taskData) => ({
+        url: "/",
+        method: "POST",
+        body: taskData,
+      }),
+      invalidatesTags: ["Task"],
+    }),
+
+    // Get Current User's Tasks
+    getMyTasks: builder.query({
+      query: () => ({
+        url: "/my-tasks",
+      }),
+      providesTags: ["Task"],
+    }),
+
+    // Get Single Task
+    getTaskById: builder.query({
+      query: (id) => ({
+        url: `/${id}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, arg) => [{ type: "Task", id: arg }],
+    }),
+
+    // Update Task
+    updateTask: builder.mutation({
+      query: ({ id, ...patch }) => ({
+        url: `/${id}`,
+        method: "PUT",
+        body: patch,
+      }),
+      invalidatesTags: (result, error, arg) => [
+        "Task",
+        { type: "Task", id: arg.taskId },
+      ],
+    }),
+
+    // Delete Task
+    deleteTask: builder.mutation({
+      query: (id) => ({
+        url: `/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Task"],
+    }),
   }),
 });
 
@@ -2344,4 +2395,10 @@ export const {
   // useGetAttendanceReportQuery,
   useLazyGetMonthlyAttendanceReportQuery,
   useLazyGetDailyAttendanceReportQuery,
+
+  useCreateTaskMutation,
+  useGetMyTasksQuery,
+  useGetTaskByIdQuery,
+  useUpdateTaskMutation,
+  useDeleteTaskMutation,
 } = apiSlice;
