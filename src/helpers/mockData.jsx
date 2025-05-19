@@ -241,16 +241,17 @@ export const tasks = [
 ];
 
 // Filter options
+
 export const statusOptions = [
-  { value: "not_started", label: "Not Started" },
-  { value: "in_progress", label: "In Progress" },
-  { value: "review", label: "Under Review" },
-  { value: "completed", label: "Completed" },
+  { value: "NOT_STARTED", label: "Not Started" },
+  { value: "IN_PROGRESS", label: "In Progress" },
+  { value: "REVIEW", label: "Under Review" },
+  { value: "COMPLETED", label: "Completed" },
 ];
 
 export const priorityOptions = [
-  { value: "low", label: "Low" },
-  { value: "medium", label: "Medium" },
-  { value: "high", label: "High" },
-  { value: "urgent", label: "Urgent" },
+  { value: "LOW", label: "Low" },
+  { value: "MEDIUM", label: "Medium" },
+  { value: "HIGH", label: "High" },
+  { value: "URGENT", label: "Urgent" },
 ];

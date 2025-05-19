@@ -1,10 +1,18 @@
 import { CheckCircle2 } from "lucide-react";
 import { useState } from "react";
+import { useGetUserQuery } from "../../../features/api.js";
 import { getStatusColor, getStatusLabel } from "../../../utils/taskUtils.js";
 
-const TaskProgress = ({ task, onProgressUpdate, onStatusUpdate }) => {
-  console.log(task, onProgressUpdate);
+const TaskProgress = ({
+  task,
+  assignedTo,
+  onProgressUpdate,
+  onStatusUpdate,
+}) => {
+  const { data: user } = useGetUserQuery();
+
   const [progress, setProgress] = useState(task.progress);
+
   const [isEditing, setIsEditing] = useState(false);
 
   const handleProgressChange = (e) => {
@@ -16,8 +24,13 @@ const TaskProgress = ({ task, onProgressUpdate, onStatusUpdate }) => {
     onProgressUpdate(progress);
     setIsEditing(false);
   };
+  let statusOptions = [];
 
-  const statusOptions = ["NOT_STARTED", "IN_PROGRESS", "REVIEW", "COMPLETED"];
+  if (user?.data?.id == assignedTo) {
+    statusOptions = ["NOT_STARTED", "IN_PROGRESS", "REVIEW"];
+  } else {
+    statusOptions = ["NOT_STARTED", "IN_PROGRESS", "REVIEW", "COMPLETED"];
+  }
 
   return (
     <div className="mb-4 rounded-md border border-dark-box border-opacity-5 bg-white p-4 shadow-sm dark:bg-dark-box">

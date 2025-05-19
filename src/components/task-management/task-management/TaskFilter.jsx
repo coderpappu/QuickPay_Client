@@ -1,5 +1,4 @@
-import React from 'react';
-import { Filter, X } from 'lucide-react';
+import { Filter, X } from "lucide-react";
 
 const TaskFilter = ({
   statusOptions,
@@ -10,18 +9,18 @@ const TaskFilter = ({
   onStatusChange,
   onPriorityChange,
   onSearchChange,
-  onClearFilters
+  onClearFilters,
 }) => {
-  
+  console.log(statusOptions, priorityOptions);
   return (
-    <div className="bg-white dark:bg-dark-box border border-dark-box border-opacity-5 rounded-md shadow-sm p-4 mb-4">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
-        <div className="text-gray-700 dark:text-dark-text-color font-medium flex items-center">
+    <div className="mb-4 rounded-md border border-dark-box border-opacity-5 bg-white p-4 shadow-sm dark:bg-dark-box">
+      <div className="flex flex-col items-start justify-between gap-3 md:flex-row md:items-center">
+        <div className="flex items-center font-medium text-gray-700 dark:text-dark-text-color">
           <Filter size={18} className="mr-2" />
           <span>Filters</span>
         </div>
-        
-        <div className="flex-1 w-full md:w-auto">
+
+        <div className="w-full flex-1 md:w-auto">
           <input
             type="text"
             placeholder="Search tasks..."
@@ -30,8 +29,8 @@ const TaskFilter = ({
             className="h-10 w-full rounded-md border border-dark-box border-opacity-5 bg-light-input px-3 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
           />
         </div>
-        
-        <div className="flex flex-wrap gap-3 w-full md:w-auto">
+
+        <div className="flex w-full flex-wrap gap-3 md:w-auto">
           <select
             value={selectedStatus}
             onChange={(e) => onStatusChange(e.target.value)}
@@ -44,7 +43,7 @@ const TaskFilter = ({
               </option>
             ))}
           </select>
-          
+
           <select
             value={selectedPriority}
             onChange={(e) => onPriorityChange(e.target.value)}
@@ -57,11 +56,11 @@ const TaskFilter = ({
               </option>
             ))}
           </select>
-          
+
           {(selectedStatus || selectedPriority || searchQuery) && (
             <button
               onClick={onClearFilters}
-              className="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-sm"
+              className="flex items-center text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
             >
               <X size={16} className="mr-1" />
               Clear

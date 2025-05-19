@@ -6,6 +6,7 @@ import {
   UserCircle,
 } from "lucide-react";
 import { useState } from "react";
+import { useGetUserQuery } from "../../../features/api.js";
 import {
   formatDate,
   getDueStatusColor,
@@ -25,6 +26,7 @@ const TaskDetail = ({
   onAddComment,
   onEdit,
 }) => {
+  const { data: user } = useGetUserQuery();
   const [comment, setComment] = useState("");
 
   const handleStatusUpdate = (status) => {
@@ -56,9 +58,10 @@ const TaskDetail = ({
           <h2 className="flex-1 text-xl font-medium text-gray-900 dark:text-dark-text-color">
             {task?.title}
           </h2>
+
           <button
             onClick={() => onEdit(task)}
-            className="ml-3 rounded-md bg-gray-100 px-3 py-1 text-sm text-gray-700 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+            className={`${user?.data?.id == task?.assignedTo?.id && "hidden"} ml-3 rounded-md bg-gray-100 px-3 py-1 text-sm text-gray-700 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600`}
           >
             Edit
           </button>
@@ -246,33 +249,33 @@ const TaskDetail = ({
                 Activity
               </h3>
 
-              {task?.activities && task?.activities.length > 0 ? (
+              {task?.TaskActivity && task?.TaskActivity.length > 0 ? (
                 <div className="rounded-md bg-gray-50 p-4 dark:bg-gray-800">
                   <ul className="space-y-3">
-                    {task?.activities.map((activity) => (
+                    {task?.TaskActivity.map((activity) => (
                       <li key={activity.id} className="flex items-start">
                         <div className="mr-2 flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-xs dark:bg-gray-700">
-                          {/* {activity.user.avatar ? (
+                          {activity?.employee?.avatar ? (
                             <img
-                              src={activity.user.avatar}
-                              alt={activity.user.name}
+                              src={activity?.employee?.avatar}
+                              alt={activity?.employee?.name}
                               className="h-full w-full object-cover"
                             />
                           ) : (
-                            activity.user.name.charAt(0).toUpperCase()
-                          )} */}
+                            activity?.employee?.name?.charAt(0).toUpperCase()
+                          )}
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center">
                             <span className="text-sm font-medium text-gray-900 dark:text-dark-text-color">
-                              {activity.user.name}
+                              {activity?.employee?.name}
                             </span>
                             <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
-                              {formatDate(activity.timestamp)}
+                              {formatDate(activity?.timestamp)}
                             </span>
                           </div>
                           <p className="text-sm text-gray-700 dark:text-gray-300">
-                            {activity.description}
+                            {activity?.description}
                           </p>
                         </div>
                       </li>
@@ -294,6 +297,7 @@ const TaskDetail = ({
         <div className="lg:col-span-1">
           <TaskProgress
             task={task}
+            assignedTo={task?.assignedTo?.id}
             onProgressUpdate={handleProgressUpdate}
             onStatusUpdate={handleStatusUpdate}
           />

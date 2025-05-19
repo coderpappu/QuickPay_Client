@@ -11,6 +11,7 @@ import {
   useGetEmployeesQuery,
   useGetMyTasksQuery,
   useGetUserQuery,
+  useUpdateTaskMutation,
 } from "../../features/api";
 import {
   currentUser,
@@ -41,10 +42,11 @@ function TaskManagement() {
   const companyId = user?.data?.company_id;
 
   const { data: employeeList } = useGetEmployeesQuery(companyId);
+  const [updateTask] = useUpdateTaskMutation();
 
   const employees = employeeList?.data;
 
-  const { data, isLoading } = useGetMyTasksQuery();
+  const { data, isLoading, refetch } = useGetMyTasksQuery();
 
   // State
   const [tasks, setTasks] = useState([]);
@@ -59,11 +61,10 @@ function TaskManagement() {
   const [selectedPriority, setSelectedPriority] = useState("");
 
   useEffect(() => {
-    setTasks(data?.data || []);
-  }, []);
-
-  console.log(tasks);
-
+    if (data?.data) {
+      setTasks(data.data);
+    }
+  }, [data]);
   // Toggle dark mode
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -124,6 +125,16 @@ function TaskManagement() {
           ? { ...task, ...values, updatedAt: new Date() }
           : task,
       );
+      await updateTask({
+        id: values?.id,
+        title: values?.title,
+        priority: values?.priority,
+        progress: values?.progress,
+        status: values?.status,
+        dueDate: new Date(values?.dueDate),
+        description: values?.description,
+        assignedToId: values?.assignedToId,
+      });
       setTasks(updatedTasks);
       setSelectedTask({ ...selectedTask, ...values, updatedAt: new Date() });
     } else {
@@ -151,7 +162,19 @@ function TaskManagement() {
   };
 
   // Handler for updating task status
-  const handleStatusUpdate = (taskId, status) => {
+  const handleStatusUpdate = async (taskId, status) => {
+    const task = tasks.find((t) => t.id === taskId);
+    if (!task) return;
+
+    // Prepare updated fields
+    let progress = task.progress;
+    if (status === "COMPLETED") progress = 100;
+    else if (status === "NOT_STARTED") progress = 0;
+    else if (status === "IN_PROGRESS" && task.progress === 0) progress = 10;
+
+    // Call backend API
+    await updateTask({ id: taskId, status, progress });
+    await refetch();
     const updatedTasks = tasks.map((task) => {
       if (task.id === taskId) {
         // Auto-update progress based on status
@@ -174,7 +197,7 @@ function TaskManagement() {
           status,
           progress,
           updatedAt: new Date(),
-          activities: [newActivity, ...task.activities],
+          activities: [newActivity, ...task.TaskActivity],
         };
       }
       return task;
@@ -190,7 +213,14 @@ function TaskManagement() {
   };
 
   // Handler for updating task progress
-  const handleProgressUpdate = (taskId, progress) => {
+  const handleProgressUpdate = async (taskId, progress) => {
+    try {
+      await updateTask({ id: taskId, progress });
+      await refetch();
+    } catch (error) {
+      console.error("Failed to update task progress", error);
+    }
+
     const updatedTasks = tasks.map((task) => {
       if (task.id === taskId) {
         // Auto-update status based on progress
@@ -213,7 +243,7 @@ function TaskManagement() {
           progress,
           status,
           updatedAt: new Date(),
-          activities: [newActivity, ...task.activities],
+          activities: [newActivity, ...task.TaskActivity],
         };
       }
       return task;
@@ -251,7 +281,7 @@ function TaskManagement() {
         return {
           ...task,
           comments: [newComment, ...task.comments],
-          activities: [newActivity, ...task.activities],
+          activities: [newActivity, ...task.TaskActivity],
           updatedAt: new Date(),
         };
       }
@@ -316,9 +346,9 @@ function TaskManagement() {
               selectedStatus={selectedStatus}
               selectedPriority={selectedPriority}
               searchQuery={searchQuery}
-              onStatusChange={setSelectedStatus}
-              onPriorityChange={setSelectedPriority}
-              onSearchChange={setSearchQuery}
+              onStatusChange={(value) => setSelectedStatus(value)}
+              onPriorityChange={(value) => setSelectedPriority(value)}
+              onSearchChange={(value) => setSearchQuery(value)}
               onClearFilters={handleClearFilters}
             />
 
