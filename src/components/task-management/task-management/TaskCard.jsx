@@ -14,7 +14,7 @@ const TaskCard = ({ task, onClick }) => {
 
   return (
     <div
-      className="mb-3 cursor-pointer rounded-md border border-dark-box border-opacity-5 bg-white shadow-sm transition-shadow duration-300 hover:shadow-md dark:bg-dark-box"
+      className="mb-3 cursor-pointer rounded-md border border-dark-box border-opacity-5 bg-white shadow-sm transition-shadow duration-300 hover:shadow-md dark:border-gray-700 dark:bg-dark-box"
       onClick={() => onClick(task)}
     >
       <div className="p-4">

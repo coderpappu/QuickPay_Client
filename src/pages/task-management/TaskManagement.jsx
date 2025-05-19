@@ -40,6 +40,7 @@ function TaskManagement() {
   const { data: user } = useGetUserQuery();
 
   const companyId = user?.data?.company_id;
+  const currentUserId = user?.data?.id;
 
   const { data: employeeList } = useGetEmployeesQuery(companyId);
   const [updateTask] = useUpdateTaskMutation();
@@ -356,6 +357,7 @@ function TaskManagement() {
               tasks={filteredTasks}
               onTaskClick={handleTaskClick}
               onCreateTask={handleCreateTask}
+              currentUserId={currentUserId}
             />
           </div>
         ) : (
