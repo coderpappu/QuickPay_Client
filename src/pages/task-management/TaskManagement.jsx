@@ -6,7 +6,12 @@ import TaskDetail from "../../components/task-management/task-management/TaskDet
 import TaskFilter from "../../components/task-management/task-management/TaskFilter";
 import TaskForm from "../../components/task-management/task-management/TaskForm";
 import TaskList from "../../components/task-management/task-management/TaskList";
-import { useCreateTaskMutation, useGetMyTasksQuery } from "../../features/api";
+import {
+  useCreateTaskMutation,
+  useGetEmployeesQuery,
+  useGetMyTasksQuery,
+  useGetUserQuery,
+} from "../../features/api";
 import {
   currentUser,
   priorityOptions,
@@ -30,9 +35,16 @@ const generateId = () => {
 
 function TaskManagement() {
   const [createTask] = useCreateTaskMutation();
-  const { data, isLoading } = useGetMyTasksQuery();
 
-  console.log(data);
+  const { data: user } = useGetUserQuery();
+
+  const companyId = user?.data?.company_id;
+
+  const { data: employeeList } = useGetEmployeesQuery(companyId);
+
+  const employees = employeeList?.data;
+
+  const { data, isLoading } = useGetMyTasksQuery();
 
   // State
   const [tasks, setTasks] = useState([]);
@@ -97,13 +109,14 @@ function TaskManagement() {
     status: "NOT_STARTED",
     priority: "",
     progress: 0,
-    assignedToId: "70831846-eb58-4f1b-96f5-20ef44162b81",
+    assignedToId: "",
     dueDate: new Date().toISOString().split("T")[0],
     tags: [],
   };
 
   // Handler for form submission
   const handleFormSubmit = async (values) => {
+    console.log(values);
     if (isEditing) {
       // Update existing task
       const updatedTasks = tasks.map((task) =>
@@ -332,6 +345,7 @@ function TaskManagement() {
         <TaskForm
           initialValues={isEditing ? selectedTask : initialTaskValues}
           users={users}
+          employees={employees}
           onSubmit={handleFormSubmit}
           onCancel={handleCloseForm}
           isEditing={isEditing}

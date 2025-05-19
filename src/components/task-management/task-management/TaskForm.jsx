@@ -5,6 +5,7 @@ import * as Yup from "yup";
 const TaskForm = ({
   initialValues,
   users,
+  employees,
   onSubmit,
   onCancel,
   isEditing = false,
@@ -125,18 +126,19 @@ const TaskForm = ({
                     name="assignedToId.id"
                     className="h-10 w-full rounded-md border border-dark-box border-opacity-5 bg-light-input px-3 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
                     onChange={(e) => {
-                      const selectedUser = users.find(
-                        (user) => user.id === e.target.value,
+                      const selectedUser = employees.find(
+                        (employee) => employee.id === e.target.value,
                       );
                       if (selectedUser) {
-                        setFieldValue("assignedToId", selectedUser);
+                        console.log(selectedUser);
+                        setFieldValue("assignedToId", selectedUser?.id);
                       }
                     }}
                   >
                     <option value="">Select Assignee</option>
-                    {users.map((user) => (
-                      <option key={user.id} value={user.id}>
-                        {user.name} {user.position ? `(${user.position})` : ""}
+                    {employees.map((employee) => (
+                      <option key={employee.id} value={employee.id}>
+                        {employee.name}{" "}
                       </option>
                     ))}
                   </Field>

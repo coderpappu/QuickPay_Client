@@ -2,6 +2,7 @@ import { PlusCircle } from "lucide-react";
 import TaskCard from "./TaskCard";
 
 const TaskList = ({ tasks, onTaskClick, onCreateTask }) => {
+  
   // Group tasks by status
   const tasksByStatus = {
     NOT_STARTED: tasks.filter((task) => task.status === "NOT_STARTED"),
