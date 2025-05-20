@@ -6,7 +6,11 @@ import {
   UserCircle,
 } from "lucide-react";
 import { useState } from "react";
-import { useGetUserQuery } from "../../../features/api.js";
+import {
+  useCreateCommentMutation,
+  useGetTaskCommentsQuery,
+  useGetUserQuery,
+} from "../../../features/api.js";
 import {
   formatDate,
   getDueStatusColor,
@@ -26,6 +30,13 @@ const TaskDetail = ({
   onAddComment,
   onEdit,
 }) => {
+  const [createComment] = useCreateCommentMutation();
+
+  // Enable polling for real-time comments (every 3 seconds)
+  const { data: comments } = useGetTaskCommentsQuery(task?.id, {
+    pollingInterval: 3000,
+  });
+
   const { data: user } = useGetUserQuery();
   const [comment, setComment] = useState("");
 
@@ -37,9 +48,12 @@ const TaskDetail = ({
     onProgressUpdate(task?.id, progress);
   };
 
-  const handleAddComment = (e) => {
+  const handleAddComment = async (e) => {
     e.preventDefault();
+    const taskId = task?.id;
+
     if (comment.trim()) {
+      await createComment({ taskId, comment });
       onAddComment(task?.id, comment);
       setComment("");
     }
@@ -197,39 +211,63 @@ const TaskDetail = ({
                 </form>
               </div>
 
-              {task?.comments && task?.comments.length > 0 ? (
+              {comments?.data && comments?.data?.length > 0 ? (
                 <div className="space-y-4">
-                  {task?.comments.map((comment) => (
-                    <div
-                      key={comment.id}
-                      className="rounded-md bg-gray-50 p-4 dark:bg-gray-800"
-                    >
-                      <div className="mb-2 flex items-center">
-                        <div className="mr-2 flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-xs dark:bg-gray-700">
-                          {/* {comment.author.avatar ? (
-                            <img
-                              src={comment.author.avatar}
-                              alt={comment.author.name}
-                              className="h-full w-full object-cover"
-                            />
-                          ) : (
-                            comment.author.name.charAt(0).toUpperCase()
-                          )} */}
+                  {comments?.data?.map((comment) => {
+                    const isMine = comment.author.id === currentUser.id;
+                    return (
+                      <div
+                        key={comment.id}
+                        className={`flex ${isMine ? "justify-end" : "justify-start"}`}
+                      >
+                        {!isMine && (
+                          <div className="mr-2 flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-xs dark:bg-gray-700">
+                            {comment.author.avatar ? (
+                              <img
+                                src={comment.author.avatar}
+                                alt={comment.author.name}
+                                className="h-full w-full object-cover"
+                              />
+                            ) : (
+                              comment.author.name.charAt(0).toUpperCase()
+                            )}
+                          </div>
+                        )}
+                        <div
+                          className={`max-w-xs rounded-md p-3 ${
+                            isMine
+                              ? "bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100"
+                              : "bg-gray-50 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                          }`}
+                        >
+                          <div className="mb-1 flex items-center">
+                            <span className="text-xs font-medium">
+                              {comment.author.name}
+                            </span>
+                            <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
+                              {formatDate(comment.createdAt)}
+                            </span>
+                          </div>
+                          <p className="whitespace-pre-line text-sm">
+                            {comment.text}
+                          </p>
                         </div>
-                        <div className="flex-1">
-                          <span className="text-sm font-medium text-gray-900 dark:text-dark-text-color">
-                            {comment.author.name}
-                          </span>
-                          <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
-                            {formatDate(comment.createdAt)}
-                          </span>
-                        </div>
+                        {isMine && (
+                          <div className="ml-2 flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-xs dark:bg-gray-700">
+                            {currentUser.avatar ? (
+                              <img
+                                src={currentUser.avatar}
+                                alt={currentUser.name}
+                                className="h-full w-full object-cover"
+                              />
+                            ) : (
+                              currentUser.name.charAt(0).toUpperCase()
+                            )}
+                          </div>
+                        )}
                       </div>
-                      <p className="whitespace-pre-line text-sm text-gray-700 dark:text-gray-300">
-                        {comment.text}
-                      </p>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ) : (
                 <div className="rounded-md bg-gray-50 p-6 text-center dark:bg-gray-800">

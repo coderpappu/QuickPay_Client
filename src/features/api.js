@@ -2014,7 +2014,7 @@ export const apiSlice = createApi({
         method: "POST",
         body: taskData,
       }),
-      invalidatesTags: ["Task"],
+      invalidatesTags: ["Task", "Comment"],
     }),
 
     // Get Current User's Tasks
@@ -2054,6 +2054,23 @@ export const apiSlice = createApi({
         method: "DELETE",
       }),
       invalidatesTags: ["Task"],
+    }),
+
+    createComment: builder.mutation({
+      query: (commentData) => ({
+        url: "/task/comment",
+        method: "POST",
+        body: commentData,
+      }),
+      invalidatesTags: ["Task", "Comment"],
+    }),
+
+    getTaskComments: builder.query({
+      query: (id) => ({
+        url: `/task/comment/${id}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, arg) => [{ type: "Comment", id: arg }],
     }),
   }),
 });
@@ -2400,4 +2417,7 @@ export const {
   useGetTaskByIdQuery,
   useUpdateTaskMutation,
   useDeleteTaskMutation,
+
+  useCreateCommentMutation,
+  useGetTaskCommentsQuery,
 } = apiSlice;

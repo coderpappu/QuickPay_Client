@@ -279,10 +279,18 @@ function TaskManagement() {
           type: "comment",
         };
 
+        // Ensure TaskComment and TaskActivity arrays exist
+        const updatedComments = Array.isArray(task.TaskComment)
+          ? [newComment, ...task.TaskComment]
+          : [newComment];
+        const updatedActivities = Array.isArray(task.TaskActivity)
+          ? [newActivity, ...task.TaskActivity]
+          : [newActivity];
+
         return {
           ...task,
-          comments: [newComment, ...task.comments],
-          activities: [newActivity, ...task.TaskActivity],
+          TaskComment: updatedComments,
+          TaskActivity: updatedActivities,
           updatedAt: new Date(),
         };
       }
