@@ -149,6 +149,7 @@ const TaskList = ({ tasks, onTaskClick, onCreateTask, currentUserId }) => {
                   </div>
                   {assignedByMe.length > TASKS_PER_PAGE && (
                     <div className="mt-2 flex justify-center gap-2">
+                      
                       <button
                         onClick={() => setPage(status, "byMe", byMePage - 1)}
                         disabled={byMePage === 1}
@@ -156,6 +157,7 @@ const TaskList = ({ tasks, onTaskClick, onCreateTask, currentUserId }) => {
                       >
                         Prev
                       </button>
+
                       <button
                         onClick={() => setPage(status, "byMe", byMePage + 1)}
                         disabled={

@@ -11,7 +11,6 @@ const TaskFilter = ({
   onSearchChange,
   onClearFilters,
 }) => {
-  console.log(statusOptions, priorityOptions);
   return (
     <div className="mb-4 rounded-md border border-dark-box border-opacity-5 bg-white p-4 shadow-sm dark:bg-dark-box">
       <div className="flex flex-col items-start justify-between gap-3 md:flex-row md:items-center">
@@ -26,7 +25,7 @@ const TaskFilter = ({
             placeholder="Search tasks..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="h-10 w-full rounded-md border border-dark-box border-opacity-5 bg-light-input px-3 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
+            className="h-10 w-full rounded-md border border-dark-box border-opacity-5 bg-light-input px-3 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-card dark:text-dark-text-color"
           />
         </div>
 
@@ -34,7 +33,7 @@ const TaskFilter = ({
           <select
             value={selectedStatus}
             onChange={(e) => onStatusChange(e.target.value)}
-            className="h-10 rounded-md border border-dark-box border-opacity-5 bg-light-input px-3 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
+            className="h-10 rounded-md border border-dark-box border-opacity-5 bg-light-input px-3 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-card dark:text-dark-text-color"
           >
             <option value="">All Statuses</option>
             {statusOptions.map((option) => (
@@ -47,7 +46,7 @@ const TaskFilter = ({
           <select
             value={selectedPriority}
             onChange={(e) => onPriorityChange(e.target.value)}
-            className="h-10 rounded-md border border-dark-box border-opacity-5 bg-light-input px-3 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
+            className="h-10 rounded-md border border-dark-box border-opacity-5 bg-light-input px-3 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-card dark:text-dark-text-color"
           >
             <option value="">All Priorities</option>
             {priorityOptions.map((option) => (

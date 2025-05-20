@@ -36,7 +36,7 @@ const TaskForm = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-      <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white shadow-lg dark:bg-dark-box">
+      <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white shadow-lg dark:bg-dark-card">
         <div className="flex items-center justify-between border-b border-gray-200 p-4 dark:border-gray-700">
           <h2 className="text-xl font-medium text-gray-900 dark:text-dark-text-color">
             {isEditing ? "Edit Task" : "Create New Task"}
@@ -74,7 +74,7 @@ const TaskForm = ({
                       name="title"
                       type="text"
                       placeholder="Enter task title"
-                      className="h-10 w-full rounded-md border border-dark-box border-opacity-5 bg-light-input px-3 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
+                      className="h-10 w-full rounded-md border border-dark-card border-opacity-5 bg-light-input px-3 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
                     />
                     <ErrorMessage
                       name="title"
