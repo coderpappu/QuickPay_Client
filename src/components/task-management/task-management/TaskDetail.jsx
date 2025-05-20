@@ -1,11 +1,13 @@
 import {
   ArrowLeft,
+  ChevronDown,
+  ChevronUp,
   Clock,
   MessageSquare,
   Send,
   UserCircle,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   useCreateCommentMutation,
   useGetTaskCommentsQuery,
@@ -19,6 +21,7 @@ import {
   getStatusColor,
   getStatusLabel,
 } from "../../../utils/taskUtils.js";
+import CommentItem from "./CommentItem";
 import TaskProgress from "./TaskProgress";
 
 const TaskDetail = ({
@@ -39,6 +42,9 @@ const TaskDetail = ({
 
   const { data: user } = useGetUserQuery();
   const [comment, setComment] = useState("");
+  const [showAllComments, setShowAllComments] = useState(false);
+  const [showAllActivities, setShowAllActivities] = useState(false);
+  const commentInputRef = useRef(null);
 
   const handleStatusUpdate = (status) => {
     onStatusUpdate(task?.id, status);
@@ -48,16 +54,31 @@ const TaskDetail = ({
     onProgressUpdate(task?.id, progress);
   };
 
-  const handleAddComment = async (e) => {
+  const handleAddComment = async (e, parentId = null) => {
     e.preventDefault();
     const taskId = task?.id;
 
     if (comment.trim()) {
-      await createComment({ taskId, comment });
+      await createComment({ taskId, comment, parentId });
       onAddComment(task?.id, comment);
       setComment("");
     }
   };
+
+  // Handle Enter key for comment submit
+  const handleCommentKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleAddComment(e);
+    }
+  };
+
+  // Focus the comment input when task changes
+  useEffect(() => {
+    if (commentInputRef.current) {
+      commentInputRef.current.focus();
+    }
+  }, [task?.id]);
 
   return (
     <div className="rounded-md border border-dark-box border-opacity-5 bg-white shadow-sm dark:bg-dark-box">
@@ -175,7 +196,7 @@ const TaskDetail = ({
 
               <div className="mb-4 rounded-md bg-gray-50 p-4 dark:bg-gray-800">
                 <form
-                  onSubmit={handleAddComment}
+                  onSubmit={(e) => handleAddComment(e)}
                   className="flex items-start gap-2"
                 >
                   <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-xs dark:bg-gray-700">
@@ -191,11 +212,13 @@ const TaskDetail = ({
                   </div>
                   <div className="flex-1">
                     <textarea
+                      ref={commentInputRef}
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
                       placeholder="Add a comment..."
                       className="w-full rounded-md border border-dark-box border-opacity-5 bg-light-input px-3 py-2 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
                       rows="2"
+                      onKeyDown={handleCommentKeyDown}
                     />
                     <div className="mt-2 flex justify-end">
                       <button
@@ -212,63 +235,44 @@ const TaskDetail = ({
               </div>
 
               {comments?.data && comments?.data?.length > 0 ? (
-                <div className="space-y-4">
-                  {comments?.data?.map((comment) => {
-                    const isMine = comment.author.id === currentUser.id;
-                    return (
-                      <div
+                <>
+                  <div className="space-y-4">
+                    {(showAllComments
+                      ? comments.data
+                      : comments.data.slice(0, 5)
+                    ).map((comment) => (
+                      <CommentItem
                         key={comment.id}
-                        className={`flex ${isMine ? "justify-end" : "justify-start"}`}
-                      >
-                        {!isMine && (
-                          <div className="mr-2 flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-xs dark:bg-gray-700">
-                            {comment.author.avatar ? (
-                              <img
-                                src={comment.author.avatar}
-                                alt={comment.author.name}
-                                className="h-full w-full object-cover"
-                              />
-                            ) : (
-                              comment.author.name.charAt(0).toUpperCase()
-                            )}
-                          </div>
-                        )}
-                        <div
-                          className={`max-w-xs rounded-md p-3 ${
-                            isMine
-                              ? "bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100"
-                              : "bg-gray-50 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
-                          }`}
+                        comment={comment}
+                        currentUser={currentUser}
+                        createComment={createComment}
+                        taskId={task?.id}
+                        onAddComment={onAddComment}
+                      />
+                    ))}
+                  </div>
+                  {comments.data.length > 5 && (
+                    <div className="mt-4 flex justify-center">
+                      {!showAllComments ? (
+                        <button
+                          className="flex items-center rounded px-4 py-1 text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+                          onClick={() => setShowAllComments(true)}
                         >
-                          <div className="mb-1 flex items-center">
-                            <span className="text-xs font-medium">
-                              {comment.author.name}
-                            </span>
-                            <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
-                              {formatDate(comment.createdAt)}
-                            </span>
-                          </div>
-                          <p className="whitespace-pre-line text-sm">
-                            {comment.text}
-                          </p>
-                        </div>
-                        {isMine && (
-                          <div className="ml-2 flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-xs dark:bg-gray-700">
-                            {currentUser.avatar ? (
-                              <img
-                                src={currentUser.avatar}
-                                alt={currentUser.name}
-                                className="h-full w-full object-cover"
-                              />
-                            ) : (
-                              currentUser.name.charAt(0).toUpperCase()
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+                          <ChevronDown size={16} className="mr-1" />
+                          See more
+                        </button>
+                      ) : (
+                        <button
+                          className="flex items-center rounded px-4 py-1 text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+                          onClick={() => setShowAllComments(false)}
+                        >
+                          <ChevronUp size={16} className="mr-1" />
+                          Collapse
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="rounded-md bg-gray-50 p-6 text-center dark:bg-gray-800">
                   <MessageSquare
@@ -287,39 +291,66 @@ const TaskDetail = ({
                 Activity
               </h3>
 
-              {task?.TaskActivity && task?.TaskActivity.length > 0 ? (
-                <div className="rounded-md bg-gray-50 p-4 dark:bg-gray-800">
-                  <ul className="space-y-3">
-                    {task?.TaskActivity.map((activity) => (
-                      <li key={activity.id} className="flex items-start">
-                        <div className="mr-2 flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-xs dark:bg-gray-700">
-                          {activity?.employee?.avatar ? (
-                            <img
-                              src={activity?.employee?.avatar}
-                              alt={activity?.employee?.name}
-                              className="h-full w-full object-cover"
-                            />
-                          ) : (
-                            activity?.employee?.name?.charAt(0).toUpperCase()
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center">
-                            <span className="text-sm font-medium text-gray-900 dark:text-dark-text-color">
-                              {activity?.employee?.name}
-                            </span>
-                            <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
-                              {formatDate(activity?.timestamp)}
-                            </span>
+              {Array.isArray(task?.TaskActivity) &&
+              task.TaskActivity.length > 0 ? (
+                <>
+                  <div className="rounded-md bg-gray-50 p-4 dark:bg-gray-800">
+                    <ul className="space-y-3">
+                      {(showAllActivities
+                        ? [...task.TaskActivity].reverse()
+                        : [...task.TaskActivity].slice(-5).reverse()
+                      ).map((activity) => (
+                        <li key={activity.id} className="flex items-start">
+                          <div className="mr-2 flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-xs dark:bg-gray-700">
+                            {activity?.employee?.avatar ? (
+                              <img
+                                src={activity?.employee?.avatar}
+                                alt={activity?.employee?.name}
+                                className="h-full w-full object-cover"
+                              />
+                            ) : (
+                              activity?.employee?.name?.charAt(0).toUpperCase()
+                            )}
                           </div>
-                          <p className="text-sm text-gray-700 dark:text-gray-300">
-                            {activity?.description}
-                          </p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                          <div className="flex-1">
+                            <div className="flex items-center">
+                              <span className="text-sm font-medium text-gray-900 dark:text-dark-text-color">
+                                {activity?.employee?.name}
+                              </span>
+                              <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
+                                {formatDate(activity?.timestamp)}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">
+                              {activity?.description}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                    {task.TaskActivity.length > 5 && (
+                      <div className="mt-4 flex justify-center">
+                        {!showAllActivities ? (
+                          <button
+                            className="flex items-center rounded px-4 py-1 text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+                            onClick={() => setShowAllActivities(true)}
+                          >
+                            <ChevronDown size={16} className="mr-1" />
+                            See more
+                          </button>
+                        ) : (
+                          <button
+                            className="flex items-center rounded px-4 py-1 text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+                            onClick={() => setShowAllActivities(false)}
+                          >
+                            <ChevronUp size={16} className="mr-1" />
+                            Collapse
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </>
               ) : (
                 <div className="rounded-md bg-gray-50 p-6 text-center dark:bg-gray-800">
                   <Clock size={24} className="mx-auto mb-2 text-gray-400" />

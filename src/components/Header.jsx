@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CiBellOn, CiDark, CiLight } from "react-icons/ci";
 import { FiUser } from "react-icons/fi";
 import { IoIosPower } from "react-icons/io";
@@ -97,7 +97,8 @@ const Header = ({ darkModeHandler, darkMode }) => {
               />
 
               <label className="ml-1 font-medium text-[#0E1A34] dark:text-white">
-                {userData?.data?.first_name}
+                {userData?.data?.first_name ||
+                  userData?.data?.name.split(" ")[0]}
               </label>
               <MdOutlineKeyboardArrowDown
                 className="cursor-pointer text-xl text-[#0E1A34] dark:text-white"
