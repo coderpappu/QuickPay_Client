@@ -2,6 +2,12 @@ import { CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import { useGetUserQuery } from "../../../features/api.js";
 import { getStatusColor, getStatusLabel } from "../../../utils/taskUtils.js";
+const STATUS_PROGRESS = {
+  NOT_STARTED: 0,
+  IN_PROGRESS: 40,
+  REVIEW: 80,
+  COMPLETED: 100,
+};
 
 const TaskProgress = ({
   task,
@@ -13,10 +19,14 @@ const TaskProgress = ({
   const [progress, setProgress] = useState(task.progress);
   const [isEditing, setIsEditing] = useState(false);
 
+  const [status, setStatus] = useState(task.status || "NOT_STARTED");
+ 
   const isAssignedUser = user?.data?.id === assignedTo;
+ 
   const isCompleted = task.status === "COMPLETED";
 
   const handleProgressChange = (e) => {
+    
     let newProgress = parseInt(e.target.value, 10);
 
     // If employee is assigned user, cap at 80%
@@ -32,6 +42,17 @@ const TaskProgress = ({
     setIsEditing(false);
   };
 
+  // Handle status button click
+  const handleStatusClick = (newStatus) => {
+    onStatusUpdate(newStatus);
+    // console.log(newStatus);
+    const newProgress = STATUS_PROGRESS[newStatus];
+    setStatus(newStatus);
+    setProgress(newProgress);
+    // // setManualProgress(newProgress);
+
+    // if (onProgressUpdate) onProgressUpdate(task.id, newProgress);
+  };
   // Status options: assigned user can't access "COMPLETED"
   const statusOptions = isAssignedUser
     ? ["NOT_STARTED", "IN_PROGRESS", "REVIEW"]
@@ -59,20 +80,20 @@ const TaskProgress = ({
         </div>
 
         <div className="mt-2 flex flex-wrap gap-2">
-          {statusOptions.map((status) => (
+          {statusOptions.map((statusOption) => (
             <button
-              key={status}
+              key={statusOption}
               onClick={() => {
-                if (!isActionDisabled) onStatusUpdate(status);
+                if (!isActionDisabled) handleStatusClick(statusOption);
               }}
               disabled={isActionDisabled}
               className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
-                task.status === status
+                status === statusOption
                   ? "bg-button-bg text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
               } ${isActionDisabled ? "cursor-not-allowed opacity-50" : ""}`}
             >
-              {getStatusLabel(status)}
+              {getStatusLabel(statusOption)}
             </button>
           ))}
         </div>

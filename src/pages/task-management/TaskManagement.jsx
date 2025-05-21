@@ -66,6 +66,7 @@ function TaskManagement() {
       setTasks(data.data);
     }
   }, [data]);
+
   // Toggle dark mode
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -126,6 +127,7 @@ function TaskManagement() {
           ? { ...task, ...values, updatedAt: new Date() }
           : task,
       );
+
       await updateTask({
         id: values?.id,
         title: values?.title,
@@ -169,20 +171,24 @@ function TaskManagement() {
 
     // Prepare updated fields
     let progress = task.progress;
+
     if (status === "COMPLETED") progress = 100;
     else if (status === "NOT_STARTED") progress = 0;
-    else if (status === "IN_PROGRESS" && task.progress === 0) progress = 10;
+    else if (status === "IN_PROGRESS") progress = 40;
+    else if (status === "REVIEW") progress = 80;
 
+    console.log(progress);
     // Call backend API
     await updateTask({ id: taskId, status, progress });
     await refetch();
+
     const updatedTasks = tasks.map((task) => {
       if (task.id === taskId) {
         // Auto-update progress based on status
         let progress = task.progress;
         if (status === "COMPLETED") progress = 100;
         else if (status === "NOT_STARTED") progress = 0;
-        else if (status === "IN_PROGRESS" && task.progress === 0) progress = 10;
+        else if (status === "IN_PROGRESS" && task.progress === 0) progress = 40;
 
         // Add activity record
         const newActivity = {
