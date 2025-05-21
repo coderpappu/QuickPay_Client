@@ -4,7 +4,13 @@ import TaskCard from "./TaskCard";
 
 const TASKS_PER_PAGE = 10;
 
-const TaskList = ({ tasks, onTaskClick, onCreateTask, currentUserId }) => {
+const TaskList = ({
+  tasks,
+  onTaskClick,
+  onCreateTask,
+  currentUserId,
+  onDeleteTask,
+}) => {
   const [pageState, setPageState] = useState({});
 
   const getStatusHeader = (status) => {
@@ -105,6 +111,7 @@ const TaskList = ({ tasks, onTaskClick, onCreateTask, currentUserId }) => {
                         key={task.id}
                         task={task}
                         onClick={onTaskClick}
+                        onDeleteTask={onDeleteTask}
                       />
                     ))}
                   </div>
@@ -144,12 +151,12 @@ const TaskList = ({ tasks, onTaskClick, onCreateTask, currentUserId }) => {
                         key={task.id}
                         task={task}
                         onClick={onTaskClick}
+                        onDeleteTask={onDeleteTask}
                       />
                     ))}
                   </div>
                   {assignedByMe.length > TASKS_PER_PAGE && (
                     <div className="mt-2 flex justify-center gap-2">
-                      
                       <button
                         onClick={() => setPage(status, "byMe", byMePage - 1)}
                         disabled={byMePage === 1}

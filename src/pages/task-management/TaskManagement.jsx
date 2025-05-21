@@ -1,5 +1,6 @@
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 // Import components
 import TaskDetail from "../../components/task-management/task-management/TaskDetail";
@@ -8,11 +9,13 @@ import TaskForm from "../../components/task-management/task-management/TaskForm"
 import TaskList from "../../components/task-management/task-management/TaskList";
 import {
   useCreateTaskMutation,
+  useDeleteTaskMutation,
   useGetEmployeesQuery,
   useGetMyTasksQuery,
   useGetUserQuery,
   useUpdateTaskMutation,
 } from "../../features/api";
+import ConfirmDialog from "../../helpers/ConfirmDialog";
 import {
   currentUser,
   priorityOptions,
@@ -38,6 +41,8 @@ function TaskManagement() {
   const [createTask] = useCreateTaskMutation();
 
   const { data: user } = useGetUserQuery();
+
+  const [deleteTask] = useDeleteTaskMutation();
 
   const companyId = user?.data?.company_id;
   const currentUserId = user?.data?.id;
@@ -119,7 +124,6 @@ function TaskManagement() {
 
   // Handler for form submission
   const handleFormSubmit = async (values) => {
-    console.log(values);
     if (isEditing) {
       // Update existing task
       const updatedTasks = tasks.map((task) =>
@@ -137,30 +141,18 @@ function TaskManagement() {
         dueDate: new Date(values?.dueDate),
         description: values?.description,
         assignedToId: values?.assignedToId,
-      });
+      }).unwrap();
+
+      toast.success("Task updated successfully!");
       setTasks(updatedTasks);
       setSelectedTask({ ...selectedTask, ...values, updatedAt: new Date() });
     } else {
-      // Create new task
-      // const newTask = {
-      //   ...values,
-      //   progress: 0,
-      //   status: "not_started",
-      //   comments: [],
-      //   activities: [
-      //     {
-      //       id: generateId(),
-      //       description: "Task created",
-      //       user: currentUser,
-      //       timestamp: new Date(),
-      //       type: "created",
-      //     },
-      //   ],
-      // };
+      await createTask(values).unwrap();
+      setTasks([...tasks, values]);
 
-      await createTask(values);
-      setTasks([...tasks, newTask]);
+      toast.success("Task added successfully!");
     }
+
     setIsFormOpen(false);
   };
 
@@ -177,7 +169,6 @@ function TaskManagement() {
     else if (status === "IN_PROGRESS") progress = 40;
     else if (status === "REVIEW") progress = 80;
 
-    console.log(progress);
     // Call backend API
     await updateTask({ id: taskId, status, progress });
     await refetch();
@@ -312,6 +303,48 @@ function TaskManagement() {
     }
   };
 
+  // Handler for deleting a task
+  // const handleDeleteTask = async (taskId) => {
+  //   try {
+  //     await deleteTask(taskId).unwrap();
+  //     setTasks(tasks.filter((task) => task.id !== taskId));
+  //     toast.success("Task deleted successfully!");
+  //   } catch (err) {
+  //     toast.error("Failed to delete task.");
+  //   }
+  // };
+
+  const handleDeleteTask = async (id) => {
+    const confirm = () =>
+      toast(
+        (t) => (
+          <ConfirmDialog
+            onConfirm={async () => {
+              toast.dismiss(t.id);
+              try {
+                await deleteTask(id).then((res) => {
+                  if (res.error != null) {
+                    toast.error(res.error.data.message);
+                  } else {
+                    toast.success("Task deleted successfully");
+                  }
+                });
+              } catch (error) {
+                toast.error(error.message || "Failed to delete task");
+              }
+            }}
+            onCancel={() => toast.dismiss(t.id)}
+            title={"task"}
+          />
+        ),
+        {
+          duration: Infinity,
+        },
+      );
+
+    confirm();
+  };
+
   // Filter tasks based on search and filters
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch =
@@ -372,6 +405,7 @@ function TaskManagement() {
               onTaskClick={handleTaskClick}
               onCreateTask={handleCreateTask}
               currentUserId={currentUserId}
+              onDeleteTask={handleDeleteTask}
             />
           </div>
         ) : (

@@ -1,4 +1,4 @@
-import { Clock } from "lucide-react";
+import { Clock, Trash2 } from "lucide-react";
 import {
   calculateDaysRemaining,
   getDueStatusColor,
@@ -7,19 +7,18 @@ import {
   getStatusColor,
   getStatusLabel,
 } from "../../../utils/taskUtils";
-
-const TaskCard = ({ task, onClick }) => {
+const TaskCard = ({ task, onClick, onDeleteTask }) => {
   const daysRemaining = calculateDaysRemaining(task.dueDate);
   const dueStatusColor = getDueStatusColor(task.dueDate);
 
   return (
-    <div
-      className="mb-3 cursor-pointer rounded-md border border-dark-box border-opacity-5 bg-white shadow-sm transition-shadow duration-300 hover:shadow-md dark:border-gray-700 dark:bg-dark-box"
-      onClick={() => onClick(task)}
-    >
+    <div className="mb-3 cursor-pointer rounded-md border border-dark-box border-opacity-5 bg-white shadow-sm transition-shadow duration-300 hover:shadow-md dark:border-gray-700 dark:bg-dark-box">
       <div className="p-4">
         <div className="mb-2 flex items-start justify-between">
-          <h3 className="font-medium text-gray-900 dark:text-dark-text-color">
+          <h3
+            className="font-medium text-gray-900 dark:text-dark-text-color"
+            onClick={() => onClick(task)}
+          >
             {task.title}
           </h3>
           <span
@@ -27,13 +26,29 @@ const TaskCard = ({ task, onClick }) => {
           >
             {getPriorityLabel(task.priority)}
           </span>
+
+          <span>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (typeof onDeleteTask === "function") {
+                  onDeleteTask(task.id);
+                }
+              }}
+            >
+              <Trash2 size={18} className="text-red-600" />
+            </button>
+          </span>
         </div>
 
         <p className="mb-3 line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
           {task.description}
         </p>
 
-        <div className="mt-4 flex items-center justify-between">
+        <div
+          className="mt-4 flex items-center justify-between"
+          onClick={() => onClick(task)}
+        >
           <div className="flex items-center">
             <div className="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-gray-200 text-xs dark:bg-gray-700">
               {task.assignedToId?.image ? (
