@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import BoardMenuButton from "../../components/company/BoardMenuButton";
 
 import AllowanceCard from "../../components/hrm/allowance/AllowanceCard";
@@ -16,6 +16,7 @@ import TerminationCard from "../../components/hrm/TerminationCard";
 import BonusTypeCard from "../../components/hrm/bonus/BonusType";
 import DocsTypeCard from "../../components/hrm/docsType/DocsType";
 import GradeCard from "../../components/hrm/grade/GradeCard";
+import PolicyCard from "../../components/hrm/policy/PolicyCard";
 import ShiftCard from "../../components/hrm/shift/ShiftCard";
 
 const HrmSetup = () => {
@@ -63,28 +64,32 @@ const HrmSetup = () => {
       id: 9,
     },
     {
-      title: "Termination Type",
+      title: "Policy",
       id: 10,
     },
     {
-      title: "Section",
+      title: "Termination Type",
       id: 11,
     },
     {
-      title: "Shift",
+      title: "Section",
       id: 12,
     },
     {
-      title: "Grade",
+      title: "Shift",
       id: 13,
     },
     {
-      title: "Document Type",
+      title: "Grade",
       id: 14,
     },
     {
-      title: "Bonus Type",
+      title: "Document Type",
       id: 15,
+    },
+    {
+      title: "Bonus Type",
+      id: 16,
     },
   ];
 
@@ -95,9 +100,9 @@ const HrmSetup = () => {
         <h2>HRM Settings</h2>
       </div>
 
-      <div className="flex justify-between my-4">
+      <div className="my-4 flex justify-between">
         {/* board of system menu */}
-        <div className="w-[25%] bg-white dark:bg-dark-card rounded-md h-full">
+        <div className="h-full w-[25%] rounded-md bg-white dark:bg-dark-card">
           {/* menu button  */}
           {systemMenuList?.map((menu) => (
             <BoardMenuButton
@@ -111,7 +116,7 @@ const HrmSetup = () => {
         </div>
 
         {/* show box  */}
-        <div className="w-[73%] overflow-auto  ">
+        <div className="w-[73%] overflow-auto">
           {/* settings Card  */}
           {activeSetting == 1 && <BranchCard />}
 
@@ -123,12 +128,13 @@ const HrmSetup = () => {
           {activeSetting == 7 && <AllowanceCard />}
           {activeSetting == 8 && <LoanCard />}
           {activeSetting == 9 && <DeductionCard />}
-          {activeSetting == 10 && <TerminationCard />}
-          {activeSetting == 11 && <SectionCard />}
-          {activeSetting == 12 && <ShiftCard />}
-          {activeSetting == 13 && <GradeCard />}
-          {activeSetting == 14 && <DocsTypeCard />}
-          {activeSetting == 15 && <BonusTypeCard />}
+          {activeSetting == 10 && <PolicyCard />}
+          {activeSetting == 11 && <TerminationCard />}
+          {activeSetting == 12 && <SectionCard />}
+          {activeSetting == 13 && <ShiftCard />}
+          {activeSetting == 14 && <GradeCard />}
+          {activeSetting == 15 && <DocsTypeCard />}
+          {activeSetting == 16 && <BonusTypeCard />}
         </div>
       </div>
     </div>
