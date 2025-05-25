@@ -8,6 +8,7 @@ import {
 import ConfirmDialog from "../../../helpers/ConfirmDialog";
 import BrandCardWrapper from "../../company/BrandCardWrapper";
 import DelayPolicy from "./DelayPolicy";
+import EarlyOutPolicy from "./EarlyOutPolicy";
 
 const PolicyCard = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -16,7 +17,6 @@ const PolicyCard = () => {
 
   const companyId = useSelector((state) => state.company.companyId);
   const [deleteBonusType] = useDeleteBonusTypeMutation();
-
 
   const {
     data: bonusTypeList,
@@ -103,7 +103,7 @@ const PolicyCard = () => {
       {/* Body Content */}
       <div className="px-6 py-3">
         {activeSetting === 1 && <DelayPolicy />}
-        {activeSetting === 2 && <div>Early Out Policy Component</div>}
+        {activeSetting === 2 && <EarlyOutPolicy />}
         {activeSetting === 3 && <div>Extra Work Policy Component</div>}
       </div>
     </BrandCardWrapper>
