@@ -2,24 +2,23 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import {
-  useCreateDelayPolicyMutation,
-  useGetDelayPolicyDetailsQuery,
+  useCreateEarlyOutPolicyMutation,
+  useGetEarlyOutPolicyDetailsQuery,
 } from "../../../features/api";
 
 const EarlyOutPolicy = () => {
-  const [createDelayPolicy] = useCreateDelayPolicyMutation();
+  const [createDelayPolicy] = useCreateEarlyOutPolicyMutation();
 
   const [isActive, setIsActive] = useState(true);
   const [latePerDeduction, setLatePerDeduction] = useState(3);
   const [salaryType, setSalaryType] = useState("gross");
 
   const companyId = useSelector((state) => state.company.companyId);
-  const { data: delayDetails } = useGetDelayPolicyDetailsQuery(companyId);
+  const { data: delayDetails } = useGetEarlyOutPolicyDetailsQuery(companyId);
 
   useEffect(() => {
     if (delayDetails?.data?.length > 0) {
       const policy = delayDetails.data[0];
-
       setIsActive(policy.isActive);
       setLatePerDeduction(policy.latePerDeduction);
       setSalaryType(policy.salaryType || "gross");
@@ -30,8 +29,6 @@ const EarlyOutPolicy = () => {
     const payload = {
       isActive,
       latePerDeduction,
-      deductFrom: "salary",
-      leaveType: null,
       salaryType,
       company_id: companyId,
     };
@@ -137,9 +134,9 @@ const EarlyOutPolicy = () => {
 
       <button
         onClick={handleSubmit}
-        className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+        className="mt-4 rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
       >
-        Submit Policy
+        Save
       </button>
     </div>
   );

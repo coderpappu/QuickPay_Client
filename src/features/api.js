@@ -2092,6 +2092,23 @@ export const apiSlice = createApi({
       }),
       providesTags: ["Policy", "Delay"],
     }),
+
+    createEarlyOutPolicy: builder.mutation({
+      query: (earlyoutData) => ({
+        url: "/policy/create/earlyout",
+        method: "POST",
+        body: earlyoutData,
+      }),
+      invalidatesTags: ["Policy", "earlyout"],
+    }),
+
+    getEarlyOutPolicyDetails: builder.query({
+      query: (company_id) => ({
+        url: `/policy/earlyout/details`,
+        params: { company_id },
+      }),
+      providesTags: ["Policy", "earlyout"],
+    }),
   }),
 });
 
@@ -2445,4 +2462,7 @@ export const {
   // createDelayPolicy
   useCreateDelayPolicyMutation,
   useGetDelayPolicyDetailsQuery,
+
+  useCreateEarlyOutPolicyMutation,
+  useGetEarlyOutPolicyDetailsQuery,
 } = apiSlice;
