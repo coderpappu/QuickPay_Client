@@ -17,6 +17,7 @@ const PolicyCard = () => {
   const companyId = useSelector((state) => state.company.companyId);
   const [deleteBonusType] = useDeleteBonusTypeMutation();
 
+
   const {
     data: bonusTypeList,
     isLoading,

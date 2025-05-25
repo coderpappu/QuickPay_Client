@@ -2072,6 +2072,26 @@ export const apiSlice = createApi({
       }),
       providesTags: (result, error, arg) => [{ type: "Comment", id: arg }],
     }),
+
+    // policy ------
+
+    // --- delay - policy ---
+    createDelayPolicy: builder.mutation({
+      query: (delayData) => ({
+        url: "/policy/create/delay",
+        method: "POST",
+        body: delayData,
+      }),
+      invalidatesTags: ["Policy", "Delay"],
+    }),
+
+    getDelayPolicyDetails: builder.query({
+      query: (company_id) => ({
+        url: `/policy/delay/details`,
+        params: { company_id },
+      }),
+      providesTags: ["Policy", "Delay"],
+    }),
   }),
 });
 
@@ -2420,4 +2440,9 @@ export const {
 
   useCreateCommentMutation,
   useGetTaskCommentsQuery,
+
+  // -- delay policy
+  // createDelayPolicy
+  useCreateDelayPolicyMutation,
+  useGetDelayPolicyDetailsQuery,
 } = apiSlice;

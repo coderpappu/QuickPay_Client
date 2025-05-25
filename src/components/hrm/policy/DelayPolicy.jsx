@@ -1,8 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useGetLeaveTypeListQuery } from "../../../features/api";
+import {
+  useCreateDelayPolicyMutation,
+  useGetDelayPolicyDetailsQuery,
+  useGetLeaveTypeListQuery,
+} from "../../../features/api";
+
+import toast from "react-hot-toast";
 
 const DelayPolicy = () => {
+  const [createDelayPolicy] = useCreateDelayPolicyMutation();
+
   const [isActive, setIsActive] = useState(true);
   const [deductFromLeave, setDeductFromLeave] = useState(true);
   const [latePerDeduction, setLatePerDeduction] = useState(3);
@@ -10,28 +18,45 @@ const DelayPolicy = () => {
   const [salaryType, setSalaryType] = useState("gross");
 
   const companyId = useSelector((state) => state.company.companyId);
+
+  const { data: delayDetails } = useGetDelayPolicyDetailsQuery(companyId);
   const { data: leaveTypeList } = useGetLeaveTypeListQuery(companyId);
 
-  const lateDaysExample = 5;
-  const rawDeduction = lateDaysExample / latePerDeduction;
-  const calculatedDeduction = Number(rawDeduction.toFixed(2));
+  // Set form values when delayDetails are loaded
+  useEffect(() => {
+    if (delayDetails?.data?.length > 0) {
+      const policy = delayDetails.data[0];
 
-  const handleSubmit = () => {
+      setIsActive(policy.isActive);
+      setLatePerDeduction(policy.latePerDeduction);
+      setDeductFromLeave(policy.deductFrom === "leave");
+      setLeaveType(policy.leaveType || "Casual");
+      setSalaryType(policy.salaryType || "gross");
+    }
+  }, [delayDetails]);
+
+  const handleSubmit = async () => {
     const payload = {
       isActive,
       latePerDeduction,
       deductFrom: deductFromLeave ? "leave" : "salary",
       leaveType: deductFromLeave ? leaveType : null,
       salaryType: !deductFromLeave ? salaryType : null,
-      companyId,
+      company_id: companyId,
     };
 
-    console.log("Submitting delay policy:", payload);
-
-    // TODO: replace this with actual mutation or API call
-    // Example:
-    // addDelayPolicy(payload).unwrap().then(...).catch(...);
+    try {
+      const response = await createDelayPolicy(payload).unwrap();
+      toast.success(response.message);
+    } catch (error) {
+      toast.error(error?.data?.message || "Something went wrong");
+    }
   };
+
+  const lateDaysExample = 5;
+  const calculatedDeduction = Number(
+    (lateDaysExample / latePerDeduction).toFixed(2),
+  );
 
   return (
     <div className="w-full rounded-xl border bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-dark-card">
@@ -41,28 +66,20 @@ const DelayPolicy = () => {
 
       {/* Enable Policy */}
       <div className="mb-4 flex items-center justify-between">
-        <label
-          htmlFor="policy-active"
-          className="text-sm font-medium text-gray-700 dark:text-gray-300"
-        >
+        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
           Enable delay deduction
         </label>
-
         <input
           type="checkbox"
-          id="policy-active"
-          className="h-5 w-5 accent-blue-600"
           checked={isActive}
           onChange={() => setIsActive(!isActive)}
+          className="h-5 w-5 accent-blue-600"
         />
       </div>
 
       {/* Late Count Rule */}
       <div className="mb-4">
-        <label
-          htmlFor="late-per-deduction"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-        >
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           How many late days = 1 deduction
         </label>
         <input
@@ -75,7 +92,7 @@ const DelayPolicy = () => {
         />
       </div>
 
-      {/* Deduction Method */}
+      {/* Deduct From */}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
           Deduct from:
@@ -106,7 +123,7 @@ const DelayPolicy = () => {
         </div>
       </div>
 
-      {/* Conditional: Leave Type Selector */}
+      {/* Conditional: Leave Type */}
       {isActive && deductFromLeave && (
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -118,15 +135,15 @@ const DelayPolicy = () => {
             className="h-10 w-full rounded-md border border-dark-box border-opacity-5 bg-light-input px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
           >
             {leaveTypeList?.data?.map((leave) => (
-              <option key={leave?.id} value={leave?.name}>
-                {leave?.name}
+              <option key={leave.id} value={leave.name}>
+                {leave.name}
               </option>
             ))}
           </select>
         </div>
       )}
 
-      {/* Conditional: Salary Type Selector */}
+      {/* Conditional: Salary Type */}
       {isActive && !deductFromLeave && (
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -159,7 +176,7 @@ const DelayPolicy = () => {
         </div>
       )}
 
-      {/* Preview Result */}
+      {/* Preview Box */}
       {isActive && (
         <div className="rounded-md bg-blue-50 p-4 text-sm text-blue-800 dark:bg-blue-900/20 dark:text-blue-300">
           <p>
@@ -181,7 +198,6 @@ const DelayPolicy = () => {
         </div>
       )}
 
-      {/* Submit Button */}
       <button
         onClick={handleSubmit}
         className="mt-4 rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
