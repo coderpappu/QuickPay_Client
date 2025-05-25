@@ -1,5 +1,4 @@
 import { Field } from "formik";
-import React from "react";
 
 const BrandInput = ({ title, placeText, type = "text" }) => {
   return (
