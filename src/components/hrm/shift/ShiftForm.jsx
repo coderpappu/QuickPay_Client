@@ -32,6 +32,7 @@ const ShiftForm = ({ shiftId, onClose }) => {
     start_time: "",
     end_time: "",
     late_time_count: "",
+    early_out_count: "",
   });
 
   const {
@@ -47,6 +48,7 @@ const ShiftForm = ({ shiftId, onClose }) => {
         start_time: shiftDetails?.data?.start_time,
         end_time: shiftDetails?.data?.end_time,
         late_time_count: shiftDetails?.data?.late_time_count,
+        early_out_count: shiftDetails?.data?.early_out_count,
       });
     }
   }, [shiftDetails]);
@@ -76,7 +78,13 @@ const ShiftForm = ({ shiftId, onClose }) => {
           initialValues={initialValues}
           validationSchema={shiftSchema}
           onSubmit={async (values, { setSubmitting }) => {
-            const { name, start_time, end_time, late_time_count } = values;
+            const {
+              name,
+              start_time,
+              end_time,
+              late_time_count,
+              early_out_count,
+            } = values;
 
             try {
               if (!shiftId) {
@@ -85,6 +93,7 @@ const ShiftForm = ({ shiftId, onClose }) => {
                   start_time,
                   end_time,
                   late_time_count,
+                  early_out_count,
                   company_id: companyId,
                 }).then((res) => {
                   if (res.error) {
@@ -102,6 +111,7 @@ const ShiftForm = ({ shiftId, onClose }) => {
                   start_time,
                   end_time,
                   late_time_count,
+                  early_out_count,
                   company_id: companyId,
                 }).then((res) => {
                   if (res.error) {
@@ -180,6 +190,22 @@ const ShiftForm = ({ shiftId, onClose }) => {
                 <InputBox name="late_time_count" type="time" />
                 <ErrorMessage
                   name="late_time_count"
+                  component="div"
+                  className="mt-1 text-sm text-red-500"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor="early_out_count"
+                  className="block text-sm font-medium dark:text-dark-text-color"
+                >
+                  Early Out Time
+                </label>
+
+                <InputBox name="early_out_count" type="time" />
+                <ErrorMessage
+                  name="early_out_count"
                   component="div"
                   className="mt-1 text-sm text-red-500"
                 />

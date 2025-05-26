@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
@@ -85,16 +85,19 @@ const ShiftCard = () => {
         <div className="w-[20%] dark:text-white">
           <h3>{shift?.name}</h3>
         </div>
-        <div className="w-[20%] dark:text-white">
+        <div className="w-[15%] dark:text-white">
           <h3>{formatTimeTo12Hour(shift?.start_time)}</h3>
         </div>
-        <div className="w-[20%] dark:text-white">
+        <div className="w-[15%] dark:text-white">
           <h3>{formatTimeTo12Hour(shift?.end_time)}</h3>
         </div>
-        <div className="w-[20%] dark:text-white">
+        <div className="w-[15%] dark:text-white">
           <h3>{formatTimeTo12Hour(shift?.late_time_count)}</h3>
         </div>
 
+        <div className="w-[15%] dark:text-white">
+          <h3>{formatTimeTo12Hour(shift?.early_out_count)}</h3>
+        </div>
         <div className="w-[15%] dark:text-white">
           <div className="flex flex-wrap justify-start gap-2">
             {/* edit button  */}
@@ -118,7 +121,7 @@ const ShiftCard = () => {
     <>
       <BrandCardWrapper>
         <HrmSetupCardHeader
-          title="Deduction"
+          title="Shift"
           handleOpen={handleOpen}
           isPopupOpen={isPopupOpen}
         />
@@ -129,16 +132,20 @@ const ShiftCard = () => {
               <h3>Name</h3>
             </div>
 
-            <div className="w-[20%] dark:text-white">
-              <h3>Type</h3>
+            <div className="w-[15%] dark:text-white">
+              <h3>Start Time</h3>
             </div>
 
-            <div className="w-[20%] dark:text-white">
-              <h3>Basic Percentage</h3>
+            <div className="w-[15%] dark:text-white">
+              <h3>End Time</h3>
             </div>
 
-            <div className="w-[20%] dark:text-white">
-              <h3>Limit Per Month</h3>
+            <div className="w-[15%] dark:text-white">
+              <h3>Late Time</h3>
+            </div>
+
+            <div className="w-[15%] dark:text-white">
+              <h3>Early out Time</h3>
             </div>
 
             <div className="w-[15%] dark:text-white">
