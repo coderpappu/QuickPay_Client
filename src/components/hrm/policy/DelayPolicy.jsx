@@ -135,8 +135,8 @@ const DelayPolicy = () => {
             className="h-10 w-full rounded-md border border-dark-box border-opacity-5 bg-light-input px-2 py-1 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
           >
             {leaveTypeList?.data?.map((leave) => (
-              <option key={leave.id} value={leave.name}>
-                {leave.name}
+              <option key={leave.id} value={leave?.id}>
+                {leave?.name}
               </option>
             ))}
           </select>
@@ -144,7 +144,7 @@ const DelayPolicy = () => {
       )}
 
       {/* Conditional: Salary Type */}
-      {isActive && !deductFromLeave && (
+      {isActive && !deductFromLeave && (``
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Salary type for deduction:

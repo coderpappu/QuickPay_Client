@@ -7,8 +7,8 @@ import {
 } from "../../../features/api";
 
 const EarlyOutPolicy = () => {
+  
   const [createDelayPolicy] = useCreateEarlyOutPolicyMutation();
-
   const [isActive, setIsActive] = useState(true);
   const [latePerDeduction, setLatePerDeduction] = useState(3);
   const [salaryType, setSalaryType] = useState("gross");
