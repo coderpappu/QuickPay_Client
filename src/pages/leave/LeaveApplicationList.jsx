@@ -1,6 +1,5 @@
 import { AiOutlineDelete } from "react-icons/ai";
 import { CiEdit } from "react-icons/ci";
-import { PiEyeLight } from "react-icons/pi";
 import BrandCardWrapper from "../../components/company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../components/company/SettingCardHeader";
 import {
@@ -11,7 +10,6 @@ import {
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import LeaveApplicationForm from "../../components/hrm/Leave/LeaveApplicationForm";
 import ConfirmDialog from "../../helpers/ConfirmDialog";
 import CardSkeleton from "../../skeletons/card";
@@ -84,6 +82,8 @@ const LeaveApplicationListCard = () => {
     confirm();
   };
 
+  console.log(leaveApplicationList);
+
   if (!isLoading && !isError) {
     content = (
       <>
@@ -92,14 +92,16 @@ const LeaveApplicationListCard = () => {
             key={application?.id}
             className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
           >
-            <div className="w-[3%] dark:text-white">
+            <div className="w-[1%] dark:text-white">
               <h3>{++index}</h3>
             </div>
 
             <div className="w-[8%] dark:text-white">
               <h3>{application.LeaveType?.name}</h3>
             </div>
-
+            <div className="w-[8%] dark:text-white">
+              <h3>{application?.Employee?.name}</h3>
+            </div>
             <div className="w-[7%] dark:text-white">
               <h3>{DateConverterFromUTC(application?.created_at)}</h3>
             </div>
@@ -111,7 +113,7 @@ const LeaveApplicationListCard = () => {
             <div className="w-[7%] dark:text-white">
               <h3>{DateConverterFromUTC(application?.end_date)}</h3>
             </div>
-            <div className="w-[5%] dark:text-white">
+            <div className="w-[3%] dark:text-white">
               <h3>{application?.leaveDuration}</h3>
             </div>
             <div className="w-[8%] dark:text-white">
@@ -124,7 +126,7 @@ const LeaveApplicationListCard = () => {
             <div className="w-[10%] dark:text-white">
               <h3>{application?.note || "..."}</h3>
             </div>
-            <div className="w-[8%] dark:text-white">
+            <div className="w-[5%] dark:text-white">
               <h3>Manager</h3>
             </div>
             <div className="w-[8%] dark:text-white">
@@ -135,15 +137,7 @@ const LeaveApplicationListCard = () => {
               </div>
             </div>
 
-            <div className="fex flex w-[10%] flex-wrap gap-2 space-x-2 text-white">
-              <div>
-                <Link to={`/leave/application/${application?.id}`}>
-                  <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-green-600 p-2">
-                    <PiEyeLight size={20} />
-                  </div>
-                </Link>
-              </div>
-
+            <div className="fex flex w-[6%] flex-wrap gap-2 space-x-2 text-white">
               {/* edit button  */}
               <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-sm bg-indigo-700 p-2">
                 <CiEdit size={20} onClick={() => handleOpen(application?.id)} />
@@ -173,12 +167,15 @@ const LeaveApplicationListCard = () => {
         <div className="px-6 py-3">
           {/* header  */}
           <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
-            <div className="w-[3%] dark:text-white">
+            <div className="w-[1%] dark:text-white">
               <h3>SL</h3>
             </div>
 
             <div className="w-[8%] dark:text-white">
               <h3>Leave Type</h3>
+            </div>
+            <div className="w-[8%] dark:text-white">
+              <h3>EM Name</h3>
             </div>
 
             <div className="w-[7%] dark:text-white">
@@ -192,7 +189,7 @@ const LeaveApplicationListCard = () => {
             <div className="w-[7%] dark:text-white">
               <h3>End Date</h3>
             </div>
-            <div className="w-[5%] dark:text-white">
+            <div className="w-[3%] dark:text-white">
               <h3>Days</h3>
             </div>
             <div className="w-[8%] dark:text-white">
@@ -205,13 +202,13 @@ const LeaveApplicationListCard = () => {
             <div className="w-[10%] dark:text-white">
               <h3>Note</h3>
             </div>
-            <div className="w-[8%] dark:text-white">
+            <div className="w-[5%] dark:text-white">
               <h3>Approved By</h3>
             </div>
             <div className="w-[8%] dark:text-white">
               <h3>Status</h3>
             </div>
-            <div className="w-[10%] dark:text-white">
+            <div className="w-[6%] dark:text-white">
               <h3>Action</h3>
             </div>
           </div>

@@ -1,4 +1,3 @@
-import React from "react";
 import { useSelector } from "react-redux";
 import {
   useGetbrandQuery,
@@ -29,6 +28,7 @@ const SalarySheet = ({ slipPreview }) => {
     { LateSalary: getEmployeeSalary?.data?.lateDaySalary } || [],
   ];
 
+  console.log(getEmployeeSalary?.data?.lateDaySalary);
 
   return (
     <div className="mx-auto max-w-5xl rounded-md bg-white p-6 shadow-md dark:bg-dark-box">
@@ -166,7 +166,10 @@ const SalarySheet = ({ slipPreview }) => {
           </div>
           <div className="border-r border-dark-card p-2">Total Deduction</div>
           <div className="p-2">
-            {Math.round(getEmployeeSalary?.data?.totalDeduction)}
+            {Math.round(
+              getEmployeeSalary?.data?.totalDeduction +
+                getEmployeeSalary?.data?.lateDaySalary,
+            )}
           </div>
         </div>
       </div>

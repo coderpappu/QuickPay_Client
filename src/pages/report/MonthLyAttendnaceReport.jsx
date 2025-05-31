@@ -1,19 +1,29 @@
 import { BarChart, Calendar, Clock, FileDown } from "lucide-react";
-import React, { useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useLazyGetMonthlyAttendanceReportQuery } from "../../features/api";
 
 const MonthlyAttendanceReport = () => {
   const [selectedMonth, setSelectedMonth] = useState("");
+  const [displayMonth, setDisplayMonth] = useState(""); // for MM-YYYY
   const [isLoading, setIsLoading] = useState(false);
+
   const companyId = useSelector((state) => state.company.companyId);
   const [triggerDownload] = useLazyGetMonthlyAttendanceReportQuery();
 
   const handleMonthChange = (e) => {
-    setSelectedMonth(e.target.value);
+    const value = e.target.value; // YYYY-MM
+    setSelectedMonth(value);
+    if (value) {
+      const [year, month] = value.split("-");
+      setDisplayMonth(`${year}-${month}-25`);
+    } else {
+      setDisplayMonth("");
+    }
   };
 
+  console.log(displayMonth);
   const handleDownload = async () => {
     if (!selectedMonth) {
       toast.error("Please select a valid month.");
@@ -24,7 +34,7 @@ const MonthlyAttendanceReport = () => {
     try {
       const result = await triggerDownload({
         companyId,
-        selectedDate: selectedMonth,
+        selectedDate: displayMonth,
       });
       const blob = result.data;
       const url = window.URL.createObjectURL(blob);
@@ -92,6 +102,12 @@ const MonthlyAttendanceReport = () => {
                     onChange={handleMonthChange}
                     className="w-full rounded-lg border border-gray-200 bg-white px-10 py-3 text-sm text-gray-700 shadow-sm transition duration-200 hover:border-gray-300 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-gray-700 dark:bg-gray-700 dark:text-white dark:hover:border-gray-600"
                   />
+                  {displayMonth && (
+                    <div className="mt-2 text-xs text-emerald-700 dark:text-emerald-300">
+                      Selected:{" "}
+                      <span className="font-semibold">{displayMonth}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 

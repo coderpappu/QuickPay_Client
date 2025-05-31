@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import * as XLSX from "xlsx";
@@ -131,6 +131,7 @@ const PaySlipCard = () => {
     }
   };
 
+  console.log(employeeSalarySheet);
   const handleExportToExcel = () => {
     if (!employeeSalarySheet?.data?.length) {
       toast.error("No data to export");
@@ -147,8 +148,18 @@ const PaySlipCard = () => {
       "Basic Salary": sheet?.basic_salary || 0,
       Overtime:
         Math.round(sheet?.overtime_salary_sheet?.[0]?.overtime_salary) || 0,
-      Allowance: sheet?.allowance_salary_sheet?.[0]?.amount || 0,
-      Deduction: sheet?.deduction_salary_sheet?.[0]?.amount || 0,
+      Allowance: Array.isArray(sheet?.allowance_salary_sheet)
+        ? sheet.allowance_salary_sheet.reduce(
+            (sum, a) => sum + (a.amount || 0),
+            0,
+          )
+        : 0,
+      Deduction: Array.isArray(sheet?.deduction_salary_sheet)
+        ? sheet.deduction_salary_sheet.reduce(
+            (sum, d) => sum + (d.amount || 0),
+            0,
+          )
+        : 0,
       "Net Salary": sheet?.netSalary || 0,
       Status: sheet?.status,
     }));
