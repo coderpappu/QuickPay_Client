@@ -1,17 +1,20 @@
+// Prevent rendering until data is loaded, to avoid ref errors with react-to-print
+
 import { useSelector } from "react-redux";
 import {
   useGetbrandQuery,
   useGetEmployeeSalarySheetQuery,
 } from "../../../features/api";
 
-const SalarySheet = ({ slipPreview }) => {
+const PreviewPayslipCard = ({ slipPreview }) => {
   const companyId = useSelector((state) => state.company.companyId);
   const { data: brandDetails } = useGetbrandQuery(companyId);
 
   const { data: getEmployeeSalary } = useGetEmployeeSalarySheetQuery({
     ...slipPreview,
   });
-
+  // Only render if the actual salary data is available
+  if (!getEmployeeSalary?.data?.generatedSalary) return <div>Loading...</div>;
   const employeeData = getEmployeeSalary?.data?.generatedSalary?.Employee;
 
   const leftside = [
@@ -25,10 +28,9 @@ const SalarySheet = ({ slipPreview }) => {
   const rightside = [
     ...(getEmployeeSalary?.data?.generatedSalary?.deduction_salary_sheet || []),
     ...(getEmployeeSalary?.data?.generatedSalary?.loan || []),
-    { LateSalary: getEmployeeSalary?.data?.lateDaySalary } || [],
+    ...(getEmployeeSalary?.data?.generatedSalary
+      ?.LateEarlyOutLeaveSalaryDeduction || []),
   ];
-
-  console.log(getEmployeeSalary?.data?.lateDaySalary);
 
   return (
     <div className="mx-auto max-w-5xl rounded-md bg-white p-6 shadow-md dark:bg-dark-box">
@@ -93,15 +95,19 @@ const SalarySheet = ({ slipPreview }) => {
         </div>
 
         {/* Dynamic Rows */}
-        {/* Dynamic Rows */}
         {Array(Math.max(leftside.length, rightside.length))
           .fill(null)
           .map((_, index) => {
             const leftData = leftside[index];
             const rightData = rightside[index];
 
-            if (!leftData && !rightData) {
-              return null; // Skip rendering if both left and right data are not found
+            // Hide only the unpaid_leave_salary with amount 0, but always show other rows
+            const hideRight =
+              rightData &&
+              rightData.title === "unpaid_leave_salary" &&
+              (!rightData.amount || rightData.amount === 0);
+            if (!leftData && (!rightData || hideRight)) {
+              return null; // Skip rendering if both left and right data are not found or right is hidden
             }
 
             return (
@@ -139,14 +145,20 @@ const SalarySheet = ({ slipPreview }) => {
                 )}
 
                 {/* Right Side (Deductions) */}
-                {rightData && (
+                {rightData && !hideRight && (
                   <>
                     <div className="border-r border-dark-card p-2">
                       {rightData.EmployeeDeduction?.DeductionType?.name
                         ? rightData.EmployeeDeduction?.DeductionType?.name
-                        : rightData?.LateSalary
-                          ? "Late Salary"
-                          : rightData.name || ""}
+                        : rightData.title
+                          ? rightData.title === "late_day_salary"
+                            ? "Late Day Salary"
+                            : rightData.title === "unpaid_leave_salary"
+                              ? "Unpaid Leave Salary"
+                              : rightData.title
+                          : rightData?.LateSalary
+                            ? "Late Salary"
+                            : rightData.name || ""}
                     </div>
                     <div className="p-2">
                       {rightData.amount
@@ -182,4 +194,4 @@ const SalarySheet = ({ slipPreview }) => {
   );
 };
 
-export default SalarySheet;
+export default PreviewPayslipCard;

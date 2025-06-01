@@ -98,7 +98,6 @@ const PaySlipCard = () => {
     month,
     year,
   });
-
   const handleMonthChange = (event) => {
     setMonth(event.target.value);
   };
@@ -131,7 +130,6 @@ const PaySlipCard = () => {
     }
   };
 
-  console.log(employeeSalarySheet);
   const handleExportToExcel = () => {
     if (!employeeSalarySheet?.data?.length) {
       toast.error("No data to export");
@@ -154,13 +152,22 @@ const PaySlipCard = () => {
             0,
           )
         : 0,
-      Deduction: Array.isArray(sheet?.deduction_salary_sheet)
-        ? sheet.deduction_salary_sheet.reduce(
-            (sum, d) => sum + (d.amount || 0),
-            0,
-          )
-        : 0,
+      Deduction:
+        (Array.isArray(sheet?.deduction_salary_sheet)
+          ? sheet.deduction_salary_sheet.reduce(
+              (sum, d) => sum + (d.amount || 0),
+              0,
+            )
+          : 0) +
+        (Array.isArray(sheet.LateEarlyOutLeaveSalaryDeduction)
+          ? sheet.LateEarlyOutLeaveSalaryDeduction.reduce(
+              (sum, item) => sum + (item.amount || 0),
+              0,
+            )
+          : 0),
+
       "Net Salary": sheet?.netSalary || 0,
+
       Status: sheet?.status,
     }));
 
@@ -209,8 +216,23 @@ const PaySlipCard = () => {
           <h3>{sheet?.allowance_salary_sheet?.[0]?.amount || "00"}</h3>
         </div>
         <div className="w-[10%] dark:text-white">
-          <h3>{sheet?.deduction_salary_sheet?.[0]?.amount || "00"}</h3>
+          <h3>
+            {(Array.isArray(sheet?.deduction_salary_sheet)
+              ? sheet.deduction_salary_sheet.reduce(
+                  (sum, d) => sum + (d.amount || 0),
+                  0,
+                )
+              : 0) +
+              (Array.isArray(sheet.LateEarlyOutLeaveSalaryDeduction)
+                ? sheet.LateEarlyOutLeaveSalaryDeduction.reduce(
+                    (sum, item) => sum + (item.amount || 0),
+                    0,
+                  )
+                : 0)}
+          </h3>
         </div>
+
+        <div className="w-[5%] dark:text-white">{sheet?.netSalary}</div>
         <div className="w-[7%] text-center dark:text-white">
           <button
             className={`w-24 border px-4 py-2 ${sheet?.status !== "Unpaid" ? "border-green-400 text-green-400" : "border-yellow-400 text-yellow-400"} mx-2 rounded-md`}
@@ -218,7 +240,7 @@ const PaySlipCard = () => {
             {sheet?.status}
           </button>
         </div>
-        <div className="w-[35%] dark:text-white">
+        <div className="w-[30%] dark:text-white">
           <button
             className="mx-2 rounded-md bg-yellow-500 px-4 py-2"
             onClick={() =>
@@ -383,10 +405,13 @@ const PaySlipCard = () => {
               <div className="w-[10%] dark:text-white">
                 <h3>Deduction</h3>
               </div>
+              <div className="w-[5%] dark:text-white">
+                <h3>Net Salary</h3>
+              </div>
               <div className="w-[7%] text-center dark:text-white">
                 <h3>Status</h3>
               </div>
-              <div className="w-[35%] dark:text-white">
+              <div className="w-[30%] dark:text-white">
                 <h3>Action</h3>
               </div>
             </div>
