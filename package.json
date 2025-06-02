@@ -76,7 +76,7 @@
     "autoprefixer": "^10.4.19",
     "babel-eslint": "^10.1.0",
     "daisyui": "^4.12.10",
-    "eslint": "^9.21.0",
+    "eslint": "^8.57.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "2.25.3",

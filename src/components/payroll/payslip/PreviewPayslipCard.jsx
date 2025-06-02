@@ -48,9 +48,11 @@ const PreviewPayslipCard = ({ slipPreview }) => {
       {/* Payslip Content - This div will be captured for PDF */}
       <div ref={payslipRef} className="bg-white p-4 dark:bg-dark-box">
         {/* Header */}
+
         <div className="mx-auto mb-4 h-auto w-[150px] text-center text-xl font-bold">
           <img src={brandDetails?.data?.lightImageUrl} alt="" />
         </div>
+
         <div className="mb-2 flex justify-between text-sm">
           <div className="mb-4 flex flex-col items-start gap-2">
             <p>

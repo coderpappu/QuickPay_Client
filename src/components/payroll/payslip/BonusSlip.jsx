@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
@@ -161,11 +161,10 @@ const BonusSlipCard = () => {
   const handleExport = () => {
     const csvData = bonusSlip?.data?.map((slip) => ({
       Name: slip?.Employee?.name,
-      EmployeeID: slip?.Employee?.EmployeeID,
-      Bonus_Name: slip?.BonusType?.title,
+      EmployeeID: slip?.Employee?.employeeId,
+      BonusType: slip?.BonusType?.title,
       Amount: slip?.amount,
       Status: slip?.status,
-      Bonus_Type: slip?.type,
       Payment_Date: slip?.payment_date,
     }));
     setCsvData(csvData);
@@ -251,10 +250,10 @@ const BonusSlipCard = () => {
 
   return (
     <div>
-      <div className="flex w-full justify-end rounded-md bg-dark-card p-5 px-6 py-8">
+      <div className="flex w-full justify-end rounded-md bg-white p-5 px-6 py-8 dark:bg-dark-card">
         <div className="flex w-[100%] flex-wrap items-center justify-end gap-2">
           <select
-            className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 px-2 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
+            className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 bg-light-input px-2 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
             value={bonusType}
             onChange={handleBonusTypeChange}
           >
@@ -268,7 +267,7 @@ const BonusSlipCard = () => {
           </select>
 
           <select
-            className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 px-2 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
+            className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 bg-light-input px-2 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
             value={dept}
             onChange={handleDeptChange}
           >
@@ -284,7 +283,7 @@ const BonusSlipCard = () => {
           </select>
 
           <select
-            className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 px-2 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
+            className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 bg-light-input px-2 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
             value={month}
             onChange={handleMonthChange}
           >
@@ -304,7 +303,7 @@ const BonusSlipCard = () => {
           </select>
 
           <select
-            className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 px-3 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
+            className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 bg-light-input px-3 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
             value={year}
             onChange={handleYearChange}
           >
@@ -333,7 +332,7 @@ const BonusSlipCard = () => {
             </div>
             <div className="flex w-[51%] flex-wrap items-center justify-end gap-2">
               <select
-                className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 px-2 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
+                className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 bg-light-input px-2 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
                 value={month}
                 onChange={handleMonthChange}
               >
@@ -353,7 +352,7 @@ const BonusSlipCard = () => {
               </select>
 
               <select
-                className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 px-3 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
+                className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 bg-light-input px-3 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
                 value={year}
                 onChange={handleYearChange}
               >
@@ -411,7 +410,7 @@ const BonusSlipCard = () => {
           </div>
         </BrandCardWrapper>
       </div>
-      
+
       {isPopupOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div className="w-full max-w-5xl rounded-lg bg-white p-6 dark:bg-dark-card">
