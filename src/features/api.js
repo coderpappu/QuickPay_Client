@@ -1722,6 +1722,15 @@ export const apiSlice = createApi({
       invalidatesTags: ["employeesalarysheet"],
     }),
 
+    bulkDeleteSalarySheet: builder.mutation({
+      query: ({ month, year, companyId }) => ({
+        url: `/salarysetting/salary-sheet/bulk-delete`,
+        method: "DELETE",
+        params: { month, year, companyId },
+      }),
+      invalidatesTags: ["employeesalarysheet"],
+    }),
+
     // device configuration
     addDeviceConfiguration: builder.mutation({
       query: (credentials) => ({
@@ -2396,6 +2405,8 @@ export const {
   useGetGeneratedSalarySheetQuery,
   useUpdateSalarySheetMutation,
   useDeleteSalarySheetMutation,
+  // useBulkEmployeePaymentMutation,
+  useBulkDeleteSalarySheetMutation,
 
   // device configure
   useAddDeviceConfigurationMutation,

@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import * as XLSX from "xlsx";
 import {
+  useBulkDeleteSalarySheetMutation,
   useBulkEmployeePaymentMutation,
   useDeleteSalarySheetMutation,
   useGeneratedEmployeeSalaryBulkMutation,
@@ -29,6 +30,7 @@ const PaySlipCard = () => {
   const [deleteSalarySheet] = useDeleteSalarySheetMutation();
   const [bulkEmployeePayment] = useBulkEmployeePaymentMutation();
   const [generateBulkSalary] = useGeneratedEmployeeSalaryBulkMutation();
+  const [bulkDeleteSalary] = useBulkDeleteSalarySheetMutation();
 
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
@@ -79,6 +81,16 @@ const PaySlipCard = () => {
       refetchSalarySheet();
     } catch (error) {
       toast.error("Failed to delete salary sheet");
+    }
+  };
+
+  const handleBulkDeleteSalarysheet = async () => {
+    try {
+      await bulkDeleteSalary({ month, year, companyId });
+      toast.success("Salary sheets deleted successfully");
+      refetchSalarySheet();
+    } catch (error) {
+      toast.error("Failed to delete salary sheets");
     }
   };
 
@@ -331,7 +343,7 @@ const PaySlipCard = () => {
               compact={true}
             />
             <button
-              onClick={handleExportToExcel}
+              onClick={handleBulkDeleteSalarysheet}
               disabled={isExporting || !employeeSalarySheet?.data?.length}
               className="flex items-center gap-2 rounded-md bg-red-600 px-4 py-2 font-medium text-white transition-colors hover:bg-red-700 disabled:bg-red-400 disabled:opacity-60 dark:bg-opacity-60"
             >
