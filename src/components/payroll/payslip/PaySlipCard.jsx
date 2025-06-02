@@ -88,7 +88,12 @@ const PaySlipCard = () => {
     try {
       await bulkDeleteSalary({ month, year, companyId });
       toast.success("Salary sheets deleted successfully");
-      refetchSalarySheet();
+      // Wait for the backend to process, then refetch and force a state update
+      await refetchSalarySheet();
+      // Optionally, force a local state update to ensure UI refresh
+      setTimeout(() => {
+        refetchSalarySheet();
+      }, 200);
     } catch (error) {
       toast.error("Failed to delete salary sheets");
     }
@@ -110,18 +115,18 @@ const PaySlipCard = () => {
     }
   };
 
-  // Handle individual payment
-  const handleUpdateSalarySheet = async (employeeId, generate_date) => {
+  // Handle individual pay/unpay toggle
+  const handleUpdateSalarySheet = async (employeeId, generate_date, status) => {
     try {
       await updateSalarySheet({
         employeeId,
         generate_date,
-        status: "Paid",
+        status,
       }).unwrap();
-      toast.success("Payment successful");
+      toast.success(`Status updated to ${status}`);
       refetchSalarySheet();
     } catch (error) {
-      toast.error("Payment failed");
+      toast.error("Failed to update status");
     }
   };
 
@@ -151,6 +156,7 @@ const PaySlipCard = () => {
         year,
         companyId,
       }).unwrap();
+
       toast.success("Payslips generated successfully");
       refetchSalarySheet();
     } catch (error) {
@@ -217,6 +223,23 @@ const PaySlipCard = () => {
     }
   };
 
+  // Search state for employee name or ID
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filtered data by employee name or ID
+  const filteredSalaryData =
+    employeeSalarySheet?.data?.filter((sheet) => {
+      if (!searchTerm) return true;
+      const nameMatch = sheet?.Employee?.name
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const idMatch = sheet?.Employee?.employeeId
+        ?.toString()
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      return nameMatch || idMatch;
+    }) || [];
+
   // Determine what content to display
   let content;
 
@@ -228,7 +251,7 @@ const PaySlipCard = () => {
         message={sheetError?.data?.message || "Error loading salary data"}
       />
     );
-  } else if (!employeeSalarySheet?.data?.length) {
+  } else if (!filteredSalaryData.length) {
     content = (
       <div className="flex flex-col items-center justify-center py-16 text-gray-500 dark:text-gray-400">
         <div className="mb-4 text-6xl opacity-20">
@@ -236,7 +259,8 @@ const PaySlipCard = () => {
         </div>
         <h3 className="mb-2 text-xl font-medium">No salary sheets found</h3>
         <p className="mb-6 text-sm">
-          Generate payslips for the selected month and year.
+          Generate payslips for the selected month and year or adjust your
+          search.
         </p>
         <button
           onClick={handleGenerateSalary}
@@ -260,7 +284,7 @@ const PaySlipCard = () => {
   } else {
     content = (
       <SalaryTable
-        data={employeeSalarySheet.data}
+        data={filteredSalaryData}
         onViewPayslip={(employeeId, deviceId) => {
           setSlipPreview({ employeeId, deviceId, companyId, month, year });
           setIsPayslipModalOpen(true);
@@ -335,6 +359,15 @@ const PaySlipCard = () => {
           </div>
 
           <div className="mt-4 flex flex-wrap items-center gap-3 sm:mt-0">
+            {/* Search by employee name or ID */}
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search by employee name or ID..."
+              className="rounded-md border border-gray-300 border-opacity-10 bg-light-input px-3 py-2 text-sm focus:border-blue-500 focus:outline-none dark:bg-dark-box dark:text-white"
+              style={{ minWidth: 200 }}
+            />
             <MonthYearSelector
               month={month}
               year={year}
@@ -345,7 +378,7 @@ const PaySlipCard = () => {
             <button
               onClick={handleBulkDeleteSalarysheet}
               disabled={isExporting || !employeeSalarySheet?.data?.length}
-              className="flex items-center gap-2 rounded-md bg-red-600 px-4 py-2 font-medium text-white transition-colors hover:bg-red-700 disabled:bg-red-400 disabled:opacity-60 dark:bg-opacity-60"
+              className="flex items-center gap-2 rounded-md bg-red-600 px-4 py-2 font-medium text-white transition-colors hover:bg-red-700 disabled:bg-red-400 disabled:opacity-60 dark:bg-opacity-40"
             >
               <Trash2 className="h-3.5 w-3.5" />
               Bulk Delete

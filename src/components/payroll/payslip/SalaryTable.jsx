@@ -141,16 +141,22 @@ const SalaryTable = ({
                   Payslip
                 </button>
 
-                {sheet?.status !== "Paid" && (
-                  <button
-                    className="flex items-center gap-1 rounded bg-green-100 px-3 py-1.5 text-xs font-medium text-green-700 transition-colors hover:bg-green-200 dark:bg-green-900 dark:bg-opacity-20 dark:text-green-400 dark:hover:bg-opacity-30"
-                    onClick={() =>
-                      onPaySalary(sheet?.Employee?.id, sheet?.generate_date)
-                    }
-                  >
-                    Pay
-                  </button>
-                )}
+                <button
+                  className={`flex items-center gap-1 rounded px-3 py-1.5 text-xs font-medium transition-colors ${
+                    sheet?.status === "Paid"
+                      ? "bg-yellow-100 text-yellow-700 hover:bg-yellow-200 dark:bg-yellow-900 dark:bg-opacity-20 dark:text-yellow-400 dark:hover:bg-opacity-30"
+                      : "bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900 dark:bg-opacity-20 dark:text-green-400 dark:hover:bg-opacity-30"
+                  } `}
+                  onClick={() =>
+                    onPaySalary(
+                      sheet?.Employee?.id,
+                      sheet?.generate_date,
+                      sheet?.status === "Paid" ? "Unpaid" : "Paid",
+                    )
+                  }
+                >
+                  {sheet?.status === "Paid" ? "Unpay" : "Pay"}
+                </button>
 
                 <button
                   className="flex items-center gap-1 rounded bg-purple-100 px-3 py-1.5 text-xs font-medium text-purple-700 transition-colors hover:bg-purple-200 dark:bg-purple-900 dark:bg-opacity-20 dark:text-purple-400 dark:hover:bg-opacity-30"
