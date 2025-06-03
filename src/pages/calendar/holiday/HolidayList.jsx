@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import BrandCardWrapper from "../../../components/company/BrandCardWrapper";
-import { HrmSetupCardHeader } from "../../../components/company/SettingCardHeader";
 import {
   useDeleteHolidayMutation,
   useGetHolidayListQuery,
@@ -16,7 +15,11 @@ import HolidayFormPopup from "./HolidayForm";
 const HolidayList = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false); // State to manage popup visibility
   const [selectedHolidayId, setSelectedHolidayId] = useState(null);
+
   const companyId = useSelector((state) => state.company.companyId);
+  const [month, setMonth] = useState(new Date().getMonth() + 1); // 1-12
+  const [year, setYear] = useState(new Date().getFullYear());
+
   const onClose = () => {
     setIsPopupOpen(false);
   };
@@ -63,9 +66,10 @@ const HolidayList = () => {
     isLoading,
     isError,
     error,
-  } = useGetHolidayListQuery(companyId, {
-    skip: companyId == null,
-  });
+  } = useGetHolidayListQuery(
+    { companyId, month, year },
+    { skip: companyId == null },
+  );
 
   let content;
 
@@ -115,7 +119,47 @@ const HolidayList = () => {
   return (
     <div className="w-[49%]">
       <BrandCardWrapper>
-        <HrmSetupCardHeader title="Holidays" handleOpen={handleOpen} />
+        <div className="flex items-center justify-between border-b border-dark-box border-opacity-5 px-6 py-4 dark:border-dark-border-color dark:border-opacity-5">
+          <div>
+            <h3 className="text-base leading-6 dark:text-dark-heading-color">
+              Holidays
+            </h3>
+          </div>
+          {/* Month/Year Selector */}
+          <div className="mb-4 flex flex-wrap items-center gap-4">
+            <div>
+              <select
+                className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-box dark:text-dark-text-color"
+                value={month}
+                onChange={(e) => setMonth(Number(e.target.value))}
+              >
+                {Array.from({ length: 12 }, (_, i) => (
+                  <option key={i + 1} value={i + 1}>
+                    {new Date(0, i).toLocaleString("default", {
+                      month: "long",
+                    })}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <select
+                className="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:outline-none dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-box dark:text-dark-text-color"
+                value={year}
+                onChange={(e) => setYear(Number(e.target.value))}
+              >
+                {Array.from({ length: 6 }, (_, i) => {
+                  const y = new Date().getFullYear() - 2 + i;
+                  return (
+                    <option key={y} value={y}>
+                      {y}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+          </div>
+        </div>
         <div className="px-6 py-3">
           {/* header  */}
           <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
