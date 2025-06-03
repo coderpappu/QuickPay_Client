@@ -1,7 +1,7 @@
 import { format, getDay, parse, startOfWeek } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Calendar as BigCalendar, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useSelector } from "react-redux";
@@ -26,13 +26,23 @@ const localizer = dateFnsLocalizer({
 });
 
 const MyCalendar = () => {
+  const [month, setMonth] = useState(new Date().getMonth() + 1); // 1-12
+  const [year, setYear] = useState(new Date().getFullYear());
+
+  // Handler to update month/year when calendar view changes
+  const handleNavigate = (date) => {
+    setMonth(date.getMonth() + 1); // JS months are 0-based
+    setYear(date.getFullYear());
+  };
+
   const companyId = useSelector((state) => state.company.companyId);
 
   const { data } = useGetEmployeeQuery();
 
-  const { data: holidaysData } = useGetHolidayListQuery(companyId, {
-    skip: companyId == null,
-  });
+  const { data: holidaysData } = useGetHolidayListQuery(
+    { companyId, month, year },
+    { skip: !companyId },
+  );
 
   const { data: weekendsData } = useGetWeekendListQuery(companyId, {
     skip: companyId == null,
@@ -142,6 +152,7 @@ const MyCalendar = () => {
           toolbar: CustomToolbar,
         }}
         onSelectEvent={handleSelectEvent}
+        onNavigate={handleNavigate}
         eventPropGetter={eventStyleGetter}
         dayPropGetter={dayPropGetter}
       />

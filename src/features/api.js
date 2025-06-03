@@ -614,9 +614,9 @@ export const apiSlice = createApi({
     }),
 
     getHolidayList: builder.query({
-      query: (companyId) => ({
+      query: ({ companyId, month, year }) => ({
         url: `/holiday/list/`,
-        params: { companyId },
+        params: { companyId, month, year },
       }),
       providesTags: ["holiday"],
     }),
