@@ -1,3 +1,4 @@
+import { AlertTriangle, DollarSign, FileText, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
 import toast from "react-hot-toast";
@@ -67,13 +68,12 @@ const BonusSlipCard = () => {
       await bulkEmployeePayment({ generate_date, status: "Paid" }).unwrap();
       toast.success("Bulk payment processed successfully.");
     } catch (error) {
-      console.log(error);
       toast.error("There was an error processing");
     }
   };
 
-  const handleUpdateBonusSlip = async (employeeId, generate_date) => {
-    await updateBonusSlip({ employeeId, generate_date, status: "Paid" });
+  const handleUpdateBonusSlip = async (employeeId, generate_date, status) => {
+    await updateBonusSlip({ employeeId, generate_date, status });
   };
 
   useEffect(() => {
@@ -144,13 +144,14 @@ const BonusSlipCard = () => {
     }));
 
     try {
-      await generateBonusSlip({
+      const generatedSlip = await generateBonusSlip({
         employeeIds,
         month,
         year,
         companyId,
         bonusType,
       }).unwrap();
+
       toast.success("Employees bonus generated successfully");
     } catch (error) {
       toast.error("Error generating employees bonus");
@@ -200,16 +201,26 @@ const BonusSlipCard = () => {
             <h3>{sheet?.amount || "00"}</h3>
           </div>
 
-          <div className="w-[7%] text-center dark:text-white">
-            <button
-              className={`w-24 border px-4 py-2 ${sheet?.status !== "Unpaid" ? "border-green-400 text-green-400" : "border-yellow-400 text-yellow-400"} mx-2 rounded-md`}
+          <div className="flex w-[7%] justify-center">
+            <span
+              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                sheet?.status === "Paid"
+                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:bg-opacity-20 dark:text-green-400"
+                  : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:bg-opacity-20 dark:text-yellow-400"
+              }`}
             >
-              {sheet?.status}{" "}
-            </button>
+              {sheet?.status === "Paid" ? (
+                <DollarSign className="mr-1 h-3 w-3" />
+              ) : (
+                <AlertTriangle className="mr-1 h-3 w-3" />
+              )}
+              {sheet?.status}
+            </span>
           </div>
-          <div className="w-[30%] dark:text-white">
+
+          <div className="flex w-[20%] flex-wrap justify-between dark:text-white">
             <button
-              className="mx-2 rounded-md bg-yellow-500 px-4 py-2"
+              className="flex items-center gap-1 rounded bg-blue-100 px-3 py-1.5 text-xs font-medium text-blue-700 transition-colors hover:bg-blue-200 dark:bg-blue-900 dark:bg-opacity-20 dark:text-blue-400 dark:hover:bg-opacity-30"
               onClick={() =>
                 handleOpen({
                   employee_id: sheet?.Employee?.id,
@@ -226,21 +237,32 @@ const BonusSlipCard = () => {
                 })
               }
             >
+              <FileText className="h-3.5 w-3.5" />
               Payslip
-            </button>
-            <button
-              className="mx-2 rounded-md bg-purple-700 px-4 py-2"
-              onClick={() =>
-                handleUpdateBonusSlip(sheet?.Employee?.id, sheet?.generate_date)
-              }
-            >
-              Click To Paid
             </button>
 
             <button
-              className="mx-2 rounded-md bg-green-500 px-4 py-2"
+              className={`flex items-center gap-1 rounded px-3 py-1.5 text-xs font-medium transition-colors ${
+                sheet?.status === "Paid"
+                  ? "bg-yellow-100 text-yellow-700 hover:bg-yellow-200 dark:bg-yellow-900 dark:bg-opacity-20 dark:text-yellow-400 dark:hover:bg-opacity-30"
+                  : "bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900 dark:bg-opacity-20 dark:text-green-400 dark:hover:bg-opacity-30"
+              } `}
+              onClick={() =>
+                handleUpdateBonusSlip(
+                  sheet?.Employee?.id,
+                  sheet?.generate_date,
+                  sheet?.status === "Paid" ? "Unpaid" : "Paid",
+                )
+              }
+            >
+              {sheet?.status === "Paid" ? "Unpay" : "Pay"}
+            </button>
+
+            <button
+              className="flex items-center gap-1 rounded bg-red-100 px-3 py-1.5 text-xs font-medium text-red-700 transition-colors hover:bg-red-200 dark:bg-red-900 dark:bg-opacity-20 dark:text-red-400 dark:hover:bg-opacity-30"
               onClick={() => handleDeleteBonusSlip(sheet?.id)}
             >
+              <Trash2 className="h-3.5 w-3.5" />
               Delete
             </button>
           </div>
@@ -400,7 +422,7 @@ const BonusSlipCard = () => {
               <div className="w-[7%] text-center dark:text-white">
                 <h3>Status </h3>
               </div>
-              <div className="w-[30%] dark:text-white">
+              <div className="w-[20%] dark:text-white">
                 <h3>Action </h3>
               </div>
             </div>

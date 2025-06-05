@@ -8,14 +8,17 @@ import PayslipDownloadButton from "./PayslipDownloadButton";
 
 const PreviewPayslipCard = ({ slipPreview }) => {
   const payslipRef = useRef(null);
+
   const companyId = useSelector((state) => state.company.companyId);
   const { data: brandDetails } = useGetbrandQuery(companyId);
 
   const { data: getEmployeeSalary } = useGetEmployeeSalarySheetQuery({
     ...slipPreview,
   });
+
   // Only render if the actual salary data is available
   if (!getEmployeeSalary?.data?.generatedSalary) return <div>Loading...</div>;
+  
   const employeeData = getEmployeeSalary?.data?.generatedSalary?.Employee;
   const generateDate = getEmployeeSalary?.data?.generatedSalary?.generate_date;
 
@@ -122,11 +125,18 @@ const PreviewPayslipCard = ({ slipPreview }) => {
               const leftData = leftside[index];
               const rightData = rightside[index];
 
-              // Hide only the unpaid_leave_salary with amount 0, but always show other rows
-              const hideRight =
+              // Hide late_day_salary, unpaid_leave_salary, early_out_salary if amount is 0
+              const isSpecialDeduction =
                 rightData &&
-                rightData.title === "unpaid_leave_salary" &&
+                [
+                  "late_day_salary",
+                  "unpaid_leave_salary",
+                  "early_out_salary",
+                ].includes(rightData.title);
+              const hideRight =
+                isSpecialDeduction &&
                 (!rightData.amount || rightData.amount === 0);
+
               if (!leftData && (!rightData || hideRight)) {
                 return null; // Skip rendering if both left and right data are not found or right is hidden
               }
@@ -176,7 +186,9 @@ const PreviewPayslipCard = ({ slipPreview }) => {
                               ? "Late Day Salary"
                               : rightData.title === "unpaid_leave_salary"
                                 ? "Unpaid Leave Salary"
-                                : rightData.title
+                                : rightData.title === "early_out_salary"
+                                  ? "Early Out Salary"
+                                  : rightData.title
                             : rightData?.LateSalary
                               ? "Late Salary"
                               : rightData.name || ""}
@@ -205,7 +217,9 @@ const PreviewPayslipCard = ({ slipPreview }) => {
             <div className="p-2">
               {Math.round(
                 getEmployeeSalary?.data?.totalDeduction +
-                  getEmployeeSalary?.data?.lateDaySalary,
+                  getEmployeeSalary?.data?.lateDaySalary +
+                  getEmployeeSalary?.data?.unpaidLeaveSalary +
+                  getEmployeeSalary?.data?.earlyOutSalary,
               )}
             </div>
           </div>
@@ -213,7 +227,7 @@ const PreviewPayslipCard = ({ slipPreview }) => {
 
         {/* Net Amount */}
         <div className="flex justify-end text-lg font-bold">
-          <p>Net Salary : {Math.round(getEmployeeSalary?.data?.netSalary)}</p>
+          <p>Net Salary : {getEmployeeSalary?.data?.netSalary}</p>
         </div>
       </div>
     </div>

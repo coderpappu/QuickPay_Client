@@ -223,6 +223,7 @@ const PaySlipCard = () => {
         "Net Salary",
         "Status",
       ];
+
       ws["!cols"] = bankHeaders.map((header) => ({
         wch:
           Math.max(
@@ -331,11 +332,11 @@ const PaySlipCard = () => {
         "Employee Info", // Department
         "Employee Info", // Section
         "Basic Salary", // Basic Salary (separate)
-        ...Array(allowanceTypes.length + 1).fill("Total Allowance"), // All allowance types + Total Allowance
-        ...Array(deductionTypes.length + 1).fill("Total Deduction"), // All deduction types + Total Deduction
-        "Summary",
-        "Summary",
-        "Summary",
+        ...Array(allowanceTypes.length).fill("Allowances"), // Each allowance type
+        "Total Allowance", // Total Allowance
+        ...Array(deductionTypes.length).fill("Deductions"), // Each deduction type
+        "Total Deduction", // Total Deduction
+        ...Array(3).fill("Summary"),
       ];
       const mainHeaders = [
         "Employee ID",
@@ -422,21 +423,31 @@ const PaySlipCard = () => {
 
       // Set merges for Allowances and Deductions
       const merges = [];
-      // Employee Info (first 6 columns: 0-5)
-      merges.push({ s: { r: 0, c: 0 }, e: { r: 0, c: 5 } });
-      // Allowances
+      // Employee Info (first 5 columns: 0-4)
+      merges.push({ s: { r: 0, c: 0 }, e: { r: 0, c: 4 } });
+      // Basic Salary (col 5)
+      merges.push({ s: { r: 0, c: 5 }, e: { r: 1, c: 5 } });
+      // Allowances (all allowance columns + total)
       if (allowanceTypes.length > 0) {
         const start = 6;
         const end = start + allowanceTypes.length - 1;
-        merges.push({ s: { r: 0, c: start }, e: { r: 0, c: end } });
-        merges.push({ s: { r: 0, c: end + 1 }, e: { r: 1, c: end + 1 } }); // Total Allowance
+        // Merge "Allowances" over all allowance type columns
+        if (allowanceTypes.length > 0) {
+          merges.push({ s: { r: 0, c: start }, e: { r: 0, c: end } });
+        }
+        // Merge "Allowances" for Total Allowance column
+        merges.push({ s: { r: 0, c: end + 1 }, e: { r: 1, c: end + 1 } });
       }
-      // Deductions
+      // Deductions (all deduction columns + total)
       if (deductionTypes.length > 0) {
         const start = 7 + allowanceTypes.length;
         const end = start + deductionTypes.length - 1;
-        merges.push({ s: { r: 0, c: start }, e: { r: 0, c: end } });
-        merges.push({ s: { r: 0, c: end + 1 }, e: { r: 1, c: end + 1 } }); // Total Deduction
+        // Merge "Deductions" over all deduction type columns
+        if (deductionTypes.length > 0) {
+          merges.push({ s: { r: 0, c: start }, e: { r: 0, c: end } });
+        }
+        // Merge "Deductions" for Total Deduction column
+        merges.push({ s: { r: 0, c: end + 1 }, e: { r: 1, c: end + 1 } });
       }
       // Summary (last 3 columns)
       const summaryStart = mainHeaders.length - 3;
