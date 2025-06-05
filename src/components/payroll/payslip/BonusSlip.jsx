@@ -16,6 +16,7 @@ import {
 import ListSkeleton from "../../../skeletons/ListSkeleton";
 import ErrorMessage from "../../../utils/ErrorMessage";
 import BrandCardWrapper from "../../company/BrandCardWrapper";
+import MonthYearSelector from "./MonthYearSelector";
 import PreviewBonusSlip from "./PreviewBonusSlip";
 
 const BonusSlipCard = () => {
@@ -171,6 +172,18 @@ const BonusSlipCard = () => {
     setCsvData(csvData);
   };
 
+  // Single filter input for both name and ID
+  const [filterText, setFilterText] = useState("");
+  let filteredBonusData = bonusSlip?.data || [];
+  if (filterText.trim()) {
+    const search = filterText.trim().toLowerCase();
+    filteredBonusData = filteredBonusData.filter(
+      (sheet) =>
+        sheet?.Employee?.name?.toLowerCase().includes(search) ||
+        String(sheet?.Employee?.employeeId).toLowerCase().includes(search),
+    );
+  }
+
   let content;
 
   if (isLoading) return <ListSkeleton />;
@@ -183,8 +196,8 @@ const BonusSlipCard = () => {
   if (isErrorBonusSlip)
     content = <ErrorMessage message={slipError?.data?.message} />;
 
-  if (bonusSlip?.data.length !== 0)
-    content = bonusSlip?.data?.map((sheet) => (
+  if (filteredBonusData.length !== 0)
+    content = filteredBonusData.map((sheet) => (
       <>
         {" "}
         <div className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10">
@@ -346,43 +359,32 @@ const BonusSlipCard = () => {
 
       <div className="my-3">
         <BrandCardWrapper>
+          {/* Single Filter Input */}
+
           <div className="flex items-center justify-between border-b border-dark-box border-opacity-5 px-6 py-4 dark:border-dark-border-color dark:border-opacity-5">
             <div>
               <h3 className="text-base leading-6 dark:text-dark-heading-color">
                 Bonus slip
               </h3>
             </div>
-            <div className="flex w-[51%] flex-wrap items-center justify-end gap-2">
-              <select
-                className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 bg-light-input px-2 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
-                value={month}
-                onChange={handleMonthChange}
-              >
-                <option value="">Select Month</option>
-                <option value="01">JAN</option>
-                <option value="02">FEB</option>
-                <option value="03">MAR</option>
-                <option value="04">APR</option>
-                <option value="05">MAY</option>
-                <option value="06">JUN</option>
-                <option value="07">JUL</option>
-                <option value="08">AUG</option>
-                <option value="09">SEP</option>
-                <option value="10">OCT</option>
-                <option value="11">NOV</option>
-                <option value="12">DEC</option>
-              </select>
 
-              <select
-                className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 bg-light-input px-3 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
-                value={year}
-                onChange={handleYearChange}
-              >
-                <option value="">Select Year</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-              </select>
+            <div className="flex w-[60%] flex-wrap items-center justify-end gap-2">
+              <input
+                id="filterText"
+                type="text"
+                value={filterText}
+                onChange={(e) => setFilterText(e.target.value)}
+                placeholder="Name or ID"
+                className="rounded-md border border-gray-300 border-opacity-10 bg-light-input px-3 py-3 text-sm focus:border-blue-500 focus:outline-none dark:bg-dark-box dark:text-white"
+                style={{ minWidth: 200 }}
+              />
+              <MonthYearSelector
+                month={month}
+                year={year}
+                onMonthChange={setMonth}
+                onYearChange={setYear}
+                className="flex-1"
+              />
 
               <CSVLink
                 data={csvData}
