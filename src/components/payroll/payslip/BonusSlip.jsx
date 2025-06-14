@@ -1,8 +1,8 @@
 import { AlertTriangle, DollarSign, FileText, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { CSVLink } from "react-csv";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import * as XLSX from "xlsx";
 import {
   useCreateBonusSlipMutation,
   useDeleteBonusSlipMutation,
@@ -172,9 +172,222 @@ const BonusSlipCard = () => {
     setCsvData(csvData);
   };
 
+  const handleGenerateBankBonusSheet = () => {
+    if (!bonusSlip?.data?.length) {
+      toast.error("No data to export");
+      return;
+    }
+    console.log(bonusSlip);
+    try {
+      // Prepare data for bank sheet
+      const excelData = bonusSlip.data.map((sheet) => ({
+        "Employee ID": sheet?.Employee?.employeeId,
+        Name: sheet?.Employee?.name,
+        "Bank Name": sheet?.Employee?.EmployeeBankAcc?.[0]?.bank_name || "",
+        "Bank Branch": sheet?.Employee?.EmployeeBankAcc?.[0]?.branch_name || "",
+        "Account No": sheet?.Employee?.EmployeeBankAcc?.[0]?.bank_acc_no || "",
+        "Routing No": sheet?.Employee?.EmployeeBankAcc?.[0]?.routing_no || "",
+        "Bonus Type": sheet?.BonusType?.title || "",
+        Amount: sheet?.amount || 0,
+        Status: sheet?.status,
+      }));
+
+      const ws = XLSX.utils.json_to_sheet(excelData);
+      const bankHeaders = [
+        "Employee ID",
+        "Name",
+        "Bank Name",
+        "Bank Branch",
+        "Account No",
+        "Routing No",
+        "Bonus Type",
+        "Amount",
+        "Status",
+      ];
+      ws["!cols"] = bankHeaders.map((header) => ({
+        wch:
+          Math.max(
+            header.length,
+            ...excelData.map((row) =>
+              row[header] !== undefined && row[header] !== null
+                ? String(row[header]).length
+                : 0,
+            ),
+          ) + 2,
+      }));
+      // Right-align amount column
+      const amountColIdx = bankHeaders.indexOf("Amount");
+      for (let rowIdx = 1; rowIdx < excelData.length + 1; rowIdx++) {
+        const cellAddress = XLSX.utils.encode_cell({
+          r: rowIdx,
+          c: amountColIdx,
+        });
+        if (!ws[cellAddress]) continue;
+        ws[cellAddress].s = ws[cellAddress].s || {};
+        ws[cellAddress].s.alignment = { horizontal: "right" };
+        ws[cellAddress].z = "#,##0.00";
+      }
+      // Header cell
+      const headerCell = XLSX.utils.encode_cell({ r: 0, c: amountColIdx });
+      if (ws[headerCell]) {
+        ws[headerCell].s = ws[headerCell].s || {};
+        ws[headerCell].s.alignment = {
+          horizontal: "right",
+          vertical: "center",
+        };
+      }
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Bank Bonus Sheet");
+      // Format file name as bank-bonus-sheet-mmm-yyyy.xlsx
+      const monthNames = [
+        "january",
+        "february",
+        "march",
+        "april",
+        "may",
+        "june",
+        "july",
+        "august",
+        "september",
+        "october",
+        "november",
+        "december",
+      ];
+      const monthIdx = parseInt(month, 10) - 1;
+      const monthName = monthNames[monthIdx] || month;
+      const fileName = `bank-bonus-sheet-${monthName}-${year}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+      toast.success("Bank Bonus Sheet exported successfully");
+    } catch (error) {
+      toast.error("Failed to export Bank Bonus Sheet");
+    }
+  };
+
+  const handleGenerateBonusDetailsSheet = () => {
+    if (!bonusSlip?.data?.length) {
+      toast.error("No data to export");
+      return;
+    }
+    try {
+      // Collect all unique bonus types for dynamic columns
+      const bonusTypeSet = new Set();
+      bonusSlip.data.forEach((sheet) => {
+        if (sheet?.BonusType?.title) bonusTypeSet.add(sheet.BonusType.title);
+      });
+      const bonusTypes = Array.from(bonusTypeSet);
+      // Build headers
+      const mainHeaders = [
+        "Employee ID",
+        "Employee Name",
+        ...bonusTypes,
+        "Total Bonus",
+        "Status",
+      ];
+      // Build data rows
+      const employeeMap = {};
+      bonusSlip.data.forEach((sheet) => {
+        const empId = sheet?.Employee?.employeeId;
+        if (!employeeMap[empId]) {
+          employeeMap[empId] = {
+            "Employee ID": empId,
+            "Employee Name": sheet?.Employee?.name,
+            Status: sheet?.status,
+          };
+          bonusTypes.forEach((type) => (employeeMap[empId][type] = 0));
+        }
+        const type = sheet?.BonusType?.title;
+        if (type) {
+          employeeMap[empId][type] += sheet?.amount || 0;
+        }
+      });
+      // Calculate total bonus per employee
+      Object.values(employeeMap).forEach((row) => {
+        row["Total Bonus"] = bonusTypes.reduce(
+          (sum, type) => sum + (row[type] || 0),
+          0,
+        );
+      });
+      const detailsData = Object.values(employeeMap);
+      // Add summary row
+      const summaryRow = { "Employee ID": "Total", "Employee Name": "" };
+      bonusTypes.forEach((type) => {
+        summaryRow[type] = detailsData.reduce(
+          (sum, row) => sum + (row[type] || 0),
+          0,
+        );
+      });
+      summaryRow["Total Bonus"] = detailsData.reduce(
+        (sum, row) => sum + (row["Total Bonus"] || 0),
+        0,
+      );
+      summaryRow["Status"] = "";
+      detailsData.push(summaryRow);
+
+      const ws = XLSX.utils.json_to_sheet(detailsData, { header: mainHeaders });
+      ws["!cols"] = mainHeaders.map((header) => ({
+        wch:
+          Math.max(
+            header.length,
+            ...detailsData.map((row) =>
+              row[header] !== undefined && row[header] !== null
+                ? String(row[header]).length
+                : 0,
+            ),
+          ) + 2,
+      }));
+      // Right-align all bonus amount columns
+      bonusTypes.concat(["Total Bonus"]).forEach((header) => {
+        const colIdx = mainHeaders.indexOf(header);
+        if (colIdx === -1) return;
+        for (let rowIdx = 1; rowIdx < detailsData.length + 1; rowIdx++) {
+          const cellAddress = XLSX.utils.encode_cell({ r: rowIdx, c: colIdx });
+          if (!ws[cellAddress]) continue;
+          ws[cellAddress].s = ws[cellAddress].s || {};
+          ws[cellAddress].s.alignment = { horizontal: "right" };
+          ws[cellAddress].z = "#,##0.00";
+        }
+        // Header cell
+        const headerCell = XLSX.utils.encode_cell({ r: 0, c: colIdx });
+        if (ws[headerCell]) {
+          ws[headerCell].s = ws[headerCell].s || {};
+          ws[headerCell].s.alignment = {
+            horizontal: "right",
+            vertical: "center",
+          };
+        }
+      });
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Bonus Details Sheet");
+      // Format file name as bonus-details-sheet-mmm-yyyy.xlsx
+      const monthNames = [
+        "january",
+        "february",
+        "march",
+        "april",
+        "may",
+        "june",
+        "july",
+        "august",
+        "september",
+        "october",
+        "november",
+        "december",
+      ];
+      const monthIdx = parseInt(month, 10) - 1;
+      const monthName = monthNames[monthIdx] || month;
+      const fileName = `bonus-details-sheet-${monthName}-${year}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+      toast.success("Bonus Details Sheet exported successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to export Bonus Details Sheet");
+    }
+  };
+
   // Single filter input for both name and ID
   const [filterText, setFilterText] = useState("");
   let filteredBonusData = bonusSlip?.data || [];
+
   if (filterText.trim()) {
     const search = filterText.trim().toLowerCase();
     filteredBonusData = filteredBonusData.filter(
@@ -199,7 +412,6 @@ const BonusSlipCard = () => {
   if (filteredBonusData.length !== 0)
     content = filteredBonusData.map((sheet) => (
       <>
-        {" "}
         <div className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10">
           <div className="w-[10%] dark:text-white">
             <h3>{sheet?.Employee?.employeeId}</h3>
@@ -378,6 +590,7 @@ const BonusSlipCard = () => {
                 className="rounded-md border border-gray-300 border-opacity-10 bg-light-input px-3 py-3 text-sm focus:border-blue-500 focus:outline-none dark:bg-dark-box dark:text-white"
                 style={{ minWidth: 200 }}
               />
+
               <MonthYearSelector
                 month={month}
                 year={year}
@@ -386,15 +599,18 @@ const BonusSlipCard = () => {
                 className="flex-1"
               />
 
-              <CSVLink
-                data={csvData}
-                filename={`salary_sheet_${month}_${year}.csv`}
+              <button
                 className="rounded-md bg-blue-500 px-3 py-3 text-white"
-                onClick={handleExport}
+                onClick={() => handleGenerateBankBonusSheet()}
               >
-                Export
-              </CSVLink>
-
+                Bank Bonus Sheet
+              </button>
+              <button
+                className="rounded-md bg-blue-500 px-3 py-3 text-white"
+                onClick={() => handleGenerateBonusDetailsSheet()}
+              >
+                Bonus Details Sheet
+              </button>
               <button
                 className="rounded-md bg-blue-500 px-3 py-3 text-white"
                 onClick={handleBulkPayment}

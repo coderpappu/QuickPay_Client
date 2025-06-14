@@ -17,6 +17,7 @@ const BonusSlipDownloadButton = ({
 
     try {
       const input = bonusSlipRef.current;
+
       const pdf = new jsPDF("p", "mm", "a4");
 
       // Override background colors temporarily for capture
@@ -53,6 +54,7 @@ const BonusSlipDownloadButton = ({
       const pageHeight = pdf.internal.pageSize.getHeight();
 
       // Calculate dimensions to fit the PDF page while maintaining aspect ratio
+      
       const margin = 10;
       const imgWidth = pageWidth - margin * 2;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
