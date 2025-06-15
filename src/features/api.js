@@ -1925,6 +1925,15 @@ export const apiSlice = createApi({
       invalidatesTags: ["bonus_slip"],
     }),
 
+    deleteBulkBonusSlip: builder.mutation({
+      query: ({ company_id, generate_date }) => ({
+        url: `/bonus/slip/delete-bulk`,
+        method: "DELETE",
+        params: { company_id, generate_date },
+      }),
+      invalidatesTags: ["bonus_slip"],
+    }),
+
     updateBonusSlip: builder.mutation({
       query: ({ employeeId, ...credentials }) => ({
         url: `/bonus/slip/update/${employeeId}`,
@@ -2447,6 +2456,7 @@ export const {
   useDeleteBonusSlipMutation,
   useUpdateBonusSlipMutation,
   useUpdateBonusBulkMutation,
+  useDeleteBulkBonusSlipMutation,
 
   // bank account details
   useCreateEmployeeBankAccMutation,

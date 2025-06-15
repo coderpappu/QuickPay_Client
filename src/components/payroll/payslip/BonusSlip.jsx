@@ -1,4 +1,10 @@
-import { AlertTriangle, DollarSign, FileText, Trash2 } from "lucide-react";
+import {
+  AlertTriangle,
+  DollarSign,
+  Download,
+  FileText,
+  Trash2,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
@@ -6,6 +12,7 @@ import * as XLSX from "xlsx";
 import {
   useCreateBonusSlipMutation,
   useDeleteBonusSlipMutation,
+  useDeleteBulkBonusSlipMutation,
   useGetBonusSlipQuery,
   useGetBonusTypeListQuery,
   useGetDepartmentsQuery,
@@ -33,6 +40,7 @@ const BonusSlipCard = () => {
 
   const [deleteBonusSlip] = useDeleteBonusSlipMutation();
   const [bulkEmployeePayment] = useUpdateBonusBulkMutation();
+  const [deleteBulkBonusSlip] = useDeleteBulkBonusSlipMutation();
 
   const companyId = useSelector((state) => state.company.companyId);
 
@@ -82,6 +90,16 @@ const BonusSlipCard = () => {
       toast.success(`Bonus slip updated to ${status}.`);
     } catch (error) {
       toast.error("Failed to update bonus slip.");
+    }
+  };
+
+  const handleBulkDeleteBonusSlip = async () => {
+    const generate_date = `${String(month).padStart(2, "0")}-${year}`;
+    try {
+      await deleteBulkBonusSlip({ generate_date, companyId }).unwrap();
+      toast.success("Bulk bonus slips deleted successfully.");
+    } catch (error) {
+      toast.error("Failed to delete bulk bonus slips.");
     }
   };
 
@@ -467,7 +485,7 @@ const BonusSlipCard = () => {
               </h3>
             </div>
 
-            <div className="flex w-[70%] flex-wrap items-center justify-end gap-2">
+            <div className="w-[8 0%] flex flex-wrap items-center justify-end gap-2">
               <input
                 id="filterText"
                 type="text"
@@ -487,22 +505,32 @@ const BonusSlipCard = () => {
               />
 
               <button
-                className="rounded-md bg-blue-500 px-3 py-3 text-white"
-                onClick={() => handleGenerateBankBonusSheet()}
+                onClick={handleGenerateBankBonusSheet}
+                className="flex items-center gap-2 rounded-md bg-green-600 px-4 py-2 font-medium text-white transition-all hover:bg-green-700 disabled:bg-green-400 disabled:opacity-60"
               >
-                Bank Bonus Sheet
+                <Download className="h-4 w-4" />
+                Bank Sheet
               </button>
               <button
-                className="rounded-md bg-blue-500 px-3 py-3 text-white"
-                onClick={() => handleGenerateBonusDetailsSheet()}
+                onClick={handleGenerateBonusDetailsSheet}
+                className="flex items-center gap-2 rounded-md bg-purple-600 px-4 py-2 font-medium text-white transition-all hover:bg-purple-700 disabled:bg-purple-400 disabled:opacity-60"
               >
-                Bonus Details Sheet
+                <FileText className="h-4 w-4" />
+                Details Sheet
               </button>
               <button
-                className="rounded-md bg-blue-500 px-3 py-3 text-white"
                 onClick={handleBulkPayment}
+                className="flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-all hover:bg-blue-700 disabled:bg-blue-400 disabled:opacity-60"
               >
+                <DollarSign className="h-4 w-4" />
                 Bulk Payment
+              </button>
+              <button
+                onClick={handleBulkDeleteBonusSlip}
+                className="flex items-center gap-2 rounded-md bg-red-600 px-4 py-2 font-medium text-white transition-all hover:bg-red-700 disabled:bg-red-400 disabled:opacity-60"
+              >
+                <Trash2 className="h-4 w-4" />
+                Bulk Delete
               </button>
             </div>
           </div>
