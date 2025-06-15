@@ -64,27 +64,32 @@ const BonusSlipCard = () => {
 
   const handleBulkPayment = async () => {
     const generate_date = `${String(month).padStart(2, "0")}-${year}`;
-
     try {
       await bulkEmployeePayment({ generate_date, status: "Paid" }).unwrap();
       toast.success("Bulk payment processed successfully.");
     } catch (error) {
-      toast.error("There was an error processing");
+      toast.error("There was an error processing the bulk payment.");
     }
   };
 
-  const handleUpdateBonusSlip = async (employeeId, generate_date, status) => {
-    await updateBonusSlip({ employeeId, generate_date, status });
+  const handleUpdateBonusSlip = async (
+    employeeId,
+    generate_date,
+    status = "Paid",
+  ) => {
+    try {
+      await updateBonusSlip({ employeeId, generate_date, status });
+      toast.success(`Bonus slip updated to ${status}.`);
+    } catch (error) {
+      toast.error("Failed to update bonus slip.");
+    }
   };
 
   useEffect(() => {
-    // Get the current month and year
-    const currentMonth = String(new Date().getMonth() + 1).padStart(2, "0");
-    const currentYear = String(new Date().getFullYear());
-
-    // Set them as default values
-    setMonth(currentMonth);
-    setYear(currentYear);
+    // Set default month and year
+    const currentDate = new Date();
+    setMonth(String(currentDate.getMonth() + 1).padStart(2, "0"));
+    setYear(String(currentDate.getFullYear()));
   }, []);
 
   const onClose = () => {
@@ -173,14 +178,8 @@ const BonusSlipCard = () => {
   };
 
   const handleGenerateBankBonusSheet = () => {
-    if (!bonusSlip?.data?.length) {
-      toast.error("No data to export");
-      return;
-    }
-    console.log(bonusSlip);
     try {
-      // Prepare data for bank sheet
-      const excelData = bonusSlip.data.map((sheet) => ({
+      const excelData = bonusSlip?.data?.map((sheet) => ({
         "Employee ID": sheet?.Employee?.employeeId,
         Name: sheet?.Employee?.name,
         "Bank Name": sheet?.Employee?.EmployeeBankAcc?.[0]?.bank_name || "",
@@ -215,100 +214,44 @@ const BonusSlipCard = () => {
             ),
           ) + 2,
       }));
-      // Right-align amount column
-      const amountColIdx = bankHeaders.indexOf("Amount");
-      for (let rowIdx = 1; rowIdx < excelData.length + 1; rowIdx++) {
-        const cellAddress = XLSX.utils.encode_cell({
-          r: rowIdx,
-          c: amountColIdx,
-        });
-        if (!ws[cellAddress]) continue;
-        ws[cellAddress].s = ws[cellAddress].s || {};
-        ws[cellAddress].s.alignment = { horizontal: "right" };
-        ws[cellAddress].z = "#,##0.00";
-      }
-      // Header cell
-      const headerCell = XLSX.utils.encode_cell({ r: 0, c: amountColIdx });
-      if (ws[headerCell]) {
-        ws[headerCell].s = ws[headerCell].s || {};
-        ws[headerCell].s.alignment = {
-          horizontal: "right",
-          vertical: "center",
-        };
-      }
+
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Bank Bonus Sheet");
-      // Format file name as bank-bonus-sheet-mmm-yyyy.xlsx
-      const monthNames = [
-        "january",
-        "february",
-        "march",
-        "april",
-        "may",
-        "june",
-        "july",
-        "august",
-        "september",
-        "october",
-        "november",
-        "december",
-      ];
-      const monthIdx = parseInt(month, 10) - 1;
-      const monthName = monthNames[monthIdx] || month;
-      const fileName = `bank-bonus-sheet-${monthName}-${year}.xlsx`;
+      const fileName = `bank-bonus-sheet-${month}-${year}.xlsx`;
       XLSX.writeFile(wb, fileName);
-      toast.success("Bank Bonus Sheet exported successfully");
+      toast.success("Bank Bonus Sheet exported successfully.");
     } catch (error) {
-      toast.error("Failed to export Bank Bonus Sheet");
+      toast.error("Failed to export Bank Bonus Sheet.");
     }
   };
 
   const handleGenerateBonusDetailsSheet = () => {
-    if (!bonusSlip?.data?.length) {
-      toast.error("No data to export");
-      return;
-    }
     try {
-      // Collect all unique bonus types for dynamic columns
-      const bonusTypeSet = new Set();
-      bonusSlip.data.forEach((sheet) => {
-        if (sheet?.BonusType?.title) bonusTypeSet.add(sheet.BonusType.title);
-      });
-      const bonusTypes = Array.from(bonusTypeSet);
-      // Build headers
-      const mainHeaders = [
-        "Employee ID",
-        "Employee Name",
-        ...bonusTypes,
-        "Total Bonus",
-        "Status",
-      ];
-      // Build data rows
       const employeeMap = {};
-      bonusSlip.data.forEach((sheet) => {
-        const empId = sheet?.Employee?.employeeId;
-        if (!employeeMap[empId]) {
-          employeeMap[empId] = {
-            "Employee ID": empId,
+      bonusSlip?.data?.forEach((sheet) => {
+        const employeeId = sheet?.Employee?.employeeId;
+        if (!employeeMap[employeeId]) {
+          employeeMap[employeeId] = {
+            "Employee ID": employeeId,
             "Employee Name": sheet?.Employee?.name,
-            Status: sheet?.status,
           };
-          bonusTypes.forEach((type) => (employeeMap[empId][type] = 0));
         }
-        const type = sheet?.BonusType?.title;
-        if (type) {
-          employeeMap[empId][type] += sheet?.amount || 0;
-        }
+        const bonusType = sheet?.BonusType?.title;
+        employeeMap[employeeId][bonusType] =
+          (employeeMap[employeeId][bonusType] || 0) + (sheet?.amount || 0);
       });
-      // Calculate total bonus per employee
+
+      const bonusTypes = Array.from(
+        new Set(bonusSlip?.data?.map((sheet) => sheet?.BonusType?.title)),
+      );
       Object.values(employeeMap).forEach((row) => {
         row["Total Bonus"] = bonusTypes.reduce(
           (sum, type) => sum + (row[type] || 0),
           0,
         );
       });
+
       const detailsData = Object.values(employeeMap);
-      // Add summary row
       const summaryRow = { "Employee ID": "Total", "Employee Name": "" };
       bonusTypes.forEach((type) => {
         summaryRow[type] = detailsData.reduce(
@@ -320,10 +263,15 @@ const BonusSlipCard = () => {
         (sum, row) => sum + (row["Total Bonus"] || 0),
         0,
       );
-      summaryRow["Status"] = "";
       detailsData.push(summaryRow);
 
-      const ws = XLSX.utils.json_to_sheet(detailsData, { header: mainHeaders });
+      const ws = XLSX.utils.json_to_sheet(detailsData);
+      const mainHeaders = [
+        "Employee ID",
+        "Employee Name",
+        ...bonusTypes,
+        "Total Bonus",
+      ];
       ws["!cols"] = mainHeaders.map((header) => ({
         wch:
           Math.max(
@@ -335,52 +283,14 @@ const BonusSlipCard = () => {
             ),
           ) + 2,
       }));
-      // Right-align all bonus amount columns
-      bonusTypes.concat(["Total Bonus"]).forEach((header) => {
-        const colIdx = mainHeaders.indexOf(header);
-        if (colIdx === -1) return;
-        for (let rowIdx = 1; rowIdx < detailsData.length + 1; rowIdx++) {
-          const cellAddress = XLSX.utils.encode_cell({ r: rowIdx, c: colIdx });
-          if (!ws[cellAddress]) continue;
-          ws[cellAddress].s = ws[cellAddress].s || {};
-          ws[cellAddress].s.alignment = { horizontal: "right" };
-          ws[cellAddress].z = "#,##0.00";
-        }
-        // Header cell
-        const headerCell = XLSX.utils.encode_cell({ r: 0, c: colIdx });
-        if (ws[headerCell]) {
-          ws[headerCell].s = ws[headerCell].s || {};
-          ws[headerCell].s.alignment = {
-            horizontal: "right",
-            vertical: "center",
-          };
-        }
-      });
+
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Bonus Details Sheet");
-      // Format file name as bonus-details-sheet-mmm-yyyy.xlsx
-      const monthNames = [
-        "january",
-        "february",
-        "march",
-        "april",
-        "may",
-        "june",
-        "july",
-        "august",
-        "september",
-        "october",
-        "november",
-        "december",
-      ];
-      const monthIdx = parseInt(month, 10) - 1;
-      const monthName = monthNames[monthIdx] || month;
-      const fileName = `bonus-details-sheet-${monthName}-${year}.xlsx`;
+      const fileName = `bonus-details-sheet-${month}-${year}.xlsx`;
       XLSX.writeFile(wb, fileName);
-      toast.success("Bonus Details Sheet exported successfully");
+      toast.success("Bonus Details Sheet exported successfully.");
     } catch (error) {
-      console.log(error);
-      toast.error("Failed to export Bonus Details Sheet");
+      toast.error("Failed to export Bonus Details Sheet.");
     }
   };
 
@@ -529,36 +439,13 @@ const BonusSlipCard = () => {
             ))}
           </select>
 
-          <select
-            className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 bg-light-input px-2 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
-            value={month}
-            onChange={handleMonthChange}
-          >
-            <option value="">Select Month</option>
-            <option value="01">JAN</option>
-            <option value="02">FEB</option>
-            <option value="03">MAR</option>
-            <option value="04">APR</option>
-            <option value="05">MAY</option>
-            <option value="06">JUN</option>
-            <option value="07">JUL</option>
-            <option value="08">AUG</option>
-            <option value="09">SEP</option>
-            <option value="10">OCT</option>
-            <option value="11">NOV</option>
-            <option value="12">DEC</option>
-          </select>
-
-          <select
-            className="h-13 w-64 rounded-md border border-dark-box border-opacity-5 bg-light-input px-3 py-3 text-sm focus:border focus:border-button-bg focus:outline-none dark:bg-dark-box dark:text-dark-text-color"
-            value={year}
-            onChange={handleYearChange}
-          >
-            <option value="">Select Year</option>
-            <option value="2023">2023</option>
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-          </select>
+          <MonthYearSelector
+            month={month}
+            year={year}
+            onMonthChange={setMonth}
+            onYearChange={setYear}
+            className="flex-1"
+          />
 
           <button
             onClick={handleGenerateSalary}
@@ -580,7 +467,7 @@ const BonusSlipCard = () => {
               </h3>
             </div>
 
-            <div className="flex w-[60%] flex-wrap items-center justify-end gap-2">
+            <div className="flex w-[70%] flex-wrap items-center justify-end gap-2">
               <input
                 id="filterText"
                 type="text"
