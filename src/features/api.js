@@ -678,9 +678,9 @@ export const apiSlice = createApi({
     }),
 
     getAllLeaveApplication: builder.query({
-      query: (companyId) => ({
+      query: ({ companyId, month, year }) => ({
         url: `/leave/application/list`,
-        params: { companyId },
+        params: { companyId, month, year },
       }),
 
       providesTags: ["leaveType", "earnLeave", "leaveApplication"],

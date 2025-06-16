@@ -3,15 +3,20 @@ import { RxHome } from "react-icons/rx";
 import { TbCards } from "react-icons/tb";
 
 import { BiArchive, BiCircleThreeQuarter } from "react-icons/bi";
-import { BsCheck2Circle, BsClockHistory } from "react-icons/bs";
+import { BsClockHistory } from "react-icons/bs";
 import { GoPeople } from "react-icons/go";
 import { HiOutlineClipboard } from "react-icons/hi";
 import { HiOutlineShieldCheck } from "react-icons/hi2";
 import { LuUserRoundCog } from "react-icons/lu";
-import { MdModelTraining, MdOutlinePolicy } from "react-icons/md";
+import {
+  MdModelTraining,
+  MdOutlinePolicy,
+  MdOutlineTaskAlt,
+} from "react-icons/md";
 import { RiCalendarScheduleLine, RiSpeedUpLine } from "react-icons/ri";
 import { TbPigMoney } from "react-icons/tb";
 
+import { BsEscape } from "react-icons/bs";
 const adminMenuItems = [
   {
     title: "Dashboard",
@@ -46,7 +51,7 @@ const adminMenuItems = [
     ],
   },
   {
-    icon: <BsCheck2Circle size={18} />,
+    icon: <BsEscape size={18} />,
     title: "Leave Management",
     subMenu: [
       { title: "Leave Application", link: "/company/leave/application" },
@@ -93,6 +98,11 @@ const adminMenuItems = [
       { title: "Gaol Tracking ", link: "/account-settings" },
       { title: "Task Manage ", link: "/task-manager" },
     ],
+  },
+  {
+    icon: <MdOutlineTaskAlt size={18} />,
+    title: "Task Manager",
+    subMenu: [{ title: "Task Manage ", link: "/task-manager" }],
   },
   {
     icon: <MdModelTraining size={18} />,
@@ -185,10 +195,14 @@ const employeeMenuItems = [
     title: "Leave Management",
     icon: <TbCards size={18} />,
     subMenu: [
-      { title: "Apply Leave", link: "/employee/leave/application" },
+      { title: "Leave", link: "/employee/leave/application" },
       { title: "Reports", link: "/employee/leave/form" },
-      { title: "Task Manage ", link: "/task-manager" },
     ],
+  },
+  {
+    title: "Task Manager",
+    icon: <MdOutlineTaskAlt size={18} />,
+    subMenu: [{ title: "Task Manage ", link: "/task-manager" }],
   },
   {
     title: "Loan Management",
