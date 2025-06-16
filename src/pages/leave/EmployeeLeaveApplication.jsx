@@ -11,7 +11,7 @@ import {
 import CardSkeleton from "../../skeletons/card";
 import { convertToTimeZone } from "../../utils/DatePicker";
 import ErrorMessage from "../../utils/ErrorMessage";
-import LeaveForm from "../employee/LeaveForm";
+import LeaveForm from "./LeaveForm";
 
 const EmployeeLeaveApplication = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);

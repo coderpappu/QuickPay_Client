@@ -45,8 +45,6 @@ const LeaveForm = ({ onClose }) => {
   const { data: earnLeave, isLoading: earnLeaveLoding } =
     useGetEarnLeaveQuery(companyId);
 
-  console.log(earnLeave);
-
   const [initialValues, setInitialValues] = useState({
     leaveType_id: "",
     start_date: "",
@@ -75,7 +73,6 @@ const LeaveForm = ({ onClose }) => {
 
   if (!isLoading && !earnLeaveLoding) {
     if (earnLeave?.data == null) {
-      console.log(types?.data);
       allType = types?.data;
     } else {
       allType = types?.data?.concat(earnLeave?.data);
@@ -84,20 +81,23 @@ const LeaveForm = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="relative w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+      <div className="relative w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-dark-card">
+        {" "}
+        {/* Added dark mode class for card */}
         <button
-          className="absolute right-3 top-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+          className="absolute right-3 top-3 text-gray-500 hover:text-gray-700 focus:outline-none dark:text-gray-300 dark:hover:text-gray-100"
           onClick={onClose}
         >
           &#x2715;
         </button>
-        <h2 className="mb-4 text-xl font-semibold text-gray-800">
+        <h2 className="mb-4 text-xl font-semibold text-gray-800 dark:text-white">
+          {" "}
+          {/* Added dark mode class for text */}
           {id ? "Edit Application" : "Leave Application"}
         </h2>
         <Formik
           enableReinitialize
           initialValues={initialValues}
-          // validationSchema={leaveSchema}
           onSubmit={async (values, { setSubmitting }) => {
             const { leaveType_id, start_date, end_date, reason } = values;
             try {
@@ -129,7 +129,7 @@ const LeaveForm = ({ onClose }) => {
                   if (res.error) {
                     toast.error(res?.error?.data?.message);
                   } else {
-                    toast.success("Leave updated updated successfully");
+                    toast.success("Leave updated successfully");
                     navigate("/holiday");
                     onClose();
                   }
@@ -147,7 +147,7 @@ const LeaveForm = ({ onClose }) => {
               <div className="mb-4">
                 <label
                   htmlFor="leaveType_id"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Leave Type
                 </label>
@@ -155,7 +155,7 @@ const LeaveForm = ({ onClose }) => {
                   as="select"
                   name="leaveType_id"
                   id="type"
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm"
+                  className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm dark:border-gray-600 dark:bg-dark-box dark:text-white"
                 >
                   <option value="">Select Type</option>
                   {allType?.map((item) => (
@@ -174,7 +174,7 @@ const LeaveForm = ({ onClose }) => {
               <div className="mb-4">
                 <label
                   htmlFor="start_date"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Start Date
                 </label>
@@ -182,7 +182,7 @@ const LeaveForm = ({ onClose }) => {
                   type="date"
                   name="start_date"
                   id="start_date"
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm"
+                  className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm dark:border-gray-600 dark:bg-dark-box dark:text-white"
                 />
                 <ErrorMessage
                   name="start_date"
@@ -194,7 +194,7 @@ const LeaveForm = ({ onClose }) => {
               <div className="mb-4">
                 <label
                   htmlFor="end_date"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   End Date
                 </label>
@@ -202,7 +202,7 @@ const LeaveForm = ({ onClose }) => {
                   type="date"
                   name="end_date"
                   id="end_date"
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm"
+                  className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm dark:border-gray-600 dark:bg-dark-box dark:text-white"
                 />
                 <ErrorMessage
                   name="end_date"
@@ -214,7 +214,7 @@ const LeaveForm = ({ onClose }) => {
               <div className="mb-4">
                 <label
                   htmlFor="reason"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                 >
                   Reason
                 </label>
@@ -222,7 +222,7 @@ const LeaveForm = ({ onClose }) => {
                   type="text"
                   name="reason"
                   id="description"
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm"
+                  className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm dark:border-gray-600 dark:bg-dark-box dark:text-white"
                 />
                 <ErrorMessage
                   name="reason"
@@ -235,14 +235,14 @@ const LeaveForm = ({ onClose }) => {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="mr-4 rounded-md bg-gray-300 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-400"
+                  className="dark:bg-dark-button dark:hover:bg-dark-button-hover mr-4 rounded-md bg-gray-300 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-400 dark:text-white"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="rounded-md bg-[#3686FF] px-4 py-2 text-sm font-medium text-white hover:bg-[#5A21B3]"
+                  className="dark:bg-dark-primary dark:hover:bg-dark-primary-hover rounded-md bg-[#3686FF] px-4 py-2 text-sm font-medium text-white hover:bg-[#5A21B3]"
                 >
                   {id ? "Update" : "Apply"}
                 </button>
