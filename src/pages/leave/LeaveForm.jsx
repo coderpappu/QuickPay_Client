@@ -20,11 +20,6 @@ const leaveSchema = Yup.object().shape({
   reason: Yup.string().required("Reason is required"),
 });
 
-// leaveType_id String
-// start_date   String
-// end_date     String
-// reason       String
-
 const LeaveForm = ({ onClose }) => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -113,7 +108,7 @@ const LeaveForm = ({ onClose }) => {
                     toast.error(res?.error?.data?.message);
                   } else {
                     toast.success("Leave applied successfully");
-                    navigate("/holiday");
+                    navigate("/employee/leave/application");
                     onClose();
                   }
                 });
