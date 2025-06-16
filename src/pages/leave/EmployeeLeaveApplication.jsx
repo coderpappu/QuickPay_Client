@@ -1,6 +1,7 @@
 import { useState } from "react";
 import BrandCardWrapper from "../../components/company/BrandCardWrapper";
 import { HrmSetupCardHeader } from "../../components/company/SettingCardHeader";
+import MonthYearSelector from "../../components/payroll/payslip/MonthYearSelector";
 
 import { useSelector } from "react-redux";
 import {
@@ -15,10 +16,10 @@ import LeaveForm from "../employee/LeaveForm";
 const EmployeeLeaveApplication = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectAllowanceId, setSelectAllowanceId] = useState(null);
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
+  const currentDate = new Date();
+  const [month, setMonth] = useState(currentDate.toISOString().slice(5, 7));
+  const [year, setYear] = useState(currentDate.getFullYear().toString());
   const [statusFilter, setStatusFilter] = useState("");
-  const [employeeFilter, setEmployeeFilter] = useState("");
 
   const { data: employee } = useGetUserQuery();
   const employeeId = employee?.data?.id;
@@ -39,7 +40,7 @@ const EmployeeLeaveApplication = () => {
     isLoading,
     isError,
     error,
-  } = useGetEmployeeLeaveListQuery({ companyId, employeeId });
+  } = useGetEmployeeLeaveListQuery({ companyId, employeeId, month, year });
 
   const statusColorHandler = (status) => {
     switch (status) {
@@ -55,20 +56,9 @@ const EmployeeLeaveApplication = () => {
   };
 
   const filteredData = leaveApplications?.data?.filter((application) => {
-    const startDate = new Date(application.start_date);
-    const isWithinDateRange =
-      (!fromDate || new Date(fromDate) <= startDate) &&
-      (!toDate || startDate <= new Date(toDate));
     const isMatchingStatus =
       !statusFilter || application.status === statusFilter;
-    const isMatchingEmployee =
-      !employeeFilter ||
-      application.employeeName
-        ?.toLowerCase()
-        .includes(employeeFilter.toLowerCase()) ||
-      application.employeeId?.toString().includes(employeeFilter);
-
-    return isWithinDateRange && isMatchingStatus && isMatchingEmployee;
+    return isMatchingStatus;
   });
 
   let content;
@@ -124,54 +114,23 @@ const EmployeeLeaveApplication = () => {
 
         {/* Filter Bar */}
         <div className="flex flex-wrap items-center justify-end gap-4 px-6 py-2">
+          <MonthYearSelector
+            month={month}
+            year={year}
+            onMonthChange={setMonth}
+            onYearChange={setYear}
+          />
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-white">
-              From Date
-            </label>
-            <input
-              type="date"
-              value={fromDate}
-              onChange={(e) => setFromDate(e.target.value)}
-              className="mt-1 w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-dark-card dark:text-white"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-white">
-              To Date
-            </label>
-            <input
-              type="date"
-              value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
-              className="mt-1 w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-dark-card dark:text-white"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-white">
-              Status
-            </label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="mt-1 w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-dark-card dark:text-white"
+              className="h-12 rounded border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-dark-card dark:text-white"
             >
               <option value="">All</option>
               <option value="PENDING">Pending</option>
               <option value="APPROVED">Approved</option>
               <option value="REJECTED">Rejected</option>
             </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-white">
-              Employee
-            </label>
-            <input
-              type="text"
-              value={employeeFilter}
-              onChange={(e) => setEmployeeFilter(e.target.value)}
-              placeholder="Search by name or ID"
-              className="mt-1 w-full rounded border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-dark-card dark:text-white"
-            />
           </div>
         </div>
 
