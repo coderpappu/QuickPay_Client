@@ -194,10 +194,7 @@ const employeeMenuItems = [
   {
     title: "Leave Management",
     icon: <TbCards size={18} />,
-    subMenu: [
-      { title: "Leave", link: "/employee/leave/application" },
-      { title: "Reports", link: "/employee/leave/form" },
-    ],
+    subMenu: [{ title: "Leave", link: "/employee/leave/application" }],
   },
   {
     title: "Task Manager",

@@ -22,11 +22,10 @@ const applicationSchema = Yup.object().shape({
 });
 
 const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
+  
   const companyId = useSelector((state) => state.company.companyId);
 
   const { data: userDetails } = useGetUserQuery();
-
-  console.log(userDetails);
 
   const { data: leaveApplicationDetails } = useGetLeaveApplicationDetailsQuery(
     selectId,

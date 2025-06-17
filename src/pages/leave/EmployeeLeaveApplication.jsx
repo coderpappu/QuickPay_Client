@@ -6,9 +6,11 @@ import MonthYearSelector from "../../components/payroll/payslip/MonthYearSelecto
 import { motion } from "framer-motion";
 import { BarChart2, CalendarCheck, Clock } from "lucide-react";
 import { useSelector } from "react-redux";
+import LeaveApplicationModal from "../../components/hrm/Leave/LeaveApplicationModal";
 import {
   useCalculationLeaveDaysQuery,
   useGetEmployeeLeaveListQuery,
+  useGetLeaveApplicationFormatQuery,
   useGetUserQuery,
 } from "../../features/api";
 import CardSkeleton from "../../skeletons/card";
@@ -23,7 +25,7 @@ const EmployeeLeaveApplication = () => {
   const [month, setMonth] = useState(currentDate.toISOString().slice(5, 7));
   const [year, setYear] = useState(currentDate.getFullYear().toString());
   const [statusFilter, setStatusFilter] = useState("");
-
+  const [selectedLeave, setSelectedLeave] = useState(null);
   const { data: employee } = useGetUserQuery();
 
   const employeeId = employee?.data?.id;
@@ -55,6 +57,9 @@ const EmployeeLeaveApplication = () => {
     year,
     company_id: companyId,
   });
+
+  const { data: certificateFormat } =
+    useGetLeaveApplicationFormatQuery(companyId);
 
   const statusColorHandler = (status) => {
     switch (status) {
@@ -111,6 +116,11 @@ const EmployeeLeaveApplication = () => {
         </div>
         <div className="w-[14%] dark:text-white">
           <h3>{application?.note}</h3>
+        </div>
+        <div className="w-[14%] dark:text-white">
+          <button onClick={() => setSelectedLeave(application)}>
+            Preview Application
+          </button>
         </div>
         <div className="w-[10%] dark:text-white">
           <div
@@ -243,6 +253,9 @@ const EmployeeLeaveApplication = () => {
             <div className="w-[14%] dark:text-white">
               <h3>Note</h3>
             </div>
+            <div className="w-[14%] dark:text-white">
+              <h3>File</h3>
+            </div>
             <div className="w-[10%] dark:text-white">
               <h3>Status</h3>
             </div>
@@ -272,6 +285,14 @@ const EmployeeLeaveApplication = () => {
               </div>
             </div>
           </div>
+        )}
+
+        {selectedLeave && (
+          <LeaveApplicationModal
+            leave={selectedLeave}
+            formatData={certificateFormat?.data?.formatData}
+            onClose={() => setSelectedLeave(null)}
+          />
         )}
       </BrandCardWrapper>
     </>
