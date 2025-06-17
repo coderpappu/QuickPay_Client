@@ -32,7 +32,7 @@ import EmployeeProfile from "./pages/employee/EmployeeProfile";
 import EmployeeRegistration from "./pages/employee/employeeRegistrationForm";
 import ExperienceApplication from "./pages/employee/ExperienceCertificate";
 import JoiningLetter from "./pages/employee/JoiningLetter";
-import LeaveForm from "./pages/employee/LeaveForm";
+
 import LoginEmployee from "./pages/employee/LoginEmployee";
 import NOCLetter from "./pages/employee/NOCLetter";
 import Profile from "./pages/employee/Profile";
@@ -94,7 +94,7 @@ function App() {
               path="company/leave/application"
               element={<LeaveApplicationListCard />}
             />
-            <Route path="/leave/form" element={<LeaveForm />} />
+
             <Route
               path="/employee/leave/application"
               element={<EmployeeLeaveApplication />}
