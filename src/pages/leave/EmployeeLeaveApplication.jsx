@@ -97,18 +97,18 @@ const EmployeeLeaveApplication = () => {
         key={application?.id}
         className="flex w-full flex-wrap items-center justify-between border-t border-dark-border-color px-3 py-3 text-[13px] dark:border-opacity-10"
       >
-        <div className="w-[14%] dark:text-white">
+        <div className="w-[10%] dark:text-white">
           <h3>{application?.LeaveType?.name}</h3>
         </div>
 
-        <div className="w-[14%] dark:text-white">
+        <div className="w-[10%] dark:text-white">
           <h3>{convertToTimeZone(application?.start_date)}</h3>
         </div>
 
-        <div className="w-[14%] dark:text-white">
+        <div className="w-[10%] dark:text-white">
           <h3>{convertToTimeZone(application?.end_date)}</h3>
         </div>
-        <div className="w-[14%] dark:text-white">
+        <div className="w-[10%] dark:text-white">
           <h3>{convertToTimeZone(application?.created_at)}</h3>
         </div>
         <div className="w-[14%] dark:text-white">
@@ -117,9 +117,12 @@ const EmployeeLeaveApplication = () => {
         <div className="w-[14%] dark:text-white">
           <h3>{application?.note}</h3>
         </div>
-        <div className="w-[14%] dark:text-white">
-          <button onClick={() => setSelectedLeave(application)}>
-            Preview Application
+        <div className="w-[10%] dark:text-white">
+          <button
+            onClick={() => setSelectedLeave(application)}
+            className="rounded bg-blue-600 px-3 py-1 text-sm text-white transition hover:bg-blue-700"
+          >
+            View PDF
           </button>
         </div>
         <div className="w-[10%] dark:text-white">
@@ -233,18 +236,18 @@ const EmployeeLeaveApplication = () => {
         {/* Table Header */}
         <div className="px-6 py-3">
           <div className="flex w-full flex-wrap justify-between rounded-sm bg-light-bg px-3 py-3 text-sm dark:bg-dark-box">
-            <div className="w-[14%] dark:text-white">
-              <h3>Leave Type</h3>
+            <div className="w-[10%] dark:text-white">
+              <h3>Type</h3>
             </div>
 
-            <div className="w-[14%] dark:text-white">
+            <div className="w-[10%] dark:text-white">
               <h3>Start Date</h3>
             </div>
 
-            <div className="w-[14%] dark:text-white">
+            <div className="w-[10%] dark:text-white">
               <h3>End Date</h3>
             </div>
-            <div className="w-[14%] dark:text-white">
+            <div className="w-[10%] dark:text-white">
               <h3>Apply Date</h3>
             </div>
             <div className="w-[14%] dark:text-white">
@@ -253,8 +256,8 @@ const EmployeeLeaveApplication = () => {
             <div className="w-[14%] dark:text-white">
               <h3>Note</h3>
             </div>
-            <div className="w-[14%] dark:text-white">
-              <h3>File</h3>
+            <div className="w-[10%] dark:text-white">
+              <h3>Document</h3>
             </div>
             <div className="w-[10%] dark:text-white">
               <h3>Status</h3>

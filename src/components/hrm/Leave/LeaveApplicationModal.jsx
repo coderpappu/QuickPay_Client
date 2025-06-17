@@ -23,6 +23,12 @@ const LeaveApplicationModal = ({ leave, formatData, onClose }) => {
     reason: leave.reason,
     paid_status: leave.paid_status,
     current_date: todayDate(),
+    status: leave.status,
+    submitted_on: DateConverterFromUTC(leave.created_at),
+    approved_on: leave.approved_at
+      ? DateConverterFromUTC(leave.approved_at)
+      : "",
+    approved_by: leave.approved_by?.name || "",
   };
 
   const replacePlaceholders = (text) => {
