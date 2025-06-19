@@ -14,6 +14,7 @@ import CustomToolbar from "./CustomToolbar";
 import EventPopup from "./EventPopup";
 
 const MyCalendar = () => {
+  
   const [month, setMonth] = useState(new Date().getMonth() + 1); // 1-12
   const [year, setYear] = useState(new Date().getFullYear());
   const [selectedEvent, setSelectedEvent] = useState(null);

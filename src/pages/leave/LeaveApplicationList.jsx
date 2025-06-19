@@ -132,13 +132,13 @@ const LeaveApplicationListCard = () => {
           <h3>{DateConverterFromUTC(application?.end_date)}</h3>
         </div>
         <div className="w-[3%] dark:text-white">
-          <h3>{application?.leaveDuration}</h3>
+          <h3>{application?.leave_duration}</h3>
         </div>
         <div className="w-[8%] dark:text-white">
           <h3>{application?.reason}</h3>
         </div>
         <div className="w-[7%] dark:text-white">
-          <h3>{application?.paid_status}</h3>
+          <h3>{application?.final_paid_status}</h3>
         </div>
         <div className="w-[10%] dark:text-white">
           <h3>{application?.note || "..."}</h3>
@@ -148,9 +148,9 @@ const LeaveApplicationListCard = () => {
         </div>
         <div className="w-[8%] dark:text-white">
           <div
-            className={`${statusColorHandler(application?.status)} w-32 rounded-full px-1 py-2 text-center text-xs font-bold text-gray-700`}
+            className={`${statusColorHandler(application?.final_status)} w-32 rounded-full px-1 py-2 text-center text-xs font-bold text-gray-700`}
           >
-            {application?.status}
+            {application?.final_status}
           </div>
         </div>
         <div className="fex flex w-[6%] flex-wrap gap-2 space-x-2 text-white">
@@ -272,7 +272,7 @@ const LeaveApplicationListCard = () => {
                 &times;
               </button>
             </div>
-            <div className="mt-4">
+            <div className="mt-4 max-h-[80vh] overflow-y-auto">
               <LeaveApplicationForm
                 selectId={selectId}
                 setIsPopupOpen={setIsPopupOpen}

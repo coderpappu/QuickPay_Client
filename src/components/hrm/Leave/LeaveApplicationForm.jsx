@@ -8,9 +8,10 @@ import {
   useGetUserQuery,
   useUpdateLeaveApplicationMutation,
 } from "../../../features/api";
+import { DateConverterFromUTC } from "../../../utils/Converter";
 
 const applicationSchema = Yup.object().shape({
-  leaveType_id: Yup.string().required("Leave type is required"),
+  leave_type_id: Yup.string().required("Leave type is required"),
   start_date: Yup.date().required("Start date is required"),
   end_date: Yup.date()
     .required("End date is required")
@@ -22,7 +23,6 @@ const applicationSchema = Yup.object().shape({
 });
 
 const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
-  
   const companyId = useSelector((state) => state.company.companyId);
 
   const { data: userDetails } = useGetUserQuery();
@@ -32,40 +32,49 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
     { skip: !selectId },
   );
 
+  console.log(leaveApplicationDetails);
+
   const { data: leaveType } = useGetLeaveTypeListQuery(companyId);
 
   const [applicationUpdate, { isLoading }] =
     useUpdateLeaveApplicationMutation();
 
   const [initialValues, setInitialValues] = useState({
-    leaveType_id: "",
-    leaveDuration: "",
+    leave_type_id: "",
+    leave_duration: "",
     start_date: "",
     end_date: "",
     reason: "",
     status: "",
     paid_status: "",
     note: "",
+    leave_count_type: "CONTINUOUS",
+    foreign_leave: false,
+    include_extra_work: false,
   });
 
   useEffect(() => {
     if (leaveApplicationDetails?.data) {
       const app = leaveApplicationDetails.data;
+
       setInitialValues({
-        leaveType_id: app.leaveType_id || "",
-        leaveDuration: app.leaveDuration || "",
+        leave_type_id: app.leave_type_id || "",
+        leave_duration: app.leave_duration || "",
         start_date: app.start_date?.split("T")[0] || "",
         end_date: app.end_date?.split("T")[0] || "",
         reason: app.reason || "",
-        status: app.status || "",
-        paid_status: app.paid_status || "",
+        status: app.final_status || "",
+        paid_status: app.final_paid_status || "",
         note: app.note || "",
+        leave_count_type: app.leave_count_type || "CONTINUOUS",
+        foreign_leave: !!app.foreign_leave,
+        include_extra_work: !!app.include_extra_work,
       });
     }
   }, [leaveApplicationDetails]);
 
   // Function to calculate days between two dates
-  const calculateLeaveDuration = (startDate, endDate) => {
+  const calculateleave_duration = (startDate, endDate) => {
     if (!startDate || !endDate) return 0;
 
     const start = new Date(startDate);
@@ -142,17 +151,6 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
             Annual Leave: <strong>10</strong>
           </span>
         </div>
-        <div className="flex gap-4">
-          {["Continuous", "Prefix", "Suffix", "Half Day"].map((type) => (
-            <label
-              key={type}
-              className="text-light-text flex items-center dark:text-dark-text-color"
-            >
-              <input type="radio" name="leave_type_option" className="mr-1" />
-              {type}
-            </label>
-          ))}
-        </div>
       </div>
 
       <Formik
@@ -173,7 +171,7 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
                 </label>
                 <Field
                   as="select"
-                  name="leaveType_id"
+                  name="leave_type_id"
                   className="w-full rounded border border-dark-box border-opacity-5 bg-light-input px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
                 >
                   <option value="">Select Leave</option>
@@ -183,9 +181,9 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
                     </option>
                   ))}
                 </Field>
-                {errors.leaveType_id && touched.leaveType_id && (
+                {errors.leave_type_id && touched.leave_type_id && (
                   <div className="mt-1 text-xs text-red-500">
-                    {errors.leaveType_id}
+                    {errors.leave_type_id}
                   </div>
                 )}
               </div>
@@ -196,29 +194,58 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
 
                 <Field
                   type="number"
-                  name="leaveDuration"
+                  name="leave_duration"
                   disabled={true}
                   className="w-full rounded border border-dark-box border-opacity-5 bg-light-input px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
                   readOnly
                 />
 
-                {errors.leaveDuration && touched.leaveDuration && (
+                {errors.leave_duration && touched.leave_duration && (
                   <div className="mt-1 text-xs text-red-500">
-                    {errors.leaveDuration}
+                    {errors.leave_duration}
                   </div>
                 )}
               </div>
 
               <div className="flex items-center gap-4 pt-6">
-                <label className="text-light-text flex items-center dark:text-dark-text-color">
-                  <input type="checkbox" className="mr-2" />
-                  Foreign Leave Y/N
-                </label>
+                <div className="flex items-center gap-4 pt-6">
+                  <label className="text-light-text flex items-center dark:text-dark-text-color">
+                    <Field
+                      type="checkbox"
+                      name="foreign_leave"
+                      className="mr-2"
+                    />
+                    Foreign Leave Y/N
+                  </label>
 
-                <label className="text-light-text flex items-center dark:text-dark-text-color">
-                  <input type="checkbox" className="mr-2" />
-                  Include Extra Work Dates
-                </label>
+                  <label className="text-light-text flex items-center dark:text-dark-text-color">
+                    <Field
+                      type="checkbox"
+                      name="include_extra_work"
+                      className="mr-2"
+                    />
+                    Include Extra Work Dates
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-4">
+                {["CONTINUOUS", "PREFIX", "SUFFIX"].map((type) => (
+                  <label
+                    key={type}
+                    className="text-light-text flex items-center dark:text-dark-text-color"
+                  >
+                    <Field
+                      type="radio"
+                      name="leave_count_type"
+                      value={type}
+                      checked={values.leave_count_type === type}
+                      onChange={() => setFieldValue("leave_count_type", type)}
+                      className="mr-1"
+                    />
+                    {type.charAt(0) + type.slice(1).toLowerCase()}
+                  </label>
+                ))}
               </div>
 
               <div>
@@ -236,11 +263,11 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
 
                     // Calculate new duration
                     if (values.end_date) {
-                      const duration = calculateLeaveDuration(
+                      const duration = calculateleave_duration(
                         newStartDate,
                         values.end_date,
                       );
-                      setFieldValue("leaveDuration", duration);
+                      setFieldValue("leave_duration", duration);
                     }
                   }}
                 />
@@ -264,11 +291,11 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
 
                     // Calculate new duration
                     if (values.start_date) {
-                      const duration = calculateLeaveDuration(
+                      const duration = calculateleave_duration(
                         values.start_date,
                         newEndDate,
                       );
-                      setFieldValue("leaveDuration", duration);
+                      setFieldValue("leave_duration", duration);
                     }
                   }}
                 />
@@ -332,57 +359,15 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
               </div>
             </div>
 
-            <div className="mt-6">
-              <h3 className="text-light-text mb-2 text-sm font-semibold dark:text-dark-text-color">
-                APPROVAL HISTORY
-              </h3>
-              <div className="overflow-x-auto rounded border border-dark-bg border-opacity-0 dark:border-dark-border-color dark:border-opacity-5">
-                <table className="text-light-text min-w-full text-left text-sm dark:text-dark-text-color">
-                  <thead className="bg-light-input dark:bg-dark-box">
-                    <tr>
-                      <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                        Approver Code
-                      </th>
-                      <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                        Approver Name
-                      </th>
-                      <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                        Status
-                      </th>
-                      <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                        Operation Date
-                      </th>
-                      <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                        Comment
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                        0376
-                      </td>
-                      <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                        Rajib Saha
-                      </td>
-                      <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                        Under Processing
-                      </td>
-                      <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                        27-04-2025
-                      </td>
-                      <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
-                        —
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
             <div className="flex items-center justify-between pt-4">
               <p className="text-light-subtext dark:text-dark-subtext text-sm">
-                Apply Date: <strong>27-04-2025</strong>
+                Apply Date:{" "}
+                <strong>
+                  {" "}
+                  {DateConverterFromUTC(
+                    leaveApplicationDetails?.data?.created_at,
+                  )}{" "}
+                </strong>
               </p>
               <div className="space-x-3">
                 <button
@@ -431,6 +416,60 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
           </Form>
         )}
       </Formik>
+
+      <div className="mt-6">
+        <h3 className="text-light-text mb-2 text-sm font-semibold dark:text-dark-text-color">
+          APPROVAL HISTORY
+        </h3>
+        <div className="overflow-x-auto rounded border border-dark-bg border-opacity-0 dark:border-dark-border-color dark:border-opacity-5">
+          <table className="text-light-text min-w-full text-left text-sm dark:text-dark-text-color">
+            <thead className="bg-light-input dark:bg-dark-box">
+              <tr>
+                <th className="border px-1 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                  SL
+                </th>
+                <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                  Approver Name
+                </th>
+                <th className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                  Status
+                </th>
+                <th className="border px-2 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                  Operation Date
+                </th>
+                <th className="border px-4 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                  Comment
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {leaveApplicationDetails?.data?.history.map((approval, index) => (
+                <>
+                  <tr>
+                    <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                      {++index}
+                    </td>
+                    <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                      {approval?.Reviewer?.first_name +
+                        " " +
+                        approval?.Reviewer?.last_name}
+                    </td>
+                    <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                      {approval?.status}
+                    </td>
+                    <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                      {DateConverterFromUTC(approval?.created_at)}
+                    </td>
+                    <td className="border px-3 py-2 dark:border-dark-border-color dark:border-opacity-5">
+                      {approval?.admin_note}
+                    </td>
+                  </tr>
+                </>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };

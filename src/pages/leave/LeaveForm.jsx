@@ -15,7 +15,7 @@ import {
 import FormSkeleton from "../../skeletons/FormSkeleton";
 
 const leaveSchema = Yup.object().shape({
-  leaveType_id: Yup.string().required("Leave Type is required"),
+  leave_type_id: Yup.string().required("Leave Type is required"),
   start_date: Yup.string().required("Start date is required"),
   end_date: Yup.string().required("End date is required"),
   reason: Yup.string().required("Reason is required"),
@@ -41,7 +41,7 @@ const LeaveForm = ({ leaveReport, onClose }) => {
     useGetEarnLeaveQuery(companyId);
 
   const [initialValues, setInitialValues] = useState({
-    leaveType_id: "",
+    leave_type_id: "",
     start_date: "",
     end_date: "",
     reason: "",
@@ -100,7 +100,7 @@ const LeaveForm = ({ leaveReport, onClose }) => {
 
   const handleLeaveTypeChange = (e, setFieldValue, values) => {
     const typeId = e.target.value;
-    setFieldValue("leaveType_id", typeId);
+    setFieldValue("leave_type_id", typeId);
     setSelectedType(typeId);
     evaluateLeaveStatus(typeId, values.start_date, values.end_date);
   };
@@ -108,7 +108,7 @@ const LeaveForm = ({ leaveReport, onClose }) => {
   useEffect(() => {
     if (weekend?.data) {
       setInitialValues({
-        leaveType_id: weekend?.data?.holiday_type_id,
+        leave_type_id: weekend?.data?.holiday_type_id,
         start_date: weekend?.data?.start_date || "",
         end_date: weekend?.data?.end_date || "",
         reason: weekend?.data?.description || "",
@@ -146,12 +146,12 @@ const LeaveForm = ({ leaveReport, onClose }) => {
           enableReinitialize
           initialValues={initialValues}
           onSubmit={async (values, { setSubmitting }) => {
-            const { leaveType_id, start_date, end_date, reason } = values;
-            const paid_status = leaveStatus.unpaid ? "UNPAID" : "";
+            const { leave_type_id, start_date, end_date, reason } = values;
+            const paid_status = leaveStatus.unpaid ? "UNPAID" : "PAID";
             try {
               if (!id) {
                 await createEmployeeLeave({
-                  leaveType_id,
+                  leave_type_id,
                   start_date,
                   end_date,
                   reason,
@@ -169,7 +169,7 @@ const LeaveForm = ({ leaveReport, onClose }) => {
               } else {
                 await updateWeekend({
                   id,
-                  leaveType_id,
+                  leave_type_id,
                   start_date,
                   end_date,
                   reason,
@@ -195,12 +195,12 @@ const LeaveForm = ({ leaveReport, onClose }) => {
           {({ isSubmitting, values, setFieldValue }) => {
             useEffect(() => {
               evaluateLeaveStatus(
-                values.leaveType_id,
+                values.leave_type_id,
                 values.start_date,
                 values.end_date,
               );
             }, [
-              values.leaveType_id,
+              values.leave_type_id,
               values.start_date,
               values.end_date,
               evaluateLeaveStatus,
@@ -210,14 +210,14 @@ const LeaveForm = ({ leaveReport, onClose }) => {
               <Form>
                 <div className="mb-4">
                   <label
-                    htmlFor="leaveType_id"
+                    htmlFor="leave_type_id"
                     className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                   >
                     Leave Type
                   </label>
                   <Field
                     as="select"
-                    name="leaveType_id"
+                    name="leave_type_id"
                     id="type"
                     className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-[#3686FF] focus:outline-none focus:ring-[#3686FF] sm:text-sm dark:border-gray-600 dark:bg-dark-box dark:text-white"
                     onChange={(e) =>
@@ -232,7 +232,7 @@ const LeaveForm = ({ leaveReport, onClose }) => {
                     ))}
                   </Field>
                   <ErrorMessage
-                    name="leaveType_id"
+                    name="leave_type_id"
                     component="div"
                     className="mt-1 text-sm text-red-500"
                   />
