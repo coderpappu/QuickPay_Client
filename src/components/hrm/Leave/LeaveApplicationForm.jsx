@@ -206,29 +206,6 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
                   </div>
                 )}
               </div>
-
-              <div className="flex items-center gap-4 pt-6">
-                <div className="flex items-center gap-4 pt-6">
-                  <label className="text-light-text flex items-center dark:text-dark-text-color">
-                    <Field
-                      type="checkbox"
-                      name="foreign_leave"
-                      className="mr-2"
-                    />
-                    Foreign Leave Y/N
-                  </label>
-
-                  <label className="text-light-text flex items-center dark:text-dark-text-color">
-                    <Field
-                      type="checkbox"
-                      name="include_extra_work"
-                      className="mr-2"
-                    />
-                    Include Extra Work Dates
-                  </label>
-                </div>
-              </div>
-
               <div className="flex justify-end gap-4">
                 {["CONTINUOUS", "PREFIX", "SUFFIX"].map((type) => (
                   <label
@@ -307,7 +284,51 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
               </div>
             </div>
             <div>
-              <label className="text-light-text mb-1 block text-sm font-medium dark:text-dark-text-color">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 pt-6">
+                  <label className="text-light-text flex items-center dark:text-dark-text-color">
+                    <Field
+                      type="checkbox"
+                      name="foreign_leave"
+                      className="mr-2"
+                    />
+                    Foreign Leave Y/N
+                  </label>
+
+                  <label className="text-light-text flex items-center dark:text-dark-text-color">
+                    <Field
+                      type="checkbox"
+                      name="include_extra_work"
+                      className="mr-2"
+                    />
+                    Include Extra Work Dates
+                  </label>
+                </div>
+              </div>
+
+              {(values.foreign_leave || values.include_extra_work) && (
+                <div className="col-span-3 pt-2">
+                  <label className="text-light-text mb-1 block text-sm font-medium dark:text-dark-text-color">
+                    Paid Status
+                  </label>
+                  <Field
+                    as="select"
+                    name="paid_status"
+                    className="w-full rounded border border-dark-box border-opacity-5 bg-light-input px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
+                  >
+                    <option value="">Select Paid Status</option>
+                    <option value="PAID">Paid</option>
+                    <option value="UNPAID">Unpaid</option>
+                  </Field>
+                  {errors.paid_status && touched.paid_status && (
+                    <div className="mt-1 text-xs text-red-500">
+                      {errors.paid_status}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <label className="text-light-text mb-1 block pt-3 text-sm font-medium dark:text-dark-text-color">
                 Reason
               </label>
               <Field
