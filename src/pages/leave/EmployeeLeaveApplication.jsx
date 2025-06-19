@@ -56,6 +56,7 @@ const EmployeeLeaveApplication = () => {
   } = useCalculationLeaveDaysQuery({
     year,
     company_id: companyId,
+    employeeId,
   });
 
   const { data: certificateFormat } =
