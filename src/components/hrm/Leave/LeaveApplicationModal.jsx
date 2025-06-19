@@ -10,6 +10,7 @@ const LeaveApplicationModal = ({ leave, formatData, onClose }) => {
   const contentRef = useRef();
   const headerRef = useRef();
 
+  console.log(leave?.approvals[0]);
   const placeholders = {
     employee_name: leave.Employee?.name,
     company_name: leave.Employee?.company?.company_name,
@@ -21,14 +22,15 @@ const LeaveApplicationModal = ({ leave, formatData, onClose }) => {
     leaveDuration: leave.leaveDuration,
     leave_type_name: leave.LeaveType?.name,
     reason: leave.reason,
-    paid_status: leave.paid_status,
+    paid_status: leave.final_paid_status.toLowerCase(),
     current_date: todayDate(),
-    status: leave.status,
+    status: leave.final_status.toLowerCase(),
     submitted_on: DateConverterFromUTC(leave.created_at),
-    approved_on: leave.approved_at
-      ? DateConverterFromUTC(leave.approved_at)
-      : "",
-    approved_by: leave.approved_by?.name || "",
+    approved_on: DateConverterFromUTC(leave?.approvals[0]?.created_at),
+    approved_by:
+      leave?.approvals[0]?.Reviewer?.first_name +
+        " " +
+        leave?.approvals[0]?.Reviewer?.last_name || "",
   };
 
   const replacePlaceholders = (text) => {
@@ -92,7 +94,10 @@ const LeaveApplicationModal = ({ leave, formatData, onClose }) => {
     }
 
     pdf.setFontSize(10);
-    pdf.text(footerText, margin, pageHeight - 10);
+    const textWidth = pdf.getTextWidth(footerText);
+    const textX = (pageWidth - textWidth) / 2;
+    pdf.text(footerText, textX, pageHeight - 10);
+
     pdf.save("Leave_Application.pdf");
   };
 

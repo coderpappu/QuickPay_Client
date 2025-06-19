@@ -175,7 +175,10 @@ function JoiningLetter() {
       if (yPosition + currentSpacing > pageHeight - 20) {
         // Add footer and new page
         pdf.setFontSize(10);
-        pdf.text(footerText, margin, pageHeight - 10);
+        const textWidth = pdf.getTextWidth(footerText);
+        const textX = (pageWidth - textWidth) / 2;
+        pdf.text(footerText, textX, pageHeight - 10);
+
         pdf.addPage();
         currentPage++;
         // Add header to the new page

@@ -82,7 +82,7 @@ const EmployeeLeaveApplication = () => {
   };
   const filteredData = leaveApplications?.data?.filter((application) => {
     const isMatchingStatus =
-      !statusFilter || application.status === statusFilter;
+      !statusFilter || application?.status === statusFilter;
     return isMatchingStatus;
   });
 
@@ -112,11 +112,11 @@ const EmployeeLeaveApplication = () => {
         <div className="w-[10%] dark:text-white">
           <h3>{convertToTimeZone(application?.created_at)}</h3>
         </div>
-        <div className="w-[14%] dark:text-white">
-          <h3>{application?.reason}</h3>
+        <div className="line-clamp-2 w-[14%] overflow-hidden dark:text-white">
+          <h3 title={application?.note}>{application?.note}</h3>
         </div>
-        <div className="w-[14%] dark:text-white">
-          <h3>{application?.note}</h3>
+        <div className="line-clamp-2 w-[14%] overflow-hidden dark:text-white">
+          <h3 title={application?.reason}>{application?.reason}</h3>
         </div>
         <div className="w-[10%] dark:text-white">
           <button

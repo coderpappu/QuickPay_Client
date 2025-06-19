@@ -134,14 +134,17 @@ const LeaveApplicationListCard = () => {
         <div className="w-[3%] dark:text-white">
           <h3>{application?.leave_duration}</h3>
         </div>
-        <div className="w-[8%] dark:text-white">
-          <h3>{application?.reason}</h3>
+
+        <div className="line-clamp-2 w-[8%] overflow-hidden dark:text-white">
+          <h3 title={application?.reason}>{application?.reason}</h3>
         </div>
+
         <div className="w-[7%] dark:text-white">
           <h3>{application?.final_paid_status}</h3>
         </div>
-        <div className="w-[10%] dark:text-white">
-          <h3>{application?.note || "..."}</h3>
+
+        <div className="line-clamp-2 w-[10%] overflow-hidden dark:text-white">
+          <h3 title={application?.note}>{application?.note}</h3>
         </div>
         <div className="w-[5%] dark:text-white">
           <h3>Manager</h3>

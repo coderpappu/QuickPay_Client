@@ -16,7 +16,6 @@ import calculateTotalHours from "../../utils/TimeCalculator";
 import formatTimeTo12Hour from "../../utils/timeConverter";
 import todayDate from "../../utils/TodayDate";
 
-
 function ExperienceCertificate() {
   const [letterData, setLetterData] = useState(null);
   const [date, setDate] = useState("10");
@@ -129,7 +128,6 @@ function ExperienceCertificate() {
 
   // Function to handle PDF download
   const handleDownloadPDF = async () => {
-    
     const input = componentRef.current;
     const pdf = new jsPDF("p", "mm", "a4");
     const pageWidth = pdf.internal.pageSize.getWidth();
@@ -191,7 +189,10 @@ function ExperienceCertificate() {
       if (yPosition + currentSpacing > pageHeight - 20) {
         // Add footer and new page
         pdf.setFontSize(10);
-        pdf.text(footerText, margin, pageHeight - 10);
+        const textWidth = pdf.getTextWidth(footerText);
+        const textX = (pageWidth - textWidth) / 2;
+        pdf.text(footerText, textX, pageHeight - 10);
+
         pdf.addPage();
         currentPage++;
         // Add header to the new page

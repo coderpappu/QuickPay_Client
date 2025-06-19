@@ -703,9 +703,9 @@ export const apiSlice = createApi({
     }),
 
     calculationLeaveDays: builder.query({
-      query: ({ year, company_id }) => ({
+      query: ({ year, company_id, employeeId }) => ({
         url: `/leave/calculateleavedays`,
-        params: { year, company_id },
+        params: { year, company_id, employeeId },
       }),
       providesTags: ["leaveType", "earnLeave", "leaveApplication"],
     }),

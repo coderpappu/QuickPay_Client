@@ -97,9 +97,7 @@ const LeaveApplicationForm = ({ selectId, year, setIsPopupOpen }) => {
 
   return (
     <div className="bg-light-card mx-auto w-full space-y-6 rounded-lg p-6 shadow-md dark:bg-dark-card">
-      <h2 className="text-light-text text-xl font-semibold dark:text-dark-text-color">
-        Update Leave Application
-      </h2>
+      
 
       <div className="flex items-start justify-between rounded-md border bg-light-input p-4 dark:border-dark-border-color dark:border-opacity-5 dark:bg-dark-box">
         <div className="flex items-center gap-4">
@@ -357,10 +355,9 @@ const LeaveApplicationForm = ({ selectId, year, setIsPopupOpen }) => {
                   rows="3"
                   className="w-full rounded border border-dark-box border-opacity-5 bg-light-input px-3 py-2 dark:bg-dark-box dark:text-dark-text-color"
                 />
-                {errors.reason && touched.reason && (
-                  <div className="mt-1 text-xs text-red-500">
-                    {errors.reason}
-                  </div>
+
+                {errors.note && touched.note && (
+                  <div className="mt-1 text-xs text-red-500">{errors.note}</div>
                 )}
               </div>
               <div>
