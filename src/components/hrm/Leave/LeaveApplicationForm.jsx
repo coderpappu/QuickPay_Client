@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import {
+  useCalculationLeaveDaysQuery,
   useGetLeaveApplicationDetailsQuery,
   useGetLeaveTypeListQuery,
   useGetUserQuery,
@@ -22,7 +23,7 @@ const applicationSchema = Yup.object().shape({
   note: Yup.string().required("Note is required"),
 });
 
-const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
+const LeaveApplicationForm = ({ selectId, year, setIsPopupOpen }) => {
   const companyId = useSelector((state) => state.company.companyId);
 
   const { data: userDetails } = useGetUserQuery();
@@ -32,7 +33,11 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
     { skip: !selectId },
   );
 
-  console.log(leaveApplicationDetails);
+  const { data: leaveDetailsReport } = useCalculationLeaveDaysQuery({
+    year,
+    company_id: companyId,
+    employeeId: leaveApplicationDetails?.data?.Employee?.id,
+  });
 
   const { data: leaveType } = useGetLeaveTypeListQuery(companyId);
 
@@ -144,12 +149,11 @@ const LeaveApplicationForm = ({ selectId, setIsPopupOpen }) => {
 
       <div className="text-light-text flex items-center justify-between text-sm dark:text-dark-text-color">
         <div className="space-x-4">
-          <span>
-            Marriage Leave: <strong>10</strong>
-          </span>
-          <span>
-            Annual Leave: <strong>10</strong>
-          </span>
+          {leaveDetailsReport?.data?.map((leave) => (
+            <span key={leave?.leaveTypeId}>
+              {leave?.leaveTypeName}: <strong>{leave?.remainingDays}</strong>
+            </span>
+          ))}
         </div>
       </div>
 

@@ -275,6 +275,7 @@ const LeaveApplicationListCard = () => {
             <div className="mt-4 max-h-[80vh] overflow-y-auto">
               <LeaveApplicationForm
                 selectId={selectId}
+                year={year}
                 setIsPopupOpen={setIsPopupOpen}
               />
             </div>
