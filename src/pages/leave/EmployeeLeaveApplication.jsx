@@ -128,9 +128,9 @@ const EmployeeLeaveApplication = () => {
         </div>
         <div className="w-[10%] dark:text-white">
           <div
-            className={` ${statusColorHandler(application?.status)} w-32 rounded-full px-1 py-2 text-center text-xs font-bold text-gray-700`}
+            className={` ${statusColorHandler(application?.final_status)} w-32 rounded-full px-1 py-2 text-center text-xs font-bold text-gray-700`}
           >
-            {application?.status}
+            {application?.final_status}
           </div>
         </div>
       </div>
